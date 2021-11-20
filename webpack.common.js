@@ -50,8 +50,8 @@ module.exports = {
       Dropdown: "exports-loader?Dropdown!bootstrap/js/dist/dropdown"
     }),
     new HtmlWebpackPlugin({
-        // Cambiar este icono
-        favicon: '4geeks.ico',
+        // Icono de ejemplo:
+        favicon: 'logo.png',
         template: 'template.html'
     }),
     new Dotenv({ safe: true, systemvars: true })
