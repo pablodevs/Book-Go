@@ -1,5 +1,5 @@
 {
-	"name": "react-hello-webapp",
+	"name": "final-project",
 	"engines": {
 		"node": "10.x"
 	},
@@ -11,17 +11,17 @@
 		"build": "webpack --config webpack.prod.js"
 	},
 	"author": {
-		"name": "Alejandro Sanchez",
-		"url": "http://alesanchezr.com/"
+		"name": "Javier Manteca",
+		"url": "https://github.com/chavisam"
 	},
 	"contributors": [
 		{
-			"name": "Alejandro Sanchez",
-			"url": "http://alesanchezr.com/"
+			"name": "Pablo Álamo",
+			"url": "https://github.com/peibol888"
 		},
 		{
-			"name": "Ignacio Cordoba",
-			"url": "http://github.com/nachovz"
+			"name": "Clara Rojano",
+			"url": "https://github.com/clararls"
 		}
 	],
 	"license": "ISC",
