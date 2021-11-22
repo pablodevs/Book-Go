@@ -8,6 +8,7 @@ import { Footer } from "./component/footer";
 
 // Views
 import { Home } from "./pages/home";
+import { Otherpage } from "./pages/otherpage";
 
 import injectContext from "./store/appContext";
 
@@ -22,9 +23,12 @@ const Layout = () => {
 					<Route exact path="/">
 						<Home />
 					</Route>
+					<Route exact path="/otherpage">
+						<Otherpage />
+					</Route>
 					<Route>
-						<div>
-							<h5>404 - Page Not Found</h5>
+						<div className="view">
+							<h3>404 - Page Not Found</h3>
 						</div>
 					</Route>
 				</Switch>

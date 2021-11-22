@@ -43,6 +43,15 @@ li {
     padding: 0;
 }
 
+.btn{
+    &:focus {box-shadow: none;}
+    &:focus-visible {
+        outline: auto;
+        outline-offset: 1px;
+    }
+}
+
+
 /*===== Useful styles =====*/
 /* 
     Los dos styles siguientes hacen que las Pages cojan el 100% del alto de cualquier pantalla
