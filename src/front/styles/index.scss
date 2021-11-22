@@ -1,3 +1,64 @@
+/*===== General styles import =====*/
+@import "./colors"; // paleta de colores
+@import "./fonts";  // estilo de las fuentes
+
+/*===== Reseting styles =====*/
+
+*, *:before, *:after {
+    box-sizing: border-box;
+}
+
+body {
+    scroll-behavior: smooth;
+    transition: 0.3s; // Esto se aplicará a toda la webpage así qeu habrá que ver si es una buena idea
+    overflow-x: hidden;
+}
+
+#app, html, body {
+    min-height: 100vh;
+}
+
+a {
+    text-decoration: none;
+    color: black; // Estos colores habrá que modificarlos cuando esté lista la paleta de colores
+    &:hover {color: black;}
+}
+
+button {
+    background: none;
+    border: none;
+}
+
+ul {
+    margin: 0;
+    padding: 0;
+}
+li {
+    list-style: none;
+}
+
+/* Bootstrap styles */
+.row, .row > * {
+    margin: 0;
+    padding: 0;
+}
+
+/*===== Useful styles =====*/
 /* 
-    General Styles
+    Los dos styles siguientes hacen que las Pages cojan el 100% del alto de cualquier pantalla
+    y lo repartan entre el navbar, el contenido y el footer
 */
+#app {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+.view {
+    width: 100%;
+    margin-block: auto;  // Esta linea centra el contenido, es necesaria pero también puede ser: margin-bottom: auto; si quieres que el contenido esté arriba
+    padding: 1rem;       // Esta linea evita que el contenido quede pegado a los extremos
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
