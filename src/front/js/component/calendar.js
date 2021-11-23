@@ -7,22 +7,18 @@ export const Calendar = () => {
 			<table className="calendar">
 				<thead>
 					<tr className="day-names">
-						<td>LUN</td>
-						<td>MAR</td>
-						<td>MIÉ</td>
-						<td>JUE</td>
-						<td>VIE</td>
-						<td>SÁB</td>
-						<td>DOM</td>
+						<td>LUN.</td>
+						<td>MAR.</td>
+						<td>MIÉ.</td>
+						<td>JUE.</td>
+						<td>VIE.</td>
+						<td>SÁB.</td>
+						<td>DOM.</td>
 					</tr>
 				</thead>
 				<tbody>
 					<tr className="week">
-						<td>
-							<div>
-								<p>hola</p>
-							</div>
-						</td>
+						<td>1</td>
 						<td>2</td>
 						<td>3</td>
 						<td>4</td>
