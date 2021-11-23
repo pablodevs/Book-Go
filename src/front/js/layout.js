@@ -9,6 +9,7 @@ import { Footer } from "./component/footer";
 // Views
 import { Home } from "./pages/home";
 import { Otherpage } from "./pages/otherpage";
+import { Calendar } from "./component/calendar";
 
 import injectContext from "./store/appContext";
 
@@ -25,6 +26,9 @@ const Layout = () => {
 					</Route>
 					<Route exact path="/otherpage">
 						<Otherpage />
+					</Route>
+					<Route exact path="/calendar">
+						<Calendar />
 					</Route>
 					<Route>
 						<div className="view">
