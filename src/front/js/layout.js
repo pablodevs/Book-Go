@@ -8,7 +8,6 @@ import { Footer } from "./component/footer";
 
 // Views
 import { Home } from "./pages/home";
-import { Otherpage } from "./pages/otherpage";
 
 import injectContext from "./store/appContext";
 
@@ -22,9 +21,6 @@ const Layout = () => {
 				<Switch>
 					<Route exact path="/">
 						<Home />
-					</Route>
-					<Route exact path="/otherpage">
-						<Otherpage />
 					</Route>
 					<Route>
 						<div className="view">

@@ -1,4 +1,5 @@
-import React, { Component } from "react";
+import React from "react";
+import "../../styles/components/footer.scss";
 
 export const Footer = () => (
 	<footer className="py-5 text-center text-light bg-dark sticky-bottom">
