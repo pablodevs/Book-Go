@@ -1,11 +1,12 @@
 import React from "react";
+import "../../styles/components/calendar.scss";
 
 export const Calendar = () => {
 	return (
-		<div className="view">
-			<table>
+		<div className="view my-auto">
+			<table className="calendar">
 				<thead>
-					<tr>
+					<tr className="day-names">
 						<td>LUN</td>
 						<td>MAR</td>
 						<td>MIÉ</td>
@@ -17,49 +18,53 @@ export const Calendar = () => {
 				</thead>
 				<tbody>
 					<tr className="week">
-						<td className="day">1</td>
-						<td className="day">2</td>
-						<td className="day">3</td>
-						<td className="day">4</td>
-						<td className="day">5</td>
-						<td className="day">6</td>
-						<td className="day">7</td>
+						<td>
+							<div>
+								<p>hola</p>
+							</div>
+						</td>
+						<td>2</td>
+						<td>3</td>
+						<td>4</td>
+						<td>5</td>
+						<td>6</td>
+						<td>7</td>
 					</tr>
 					<tr className="week">
-						<td className="day">8</td>
-						<td className="day">9</td>
-						<td className="day">10</td>
-						<td className="day">11</td>
-						<td className="day">12</td>
-						<td className="day">13</td>
-						<td className="day">14</td>
+						<td>8</td>
+						<td>9</td>
+						<td>10</td>
+						<td>11</td>
+						<td>12</td>
+						<td>13</td>
+						<td>14</td>
 					</tr>
 					<tr className="week">
-						<td className="day">15</td>
-						<td className="day">16</td>
-						<td className="day">17</td>
-						<td className="day">18</td>
-						<td className="day">19</td>
-						<td className="day">20</td>
-						<td className="day">21</td>
+						<td>15</td>
+						<td>16</td>
+						<td>17</td>
+						<td>18</td>
+						<td>19</td>
+						<td>20</td>
+						<td>21</td>
 					</tr>
 					<tr className="week">
-						<td className="day">22</td>
-						<td className="day">23</td>
-						<td className="day">24</td>
-						<td className="day">25</td>
-						<td className="day">26</td>
-						<td className="day">27</td>
-						<td className="day">28</td>
+						<td>22</td>
+						<td>23</td>
+						<td>24</td>
+						<td>25</td>
+						<td>26</td>
+						<td>27</td>
+						<td>28</td>
 					</tr>
 					<tr className="week">
-						<td className="day">29</td>
-						<td className="day">30</td>
-						<td className="day">31</td>
-						<td className="day">1</td>
-						<td className="day">2</td>
-						<td className="day">3</td>
-						<td className="day">4</td>
+						<td>29</td>
+						<td>30</td>
+						<td>31</td>
+						<td>1</td>
+						<td>2</td>
+						<td>3</td>
+						<td>4</td>
 					</tr>
 				</tbody>
 			</table>

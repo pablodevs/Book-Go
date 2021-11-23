@@ -1,0 +1,14 @@
+.calendar {
+    border: 2px solid black;
+    font-size: 2rem;
+    width: 452px;
+    aspect-ratio: 2/1;
+}
+.day-names {
+
+}
+.week {
+    & > * {
+        color: red
+    }
+}
