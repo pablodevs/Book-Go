@@ -1,12 +1,27 @@
 import React, { Component } from "react";
-import "../../styles/pages/footer.scss";
+import "../../styles/components/footer.scss";
 
 export const Footer = () => (
 	<footer className="py-5 text-center text-light bg-dark sticky-bottom">
 		<p>&#169; Pablo, Jaime & Clara. 2021 All rigths reserved</p>
 		<p>example@example.com</p>
-		<a href="https://www.facebook.com/" className="fab fa-instagram footer-link" />
-		<a href="https://www.instagram.com/" className="fab fa-facebook-square footer-link" />
-		<a href="https://twitter.com/" className="fab fa-twitter footer-link" />
+		<a
+			target="_blank"
+			rel="noopener noreferrer"
+			href="https://www.facebook.com/"
+			className="fab fa-instagram footer-link"
+		/>
+		<a
+			target="_blank"
+			rel="noopener noreferrer"
+			href="https://www.instagram.com/"
+			className="fab fa-facebook-square footer-link"
+		/>
+		<a
+			target="_blank"
+			rel="noopener noreferrer"
+			href="https://twitter.com/"
+			className="fab fa-twitter footer-link"
+		/>
 	</footer>
 );
