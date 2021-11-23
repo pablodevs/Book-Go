@@ -8,8 +8,8 @@ export const Navbar = () => {
 				<Link to="/" className="text-light">
 					<h4>Home</h4>
 				</Link>
-				<Link to="/otherpage" className="text-light">
-					Otherpage
+				<Link to="/calendar" className="text-light">
+					calendar
 				</Link>
 			</div>
 		</nav>
