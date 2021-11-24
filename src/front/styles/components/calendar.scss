@@ -1,17 +1,56 @@
+$--fc-regular: rgb(90, 90, 90);
+$--fc-light: rgb(167, 167, 167);
+$--fc-dark: rgb(34, 34, 34);
+
+$--border-c: rgba(204, 204, 204, 0.685);
+
+$--calendar-w: #{"min(100%, 560px)"};
+$--calendar-br: 2%;
+
+div.calendar-header {
+    margin-bottom: 1rem;
+    width: $--calendar-w;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    & i, & h4 {
+        color: $--fc-regular;
+    }
+    & h1 {
+        font-weight: 300;
+    }
+}
 .calendar {
-    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
-    font-size: 2rem;
-    width: 500px;
-    height: 500px;
-    // Añadir aspect ratio 1:1!
+    border-radius: $--calendar-br;
+    overflow: hidden;
+    width: $--calendar-w;
+    display: flex;
+    flex-direction: column;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
-.day-names {
-    color: rgba(128, 128, 128, 0.664);
-    font-size: 1.5rem;
+.week-days, .week {
+    display: flex;
+    & > * {
+        flex-basis: 100%;
+    }
+} 
+.week-days {
+    padding-block: 5px;
+    border-bottom: 1px solid $--border-c;
+    color: $--fc-light;
+    font-size: clamp(0.7rem, 5vw, 1.4rem);
+    font-weight: 100;
+    & > td { padding: 5px }
 }
-.week > td, .day-names > td {
-    width: calc(100% / 7);
-    height: calc(100% / 7);
-    border: 1px solid rgba(128, 128, 128, 0.507);
-    text-align: center;
+.month {
+    aspect-ratio: 7/5;
+}
+.week {
+    & > * {
+        color: $--fc-regular;
+        aspect-ratio: 1;
+        border-radius: calc(#{$--calendar-br} + 10%);
+        font-size: clamp(1rem, 6vw, 1.5rem);
+        &:hover { background-color: #d6f9fc }
+    }
 }

@@ -57,6 +57,12 @@ li {
     Los dos styles siguientes hacen que las Pages cojan el 100% del alto de cualquier pantalla
     y lo repartan entre el navbar, el contenido y el footer
 */
+@mixin displayCenter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 #app {
     display: flex;
     flex-direction: column;
@@ -64,15 +70,11 @@ li {
 }
 .view {
     width: 100%;
-    margin-bottom: auto;  // Esta linea centra el contenido, es necesaria pero también puede ser: margin-bottom: auto; si quieres que el contenido esté arriba
+    margin-block: auto;  // Esta linea centra el contenido, es necesaria pero también puede ser: margin-bottom: auto; si quieres que el contenido esté arriba
     padding: 1rem;       // Esta linea evita que el contenido quede pegado a los extremos
-    display: flex;
+    @include displayCenter();
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
 }
 .center {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    @include displayCenter();
 }

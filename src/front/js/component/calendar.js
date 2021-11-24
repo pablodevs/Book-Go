@@ -2,68 +2,51 @@ import React from "react";
 import "../../styles/components/calendar.scss";
 
 export const Calendar = () => {
+	let weekDays = ["L", "M", "X", "J", "V", "S", "D"];
+
+	const renderWeeks = () => {
+		let weeks = [];
+		let dayNumber = 1;
+		for (let i = 0; i < 5; i++) {
+			let week = [];
+			for (let i = dayNumber; i < dayNumber + 7; i++) {
+				week.push(
+					<div key={i} className="center">
+						{i}
+					</div>
+				);
+			}
+			dayNumber += 7;
+			weeks.push(
+				<div key={i} className="week">
+					{week}
+				</div>
+			);
+		}
+		return weeks;
+	};
+
 	return (
 		<div className="view my-auto">
-			<table className="calendar">
-				<thead>
-					<tr className="day-names">
-						<td>LUN.</td>
-						<td>MAR.</td>
-						<td>MIÉ.</td>
-						<td>JUE.</td>
-						<td>VIE.</td>
-						<td>SÁB.</td>
-						<td>DOM.</td>
-					</tr>
-				</thead>
-				<tbody>
-					<tr className="week">
-						<td>1</td>
-						<td>2</td>
-						<td>3</td>
-						<td>4</td>
-						<td>5</td>
-						<td>6</td>
-						<td>7</td>
-					</tr>
-					<tr className="week">
-						<td>8</td>
-						<td>9</td>
-						<td>10</td>
-						<td>11</td>
-						<td>12</td>
-						<td>13</td>
-						<td>14</td>
-					</tr>
-					<tr className="week">
-						<td>15</td>
-						<td>16</td>
-						<td>17</td>
-						<td>18</td>
-						<td>19</td>
-						<td>20</td>
-						<td>21</td>
-					</tr>
-					<tr className="week">
-						<td>22</td>
-						<td>23</td>
-						<td>24</td>
-						<td>25</td>
-						<td>26</td>
-						<td>27</td>
-						<td>28</td>
-					</tr>
-					<tr className="week">
-						<td>29</td>
-						<td>30</td>
-						<td>31</td>
-						<td>1</td>
-						<td>2</td>
-						<td>3</td>
-						<td>4</td>
-					</tr>
-				</tbody>
-			</table>
+			<div className="calendar-header">
+				<button>
+					<i className="fas fa-chevron-left" />
+				</button>
+				<h4 className="clendar-title">NOVIEMBRE 2021</h4>
+				<button>
+					<i className="fas fa-chevron-right" />
+				</button>
+			</div>
+			<div className="calendar">
+				<div className="week-days">
+					{weekDays.map((day, idx) => (
+						<div key={idx} className="center">
+							{day}
+						</div>
+					))}
+				</div>
+				<div className="month">{renderWeeks()}</div>
+			</div>
 		</div>
 	);
 };
