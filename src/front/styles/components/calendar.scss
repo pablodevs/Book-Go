@@ -7,22 +7,20 @@ $--border-c: rgba(204, 204, 204, 0.685);
 $--calendar-w: #{"min(100%, 560px)"};
 $--calendar-br: 2%;
 
-div.calendar-header {
+.calendar-title {
     margin-bottom: 1rem;
     width: $--calendar-w;
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    & i, & h4 {
-        color: $--fc-regular;
-    }
-    & h1 {
-        font-weight: 300;
-    }
+    text-align: center;
+    color: $--fc-regular;
+    font-weight: 300;
+}
+.calendar-wrapper {
+    width: 100%;
+    padding-inline: 3rem;
 }
 .calendar {
+    margin-inline: auto;
     border-radius: $--calendar-br;
-    overflow: hidden;
     width: $--calendar-w;
     display: flex;
     flex-direction: column;
@@ -35,6 +33,7 @@ div.calendar-header {
     }
 } 
 .week-days {
+    background-color: #d6f9fc;
     padding-block: 5px;
     border-bottom: 1px solid $--border-c;
     color: $--fc-light;
@@ -42,15 +41,24 @@ div.calendar-header {
     font-weight: 100;
     & > td { padding: 5px }
 }
+.month-wrapper { position: relative }
 .month {
     aspect-ratio: 7/5;
+    overflow: hidden;
 }
-.week {
-    & > * {
-        color: $--fc-regular;
-        aspect-ratio: 1;
-        border-radius: calc(#{$--calendar-br} + 10%);
-        font-size: clamp(1rem, 6vw, 1.5rem);
-        &:hover { background-color: #d6f9fc }
-    }
+.previous-month, .next-month {
+    color: $--fc-light;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%)
+}
+.previous-month { left: -3rem }
+.next-month { right: -3rem }
+
+.day {
+    color: $--fc-regular;
+    aspect-ratio: 1;
+    border-radius: calc(#{$--calendar-br} + 10%);
+    font-size: clamp(1rem, 6vw, 1.5rem);
+    &:hover { background-color: #d6f9fc }
 }

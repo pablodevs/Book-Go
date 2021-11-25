@@ -8,7 +8,7 @@ import { Footer } from "./component/footer";
 
 // Views
 import { Home } from "./pages/home";
-import { Calendar } from "./component/calendar";
+import { Calendar } from "./component/calendar/calendar";
 
 import injectContext from "./store/appContext";
 
