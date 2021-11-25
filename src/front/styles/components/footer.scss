@@ -1,0 +1,8 @@
+@import "../colors";
+
+.footer-link {
+  color: $light-color;
+  margin: 0 1rem;
+  transition: transform 250ms;
+  display: inline-block;
+}
