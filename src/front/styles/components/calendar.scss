@@ -66,6 +66,7 @@ $--calendar-br: 2%;
 .today {
     font-weight: 600;
     box-shadow: 0 0 0 1px $--fc-dark; // Uso box-shadow porque el estilo 'border' modifica el tamaño del div mientras que box shadow NO
+    z-index: 1;
 }
 button.light-color-day { color: $--fc-light }
 

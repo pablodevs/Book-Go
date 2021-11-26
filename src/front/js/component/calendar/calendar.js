@@ -50,7 +50,8 @@ export const Calendar = () => {
 
 			for (let i = 0; i < 6; i++) {
 				let week = [];
-				for (let i = firstMonday; i < firstMonday + 7 && i <= lastSunday; i++) { // recorro el bucle desde el primer Lunes hasta el último domingo semana por semana (o sea, de 7 en 7)
+				for (let i = firstMonday; i < firstMonday + 7 && i <= lastSunday; i++) {
+					// recorro el bucle desde el primer Lunes hasta el último domingo semana por semana (o sea, de 7 en 7)
 					let date = new Date(year, dates["month_text"].indexOf(month.toLowerCase()), i);
 					week.push(
 						<Day
