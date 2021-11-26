@@ -1,0 +1,17 @@
+{
+    "month_text": [
+        "enero",
+        "febrero",
+        "marzo",
+        "abril",
+        "mayo",
+        "junio",
+        "julio",
+        "agosto",
+        "septiembre",
+        "octubre",
+        "noviembre",
+        "diciembre"
+    ],
+    "day_text": ["D", "L", "M", "X", "J", "V", "S"]
+}
