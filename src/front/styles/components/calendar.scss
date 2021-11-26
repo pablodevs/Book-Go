@@ -1,5 +1,5 @@
 $--fc-regular: rgb(90, 90, 90);
-$--fc-light: rgb(167, 167, 167);
+$--fc-light: rgb(192, 192, 192);
 $--fc-dark: rgb(34, 34, 34);
 
 $--border-c: rgba(204, 204, 204, 0.685);
@@ -9,7 +9,7 @@ $--calendar-br: 2%;
 
 .calendar-title {
     margin-bottom: 1rem;
-    width: $--calendar-w;
+    width: 100%;
     text-align: center;
     color: $--fc-regular;
     font-weight: 300;
@@ -17,6 +17,8 @@ $--calendar-br: 2%;
 .calendar-wrapper {
     width: 100%;
     padding-inline: 3rem;
+    display: flex;
+    flex-direction: column;
 }
 .calendar {
     margin-inline: auto;
@@ -36,14 +38,13 @@ $--calendar-br: 2%;
     background-color: #d6f9fc;
     padding-block: 5px;
     border-bottom: 1px solid $--border-c;
-    color: $--fc-light;
+    color: $--fc-regular;
     font-size: clamp(0.7rem, 5vw, 1.4rem);
     font-weight: 100;
     & > td { padding: 5px }
 }
 .month-wrapper { position: relative }
 .month {
-    aspect-ratio: 7/5;
     overflow: hidden;
 }
 .previous-month, .next-month {
@@ -56,9 +57,38 @@ $--calendar-br: 2%;
 .next-month { right: -3rem }
 
 .day {
-    color: $--fc-regular;
+    color: $--fc-dark;
     aspect-ratio: 1;
     border-radius: calc(#{$--calendar-br} + 10%);
     font-size: clamp(1rem, 6vw, 1.5rem);
     &:hover { background-color: #d6f9fc }
+}
+.today {
+    font-weight: 600;
+    box-shadow: 0 0 0 1px $--fc-dark; // Uso box-shadow porque el estilo 'border' modifica el tamaño del div mientras que box shadow NO
+}
+button.light-color-day { color: $--fc-light }
+
+@media screen and (max-width: 575.9px) {
+    .calendar-wrapper {
+        padding-inline: 0;
+        height: calc(100vh - 211px);    // Cuidado! Si el height del NAvbar o el footer cambian, deja de ser 188px!!! No se me ourrió otra solución
+    }
+    .previous-month { left: 1rem }
+    .next-month { right: 1rem }
+    .next-month, .previous-month {
+        transform: none;
+        top: -5rem;
+    }
+    .calendar, .month-wrapper, .month { height: 100% }
+    .month {
+        display: flex;
+        flex-direction: column;
+    }
+    .week { flex-basis: 100% }
+    .day { aspect-ratio: 0 }
+}
+
+@media screen and (max-width: 340px) {
+    .next-month, .previous-month { top: -4.5rem }
 }

@@ -9,7 +9,8 @@ const dateEachDay = (year, month, day) => {
 const getCalendar = (year) => {
     let output = [];
     for (i = 320; i < 366; i++) {
-        let date = dateEachDay(year, month, i);
+        let date = new Date(year, month, 0);
+        date = new Date(date.setDate(i));
         let day = date.getDate()
         let weekDay = day_text[date.getDay()];
         let month = month_text[date.getMonth()];
@@ -23,9 +24,9 @@ const getCalendar = (year) => {
     return output;
 }
 
-let today = new Date();
-let date = new Date(2021, 10, 2)
-console.log(date)
+
+let date = new Date(2021, 10, 26);
+console.log(typeof date)
 
 // console.log(getCalendar(today.getFullYear()))
 // console.log(month_text[today.getMonth()].toUpperCase())

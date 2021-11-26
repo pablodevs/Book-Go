@@ -71,7 +71,7 @@ li {
 .view {
     width: 100%;
     margin-block: auto;  // Esta linea centra el contenido, es necesaria pero también puede ser: margin-bottom: auto; si quieres que el contenido esté arriba
-    padding: 1rem;       // Esta linea evita que el contenido quede pegado a los extremos
+    padding: 0.8rem;       // Esta linea evita que el contenido quede pegado a los extremos
     @include displayCenter();
     flex-direction: column;
 }
