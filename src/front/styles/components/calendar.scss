@@ -69,7 +69,7 @@ $--calendar-br: 2%;
     box-shadow: inset 0 0 0 0.5px $--fc-dark; // Uso box-shadow porque el estilo 'border' modifica el tamaño del div mientras que box shadow NO
     z-index: 1;
 }
-a.light-color-day { color: $--fc-light }
+.light-color-day { color: $--fc-light }
 
 @media screen and (max-width: 575.9px) {
     .calendar-wrapper {

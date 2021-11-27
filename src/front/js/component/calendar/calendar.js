@@ -44,10 +44,10 @@ export const Calendar = () => {
 						<Day
 							key={i}
 							date={date}
-							isOnClickday={
+							isOnClickDay={
 								i > store.calendar.totDays
 									? true
-									: i <= 0 && date.getMonth() !== todayMonth
+									: i <= 0 && date.getMonth() !== todayMonth // Esto no funciona con los dias 29 y 30 de Nov estando en Diciembre!!!!!
 										? false
 										: undefined
 							}
