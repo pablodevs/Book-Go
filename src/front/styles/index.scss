@@ -78,3 +78,7 @@ li {
 .center {
     @include displayCenter();
 }
+a.disabled {
+    pointer-events: none;
+    cursor: default;
+}

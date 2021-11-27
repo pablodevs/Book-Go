@@ -7,7 +7,9 @@ export const Day = props => {
 	return (
 		<Link
 			to="/"
-			className={"center " + "day" + (props.isLight ? " light-color-day" : "") + (props.isToday ? " today" : "")}>
+			className={
+				"center day" + (props.isLight ? " light-color-day disabled" : "") + (props.isToday ? " today" : "")
+			}>
 			{props.date.getDate()}
 		</Link>
 	);
