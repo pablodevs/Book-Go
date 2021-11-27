@@ -1,19 +1,34 @@
 import dates from "../dates.json";
 
+const getNumOfDaysInMonth = (year, month) => new Date(year, month + 1, 0).getDate();
+
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
 			calendar: {
-				date: new Date(),
-				day: new Date().getDate(),
-				month: new Date().getMonth(),
-				year: new Date().getFullYear(),
-				totDays: new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate()
+				date: null,
+				day: null,
+				month: null,
+				year: null,
+				totDays: null
 			}
 		},
 		actions: {
 			// Meto todas las acciones del componente calendario en calendarActions:
 			calendarActions: {
+				setInitialCalendar: () => {
+					// Inicializa el calendario con la fecha actual al cargar la página
+					let today = new Date();
+					setStore({
+						calendar: {
+							date: today,
+							day: today.getDate(),
+							month: today.getMonth(),
+							year: today.getFullYear(),
+							totDays: new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate()
+						}
+					});
+				},
 				updateCalendar: isNext => {
 					/*
 						Esta función recibe los onClick de los botones que cambian de mes
@@ -22,26 +37,50 @@ const getState = ({ getStore, getActions, setStore }) => {
 						Tuve que añadir excepciones por si estás en Diciembre y quieres ir a
 						Enero del año que viene y lo contrario.
 					*/
-					calendar = getStore().calendar;
+					let store = getStore();
 
-					let currentMonthIndex = dates["month_text"].indexOf(month.toLowerCase());
+					let currentMonthIndex = store.calendar.month;
 					if (isNext) {
 						if (currentMonthIndex == 11) {
-							setYear(year + 1);
-							setTotDays(getMonthDays(year, 0));
-							setMonth(dates["month_text"][0].toUpperCase());
+							let newYear = store.calendar.year + 1;
+							setStore({
+								calendar: {
+									...store.calendar,
+									month: 0,
+									totDays: getNumOfDaysInMonth(newYear, 0),
+									year: newYear
+								}
+							});
 						} else {
-							setTotDays(getMonthDays(year, currentMonthIndex + 1));
-							setMonth(dates["month_text"][currentMonthIndex + 1].toUpperCase());
+							let newMonth = currentMonthIndex + 1;
+							setStore({
+								calendar: {
+									...store.calendar,
+									month: newMonth,
+									totDays: getNumOfDaysInMonth(store.calendar.year, newMonth)
+								}
+							});
 						}
 					} else {
 						if (currentMonthIndex == 0) {
-							setYear(year - 1);
-							setTotDays(getMonthDays(year, 11));
-							setMonth(dates["month_text"][11].toUpperCase());
+							let newYear = store.calendar.year - 1;
+							setStore({
+								calendar: {
+									...store.calendar,
+									month: 11,
+									totDays: getNumOfDaysInMonth(newYear, 11),
+									year: newYear
+								}
+							});
 						} else {
-							setTotDays(getMonthDays(year, currentMonthIndex - 1));
-							setMonth(dates["month_text"][currentMonthIndex - 1].toUpperCase());
+							let newMonth = currentMonthIndex - 1;
+							setStore({
+								calendar: {
+									...store.calendar,
+									month: newMonth,
+									totDays: getNumOfDaysInMonth(store.calendar.year, newMonth)
+								}
+							});
 						}
 					}
 				}
