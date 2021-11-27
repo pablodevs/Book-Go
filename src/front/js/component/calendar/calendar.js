@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import { Context } from "../../store/appContext.js"
+import { Context } from "../../store/appContext.js";
 import dates from "../../dates.json";
 import { Day } from "./day";
 import "../../../styles/components/calendar.scss";
@@ -22,7 +22,7 @@ let todayMonth = today.getMonth();
 let todayYear = today.getFullYear();
 
 export const Calendar = () => {
-	const {store, actions} = useContext(Context);
+	const { store, actions } = useContext(Context);
 
 	const [weeks, setWeeks] = useState(null); // sirve para renderizar las 6 semanas con sus días
 	const [month, setMonth] = useState(dates["month_text"][store.month].toUpperCase()); // sirve para cambiar el mes cuando el usuario clicke en las flechas
