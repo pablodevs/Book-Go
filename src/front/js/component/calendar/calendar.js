@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import { Context } from "../../store/appContext.js"
 import dates from "../../dates.json";
 import { Day } from "./day";
 import "../../../styles/components/calendar.scss";
@@ -12,17 +13,19 @@ const getMonthDays = (year, month) => {
 		te devolvería el día 31 de Enero. Si le pides el día -1 de Febrero
 		te devuelve el día 30 de Enero. 
 	*/
-	return new Date(year, month, 0).getDate();
+	return new Date(year, month + 1, 0).getDate();
 };
 
 // Obtengo la fecha actual para dar valores iniciales a los hooks:
 let today = new Date();
-let todayMonth = today.getMonth() + 1;
+let todayMonth = today.getMonth();
 let todayYear = today.getFullYear();
 
 export const Calendar = () => {
+	const {store, actions} = useContext(Context);
+
 	const [weeks, setWeeks] = useState(null); // sirve para renderizar las 6 semanas con sus días
-	const [month, setMonth] = useState(dates["month_text"][today.getMonth()].toUpperCase()); // sirve para cambiar el mes cuando el usuario clicke en las flechas
+	const [month, setMonth] = useState(dates["month_text"][store.month].toUpperCase()); // sirve para cambiar el mes cuando el usuario clicke en las flechas
 	const [totDays, setTotDays] = useState(getMonthDays(todayYear, todayMonth)); // Para saber en todo momento cuántos días tiene el mes ya que los hay de 30, 31 y 28 días.
 	const [year, setYear] = useState(today.getFullYear());
 
@@ -50,15 +53,22 @@ export const Calendar = () => {
 
 			for (let i = 0; i < 6; i++) {
 				let week = [];
-				for (let i = firstMonday; i < firstMonday + 7 && i <= lastSunday; i++) { // recorro el bucle desde el primer Lunes hasta el último domingo semana por semana (o sea, de 7 en 7)
+				for (let i = firstMonday; i < firstMonday + 7; i++) {
+					// recorro el bucle desde el primer Lunes hasta el último domingo semana por semana (o sea, de 7 en 7)
 					let date = new Date(year, dates["month_text"].indexOf(month.toLowerCase()), i);
 					week.push(
 						<Day
 							key={i}
 							date={date}
-							isLight={i <= 0 || i > totDays ? true : false} // comprobamos si el día pertenece al mes, si no, saldrá en gris claro
+							isLight={
+								i <= 0 ||
+								i > totDays ||
+								(date.getMonth() === todayMonth && date.getDate() < today.getDate())
+									? true
+									: false
+							} // comprobamos si el día pertenece al mes, si no, saldrá en gris claro
 							isToday={
-								JSON.stringify([date.getDate(), date.getMonth() + 1, date.getFullYear()]) ==
+								JSON.stringify([date.getDate(), date.getMonth(), date.getFullYear()]) ===
 								JSON.stringify([today.getDate(), todayMonth, todayYear]) // comprobamos si se trata del día de hoy, fue dificil hacer está comparación, en internet proponen date.getTime() == date2.getTime() pero no me funcionó...
 									? true
 									: false
@@ -77,36 +87,6 @@ export const Calendar = () => {
 		},
 		[month] // realizo este useEffect() cada vez que cambia el mes
 	);
-
-	const upgradeMonth = isNext => {
-		/*
-			Esta función recive los onClick de los botones que cambian de mes.
-			Así, si recive isNext = true, cambia los hooks al siguiente mes.
-			Tuve que añadir excepciones por si estás en Diciembre y quieres ir a
-			Enero del año que viene y lo contrario.
-		*/
-		let currentMonthIndex = dates["month_text"].indexOf(month.toLowerCase());
-
-		if (isNext) {
-			if (currentMonthIndex == 11) {
-				setMonth(dates["month_text"][0].toUpperCase());
-				setYear(year + 1);
-				setTotDays(getMonthDays(year, 1));
-			} else {
-				setMonth(dates["month_text"][currentMonthIndex + 1].toUpperCase());
-				setTotDays(getMonthDays(year, currentMonthIndex + 2));
-			}
-		} else {
-			if (currentMonthIndex == 0) {
-				setMonth(dates["month_text"][11].toUpperCase());
-				setYear(year - 1);
-				setTotDays(getMonthDays(year, 0));
-			} else {
-				setMonth(dates["month_text"][currentMonthIndex - 1].toUpperCase());
-				setTotDays(getMonthDays(year, currentMonthIndex));
-			}
-		}
-	};
 
 	return (
 		<div className="view">
@@ -129,9 +109,11 @@ export const Calendar = () => {
 						</div>
 						<div className="month-wrapper">
 							{/* Estos son los botones de cambio de mes, tienen position: absolute para colocarlos donde quiera */}
-							<button className="previous-month" onClick={() => upgradeMonth(false)}>
-								<i className="fas fa-chevron-left" />
-							</button>
+							{dates["month_text"].indexOf(month.toLowerCase()) === todayMonth ? null : (
+								<button className="previous-month" onClick={() => upgradeMonth(false)}>
+									<i className="fas fa-chevron-left" />
+								</button>
+							)}
 							<button className="next-month" onClick={() => upgradeMonth(true)}>
 								<i className="fas fa-chevron-right" />
 							</button>
