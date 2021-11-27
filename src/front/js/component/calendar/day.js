@@ -1,12 +1,15 @@
 import React from "react";
 import PropTypes from "prop-types";
 import "../../../styles/components/calendar.scss";
+import { Link } from "react-router-dom";
 
 export const Day = props => {
 	return (
-		<button className={"day" + (props.isLight ? " light-color-day" : "") + (props.isToday ? " today" : "")}>
+		<Link
+			to="/"
+			className={"center " + "day" + (props.isLight ? " light-color-day" : "") + (props.isToday ? " today" : "")}>
 			{props.date.getDate()}
-		</button>
+		</Link>
 	);
 };
 

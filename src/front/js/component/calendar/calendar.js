@@ -12,12 +12,12 @@ const getMonthDays = (year, month) => {
 		te devolvería el día 31 de Enero. Si le pides el día -1 de Febrero
 		te devuelve el día 30 de Enero. 
 	*/
-	return new Date(year, month, 0).getDate();
+	return new Date(year, month + 1, 0).getDate();
 };
 
 // Obtengo la fecha actual para dar valores iniciales a los hooks:
 let today = new Date();
-let todayMonth = today.getMonth() + 1;
+let todayMonth = today.getMonth();
 let todayYear = today.getFullYear();
 
 export const Calendar = () => {
@@ -50,7 +50,7 @@ export const Calendar = () => {
 
 			for (let i = 0; i < 6; i++) {
 				let week = [];
-				for (let i = firstMonday; i < firstMonday + 7 && i <= lastSunday; i++) {
+				for (let i = firstMonday; i < firstMonday + 7; i++) {
 					// recorro el bucle desde el primer Lunes hasta el último domingo semana por semana (o sea, de 7 en 7)
 					let date = new Date(year, dates["month_text"].indexOf(month.toLowerCase()), i);
 					week.push(
@@ -59,7 +59,7 @@ export const Calendar = () => {
 							date={date}
 							isLight={i <= 0 || i > totDays ? true : false} // comprobamos si el día pertenece al mes, si no, saldrá en gris claro
 							isToday={
-								JSON.stringify([date.getDate(), date.getMonth() + 1, date.getFullYear()]) ==
+								JSON.stringify([date.getDate(), date.getMonth(), date.getFullYear()]) ==
 								JSON.stringify([today.getDate(), todayMonth, todayYear]) // comprobamos si se trata del día de hoy, fue dificil hacer está comparación, en internet proponen date.getTime() == date2.getTime() pero no me funcionó...
 									? true
 									: false
@@ -92,19 +92,19 @@ export const Calendar = () => {
 			if (currentMonthIndex == 11) {
 				setMonth(dates["month_text"][0].toUpperCase());
 				setYear(year + 1);
-				setTotDays(getMonthDays(year, 1));
+				setTotDays(getMonthDays(year, 0));
 			} else {
 				setMonth(dates["month_text"][currentMonthIndex + 1].toUpperCase());
-				setTotDays(getMonthDays(year, currentMonthIndex + 2));
+				setTotDays(getMonthDays(year, currentMonthIndex + 1));
 			}
 		} else {
 			if (currentMonthIndex == 0) {
 				setMonth(dates["month_text"][11].toUpperCase());
 				setYear(year - 1);
-				setTotDays(getMonthDays(year, 0));
+				setTotDays(getMonthDays(year, 11));
 			} else {
 				setMonth(dates["month_text"][currentMonthIndex - 1].toUpperCase());
-				setTotDays(getMonthDays(year, currentMonthIndex));
+				setTotDays(getMonthDays(year, currentMonthIndex - 1));
 			}
 		}
 	};
