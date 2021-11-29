@@ -8,17 +8,20 @@ export const Day = props => {
 	const { store, actions } = useContext(Context);
 	return (
 		<>
-			{props.isOnClickDay !== undefined ? (
+			{props.isChangeMonthDay !== undefined ? (
 				<button
 					className={"center day" + (props.isLight ? " light-color-day" : "")}
-					onClick={() => actions.calendarActions.updateCalendar(props.isOnClickDay)}>
+					onClick={() => actions.calendarActions.updateCalendar(props.isChangeMonthDay)}>
 					{props.date.getDate()}
 				</button>
 			) : (
 				<Link
-					to="/"
+					to={props.isPast ? "#" : "/"}
 					className={
-						"center day" + (props.isLight ? " light-color-day" : "") + (props.isToday ? " today" : "")
+						"center day" +
+						(props.isPast ? " disabled" : "") +
+						(props.isLight ? " light-color-day" : "") +
+						(props.isToday ? " today" : "")
 					}>
 					{props.date.getDate()}
 				</Link>
@@ -31,5 +34,6 @@ Day.propTypes = {
 	date: PropTypes.object,
 	isLight: PropTypes.bool,
 	isToday: PropTypes.bool,
-	isOnClickDay: PropTypes.bool
+	isPast: PropTypes.bool,
+	isChangeMonthDay: PropTypes.bool
 };

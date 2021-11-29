@@ -81,7 +81,8 @@ button {
 .center {
     @include displayCenter();
 }
-a.disabled {
+button.disabled, a.disabled {
     pointer-events: none;
-    cursor: default;
+    cursor: not-allowed;
+    // cursor: default;
 }

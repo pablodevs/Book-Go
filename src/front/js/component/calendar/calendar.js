@@ -5,6 +5,7 @@ import { Day } from "./day";
 import "../../../styles/components/calendar.scss";
 
 // Obtengo la fecha actual para dar valores iniciales a los hooks:
+// let today = new Date();
 let today = new Date();
 let todayMonth = today.getMonth();
 let todayYear = today.getFullYear();
@@ -40,27 +41,39 @@ export const Calendar = () => {
 				for (let i = firstMonday; i < firstMonday + 7; i++) {
 					// recorro el bucle desde el primer Lunes hasta el último domingo semana por semana (o sea, de 7 en 7)
 					let date = new Date(store.calendar.year, store.calendar.month, i);
+
+					console.log("día:", date.getDate(), "mes:", date.getMonth());
+					console.log("Week:", week.length);
+
 					week.push(
 						<Day
 							key={i}
 							date={date}
-							isOnClickDay={
+							isChangeMonthDay={
+								(date.getFullYear() > todayYear || date.getMonth() > todayMonth) &&
 								i > store.calendar.totDays
 									? true
-									: i <= 0 && date.getMonth() !== todayMonth // Esto no funciona con los dias 29 y 30 de Nov estando en Diciembre!!!!!
+									: i <= 0 && (date.getMonth() >= todayMonth || date.getFullYear() > todayYear)
 										? false
 										: undefined
 							}
 							isLight={
 								i <= 0 ||
 								i > store.calendar.totDays ||
-								(date.getMonth() === todayMonth && date.getDate() < today.getDate())
+								(date.getFullYear() === todayYear &&
+									date.getMonth() === todayMonth &&
+									date.getDate() < today.getDate())
 									? true
 									: false
 							} // comprobamos si el día pertenece al mes, si no, saldrá en gris claro
 							isToday={
 								JSON.stringify([date.getDate(), date.getMonth(), date.getFullYear()]) ===
 								JSON.stringify([today.getDate(), todayMonth, todayYear]) // comprobamos si se trata del día de hoy, fue dificil hacer está comparación, en internet proponen date.getTime() == date2.getTime() pero no me funcionó...
+									? true
+									: false
+							}
+							isPast={
+								date.getTime() < new Date(todayYear, todayMonth, today.getDate()).getTime()
 									? true
 									: false
 							}

@@ -1,6 +1,6 @@
-$--fc-regular: rgb(90, 90, 90);
-$--fc-light: rgb(192, 192, 192);
-$--fc-dark: rgb(34, 34, 34);
+$--fc-regular: rgb(110, 110, 110);
+$--fc-light: rgb(221, 221, 221);
+$--fc-dark: rgb(29, 29, 36);
 
 $--border-c: rgba(204, 204, 204, 0.685);
 
@@ -69,7 +69,11 @@ $--calendar-br: 2%;
     box-shadow: inset 0 0 0 0.5px $--fc-dark; // Uso box-shadow porque el estilo 'border' modifica el tamaño del div mientras que box shadow NO
     z-index: 1;
 }
-.light-color-day { color: $--fc-light }
+a.light-color-day, button.light-color-day {
+    color: $--fc-light;
+    cursor: default;
+    &:hover { background: none }
+}
 
 @media screen and (max-width: 575.9px) {
     .calendar-wrapper {
