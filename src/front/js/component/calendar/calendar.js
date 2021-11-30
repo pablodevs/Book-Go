@@ -21,7 +21,7 @@ export const Calendar = () => {
 
 			// Compruebo en qué día cae el primer día del mes:
 			let fisrtDayOfMonth = new Date(calendar.year, calendar.month, 1);
-			// Obtengo el primer Lunes del mes anterior:
+			// Obtengo el primer Lunes del mes anterior que sacaré por pantalla, ejemplo: si el mes empieza en martes, cojo el 31 del mes anterior que será el primer lunes:
 			let monday = 2 - fisrtDayOfMonth.getDay(); // date.getDay() --> 0(sunday) - 6(monday)
 			if (fisrtDayOfMonth.getDay() === 0) monday = -5; // Domingo tiene el indice 0 así que es una excepción
 
@@ -36,6 +36,7 @@ export const Calendar = () => {
 							key={i}
 							date={date}
 							isChangeMonthDay={
+								// Compruebo si el día pertenece a otro mes para que al hacer click sobre él te lleve a ese mes
 								(date.getFullYear() > todayYear || date.getMonth() > todayMonth) && i > calendar.totDays
 									? calendar.month + 1
 									: i <= 0 &&
@@ -45,12 +46,14 @@ export const Calendar = () => {
 										: undefined
 							}
 							isToday={
+								// comprobamos si se trata del día de hoy, fue dificil hacer está comparación, en internet proponen date.getTime() == date2.getTime() pero no me funcionó...
 								JSON.stringify([date.getDate(), date.getMonth(), date.getFullYear()]) ===
-								JSON.stringify([todayDay, todayMonth, todayYear]) // comprobamos si se trata del día de hoy, fue dificil hacer está comparación, en internet proponen date.getTime() == date2.getTime() pero no me funcionó...
+								JSON.stringify([todayDay, todayMonth, todayYear])
 									? true
 									: false
 							}
 							isPast={
+								// comprobamos si es un día del pasado para darle la clase .disabled
 								date.getTime() < new Date(todayYear, todayMonth, todayDay).getTime() &&
 								calendar.month === todayMonth
 									? true
