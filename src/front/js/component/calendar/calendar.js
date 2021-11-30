@@ -30,6 +30,7 @@ export const Calendar = () => {
 				for (let i = monday; i < monday + 7; i++) {
 					// recorro el bucle desde el primer Lunes hasta el último domingo semana por semana (o sea, de 7 en 7)
 					let date = new Date(calendar.year, calendar.month, i);
+					console.log(i);
 
 					week.push(
 						<Day
