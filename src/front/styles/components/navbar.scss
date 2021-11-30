@@ -8,7 +8,10 @@
     line-height: 1rem;
     padding: 0.8rem 3rem;
     background-color: $--color-grey-dark;
-    & a { color: $--color-blue-light }
+}
+._navbar a {
+    color: $--color-grey-light;
+    &:hover { color: $--color-grey-lighter }
 }
 a.navbar-logo {
     font-size: 1.4rem;
