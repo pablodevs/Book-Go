@@ -22,8 +22,8 @@ tasks:
         pipenv run upgrade &&
         python docs/assets/greeting.py back
     - command: >
-        npm install &&
         brew install node@14 &&
         brew link node@14 &&
+        npm install &&
         npm run start
       openMode: split-right
