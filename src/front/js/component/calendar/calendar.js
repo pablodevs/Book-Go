@@ -4,83 +4,62 @@ import dates from "../../dates.json";
 import { Day } from "./day";
 import "../../../styles/components/calendar.scss";
 
-// Obtengo la fecha actual para dar valores iniciales a los hooks:
-// let today = new Date();
-let today = new Date();
-let todayMonth = today.getMonth();
-let todayYear = today.getFullYear();
-
 export const Calendar = () => {
 	const { store, actions } = useContext(Context);
 	const [weeks, setWeeks] = useState(null); // sirve para renderizar las 6 semanas con sus días
 
+	let calendar = store.calendar,
+		todayDate = calendar.todayDate,
+		todayDay = todayDate.getDate(),
+		todayMonth = todayDate.getMonth(),
+		todayYear = todayDate.getFullYear();
+
 	useEffect(
 		() => {
 			let weeksArray = [];
+			if (calendar.month === null) return;
 
 			// Compruebo en qué día cae el primer día del mes:
-			let fisrtDay = new Date(store.calendar.year, store.calendar.month, 1);
-			let fisrtDayWeekNum = fisrtDay.getDay();
-
-			// Compruebo en qué día cae el último día del mes:
-			let lastDay = new Date(store.calendar.year, store.calendar.month + 1, 0);
-			let lastDayWeekNum = lastDay.getDay();
-
-			// Empiezo a contar desde el Lunes y acabo en Domingo siempre:
-			let firstMonday = 2 - fisrtDayWeekNum;
-			if (fisrtDayWeekNum === 0) firstMonday = -5; // Domingo tiene el indice 0 así que es una excepción
-			let lastSunday = store.calendar.totDays + (7 - lastDayWeekNum);
-			if (lastDayWeekNum === 0) lastSunday = store.calendar.totDays; // Domingo tiene el indice 0 así que es una excepción
-
-			let totDaysToShow = lastSunday - firstMonday + 1; // Esto me devuelve el número de días que apareceran en pantalla
-			if (totDaysToShow !== 42) lastSunday += 7;
-			if (totDaysToShow !== 42) lastSunday += 7; // Esta línea evita que un Febrero que tiene 28 días y empieza en Lunes de problemas jajajaja
+			let fisrtDayOfMonth = new Date(calendar.year, calendar.month, 1);
+			// Obtengo el primer Lunes del mes anterior:
+			let monday = 2 - fisrtDayOfMonth.getDay(); // date.getDay() --> 0(sunday) - 6(monday)
+			if (fisrtDayOfMonth.getDay() === 0) monday = -5; // Domingo tiene el indice 0 así que es una excepción
 
 			for (let i = 0; i < 6; i++) {
 				let week = [];
-				for (let i = firstMonday; i < firstMonday + 7; i++) {
+				for (let i = monday; i < monday + 7; i++) {
 					// recorro el bucle desde el primer Lunes hasta el último domingo semana por semana (o sea, de 7 en 7)
-					let date = new Date(store.calendar.year, store.calendar.month, i);
-
-					console.log("día:", date.getDate(), "mes:", date.getMonth());
-					console.log("Week:", week.length);
+					let date = new Date(calendar.year, calendar.month, i);
 
 					week.push(
 						<Day
 							key={i}
 							date={date}
 							isChangeMonthDay={
-								(date.getFullYear() > todayYear || date.getMonth() > todayMonth) &&
-								i > store.calendar.totDays
-									? true
-									: i <= 0 && (date.getMonth() >= todayMonth || date.getFullYear() > todayYear)
-										? false
+								(date.getFullYear() > todayYear || date.getMonth() > todayMonth) && i > calendar.totDays
+									? calendar.month + 1
+									: i <= 0 &&
+									  ((date.getMonth() >= todayMonth && date.getFullYear() === todayYear) ||
+											date.getFullYear() > todayYear)
+										? calendar.month - 1
 										: undefined
 							}
-							isLight={
-								i <= 0 ||
-								i > store.calendar.totDays ||
-								(date.getFullYear() === todayYear &&
-									date.getMonth() === todayMonth &&
-									date.getDate() < today.getDate())
-									? true
-									: false
-							} // comprobamos si el día pertenece al mes, si no, saldrá en gris claro
 							isToday={
 								JSON.stringify([date.getDate(), date.getMonth(), date.getFullYear()]) ===
-								JSON.stringify([today.getDate(), todayMonth, todayYear]) // comprobamos si se trata del día de hoy, fue dificil hacer está comparación, en internet proponen date.getTime() == date2.getTime() pero no me funcionó...
+								JSON.stringify([todayDay, todayMonth, todayYear]) // comprobamos si se trata del día de hoy, fue dificil hacer está comparación, en internet proponen date.getTime() == date2.getTime() pero no me funcionó...
 									? true
 									: false
 							}
 							isPast={
-								date.getTime() < new Date(todayYear, todayMonth, today.getDate()).getTime()
+								date.getTime() < new Date(todayYear, todayMonth, todayDay).getTime() &&
+								calendar.month === todayMonth
 									? true
 									: false
 							}
 						/>
 					);
 				}
-				firstMonday += 7; // actualizo el Lunes cada 7 días
+				monday += 7; // actualizo el Lunes cada 7 días
 				weeksArray.push(
 					<div key={i} className="week">
 						{week}
@@ -89,7 +68,7 @@ export const Calendar = () => {
 			}
 			setWeeks(weeksArray); // cargo las semanas en pantalla
 		},
-		[store.calendar.month] // realizo este useEffect() cada vez que cambia el mes
+		[store.calendar] // realizo este useEffect() cada vez que cambia el mes
 	);
 
 	return (
@@ -97,9 +76,26 @@ export const Calendar = () => {
 			{/* Todo lo meto dentro de una condición con ' : null' para que no se vea feo mientras carga, podéis probar a quitarlo y ver qué pasa. */}
 			{weeks ? (
 				<div className="calendar-wrapper">
-					<h4 className="calendar-title">
-						{dates["month_text"][store.calendar.month].toUpperCase()} {store.calendar.year}
-					</h4>
+					<div className="calendar-header">
+						{/* Estos son los botones de cambio de mes, tienen position: absolute para colocarlos donde quiera */}
+						<button
+							className="previous-month"
+							onClick={
+								calendar.month > todayMonth || calendar.year > todayYear
+									? () => actions.calendarActions.updateCalendar(calendar.month - 1)
+									: () => undefined
+							}>
+							<i className="fas fa-chevron-left" />
+						</button>
+						<h4 className="calendar-title">
+							{dates["month_text"][calendar.month].toUpperCase()} {calendar.year}
+						</h4>
+						<button
+							className="next-month"
+							onClick={() => actions.calendarActions.updateCalendar(calendar.month + 1)}>
+							<i className="fas fa-chevron-right" />
+						</button>
+					</div>
 					<div className="calendar">
 						<div className="week-days">
 							{dates["day_text"]
@@ -111,21 +107,8 @@ export const Calendar = () => {
 									</div>
 								))}
 						</div>
-						<div className="month-wrapper">
-							{/* Estos son los botones de cambio de mes, tienen position: absolute para colocarlos donde quiera */}
-							{store.calendar.month === todayMonth ? null : (
-								<button
-									className="previous-month"
-									onClick={() => actions.calendarActions.updateCalendar(false)}>
-									<i className="fas fa-chevron-left" />
-								</button>
-							)}
-							<button className="next-month" onClick={() => actions.calendarActions.updateCalendar(true)}>
-								<i className="fas fa-chevron-right" />
-							</button>
-							{/* Aquí cargo el mes entero: */}
-							<div className="month">{weeks}</div>
-						</div>
+						{/* Aquí cargo el mes entero: */}
+						<div className="month">{weeks}</div>
 					</div>
 				</div>
 			) : null}

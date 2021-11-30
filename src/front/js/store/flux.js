@@ -1,11 +1,10 @@
-import dates from "../dates.json";
-
 const getNumOfDaysInMonth = (year, month) => new Date(year, month + 1, 0).getDate();
 
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
 			calendar: {
+				todayDate: new Date(),
 				date: null,
 				day: null,
 				month: null,
@@ -21,68 +20,41 @@ const getState = ({ getStore, getActions, setStore }) => {
 					let today = new Date();
 					setStore({
 						calendar: {
+							todayDate: today,
 							date: today,
 							day: today.getDate(),
 							month: today.getMonth(),
 							year: today.getFullYear(),
-							totDays: new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate()
+							totDays: getNumOfDaysInMonth(today.getFullYear(), today.getMonth())
 						}
 					});
 				},
-				updateCalendar: isNext => {
+				updateCalendar: month => {
 					/*
 						Esta función recibe los onClick de los botones que cambian de mes
 						o de los días de otros meses que aparecen en gris.
-						Así, si recibe isNext = true, cambia los hooks al siguiente mes.
-						Tuve que añadir excepciones por si estás en Diciembre y quieres ir a
-						Enero del año que viene y lo contrario.
 					*/
 					let store = getStore();
+					let year = store.calendar.year;
 
-					let currentMonthIndex = store.calendar.month;
-					if (isNext) {
-						if (currentMonthIndex == 11) {
-							let newYear = store.calendar.year + 1;
-							setStore({
-								calendar: {
-									...store.calendar,
-									month: 0,
-									totDays: getNumOfDaysInMonth(newYear, 0),
-									year: newYear
-								}
-							});
-						} else {
-							let newMonth = currentMonthIndex + 1;
-							setStore({
-								calendar: {
-									...store.calendar,
-									month: newMonth,
-									totDays: getNumOfDaysInMonth(store.calendar.year, newMonth)
-								}
-							});
-						}
-					} else {
-						if (currentMonthIndex == 0) {
-							let newYear = store.calendar.year - 1;
-							setStore({
-								calendar: {
-									...store.calendar,
-									month: 11,
-									totDays: getNumOfDaysInMonth(newYear, 11),
-									year: newYear
-								}
-							});
-						} else {
-							let newMonth = currentMonthIndex - 1;
-							setStore({
-								calendar: {
-									...store.calendar,
-									month: newMonth,
-									totDays: getNumOfDaysInMonth(store.calendar.year, newMonth)
-								}
-							});
-						}
+					if (month === 12) {
+						month = 0;
+						year += 1;
+					} else if (month === -1) {
+						month = 11;
+						year -= 1;
 					}
+
+					setStore({
+						calendar: {
+							...store.calendar,
+							date: null,
+							day: null,
+							month: month,
+							year: year,
+							totDays: getNumOfDaysInMonth(year, month)
+						}
+					});
 				}
 			}
 		}

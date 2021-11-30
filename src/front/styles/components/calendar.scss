@@ -1,19 +1,12 @@
-$--fc-regular: rgb(110, 110, 110);
-$--fc-light: rgb(221, 221, 221);
-$--fc-dark: rgb(29, 29, 36);
+/*===== General styles import =====*/
+@import "../colors"; // paleta de colores
+@import "../fonts";  // estilo de las fuentes
 
 $--border-c: rgba(204, 204, 204, 0.685);
 
 $--calendar-w: #{"min(100%, 560px)"};
 $--calendar-br: 2%;
 
-.calendar-title {
-    margin-bottom: 1rem;
-    width: 100%;
-    text-align: center;
-    color: $--fc-regular;
-    font-weight: 300;
-}
 .calendar-wrapper {
     width: 100%;
     padding-inline: 3rem;
@@ -28,6 +21,29 @@ $--calendar-br: 2%;
     flex-direction: column;
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
+.calendar-title { grid-area: m }
+.previous-month { grid-area: left }
+.next-month { grid-area: right }
+.calendar-header {
+    display: grid;
+    grid-template-columns: repeat(18, 1fr);
+    grid-template-areas:
+        ". left . m m m m m m m m m m m m . right .";
+    width: $--calendar-w;
+    margin-inline: auto;
+    margin-block: 0.8rem;
+}
+.calendar-title {
+    text-align: center;
+    color: $--fc-regular;
+    font-weight: 300;
+    margin-block: auto;
+}
+.previous-month, .next-month {
+    font-size: 1.4rem;
+    color: $--fc-regular;
+}
+
 .week-days, .week {
     display: flex;
     & > * {
@@ -43,18 +59,9 @@ $--calendar-br: 2%;
     font-weight: 100;
     & > td { padding: 5px }
 }
-.month-wrapper { position: relative }
 .month {
     overflow: hidden;
 }
-.previous-month, .next-month {
-    color: $--fc-light;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%)
-}
-.previous-month { left: -3rem }
-.next-month { right: -3rem }
 
 .day {
     color: $--fc-dark;
@@ -67,10 +74,9 @@ $--calendar-br: 2%;
     font-weight: 600;
     // inset: para que esté dentro del div y no vaya hacia afuera
     box-shadow: inset 0 0 0 0.5px $--fc-dark; // Uso box-shadow porque el estilo 'border' modifica el tamaño del div mientras que box shadow NO
-    z-index: 1;
 }
-a.light-color-day, button.light-color-day {
-    color: $--fc-light;
+.light-fc-day {
+    color: $--fc-light !important;
     cursor: default;
     &:hover { background: none }
 }
@@ -80,21 +86,11 @@ a.light-color-day, button.light-color-day {
         padding-inline: 0;
         height: calc(100vh - 66px); // Cuidado! Si el height del Navbar o el footer cambian, deja de ser 188px!!! No se me ourrió otra solución
     }
-    .previous-month { left: 1rem }
-    .next-month { right: 1rem }
-    .next-month, .previous-month {
-        transform: none;
-        top: -5rem;
-    }
-    .calendar, .month-wrapper, .month { height: 100% }
+    .calendar, .month { height: 100% }
     .month {
         display: flex;
         flex-direction: column;
     }
     .week { flex-basis: 100% }
     .day { aspect-ratio: 0 }
-}
-
-@media screen and (max-width: 340px) {
-    .next-month, .previous-month { top: -4.5rem }
 }

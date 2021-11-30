@@ -7,33 +7,27 @@ import { Link } from "react-router-dom";
 export const Day = props => {
 	const { store, actions } = useContext(Context);
 	return (
-		<>
-			{props.isChangeMonthDay !== undefined ? (
-				<button
-					className={"center day" + (props.isLight ? " light-color-day" : "")}
-					onClick={() => actions.calendarActions.updateCalendar(props.isChangeMonthDay)}>
-					{props.date.getDate()}
-				</button>
-			) : (
-				<Link
-					to={props.isPast ? "#" : "/"}
-					className={
-						"center day" +
-						(props.isPast ? " disabled" : "") +
-						(props.isLight ? " light-color-day" : "") +
-						(props.isToday ? " today" : "")
-					}>
-					{props.date.getDate()}
-				</Link>
-			)}
-		</>
+		<Link
+			to={props.isPast || props.isChangeMonthDay || props.isChangeMonthDay === 0 ? "#" : "/"}
+			className={
+				"center day" +
+				(props.isPast ? " disabled" : "") +
+				(props.isToday ? " today" : "") +
+				(props.isChangeMonthDay || props.isChangeMonthDay === 0 ? " light-fc-day" : "")
+			}
+			onClick={
+				props.isChangeMonthDay || props.isChangeMonthDay === 0
+					? () => actions.calendarActions.updateCalendar(props.isChangeMonthDay)
+					: () => undefined
+			}>
+			{props.date.getDate()}
+		</Link>
 	);
 };
 
 Day.propTypes = {
 	date: PropTypes.object,
-	isLight: PropTypes.bool,
 	isToday: PropTypes.bool,
 	isPast: PropTypes.bool,
-	isChangeMonthDay: PropTypes.bool
+	isChangeMonthDay: PropTypes.number
 };
