@@ -1,21 +1,15 @@
 @import "../colors.scss";
 
 #scroll-top {
-    box-shadow: $--color-grey-regular 0px 3px 10px 0;
-    position: fixed;
-    bottom: 1.2rem;
-    right: 1.2rem;
+    display: flex;
+    position: fixed; bottom: 1.2rem; right: 1.2rem;
+    width: fit-content; height: fit-content;
+    padding: 0.5rem;
+    border-radius: 5px;
+    box-shadow: $--color-grey-dark 0px 3px 10px 0;
     background-color: $--color-blue-light;
     color: $--color-blue-dark;
     font-size: 1.5rem;
-    padding: 0.5rem;
-    width: fit-content;
-    height: fit-content;
-    border-radius: 5px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
 
     transition: 0.3s;
     & > * {
