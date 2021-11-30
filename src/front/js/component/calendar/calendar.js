@@ -3,6 +3,7 @@ import { Context } from "../../store/appContext.js";
 import { Day } from "./day";
 import dates from "../../dates.json";
 import "../../../styles/components/calendar.scss";
+import { ScrollTop } from "../scrollTopButton.js";
 
 export const Calendar = () => {
 	const { store, actions } = useContext(Context);
@@ -77,6 +78,7 @@ export const Calendar = () => {
 
 	return (
 		<div className="view">
+			<ScrollTop />
 			{/* Todo lo meto dentro de una condición con ' : null' para que no se vea feo mientras carga, podéis probar a quitarlo y ver qué pasa. */}
 			{weeks ? (
 				<div className="calendar-wrapper">
