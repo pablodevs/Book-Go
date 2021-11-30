@@ -10,4 +10,5 @@
   margin: 0 1rem;
   transition: transform 250ms;
   display: inline-block;
+  &:hover { color: $--color-blue-light }
 }
