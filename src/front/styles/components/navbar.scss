@@ -1,8 +1,17 @@
 @import "../colors";
 
-.navbar {
+._navbar {
+    display: flex;
+    align-items: baseline;
+    justify-content: start;
+    gap: 1rem;
+    padding: 0.5rem 3rem;
     background-color: $--color-grey-dark;
     & a {
         color: $--color-blue-light;
     }
+}
+a.navbar-logo {
+    font-size: 1.4rem;
+    margin-inline-end: 2rem;
 }
