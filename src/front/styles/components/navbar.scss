@@ -1,5 +1,6 @@
 @import "../colors";
 
+$--fs-logo: 1.4rem;
 ._navbar {
     display: flex;
     align-items: baseline;
@@ -11,7 +12,7 @@
     & a { color: $--color-blue-light }
 }
 a.navbar-logo {
-    font-size: 1.4rem;
-    line-height: 1.4rem;
+    font-size: $--fs-logo;
+    line-height: $--fs-logo;
     margin-inline-end: 1.5rem;
 }

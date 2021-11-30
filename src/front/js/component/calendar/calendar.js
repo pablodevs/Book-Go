@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Context } from "../../store/appContext.js";
-import dates from "../../dates.json";
 import { Day } from "./day";
+import dates from "../../dates.json";
 import "../../../styles/components/calendar.scss";
 
 export const Calendar = () => {
