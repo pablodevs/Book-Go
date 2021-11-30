@@ -1,17 +1,17 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import "../../styles/components/navbar.scss";
 
 export const Navbar = () => {
 	return (
-		<nav className="navbar navbar-dark bg-dark sticky-top">
+		<nav className="navbar sticky-top">
 			<div className="container d-flex">
-				<Link to="/" className="text-light">
+				<NavLink to="/">
 					<h4>Home</h4>
-				</Link>
-				<Link to="/calendar" className="text-light">
+				</NavLink>
+				<NavLink to="/calendar">
 					<h5>calendar</h5>
-				</Link>
+				</NavLink>
 			</div>
 		</nav>
 	);

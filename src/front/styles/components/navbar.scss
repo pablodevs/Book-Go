@@ -1,0 +1,8 @@
+@import "../colors";
+
+.navbar {
+    background-color: $--color-grey-dark;
+    & a {
+        color: $--color-blue-light;
+    }
+}

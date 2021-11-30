@@ -83,7 +83,7 @@ button {
 }
 a.disabled {
     pointer-events: none;
-    color: $--fc-light;
+    color: $--color-grey-light;
     cursor: default;
     &:hover { background: none }
 }

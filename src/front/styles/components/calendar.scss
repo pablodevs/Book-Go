@@ -5,7 +5,7 @@
 $--border-c: rgba(204, 204, 204, 0.685);
 
 $--calendar-w: #{"min(100%, 560px)"};
-$--calendar-br: 2%;
+$--calendar-border-r: 2%;
 
 .calendar-wrapper {
     width: 100%;
@@ -15,7 +15,7 @@ $--calendar-br: 2%;
 }
 .calendar {
     margin-inline: auto;
-    border-radius: $--calendar-br;
+    border-radius: $--calendar-border-r;
     width: $--calendar-w;
     display: flex;
     flex-direction: column;
@@ -35,13 +35,13 @@ $--calendar-br: 2%;
 }
 .calendar-title {
     text-align: center;
-    color: $--fc-regular;
+    color: $--color-grey-dark;
     font-weight: 300;
     margin-block: auto;
 }
 .previous-month, .next-month {
     font-size: 1.4rem;
-    color: $--fc-regular;
+    color: $--color-grey-dark;
 }
 
 .week-days, .week {
@@ -54,7 +54,7 @@ $--calendar-br: 2%;
     background-color: #d6f9fc;
     padding-block: 5px;
     border-bottom: 1px solid $--border-c;
-    color: $--fc-regular;
+    color: $--color-grey-dark;
     font-size: clamp(0.7rem, 5vw, 1.4rem);
     font-weight: 100;
     & > td { padding: 5px }
@@ -64,19 +64,19 @@ $--calendar-br: 2%;
 }
 
 .day {
-    color: $--fc-dark;
+    color: $--color-blue-dark;
     aspect-ratio: 1;
-    border-radius: calc(#{$--calendar-br} + 10%);
+    border-radius: calc(#{$--calendar-border-r} + 10%);
     font-size: clamp(1rem, 6vw, 1.5rem);
     &:hover { background-color: #d6f9fc }
 }
 .today {
     font-weight: 600;
     // inset: para que esté dentro del div y no vaya hacia afuera
-    box-shadow: inset 0 0 0 0.5px $--fc-dark; // Uso box-shadow porque el estilo 'border' modifica el tamaño del div mientras que box shadow NO
+    box-shadow: inset 0 0 0 0.5px $--color-blue-dark; // Uso box-shadow porque el estilo 'border' modifica el tamaño del div mientras que box shadow NO
 }
-.light-fc-day {
-    color: $--fc-light !important;
+.week a.light-fc-day {
+    color: $--color-grey-light;
     cursor: default;
     &:hover { background: none }
 }

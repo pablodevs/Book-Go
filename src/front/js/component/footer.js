@@ -2,7 +2,7 @@ import React from "react";
 import "../../styles/components/footer.scss";
 
 export const Footer = () => (
-	<footer className="py-3 text-center text-light bg-dark sticky-bottom">
+	<footer className="footer py-3 text-center sticky-bottom">
 		<p>&#169; Pablo, Jaime & Clara. 2021 All rigths reserved</p>
 		<p>example@example.com</p>
 		<a
