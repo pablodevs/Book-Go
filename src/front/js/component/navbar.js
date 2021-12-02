@@ -5,11 +5,14 @@ import "../../styles/components/navbar.scss";
 export const Navbar = () => {
 	return (
 		<nav className="_navbar">
-			<NavLink className="navbar-logo" to="/">
-				Home
+			<NavLink className="_navbar-logo" to="/">
+				Inicio
 			</NavLink>
-			<NavLink to="/calendar">Calendar</NavLink>
-			<NavLink to="#">AnotherLink</NavLink>
+			<NavLink to="/calendar">Calendario</NavLink>
+			<NavLink to="#">Productos</NavLink>
+			<NavLink to="#">Servicios</NavLink>
+			<NavLink to="#">Contacto</NavLink>
+			<NavLink to="#">Entrar</NavLink>
 		</nav>
 	);
 };
