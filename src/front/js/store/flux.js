@@ -10,7 +10,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 				month: null,
 				year: null,
 				totDays: null
-			}
+			},
+			products: []
 		},
 		actions: {
 			// Meto todas las acciones del componente calendario en calendarActions:
@@ -55,10 +56,26 @@ const getState = ({ getStore, getActions, setStore }) => {
 							totDays: getNumOfDaysInMonth(year, month)
 						}
 					});
-				}
+				},
+			
+		},
+	
+			//get all products
+			get_products: async () => {
+				await fetch(process.env.BACKEND_URL + "/products")
+					.then(response => {
+						console.log(response.ok);
+						console.log(response.status);
+						return response.json();
+					})
+					.then(data => {
+						setStore({ products: data });
+					})
+					.catch(error => console.error(error));
 			}
-		}
-	};
+		
+	}
 };
+}
 
 export default getState;

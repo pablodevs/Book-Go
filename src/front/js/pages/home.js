@@ -1,14 +1,33 @@
-import React from "react";
+import React, { useEffect, useContext } from "react";
 import "../../styles/pages/home.scss";
+import { Product_card } from "./../component/product_card";
+import { Carrousel } from "./../component/carrousel";
+import { Context } from "../store/appContext";
 
 export const Home = () => {
+	const { actions, store } = useContext(Context);
+
+	useEffect(() => {
+		actions.get_products();
+	}, []);
+
 	return (
 		<div className="view">
-			<h1 className="text-center">This is the HOME page</h1>
-			<h4 className="text-center mx-5">
-				Cualquier contenido aparecerá siempre centrado y ocupando todo el alto de la pantalla por defecto
-				gracias a los estilos aplicados a .view y #app
-			</h4>
+			<h1 className="text-center">Bienvenidos a Home relax !</h1>
+			<Carrousel />
+			<div className="container-fluid">
+				{store.products.length > 0 ? (
+					<div className="row">
+						{store.products.map((item, index) => (
+							<div className="col" key={index}>
+								<Product_card product={item} />
+							</div>
+						))}
+					</div>
+				) : (
+					""
+				)}
+			</div>
 		</div>
 	);
 };
