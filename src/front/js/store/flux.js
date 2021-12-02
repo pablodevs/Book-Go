@@ -56,10 +56,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 							totDays: getNumOfDaysInMonth(year, month)
 						}
 					});
-				},
-			
-		},
-	
+				}
+			},
+
 			//get all products
 			get_products: async () => {
 				await fetch(process.env.BACKEND_URL + "/products")
@@ -73,9 +72,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 					})
 					.catch(error => console.error(error));
 			}
-		
-	}
+		}
+	};
 };
-}
 
 export default getState;
