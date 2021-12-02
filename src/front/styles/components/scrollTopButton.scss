@@ -1,0 +1,26 @@
+@import "../colors.scss";
+
+#scroll-top {
+    display: flex;
+    position: fixed; bottom: 1.2rem; right: 1.2rem;
+    width: fit-content; height: fit-content;
+    padding: 0.5rem;
+    border-radius: 5px;
+    box-shadow: $--color-grey-dark 0px 3px 10px 0;
+    background-color: $--color-blue-light;
+    color: $--color-blue-dark;
+    font-size: 1.5rem;
+
+    transition: 0.3s;
+    & > * {
+        transition: 0.3s;
+    }
+
+    &:hover {
+        background-color: $--color-blue-dark;
+        & > * {
+            transform: translateY(-3px);
+            color: $--color-blue-light;
+        }
+    }
+}

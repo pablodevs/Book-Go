@@ -17,7 +17,9 @@ const injectContext = PassedComponent => {
 			})
 		);
 
-		useEffect(() => {}, []);
+		useEffect(() => {
+			state.actions.calendarActions.setInitialCalendar();
+		}, []);
 
 		return (
 			<Context.Provider value={state}>

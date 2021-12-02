@@ -38,6 +38,9 @@ Make sure you have Python 3.8:
 2. Start coding! start the webpack dev server `$ npm run start`
 
 If having this problem: `npm ERR!` during running `$ npm install` try:
+
+  brew install node@14 && brew link node@14 && npm run start
+
 1. `$ brew install node@14`
 2. `$ brew unlink node`
 3. `$ brew link node@14`

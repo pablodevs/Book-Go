@@ -1,0 +1,21 @@
+@import "../colors";
+
+$--fs-logo: 1.4rem;
+._navbar {
+    display: flex;
+    align-items: baseline;
+    justify-content: start;
+    gap: 1rem;
+    line-height: 1rem;
+    padding: 0.8rem 3rem;
+    background-color: $--color-grey-dark;
+}
+._navbar a {
+    color: $--color-grey-light;
+    &:hover { color: $--color-grey-lighter }
+}
+a.navbar-logo {
+    font-size: $--fs-logo;
+    line-height: $--fs-logo;
+    margin-inline-end: 1.5rem;
+}

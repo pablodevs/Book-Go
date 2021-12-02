@@ -1,8 +1,14 @@
 @import "../colors";
 
+.footer {
+  background-color: $--color-grey-dark;
+  color: $--color-grey-light;
+}
+
 .footer-link {
-  color: $light-color;
+  color: $--color-grey-light;
   margin: 0 1rem;
   transition: transform 250ms;
   display: inline-block;
+  &:hover { color: $--color-blue-light }
 }
