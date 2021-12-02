@@ -12,7 +12,9 @@ export const Navbar = () => {
 			<NavLink to="#">Productos</NavLink>
 			<NavLink to="#">Servicios</NavLink>
 			<NavLink to="#">Contacto</NavLink>
-			<NavLink to="#">Entrar</NavLink>
+			<NavLink to="#" className="login-navlink">
+				Entrar
+			</NavLink>
 		</nav>
 	);
 };

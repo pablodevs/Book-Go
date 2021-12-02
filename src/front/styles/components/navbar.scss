@@ -9,7 +9,9 @@ $--fs-logo: 1.4rem;
     line-height: 1rem;
     padding: 0.8rem 3rem;
     background-color: $--color-grey-dark;
-    &:last-child { margin-left: auto; }
+}
+.login-navlink {
+    margin-left: auto;
 }
 ._navbar a {
     color: transparent;
@@ -18,10 +20,13 @@ $--fs-logo: 1.4rem;
     background-size: 900%;
     background-position: left;
     background-clip: text;
+    -moz-background-clip: text;
     -webkit-background-clip: text;
     &:hover {
         background-position: right;
         transition: background-position 0.6s ease-out;
+        -o-transition: background-position 0.6s ease-out;
+        -moz-transition: background-position 0.6s ease-out;
         -webkit-transition: background-position 0.6s ease-out;
     }
 }
