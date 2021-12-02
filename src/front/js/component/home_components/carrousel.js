@@ -1,7 +1,7 @@
 import React from "react";
-import toallas from "./../../img/toallas.jpg";
-import camas from "./../../img/camas.jpg";
-import silla from "./../../img/silla.jpg";
+import toallas from "./../../../img/toallas.jpg";
+import camas from "./../../../img/camas.jpg";
+import silla from "./../../../img/silla.jpg";
 
 export const Carrousel = () => {
 	return (

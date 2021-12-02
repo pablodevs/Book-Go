@@ -1,5 +1,5 @@
 import React from "react";
-import manicura from "./../../img/manicura.jpg";
+import manicura from "./../../../img/manicura.jpg";
 import PropTypes from "prop-types";
 
 export const Product_card = props => {
