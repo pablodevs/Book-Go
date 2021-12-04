@@ -8,13 +8,14 @@ export const Navbar = () => {
 			<NavLink className="_navbar-logo" to="/">
 				Inicio
 			</NavLink>
-			<NavLink to="/calendar">Calendario</NavLink>
+			<NavLink to="/calendar">Reserva</NavLink>
 			<NavLink to="#">Productos</NavLink>
-			<NavLink to="#">Servicios</NavLink>
 			<NavLink to="#">Contacto</NavLink>
-			<NavLink to="#" className="login-navlink">
-				Entrar
-			</NavLink>
+			<span>
+				<NavLink to="/login" className="_navbar-login">
+					Acceder
+				</NavLink>
+			</span>
 		</nav>
 	);
 };
