@@ -12,7 +12,7 @@ export const Home = () => {
 	}, []);
 
 	return (
-		<div className="view">
+		<div className="container-fluid">
 			<h1 className="text-center">Bienvenidos a Home relax !</h1>
 			<Carrousel />
 			<div className="container-fluid">
