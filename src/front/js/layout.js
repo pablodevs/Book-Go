@@ -1,15 +1,17 @@
 import React from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import ScrollToTop from "./component/scrollToTop";
+import injectContext from "./store/appContext";
 
 // Components
 import { Navbar } from "./component/navbar/navbar";
 import { Footer } from "./component/footer";
+import { Calendar } from "./component/calendar/calendar";
 
 // Views
 import { Home } from "./pages/home";
-
-import injectContext from "./store/appContext";
+import { Login } from "./pages/login";
+import { Signup } from "./component/login/signup";
 
 const Layout = () => {
 	const basename = process.env.BASENAME || "";
@@ -22,6 +24,18 @@ const Layout = () => {
 					<Route exact path="/">
 						<Home />
 					</Route>
+					<Route exact path="/calendar">
+						<Calendar />
+					</Route>
+
+					<Route exact path="/login">
+						<Login />
+					</Route>
+
+					<Route exact path="/signup">
+						<Signup />
+					</Route>
+
 					<Route>
 						<div className="view">
 							<h3>404 - Page Not Found</h3>
