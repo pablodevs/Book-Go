@@ -11,7 +11,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 				year: null,
 				totDays: null
 			},
-			products: []
+			products: [],
+			oneProduct: []
 		},
 		actions: {
 			// Meto todas las acciones del componente calendario en calendarActions:
@@ -69,6 +70,21 @@ const getState = ({ getStore, getActions, setStore }) => {
 					})
 					.then(data => {
 						setStore({ products: data });
+					})
+					.catch(error => console.error(error));
+			},
+
+			//get ONE product
+			getProduct: async id => {
+				await fetch(process.env.BACKEND_URL + `/products/${id}`)
+					.then(response => {
+						console.log(response.ok);
+						console.log(response.status);
+						return response.json();
+					})
+					.then(data => {
+						console.log(data);
+						setStore({ oneProduct: data });
 					})
 					.catch(error => console.error(error));
 			}

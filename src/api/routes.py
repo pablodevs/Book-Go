@@ -19,3 +19,15 @@ def get_all_products():
     product_query = Product.query.all()
     all_products = list(map(lambda x: x.serialize(), product_query))
     return jsonify(all_products)
+
+
+
+# GET ONE PRODUCT
+@api.route('/products/<int:id>', methods=['GET'])
+
+def get_one_product(id):
+
+    product_query = Product.query.get(id)
+    return jsonify(product_query.serialize()),200
+
+

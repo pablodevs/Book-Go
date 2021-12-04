@@ -12,6 +12,7 @@ import { Calendar } from "./component/calendar/calendar";
 import { Home } from "./pages/home";
 import { Login } from "./pages/login";
 import { Signup } from "./component/login/signup";
+import { Info } from "./pages/info";
 
 const Layout = () => {
 	const basename = process.env.BASENAME || "";
@@ -34,6 +35,10 @@ const Layout = () => {
 
 					<Route exact path="/signup">
 						<Signup />
+					</Route>
+
+					<Route exact path="/info/:id">
+						<Info />
 					</Route>
 
 					<Route>
