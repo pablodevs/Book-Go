@@ -8,17 +8,23 @@ export const Navbar = () => {
 			<NavLink className="_navbar-logo" to="/">
 				Inicio
 			</NavLink>
-			<NavLink to="/calendar">Reserva</NavLink>
-			<NavLink to="#">Productos</NavLink>
-			<NavLink to="#">Contacto</NavLink>
-			<div className="_navbar-login center">
-				<NavLink to="/login">
-					<div className="_navbar-login-effect">
-						<span>Acceder</span>
-						<i className="far fa-user" />
-					</div>
-				</NavLink>
-			</div>
+			<ul className="_navbar-group">
+				<li className="_navbar-link">
+					<NavLink to="/calendar">Reserva</NavLink>
+				</li>
+				<li className="_navbar-link">
+					<NavLink to="#">Productos</NavLink>
+				</li>
+				<li className="_navbar-link">
+					<NavLink to="#">Contacto</NavLink>
+				</li>
+			</ul>
+			<button className="_navbar-login center">
+				<div className="_navbar-login-effect">
+					<span>Acceder</span>
+					<i className="far fa-user" />
+				</div>
+			</button>
 		</nav>
 	);
 };

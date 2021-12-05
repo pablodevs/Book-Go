@@ -22,19 +22,22 @@ a._navbar-logo {
 $--login-link-border: 2px;
 $--login-link-h: calc(2rem + #{$--login-link-border} * 2);
 
-._navbar-login a { height: $--login-link-h; overflow: hidden; }
+._navbar-login {
+    align-items: flex-start;
+    margin-left: auto;
+    height: $--login-link-h;
+    overflow: hidden;
+}
 ._navbar-login-effect {
     display: flex;
     flex-direction: column;
     gap: 1rem;
     width: 100%;
-    transition-property: transform, color;
-    -webkit-transition-property: transform, color;
     transition: 0.4s ease-out;
     -o-transition: 0.4s ease-out;
     -moz-transition: 0.4s ease-out;
     -webkit-transition: 0.4s ease-out;
-    ._navbar-login a:hover & {
+    ._navbar-login:hover & {
         transform: translateY(-2rem);
         -o-transform: translateY(-2rem);
         -moz-transform: translateY(-2rem);
@@ -43,18 +46,20 @@ $--login-link-h: calc(2rem + #{$--login-link-border} * 2);
     }
 }
 
-._navbar div._navbar-login a {
+._navbar-login {
     width: 100px;
     text-align: center;
     color: $--color-grey-lighter;
-    margin-left: auto;
     border: $--login-link-border solid $--color-grey-lighter;
     padding: 0.5rem 1rem;
     border-radius: 20px;
     transition: border-color 0.4s ease-out;
+    -o-transition: border-color 0.4s ease-out;
+    -moz-transition: border-color 0.4s ease-out;
+    -webkit-transition: border-color 0.4s ease-out;
     &:hover { border-color: $--color-blue-light }
 }
-._navbar > a {
+._navbar-link {
     position: relative;
     padding-block: 0.2rem;
     color: transparent;
@@ -82,7 +87,7 @@ $--login-link-h: calc(2rem + #{$--login-link-border} * 2);
     }
 }
 @media screen and (min-width: 768px) {
-    ._navbar > a:hover {
+    ._navbar-link:hover {
         $--transition-dur: 0.6s;
         // Background transition
         background-position: right;
@@ -116,10 +121,22 @@ $--login-link-h: calc(2rem + #{$--login-link-border} * 2);
         padding-bottom: 1rem;
     }
     a._navbar-logo { margin: 0 auto 0 0 }
-    div._navbar-login {
+    ._navbar-login {
+        width: fit-content;
         position: absolute;
         top: 0.6rem;
         right: 2rem;
         margin: 0;
+    }
+    ._navbar-login-effect {
+        width: 20px;
+        transition: none;
+        -o-transition: none;
+        -moz-transition: none;
+        -webkit-transition: none;
+        transform: translateY(-2rem);
+        -o-transform: translateY(-2rem);
+        -moz-transform: translateY(-2rem);
+        -webkit-transform: translateY(-2rem);
     }
 }
