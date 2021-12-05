@@ -11,11 +11,14 @@ export const Navbar = () => {
 			<NavLink to="/calendar">Reserva</NavLink>
 			<NavLink to="#">Productos</NavLink>
 			<NavLink to="#">Contacto</NavLink>
-			<span>
-				<NavLink to="/login" className="_navbar-login">
-					Acceder
+			<div className="_navbar-login center">
+				<NavLink to="/login">
+					<div className="_navbar-login-effect">
+						<span>Acceder</span>
+						<i className="far fa-user" />
+					</div>
 				</NavLink>
-			</span>
+			</div>
 		</nav>
 	);
 };
