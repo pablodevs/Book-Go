@@ -12,7 +12,7 @@ export const Navbar = () => {
 						Inicio
 					</NavLink>
 				</span>
-				<button className="_navbar-login">
+				<button className="_navbar-login" onClick={() => setMenu(false)}>
 					<div className="_navbar-login-effect">
 						<span>Acceder</span>
 						<i className="far fa-user" />
