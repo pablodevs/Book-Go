@@ -4,11 +4,12 @@
     position: sticky;
     z-index: 1000;
     top: 0;
+
     display: flex;
     align-items: center;
     justify-content: start;
     flex-wrap: wrap;
-    gap: 1rem;
+
     line-height: 1rem;
     padding: 0.6rem 3rem;
     background-color: $--color-grey-dark;
@@ -19,75 +20,100 @@ a._navbar-logo {
     margin-inline-end: 1.5rem;
 }
 
+._navbar-group {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    gap: 1rem;
+}
+a._navbar-link {
+    position: relative;
+    padding: 0.2rem 0;
+    font-weight: 500;
+}
+
 $--login-link-border: 2px;
-$--login-link-h: calc(2rem + #{$--login-link-border} * 2);
+$--login-link-h: 2rem;
 
 ._navbar-login {
-    align-items: flex-start;
-    margin-left: auto;
-    height: $--login-link-h;
     overflow: hidden;
+    align-items: flex-start;
+    text-align: center;
+    height: $--login-link-h;
+    width: 100px;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    box-shadow: inset 0 0 0 $--login-link-border $--color-pink-dark;
+    color: $--color-pink-dark;
+    font-weight: 600;
+    transition: all 0.4s ease-out;
+    -o-transition: all 0.4s ease-out;
+    -moz-transition: all 0.4s ease-out;
+    -webkit-transition: all 0.4s ease-out;
+    &:hover, &:focus-visible {
+        outline: none;
+        box-shadow: inset 0 0 0 $--login-link-border $--color-pink-light;
+        color: $--color-pink-light;
+    }
 }
 ._navbar-login-effect {
     display: flex;
     flex-direction: column;
     gap: 1rem;
     width: 100%;
-    transition: 0.4s ease-out;
-    -o-transition: 0.4s ease-out;
-    -moz-transition: 0.4s ease-out;
-    -webkit-transition: 0.4s ease-out;
-    ._navbar-login:hover & {
+    transition: transform 0.4s ease-out;
+    -o-transition: transform 0.4s ease-out;
+    -moz-transition: transform 0.4s ease-out;
+    -webkit-transition: transform 0.4s ease-out;
+    ._navbar-login:hover &, ._navbar-login:focus-visible & {
         transform: translateY(-2rem);
         -o-transform: translateY(-2rem);
         -moz-transform: translateY(-2rem);
         -webkit-transform: translateY(-2rem);
-        color: $--color-blue-light;
     }
 }
 
-._navbar-login {
-    width: 100px;
-    text-align: center;
+._navbar-toggle {
+    display: none;
     color: $--color-grey-lighter;
-    border: $--login-link-border solid $--color-grey-lighter;
-    padding: 0.5rem 1rem;
-    border-radius: 20px;
-    transition: border-color 0.4s ease-out;
-    -o-transition: border-color 0.4s ease-out;
-    -moz-transition: border-color 0.4s ease-out;
-    -webkit-transition: border-color 0.4s ease-out;
-    &:hover { border-color: $--color-blue-light }
+    width: 20px;
+    text-align: center;
 }
-._navbar-link {
-    position: relative;
-    padding-block: 0.2rem;
-    color: transparent;
-    font-weight: 500;
-    background-image: linear-gradient(90deg, $--color-grey-lighter 0% 20%, $--color-blue-dark 20% 80%, $--color-blue-light 80% 100%);
-    background-size: 900%;
-    background-position: left;
-    background-clip: text;
-    -moz-background-clip: text;
-    -webkit-background-clip: text;
 
-    &::before {
-        $--width-overflow: 6px;
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: calc(-#{$--width-overflow} / 2);
-        background-color: $--color-blue-light;
-        height: 1.5px;
-        width: calc(100% + #{$--width-overflow});
-        transform: scale(0);
-        -o-transform: scale(0);
-        -moz-transform: scale(0);
-        -webkit-transform: scale(0);
-    }
-}
 @media screen and (min-width: 768px) {
-    ._navbar-link:hover {
+    ._navbar-logo { grid-area: logo }
+    ._navbar-group { grid-area: group2 }
+    ._navbar-login { grid-area: login }
+    ._navbar {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        grid-template-areas: "logo group2 login";
+    }
+    a._navbar-link {
+        color: transparent;
+        background-image: linear-gradient(90deg, $--color-grey-lighter 0% 20%, $--color-blue-dark 20% 80%, $--color-blue-light 80% 100%);
+        background-size: 900%;
+        background-position: left;
+        background-clip: text;
+        -moz-background-clip: text;
+        -webkit-background-clip: text;
+        
+        &::before {
+            $--width-overflow: 6px;
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: calc(-#{$--width-overflow} / 2);
+            background-color: $--color-blue-light;
+            height: 1.5px;
+            width: calc(100% + #{$--width-overflow});
+            transform: scale(0);
+            -o-transform: scale(0);
+            -moz-transform: scale(0);
+            -webkit-transform: scale(0);
+        }
+    }
+    a._navbar-link:hover {
         $--transition-dur: 0.6s;
         // Background transition
         background-position: right;
@@ -114,20 +140,92 @@ $--login-link-h: calc(2rem + #{$--login-link-border} * 2);
     }
 }
 
+// Mobile size
 @media screen and (max-width: 767.9px) {
     ._navbar {
-        flex-direction: column;
-        position: relative;
-        padding-bottom: 1rem;
+        display: flex;
+        padding: 0.6rem 3rem;
+        column-gap: 1rem;
+        transition: all 0.25s ease-out;
+        -o-transition: all 0.25s ease-out;
+        -moz-transition: all 0.25s ease-out;
+        -webkit-transition: all 0.25s ease-out;
     }
-    a._navbar-logo { margin: 0 auto 0 0 }
-    ._navbar-login {
-        width: fit-content;
-        position: absolute;
-        top: 0.6rem;
-        right: 2rem;
+    a._navbar-link {
+        color: $--color-grey-lighter;
+        transition: 0.25s ease-out;
+        -o-transition: 0.25s ease-out;
+        -moz-transition: 0.25s ease-out;
+        -webkit-transition: 0.25s ease-out;
+        &:hover { color: $--color-blue-light }
+    }
+    ._navbar-logo-wrapper {
+        justify-content: flex-start;
         margin: 0;
+        flex: 1;
     }
+    ._navbar-group {
+        gap: 0;
+        flex-direction: column;
+        justify-content: center;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: -1;
+        width: 100%;
+        height: 100vh;
+        font-size: 2rem;
+        background-color: inherit;
+        transform: translateY(-100%);
+        -o-transform: translateY(-100%);
+        -moz-transform: translateY(-100%);
+        -webkit-transform: translateY(-100%);
+        transition: transform 0.25s ease-out;
+        -o-transition: transform 0.25s ease-out;
+        -moz-transition: transform 0.25s ease-out;
+        -webkit-transition: transform 0.25s ease-out;
+        & a._navbar-link {
+            opacity: 0;
+            background-image: none;
+            width: 100%;
+            padding: 2rem;
+            text-align: center;
+            letter-spacing: 5px;
+            transition: 0.25s ease-out;
+            -o-transition: 0.25s ease-out;
+            -moz-transition: 0.25s ease-out;
+            -webkit-transition: 0.25s ease-out;
+            &:hover { color: $--color-blue-light }
+        }
+    }
+    ._navbar-show {
+        transform: translateY(0%);
+        -o-transform: translateY(0%);
+        -moz-transform: translateY(0%);
+        -webkit-transform: translateY(0%);
+        & a._navbar-link:nth-child(1) {
+            transition: opacity 0.5s ease-out 0.2s;
+            -o-transition: opacity 0.5s ease-out 0.2s;
+            -moz-transition: opacity 0.5s ease-out 0.2s;
+            -webkit-transition: opacity 0.5s ease-out 0.2s;
+            opacity: 1;
+        }
+        & a._navbar-link:nth-child(2) {
+            transition: opacity 0.5s ease-out 0.3s;
+            -o-transition: opacity 0.5s ease-out 0.3s;
+            -moz-transition: opacity 0.5s ease-out 0.3s;
+            -webkit-transition: opacity 0.5s ease-out 0.3s;
+            opacity: 1;
+        }
+        & a._navbar-link:nth-child(3) {
+            transition: opacity 0.5s ease-out 0.4s;
+            -o-transition: opacity 0.5s ease-out 0.4s;
+            -moz-transition: opacity 0.5s ease-out 0.4s;
+            -webkit-transition: opacity 0.5s ease-out 0.4s;
+            opacity: 1;
+        }
+    }
+    ._navbar-login { width: fit-content }
     ._navbar-login-effect {
         width: 20px;
         transition: none;
@@ -138,5 +236,12 @@ $--login-link-h: calc(2rem + #{$--login-link-border} * 2);
         -o-transform: translateY(-2rem);
         -moz-transform: translateY(-2rem);
         -webkit-transform: translateY(-2rem);
+    }
+    ._navbar-toggle { display: inline-block }
+}
+
+@media screen and (max-width: 424.9px) {
+    ._navbar {
+        padding: 0.3rem 1.5rem;
     }
 }

@@ -26,8 +26,8 @@ $--calendar-border-r: 2%;
 .next-month { grid-area: right }
 .calendar-header {
     display: grid;
-    grid-template-columns: repeat(18, 1fr);
-    grid-template-areas: ". left . m m m m m m m m m m m m . right .";
+    grid-template-columns: 0.1fr auto 0.1fr 1fr 0.1fr auto 0.1fr;
+    grid-template-areas: ". left . m . right .";
     width: $--calendar-w;
     margin-inline: auto;
     margin-block: 0.8rem;
