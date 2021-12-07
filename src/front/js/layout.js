@@ -3,12 +3,11 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 import ScrollToTop from "./component/scrollToTop";
 
 // Components
-import { Navbar } from "./component/navbar";
+import { Navbar } from "./component/navbar/navbar";
 import { Footer } from "./component/footer";
 
 // Views
 import { Home } from "./pages/home";
-import { Calendar } from "./component/calendar/calendar";
 
 import injectContext from "./store/appContext";
 
@@ -22,9 +21,6 @@ const Layout = () => {
 				<Switch>
 					<Route exact path="/">
 						<Home />
-					</Route>
-					<Route exact path="/calendar">
-						<Calendar />
 					</Route>
 					<Route>
 						<div className="view">

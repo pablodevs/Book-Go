@@ -3,6 +3,8 @@ const getNumOfDaysInMonth = (year, month) => new Date(year, month + 1, 0).getDat
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
+			navbarBooking: false,
+			navbarLogin: false,
 			calendar: {
 				todayDate: new Date(),
 				date: null,
@@ -14,6 +16,19 @@ const getState = ({ getStore, getActions, setStore }) => {
 			products: []
 		},
 		actions: {
+			setBool: (boolname, bool) => {
+				let store = getStore();
+				if (bool === "close") {
+					bool = false;
+				} else if (bool === "open") {
+					bool = true;
+				} else {
+					bool = !store[boolname];
+				}
+				let storeAux = {};
+				storeAux[boolname] = bool;
+				setStore(storeAux);
+			},
 			// Meto todas las acciones del componente calendario en calendarActions:
 			calendarActions: {
 				setInitialCalendar: () => {
