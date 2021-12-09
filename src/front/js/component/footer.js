@@ -4,8 +4,8 @@ import "../../styles/components/footer.scss";
 export const Footer = () => (
 	<footer className="footer py-3 text-center sticky-bottom">
 		<div className="container">
-			<div className="row ">
-				<div className="col-3 p-2">
+			<div className="row">
+				<div className="col">
 					<h5>Contact Us</h5>
 					<ul className="nav flex-column">
 						<li className="nav-item mb-2">
@@ -20,7 +20,7 @@ export const Footer = () => (
 					</ul>
 				</div>
 
-				<div className="col-3 p-2">
+				<div className="col">
 					<h5>Follow Us</h5>
 					<ul className="nav justify-content-center p-3">
 						<li className="nav-item mb-2">
@@ -50,7 +50,7 @@ export const Footer = () => (
 					</ul>
 				</div>
 
-				<div className="col-3 p-2">
+				<div className="col">
 					<form>
 						<h5>Subscribe to our newsletter</h5>
 						<p>Monthly digest of whats new and exciting from us.</p>
@@ -64,7 +64,7 @@ export const Footer = () => (
 					</form>
 				</div>
 
-				<div className="col-3 lh-sm p-2">
+				<div className="col">
 					<h5>Boring Stuff</h5>
 					<p className="text-start">
 						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam euismod volutpat eros, sed
