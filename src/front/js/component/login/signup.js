@@ -78,13 +78,13 @@ export const Signup = () => {
 							</Link>
 						</div>
 					</form>
-					{/* <div
-						className={`alert alert-${
-							store.msg.text == "User Created !" || store.msg.text == "" ? "info" : "danger"
-						}`}
-						role="alert">
-						{store.msg.show == true ? store.msg.text : store.message}
-					</div> */}
+					{store.message ? (
+						<div className={`alert alert-${store.message != "" ? "success" : "danger"}`} role="alert">
+							{store.message != "" ? store.message : ""}
+						</div>
+					) : (
+						""
+					)}
 				</div>
 			</div>
 		</div>

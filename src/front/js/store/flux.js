@@ -14,7 +14,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 				totDays: null
 			},
 			products: [],
-			oneProduct: []
+			oneProduct: [],
+			message: ""
 		},
 		actions: {
 			setBool: (boolname, bool) => {
@@ -117,6 +118,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					})
 					.then(data => {
 						console.log(data);
+						setStore({ message: "Usuario creado Correctamente. Ya puede ir al login y acceder!" });
 					})
 					.catch(error => console.error(error));
 			}
