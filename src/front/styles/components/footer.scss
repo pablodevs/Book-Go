@@ -12,3 +12,7 @@
   display: inline-block;
   &:hover { color: $--color-blue-light }
 }
+
+.footer .row{
+  gap: 1rem;
+}
