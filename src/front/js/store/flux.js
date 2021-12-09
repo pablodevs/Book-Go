@@ -13,6 +13,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 				year: null,
 				totDays: null
 			},
+			mouseEffect: {
+				X: 0,
+				Y: 0
+			},
 			products: []
 		},
 		actions: {
@@ -70,6 +74,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 							year: year,
 							totDays: getNumOfDaysInMonth(year, month)
 						}
+					});
+				},
+				setMouseEffect: newmouseEffect => {
+					setStore({
+						mouseEffect: newmouseEffect
 					});
 				}
 			},

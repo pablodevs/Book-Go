@@ -7,9 +7,9 @@ import "../../../styles/components/calendar.scss";
 export const Calendar = () => {
 	const { store, actions } = useContext(Context);
 	let [weeks, setWeeks] = useState(null); // sirve para renderizar las 6 semanas con sus días
-	let [monthEffect, setMonthEffect] = useState({
-		x: undefined,
-		y: undefined
+	let [mouseEffect, setMouseEffect] = useState({
+		X: null,
+		Y: null
 	});
 
 	let calendar = store.calendar,
@@ -78,19 +78,14 @@ export const Calendar = () => {
 		[store.calendar] // realizo este useEffect() cada vez que cambia el mes
 	);
 
-	useEffect(
-		() => {
-			if (!document.querySelector(".month")) return;
-			document.querySelector(".month").addEventListener("mousemove", event => {
-				console.log(`( ${event.offsetX} , ${event.offsetY} )`);
-				setMonthEffect({
-					x: event.offsetX,
-					y: event.offsetY
-				});
+	useEffect(() => {
+		document.body.addEventListener("mousemove", event => {
+			actions.calendarActions.setMouseEffect({
+				X: event.clientX,
+				Y: event.clientY
 			});
-		},
-		[weeks]
-	);
+		});
+	}, []);
 
 	return weeks ? (
 		<div className="calendar-wrapper">
@@ -126,20 +121,7 @@ export const Calendar = () => {
 						))}
 				</div>
 				{/* Aquí cargo el mes entero: */}
-				<div className="month">
-					{/* onMouseMove={event => {
-						console.log(`( ${event.clientX} , ${event.clientY} )`);
-						setMonthEffect({
-							x: `${event.clientX}`,
-							y: `${event.clientY}`
-						});
-					}}> */}
-					{weeks}
-					<div
-						className="month-blur-effect"
-						style={{ left: `${monthEffect.x}px`, top: `${monthEffect.y}px` }}
-					/>
-				</div>
+				<div className="month">{weeks}</div>
 			</div>
 		</div>
 	) : null;
