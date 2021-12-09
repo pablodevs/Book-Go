@@ -7,10 +7,6 @@ import "../../../styles/components/calendar.scss";
 export const Calendar = () => {
 	const { store, actions } = useContext(Context);
 	let [weeks, setWeeks] = useState(null); // sirve para renderizar las 6 semanas con sus días
-	let [mouseEffect, setMouseEffect] = useState({
-		X: null,
-		Y: null
-	});
 
 	let calendar = store.calendar,
 		todayDate = calendar.todayDate,
@@ -79,16 +75,23 @@ export const Calendar = () => {
 	);
 
 	useEffect(() => {
+		let div = document.querySelector(".popup-header");
+		var rect = div.getBoundingClientRect();
+		console.log("x:", rect.left, "y:", rect.top);
 		document.body.addEventListener("mousemove", event => {
 			actions.calendarActions.setMouseEffect({
-				X: event.clientX,
-				Y: event.clientY
+				X: event.clientX - rect.left,
+				Y: event.clientY - rect.top
 			});
 		});
 	}, []);
 
 	return weeks ? (
 		<div className="calendar-wrapper">
+			<div
+				className="month-blur-effect"
+				style={{ left: `${store.mouseEffect.X}px`, top: `${store.mouseEffect.Y}px` }}
+			/>
 			<div className="calendar-header">
 				{/* Estos son los botones de cambio de mes, tienen position: absolute para colocarlos donde quiera */}
 				<button

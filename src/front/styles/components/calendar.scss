@@ -57,6 +57,8 @@
     padding: 1rem;
 }
 
+.week, .month { gap: 0.3rem }
+
 .day {
     color: $--color-grey-dark;
     font-size: clamp(1rem, 5vw, 1.4rem);
@@ -82,7 +84,7 @@
 .calendar-wrapper, .calendar, .month, .week { flex: 1 }
 
 .month-blur-effect {
-    position: fixed;
+    position: absolute;
     width: 2px;
     height: 2px;
     border-radius: 50%;

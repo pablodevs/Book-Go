@@ -65,10 +65,6 @@ export const Navbar = () => {
 
 			{store.navbarBooking ? <BookingPopup /> : null}
 			{store.navbarLogin ? <LoginPopup /> : null}
-			<div
-				className="month-blur-effect"
-				style={{ left: `${store.mouseEffect.X}px`, top: `${store.mouseEffect.Y}px` }}
-			/>
 		</header>
 	);
 };
