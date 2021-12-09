@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Context } from "../../store/appContext.js";
 import { Day } from "./day";
-import { ScrollTop } from "../scrollTopButton.js";
 import dates from "../../dates.json";
 import "../../../styles/components/calendar.scss";
 
@@ -75,48 +74,42 @@ export const Calendar = () => {
 		[store.calendar] // realizo este useEffect() cada vez que cambia el mes
 	);
 
-	return (
-		<div className="view">
-			<ScrollTop />
-			{/* Todo lo meto dentro de una condición con ' : null' para que no se vea feo mientras carga, podéis probar a quitarlo y ver qué pasa. */}
-			{weeks ? (
-				<div className="calendar-wrapper">
-					<div className="calendar-header">
-						{/* Estos son los botones de cambio de mes, tienen position: absolute para colocarlos donde quiera */}
-						<button
-							className="previous-month"
-							onClick={
-								calendar.month > todayMonth || calendar.year > todayYear
-									? () => actions.calendarActions.updateCalendar(calendar.month - 1)
-									: () => undefined
-							}>
-							<i className="fas fa-chevron-left" />
-						</button>
-						<h4 className="calendar-title">
-							{dates["month_text"][calendar.month].toUpperCase()} {calendar.year}
-						</h4>
-						<button
-							className="next-month"
-							onClick={() => actions.calendarActions.updateCalendar(calendar.month + 1)}>
-							<i className="fas fa-chevron-right" />
-						</button>
-					</div>
-					<div className="calendar">
-						<div className="week-days">
-							{dates["day_text"]
-								.slice(1, dates["day_text"].length)
-								.concat(dates["day_text"].slice(0, 1))
-								.map((dayname, idx) => (
-									<div key={idx} className="center">
-										{dayname}
-									</div>
-								))}
-						</div>
-						{/* Aquí cargo el mes entero: */}
-						<div className="month">{weeks}</div>
-					</div>
+	return weeks ? (
+		<div className="calendar-wrapper">
+			<div className="calendar-header">
+				{/* Estos son los botones de cambio de mes, tienen position: absolute para colocarlos donde quiera */}
+				<button
+					className="previous-month"
+					onClick={
+						calendar.month > todayMonth || calendar.year > todayYear
+							? () => actions.calendarActions.updateCalendar(calendar.month - 1)
+							: () => undefined
+					}>
+					<i className="fas fa-chevron-left" />
+				</button>
+				<h4 className="calendar-title">
+					{dates["month_text"][calendar.month].toUpperCase()} {calendar.year}
+				</h4>
+				<button
+					className="next-month"
+					onClick={() => actions.calendarActions.updateCalendar(calendar.month + 1)}>
+					<i className="fas fa-chevron-right" />
+				</button>
+			</div>
+			<div className="calendar">
+				<div className="week-days">
+					{dates["day_text"]
+						.slice(1, dates["day_text"].length)
+						.concat(dates["day_text"].slice(0, 1))
+						.map((dayname, idx) => (
+							<div key={idx} className="center">
+								{dayname}
+							</div>
+						))}
 				</div>
-			) : null}
+				{/* Aquí cargo el mes entero: */}
+				<div className="month">{weeks}</div>
+			</div>
 		</div>
-	);
+	) : null;
 };

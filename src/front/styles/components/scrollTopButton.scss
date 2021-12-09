@@ -7,8 +7,8 @@
     padding: 0.5rem;
     border-radius: 5px;
     box-shadow: $--color-grey-dark 0px 3px 10px 0;
-    background-color: $--color-blue-light;
-    color: $--color-blue-dark;
+    background-color: $--color-grey-dark;
+    color: $--color-grey-lighter;
     font-size: 1.5rem;
 
     transition: 0.3s;
@@ -17,10 +17,10 @@
     }
 
     &:hover {
-        background-color: $--color-blue-dark;
+        background-color: $--color-blue-light;
         & > * {
             transform: translateY(-3px);
-            color: $--color-blue-light;
+            color: $--color-blue-dark;
         }
     }
 }
