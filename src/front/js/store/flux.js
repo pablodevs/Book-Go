@@ -102,6 +102,23 @@ const getState = ({ getStore, getActions, setStore }) => {
 						setStore({ oneProduct: data });
 					})
 					.catch(error => console.error(error));
+			},
+
+			//Create NEW USER
+			createUser: async data => {
+				await fetch(process.env.BACKEND_URL + `/user`, {
+					method: "POST",
+					body: data
+				})
+					.then(response => {
+						console.log(response.ok);
+						console.log(response.status);
+						return response.json();
+					})
+					.then(data => {
+						console.log(data);
+					})
+					.catch(error => console.error(error));
 			}
 		}
 	};
