@@ -61,6 +61,7 @@
     color: $--color-grey-dark;
     border-radius: 15%;
     font-size: clamp(1rem, 5vw, 1.4rem);
+    box-shadow: inset 0 0 0 1px blue;
     &:hover {
         background-color: $--color-blue-light;
         color: $--color-grey-dark;
@@ -80,3 +81,16 @@
 }
 
 .calendar-wrapper, .calendar, .month, .week { flex: 1 }
+
+.month-blur-effect {
+    position: fixed;
+    top: 0;
+    left: 0;
+    border: 1px solid red;
+    border-radius: 50%;
+    width: 30%;
+    aspect-ratio: 1;
+    background-color: $--color-blue-light;
+    // filter: blur(10px);
+    // z-index: -1
+}

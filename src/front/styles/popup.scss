@@ -3,6 +3,7 @@
 @import "./fonts";  // estilo de las fuentes
 
 .popup {
+    z-index: 9999;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -30,6 +31,6 @@
     justify-content: space-between;
     width: 100%;
 }
-.popup-heading {
+.popup-header-title {
     text-align: start;
 }
