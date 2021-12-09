@@ -3,6 +3,8 @@ const getNumOfDaysInMonth = (year, month) => new Date(year, month + 1, 0).getDat
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
+			navbarBooking: false,
+			navbarLogin: false,
 			calendar: {
 				todayDate: new Date(),
 				date: null,
@@ -12,9 +14,23 @@ const getState = ({ getStore, getActions, setStore }) => {
 				totDays: null
 			},
 			products: [],
-			oneProduct: []
+			oneProduct: [],
+			message: ""
 		},
 		actions: {
+			setBool: (boolname, bool) => {
+				let store = getStore();
+				if (bool === "close") {
+					bool = false;
+				} else if (bool === "open") {
+					bool = true;
+				} else {
+					bool = !store[boolname];
+				}
+				let storeAux = {};
+				storeAux[boolname] = bool;
+				setStore(storeAux);
+			},
 			// Meto todas las acciones del componente calendario en calendarActions:
 			calendarActions: {
 				setInitialCalendar: () => {
@@ -85,6 +101,24 @@ const getState = ({ getStore, getActions, setStore }) => {
 					.then(data => {
 						console.log(data);
 						setStore({ oneProduct: data });
+					})
+					.catch(error => console.error(error));
+			},
+
+			//Create NEW USER
+			createUser: async data => {
+				await fetch(process.env.BACKEND_URL + `/user`, {
+					method: "POST",
+					body: data
+				})
+					.then(response => {
+						console.log(response.ok);
+						console.log(response.status);
+						return response.json();
+					})
+					.then(data => {
+						console.log(data);
+						setStore({ message: "Usuario creado Correctamente. Ya puede ir al login y acceder!" });
 					})
 					.catch(error => console.error(error));
 			}

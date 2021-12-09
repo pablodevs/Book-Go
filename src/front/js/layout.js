@@ -4,7 +4,7 @@ import ScrollToTop from "./component/scrollToTop";
 import injectContext from "./store/appContext";
 
 // Components
-import { Navbar } from "./component/navbar";
+import { Navbar } from "./component/navbar/navbar";
 import { Footer } from "./component/footer";
 import { Calendar } from "./component/calendar/calendar";
 

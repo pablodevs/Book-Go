@@ -2,33 +2,25 @@
 @import "../colors"; // paleta de colores
 @import "../fonts";  // estilo de las fuentes
 
-$--border-c: rgba(204, 204, 204, 0.685);
-
-$--calendar-w: #{"min(100%, 560px)"};
-$--calendar-border-r: 2%;
-
 .calendar-wrapper {
     width: 100%;
-    padding-inline: 3rem;
     display: flex;
     flex-direction: column;
 }
 .calendar {
-    margin-inline: auto;
-    border-radius: $--calendar-border-r;
-    width: $--calendar-w;
+    border-radius: 0;
+    width: 100%;
     display: flex;
     flex-direction: column;
-    box-shadow: $--color-grey-regular 0px 5px 15px;
 }
 .calendar-title { grid-area: m }
 .previous-month { grid-area: left }
 .next-month { grid-area: right }
 .calendar-header {
     display: grid;
-    grid-template-columns: repeat(18, 1fr);
-    grid-template-areas: ". left . m m m m m m m m m m m m . right .";
-    width: $--calendar-w;
+    grid-template-columns: 0.1fr auto 0.1fr 1fr 0.1fr auto 0.1fr;
+    grid-template-areas: ". left . m . right .";
+    width: 100%;
     margin-inline: auto;
     margin-block: 0.8rem;
 }
@@ -54,23 +46,27 @@ $--calendar-border-r: 2%;
     padding-block: 5px;
     border-bottom: 1px solid $--color-grey-lighter;
     color: $--color-grey-dark;
-    font-size: clamp(0.7rem, 5vw, 1.4rem);
+    font-size: clamp(0.7rem, 5vw, 1.2rem);
     font-weight: 100;
     & > td { padding: 5px }
 }
 .month {
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    padding: 0 1rem 1rem 1rem;
 }
 
 .day {
     color: $--color-grey-dark;
-    aspect-ratio: 1;
-    border-radius: calc(#{$--calendar-border-r} + 10%);
-    font-size: clamp(1rem, 6vw, 1.5rem);
+    border-radius: 15%;
+    font-size: clamp(1rem, 5vw, 1.4rem);
     &:hover {
         background-color: $--color-blue-light;
         color: $--color-grey-dark;
     }
+    aspect-ratio: 1;
+    @media screen and (max-width: 767.9px) { aspect-ratio: 0 }
 }
 .today {
     font-weight: 600;
@@ -83,16 +79,4 @@ $--calendar-border-r: 2%;
     &:hover { background: none }
 }
 
-@media screen and (max-width: 575.9px) {
-    .calendar-wrapper {
-        padding-inline: 0;
-        height: calc(100vh - 66px); // Cuidado! Si el height del Navbar o el footer cambian, deja de ser 188px!!! No se me ourrió otra solución
-    }
-    .calendar, .month { height: 100% }
-    .month {
-        display: flex;
-        flex-direction: column;
-    }
-    .week { flex-basis: 100% }
-    .day { aspect-ratio: 0 }
-}
+.calendar-wrapper, .calendar, .month, .week { flex: 1 }
