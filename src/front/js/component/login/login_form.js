@@ -1,6 +1,5 @@
 import React, { useContext, useState } from "react";
 import { Context } from "../../store/appContext";
-import { Link } from "react-router-dom";
 
 export const Login_form = () => {
 	const { actions, store } = useContext(Context);
@@ -10,7 +9,7 @@ export const Login_form = () => {
 	return (
 		<div className="container">
 			<div className="row">
-				<div className="col-5 mx-auto m-5  p-4 border border-success border-rounded">
+				<div className="col-11 mx-auto m-5  p-4 border border-success border-rounded">
 					<input
 						onChange={e => {
 							setEmail(e.target.value);
@@ -33,9 +32,9 @@ export const Login_form = () => {
 						name="password"
 						placeholder="password"
 					/>
-					<Link to="/signup">
-						<p className="text-end text-primary">Never here?, Sign Up!</p>
-					</Link>
+
+					<p className="text-end text-primary">Regístrate!</p>
+
 					<button
 						onClick={() => {
 							actions.generate_token(email, password);

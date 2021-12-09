@@ -7,6 +7,8 @@ export const Signup = () => {
 	const [files, setFiles] = useState(null);
 
 	const [data, setData] = useState({
+		name: "",
+		lastname: "",
 		email: "",
 		password: ""
 	});
@@ -17,9 +19,13 @@ export const Signup = () => {
 		// we are about to send this to the backend.
 		console.log("This are the files", files);
 		let body = new FormData();
+		body.append("name", data.name);
+		body.append("lastname", data.lastname);
 		body.append("email", data.email);
 		body.append("password", data.password);
-		body.append("profile_image", files[0]);
+		if (files != null) {
+			body.append("profile_image", files[0]);
+		}
 		actions.createUser(body);
 	};
 
@@ -37,20 +43,43 @@ export const Signup = () => {
 				<div className="col-auto mx-auto  border border-success p-5 m-3">
 					<form onSubmit={submitForm}>
 						<input
+							required
 							onChange={e => {
 								handleInputChange(e);
-								// actions.changeMessage({ message: "Tic.tac.tic.tac..." });
 							}}
 							className="form-control"
+							type="text"
+							id="name"
+							name="name"
+							placeholder="Nombre..."
+						/>
+
+						<input
+							required
+							onChange={e => {
+								handleInputChange(e);
+							}}
+							className="form-control mt-2"
+							type="text"
+							id="lastname"
+							name="lastname"
+							placeholder="Apellidos..."
+						/>
+						<input
+							required
+							onChange={e => {
+								handleInputChange(e);
+							}}
+							className="form-control mt-2"
 							type="mail"
 							id="email"
 							name="email"
-							placeholder="email"
+							placeholder="Correo electrónico"
 						/>
 						<input
+							required
 							onChange={e => {
 								handleInputChange(e);
-								// actions.changeMessage({ message: "Tic.tac.tic.tac..." });
 							}}
 							className="form-control mt-2"
 							type="password"

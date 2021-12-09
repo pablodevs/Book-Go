@@ -40,10 +40,11 @@ def get_one_product(id):
 def create_new_user():
 
     # fetch for the user
-
+    name_recieved = request.form.get("name", None)
+    lastname_recieved = request.form.get("lastname", None)
     email_recieved = request.form.get("email", None)
     password_recieved = request.form.get("password", None)
-    user = User(email= email_recieved, password = password_recieved, name= "Manolo" , lastname = "lópez")
+    user = User(email= email_recieved, password = password_recieved, name= name_recieved , lastname = lastname_recieved)
  
     
 
@@ -59,10 +60,10 @@ def create_new_user():
         result = cloudinary.uploader.upload(request.files['profile_image'])
         # update the user with the given cloudinary image URL
         user.profile_image_url = result['secure_url']
-        db.session.add(user)
-        db.session.commit()
 
-        return jsonify(user.serialize()), 200
-    else:
-        raise APIException('Missing profile_image on the FormData or something fail')
+        
+    db.session.add(user)
+    db.session.commit()
+    return jsonify(user.serialize()), 200
+    
 
