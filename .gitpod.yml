@@ -22,8 +22,6 @@ tasks:
         pipenv run upgrade &&
         python docs/assets/greeting.py back
     - command: >
-        brew install node@14 &&
-        brew link node@14 &&
-        npm install &&
-        npm run start
+        ((sed -i /BACKEND_URL/d .env && echo "" >> .env && echo "BACKEND_URL=https://3001-${GITPOD_WORKSPACE_URL:8}" >> .env) || true) && 
+        npm install
       openMode: split-right
