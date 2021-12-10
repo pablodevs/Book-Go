@@ -7,6 +7,10 @@ import "../../../styles/components/calendar.scss";
 export const Calendar = () => {
 	const { store, actions } = useContext(Context);
 	let [weeks, setWeeks] = useState(null); // sirve para renderizar las 6 semanas con sus días
+	let [mouseEffect, setMouseEffect] = useState({
+		X: -900,
+		Y: -900
+	});
 
 	let calendar = store.calendar,
 		todayDate = calendar.todayDate,
@@ -74,24 +78,33 @@ export const Calendar = () => {
 		[store.calendar] // realizo este useEffect() cada vez que cambia el mes
 	);
 
-	useEffect(() => {
-		let div = document.querySelector(".popup-header");
-		var rect = div.getBoundingClientRect();
-		console.log("x:", rect.left, "y:", rect.top);
-		document.body.addEventListener("mousemove", event => {
-			actions.calendarActions.setMouseEffect({
-				X: event.clientX - rect.left,
-				Y: event.clientY - rect.top
-			});
-		});
-	}, []);
+	useEffect(
+		() => {
+			if (!document.querySelector(".month")) return;
+
+			let mouseEffectFunc = event => {
+				if (!document.querySelector(".month")) return;
+
+				// Obtengo la posición del popup (X, Y)
+				let container = document.querySelector(".month");
+				let rect = container.getBoundingClientRect();
+
+				// Añado el efecto al mouse
+				let offsetX = window.innerWidth <= 767.9 ? 0 : rect.left;
+				let offsetY = rect.top;
+
+				setMouseEffect({
+					X: event.clientX - offsetX,
+					Y: event.clientY - offsetY
+				});
+			};
+			document.body.addEventListener("mousemove", mouseEffectFunc);
+		},
+		[weeks]
+	);
 
 	return weeks ? (
 		<div className="calendar-wrapper">
-			<div
-				className="month-blur-effect"
-				style={{ left: `${store.mouseEffect.X}px`, top: `${store.mouseEffect.Y}px` }}
-			/>
 			<div className="calendar-header">
 				{/* Estos son los botones de cambio de mes, tienen position: absolute para colocarlos donde quiera */}
 				<button
@@ -124,7 +137,13 @@ export const Calendar = () => {
 						))}
 				</div>
 				{/* Aquí cargo el mes entero: */}
-				<div className="month">{weeks}</div>
+				<div className="month">
+					{weeks}
+					<div
+						className="month-blur-effect"
+						style={{ left: `${mouseEffect.X}px`, top: `${mouseEffect.Y}px` }}
+					/>
+				</div>
 			</div>
 		</div>
 	) : null;
