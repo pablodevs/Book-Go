@@ -9,7 +9,7 @@ export const LoginPopup = () => {
 	return (
 		<div className="popup login">
 			<div className="popup-header">
-				<h1 className="popup-heading">LOGIN</h1>
+				<h1 className="popup-header-title">LOGIN</h1>
 				<button onClick={() => actions.setBool("navbarLogin", "close")}>
 					<i className="fas fa-times" />
 				</button>

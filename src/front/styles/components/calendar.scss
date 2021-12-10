@@ -51,18 +51,25 @@
     & > td { padding: 5px }
 }
 .month {
+    position: relative;
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    padding: 0 1rem 1rem 1rem;
+    padding: 1rem;
 }
 
+.week, .month {
+    gap: 0.3rem;
+    @media screen and (max-width: 767.9px) { gap: 0.5rem }
+}
+
+$--days-box-shadow: inset 0 0 0 1.5px white;
 .day {
     color: $--color-grey-dark;
-    border-radius: 15%;
     font-size: clamp(1rem, 5vw, 1.4rem);
+    box-shadow: $--days-box-shadow;
     &:hover {
-        background-color: $--color-blue-light;
+        box-shadow: inset 0 0 0 2px $--color-blue-dark;
         color: $--color-grey-dark;
     }
     aspect-ratio: 1;
@@ -70,13 +77,33 @@
 }
 .today {
     font-weight: 600;
+    background-color: $--color-blue-light;
     // inset: para que esté dentro del div y no vaya hacia afuera
-    box-shadow: inset 0 0 0 0.5px $--color-grey-dark; // Uso box-shadow porque el estilo 'border' modifica el tamaño del div mientras que box shadow NO
+    box-shadow: inset 0 0 0 1.5px $--color-blue-dark,
+                inset 0 0 0 3px white,
+                inset 0 0 0 4.5px $--color-blue-dark; // Uso box-shadow porque el estilo 'border' modifica el tamaño del div mientras que box shadow NO
 }
 .week a.light-fc-day {
     color: $--color-grey-light;
     cursor: default;
-    &:hover { background: none }
+    &:hover { box-shadow: $--days-box-shadow }
 }
 
 .calendar-wrapper, .calendar, .month, .week { flex: 1 }
+
+.month-blur-effect {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    border-radius: 50%;
+    box-shadow: 0 0 0 33px #8bf0ff,
+                0 0 0 66px #b5f5ff,
+                0 0 0 100px #d3fbffbf;
+    @media screen and (max-width: 767.9px) {
+        box-shadow: 0 0 0 63px #8bf0ff,
+                    0 0 0 96px #b5f5ff,
+                    0 0 0 130px #d3fbffbf
+    }
+    filter: blur(30px);
+    z-index: -1
+}
