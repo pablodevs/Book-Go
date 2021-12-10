@@ -1,70 +1,90 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Context } from "../../store/appContext.js";
 import { NavLink } from "react-router-dom";
-import { BookingPopup } from "./bookingpopup.js";
-import { LoginPopup } from "./loginpopup.js";
+import { Popup } from "./popup.js";
 import "../../../styles/components/navbar.scss";
 
 export const Navbar = () => {
 	const { store, actions } = useContext(Context);
-	let [menu, setMenu] = useState(false);
+	let [navMenu, setNavMenu] = useState(false);
 
 	useEffect(
 		() => {
-			if ((menu || store.navbarBooking) && window.innerWidth <= 767.9) {
-				document.body.style.overflowY = "hidden";
+			if (window.innerWidth <= 767.9 && (navMenu || store.popup)) {
+				document.body.style.overflowY = "hidden"; //⚠️ERROR⚠️ cuando agrandas el tamaño de la pantalla y pasas a > 767.9, no se puede hacer 'scroll'
 			} else {
 				document.body.style.overflowY = "scroll";
 			}
 		},
-		[menu, store.navbarBooking]
+		[navMenu, store.popup]
 	);
 
 	return (
 		<header>
 			<nav className="_navbar">
 				<span className="_navbar-logo-wrapper center">
-					<NavLink className="_navbar-logo _navbar-link" to="/" onClick={() => setMenu(false)}>
+					<NavLink
+						className="_navbar-logo _navbar-link"
+						to="/"
+						onClick={() => {
+							setNavMenu(false);
+							actions.closePopup();
+						}}>
 						Inicio
 					</NavLink>
 				</span>
 				<button
 					className="_navbar-login"
 					onClick={() => {
-						actions.setBool("navbarLogin");
-						actions.setBool("navbarBooking", "close");
-						setMenu(false);
+						actions.setPopup("login");
+						setNavMenu(false);
 					}}>
 					<div className="_navbar-login-effect">
 						<span>Acceder</span>
 						<i className="far fa-user" />
 					</div>
 				</button>
-				<button className="_navbar-toggle" onClick={() => setMenu(!menu)}>
-					{menu ? <i className="fas fa-times" /> : <i className="fas fa-bars" />}
+				<button className="_navbar-toggle" onClick={() => setNavMenu(!navMenu)}>
+					{navMenu ? <i className="fas fa-times" /> : <i className="fas fa-bars" />}
 				</button>
-				<ul className={"_navbar-group" + (menu ? " _navbar-show" : "")}>
+				<ul className={"_navbar-group" + (navMenu ? " _navbar-show" : "")}>
 					<NavLink
 						className="_navbar-link"
 						to="#"
 						onClick={() => {
-							actions.setBool("navbarLogin", "close");
-							actions.setBool("navbarBooking");
-							setMenu(false);
+							actions.setPopup("booking");
+							setNavMenu(false);
 						}}>
 						Reserva
 					</NavLink>
-					<NavLink className="_navbar-link" to="#" onClick={() => setMenu(false)}>
+					<NavLink
+						className="_navbar-link"
+						to="#"
+						onClick={() => {
+							setNavMenu(false);
+							actions.closePopup();
+						}}>
 						Productos
 					</NavLink>
-					<NavLink className="_navbar-link" to="#" onClick={() => setMenu(false)}>
+					<NavLink
+						className="_navbar-link"
+						to="#"
+						onClick={() => {
+							setNavMenu(false);
+							actions.closePopup();
+						}}>
 						Contacto
 					</NavLink>
 				</ul>
 			</nav>
 
-			{store.navbarBooking ? <BookingPopup /> : null}
-			{store.navbarLogin ? <LoginPopup /> : null}
+			{store.popup === "booking" ? (
+				<Popup type={store.popup} title="¿Qué estás buscando?" />
+			) : store.popup === "login" ? (
+				<Popup type={store.popup} title="Iniciar Sesión" />
+			) : store.popup === "signup" ? (
+				<Popup type={store.popup} title="Únete" />
+			) : null}
 		</header>
 	);
 };

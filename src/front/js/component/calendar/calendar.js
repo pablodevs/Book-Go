@@ -114,7 +114,7 @@ export const Calendar = () => {
 		[weeks]
 	);
 
-	return weeks ? (
+	return (
 		<div className="calendar-wrapper">
 			<div className="calendar-header">
 				{/* Estos son los botones de cambio de mes, tienen position: absolute para colocarlos donde quiera */}
@@ -157,5 +157,5 @@ export const Calendar = () => {
 				</div>
 			</div>
 		</div>
-	) : null;
+	);
 };
