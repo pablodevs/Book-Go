@@ -78,6 +78,7 @@ export const Calendar = () => {
 		[store.calendar] // realizo este useEffect() cada vez que cambia el mes
 	);
 
+	// Mouse Effect
 	useEffect(
 		() => {
 			if (!document.querySelector(".month")) return;
@@ -89,16 +90,26 @@ export const Calendar = () => {
 				let container = document.querySelector(".month");
 				let rect = container.getBoundingClientRect();
 
-				// Añado el efecto al mouse
-				let offsetX = window.innerWidth <= 767.9 ? 0 : rect.left;
-				let offsetY = rect.top;
-
 				setMouseEffect({
-					X: event.clientX - offsetX,
-					Y: event.clientY - offsetY
+					X: event.clientX - rect.left,
+					Y: event.clientY - rect.top
 				});
 			};
-			document.body.addEventListener("mousemove", mouseEffectFunc);
+			// Añado el efecto al mouse
+			if (window.innerWidth > 767.9) document.body.addEventListener("mousemove", mouseEffectFunc);
+
+			window.addEventListener("resize", () => {
+				if (window.innerWidth <= 767.9) {
+					document.body.removeEventListener("mousemove", mouseEffectFunc);
+					if (document.querySelector(".month-blur-effect"))
+						// Ojito! el event listener se quedará, ya que no existe el removeEventListener (habrá que implementarlo digo yo)
+						document.querySelector(".month-blur-effect").style.display = "none";
+				} else {
+					document.body.addEventListener("mousemove", mouseEffectFunc);
+					if (document.querySelector(".month-blur-effect"))
+						document.querySelector(".month-blur-effect").style.display = "block";
+				}
+			});
 		},
 		[weeks]
 	);
