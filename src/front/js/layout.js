@@ -11,6 +11,7 @@ import { Calendar } from "./component/calendar/calendar";
 // Views
 import { Home } from "./pages/home";
 import { Info } from "./pages/info";
+import { Dashboard } from "./pages/dashboard";
 
 const Layout = () => {
 	const basename = process.env.BASENAME || "";
@@ -29,6 +30,10 @@ const Layout = () => {
 
 					<Route exact path="/info/:id">
 						<Info />
+					</Route>
+
+					<Route exact path="/dashboard">
+						<Dashboard />
 					</Route>
 
 					<Route>
