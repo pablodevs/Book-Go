@@ -14,23 +14,32 @@ export const Popup = () => {
 			if (store.popup === null) document.removeEventListener("keydown", handleKeyDown);
 		};
 		document.addEventListener("keydown", handleKeyDown);
+
+		document.addEventListener("click", function handleDocClick(e) {
+			if (e.target === document.querySelector(".popup-grey")) {
+				actions.closePopup();
+				document.removeEventListener("click", handleDocClick);
+			}
+		});
 	}, []);
 
 	return (
-		<div className="popup">
-			<button className="popup-close" onClick={() => actions.closePopup()}>
-				<i className="fas fa-times" />
-			</button>
-			<h1 className="popup-header">{store.popupTitle}</h1>
-			{store.popup === "login" ? (
-				<Login />
-			) : store.popup === "signup" ? (
-				<Signup />
-			) : store.popup === "booking" ? (
-				<Booking />
-			) : (
-				<h1>ERROR</h1>
-			)}
+		<div className="popup-grey">
+			<div className="popup">
+				<button className="popup-close" onClick={() => actions.closePopup()}>
+					<i className="fas fa-times" />
+				</button>
+				<h1 className="popup-header">{store.popupTitle}</h1>
+				{store.popup === "login" ? (
+					<Login />
+				) : store.popup === "signup" ? (
+					<Signup />
+				) : store.popup === "booking" ? (
+					<Booking />
+				) : (
+					<h1>ERROR</h1>
+				)}
+			</div>
 		</div>
 	);
 };
