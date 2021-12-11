@@ -6,7 +6,11 @@ import "../../../styles/components/calendar.scss";
 
 export const Calendar = () => {
 	const { store, actions } = useContext(Context);
-	const [weeks, setWeeks] = useState(null); // sirve para renderizar las 6 semanas con sus días
+	let [weeks, setWeeks] = useState(null); // sirve para renderizar las 6 semanas con sus días
+	let [mouseEffect, setMouseEffect] = useState({
+		X: -900,
+		Y: -900
+	});
 
 	let calendar = store.calendar,
 		todayDate = calendar.todayDate,
@@ -74,7 +78,43 @@ export const Calendar = () => {
 		[store.calendar] // realizo este useEffect() cada vez que cambia el mes
 	);
 
-	return weeks ? (
+	// Mouse Effect
+	useEffect(
+		() => {
+			if (!document.querySelector(".month")) return;
+
+			let mouseEffectFunc = event => {
+				if (!document.querySelector(".month")) return;
+
+				// Obtengo la posición del popup (X, Y)
+				let container = document.querySelector(".month");
+				let rect = container.getBoundingClientRect();
+
+				setMouseEffect({
+					X: event.clientX - rect.left,
+					Y: event.clientY - rect.top
+				});
+			};
+			// Añado el efecto al mouse
+			if (window.innerWidth > 767.9) document.body.addEventListener("mousemove", mouseEffectFunc);
+
+			window.addEventListener("resize", () => {
+				if (window.innerWidth <= 767.9) {
+					document.body.removeEventListener("mousemove", mouseEffectFunc);
+					if (document.querySelector(".month-blur-effect"))
+						// Ojito! el event listener se quedará, ya que no existe el removeEventListener (habrá que implementarlo digo yo)
+						document.querySelector(".month-blur-effect").style.display = "none";
+				} else {
+					document.body.addEventListener("mousemove", mouseEffectFunc);
+					if (document.querySelector(".month-blur-effect"))
+						document.querySelector(".month-blur-effect").style.display = "block";
+				}
+			});
+		},
+		[weeks]
+	);
+
+	return (
 		<div className="calendar-wrapper">
 			<div className="calendar-header">
 				{/* Estos son los botones de cambio de mes, tienen position: absolute para colocarlos donde quiera */}
@@ -108,8 +148,14 @@ export const Calendar = () => {
 						))}
 				</div>
 				{/* Aquí cargo el mes entero: */}
-				<div className="month">{weeks}</div>
+				<div className="month">
+					{weeks}
+					<div
+						className="month-blur-effect"
+						style={{ left: `${mouseEffect.X}px`, top: `${mouseEffect.Y}px` }}
+					/>
+				</div>
 			</div>
 		</div>
-	) : null;
+	);
 };
