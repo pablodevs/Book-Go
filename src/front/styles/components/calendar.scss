@@ -56,11 +56,12 @@
     display: flex;
     flex-direction: column;
     padding: 1rem;
+    @media screen and (max-width: 767.9px) { padding: 0.3rem }
 }
 
 .week, .month {
     gap: 0.3rem;
-    @media screen and (max-width: 767.9px) { gap: 0.5rem }
+    @media screen and (max-width: 767.9px) { gap: 0.2rem }
 }
 
 $--days-box-shadow: inset 0 0 0 1.5px white;
@@ -73,7 +74,11 @@ $--days-box-shadow: inset 0 0 0 1.5px white;
         color: $--color-grey-dark;
     }
     aspect-ratio: 1;
-    @media screen and (max-width: 767.9px) { aspect-ratio: 0 }
+    @media screen and (max-width: 767.9px) {
+        aspect-ratio: 0;
+        box-shadow: inset 0 0 0 1.5px $--color-grey-lighter;
+        border-radius: 16%;
+    }
 }
 .today {
     font-weight: 600;
@@ -86,7 +91,10 @@ $--days-box-shadow: inset 0 0 0 1.5px white;
 .week a.light-fc-day {
     color: $--color-grey-light;
     cursor: default;
-    &:hover { box-shadow: $--days-box-shadow }
+    &:hover {
+        box-shadow: $--days-box-shadow;
+        @media screen and (max-width: 767.9px) { box-shadow: inset 0 0 0 1.5px $--color-grey-lighter }
+    }
 }
 
 .calendar-wrapper, .calendar, .month, .week { flex: 1 }
@@ -96,14 +104,9 @@ $--days-box-shadow: inset 0 0 0 1.5px white;
     width: 2px;
     height: 2px;
     border-radius: 50%;
-    box-shadow: 0 0 0 33px #8bf0ff,
-                0 0 0 66px #b5f5ff,
-                0 0 0 100px #d3fbffbf;
-    @media screen and (max-width: 767.9px) {
-        box-shadow: 0 0 0 63px #8bf0ff,
-                    0 0 0 96px #b5f5ff,
-                    0 0 0 130px #d3fbffbf
-    }
+    box-shadow: 0 0 0 53px #8bf0ff,
+                0 0 0 86px #b5f5ff,
+                0 0 0 120px #d3fbffbf;
     filter: blur(30px);
     z-index: -1
 }

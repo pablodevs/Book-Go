@@ -12,18 +12,20 @@ const getState = ({ getStore, getActions, setStore }) => {
 				totDays: null
 			},
 			popup: null,
+			popupTitle: "",
 			products: [],
 			oneProduct: [],
 			message: ""
 		},
 		actions: {
-			setPopup: type => {
+			setPopup: (type, title) => {
 				let store = getStore();
 				let actions = getActions();
 				if (type === store.popup) actions.closePopup();
-				else setStore({ popup: type });
+				else setStore({ popup: type, popupTitle: title });
 			},
-			closePopup: () => setStore({ popup: null }),
+			setPopupTitle: newTitle => setStore({ popupTitle: newTitle }),
+			closePopup: () => setStore({ popup: null, popupTitle: "" }),
 			// Meto todas las acciones del componente calendario en calendarActions:
 			calendarActions: {
 				setInitialCalendar: () => {

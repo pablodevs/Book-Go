@@ -5,16 +5,20 @@ import { Popup } from "./popup.js";
 import "../../../styles/components/navbar.scss";
 
 export const Navbar = () => {
-	const { store, actions } = useContext(Context);
 	let [navMenu, setNavMenu] = useState(false);
+	const { store, actions } = useContext(Context);
 
 	useEffect(
 		() => {
-			if (window.innerWidth <= 767.9 && (navMenu || store.popup)) {
-				document.body.style.overflowY = "hidden"; //⚠️ERROR⚠️ cuando agrandas el tamaño de la pantalla y pasas a > 767.9, no se puede hacer 'scroll'
-			} else {
-				document.body.style.overflowY = "scroll";
+			const handleResize = () => {
+				if (window.innerWidth <= 767.9 && (navMenu || store.popup)) document.body.style.overflowY = "hidden";
+				else document.body.style.overflowY = "scroll";
+				if (!navMenu && !store.popup) window.removeEventListener("resize", handleResize);
+			};
+			if (navMenu || store.popup) {
+				window.addEventListener("resize", handleResize);
 			}
+			handleResize();
 		},
 		[navMenu, store.popup]
 	);
@@ -36,7 +40,7 @@ export const Navbar = () => {
 				<button
 					className="_navbar-login"
 					onClick={() => {
-						actions.setPopup("login");
+						actions.setPopup("login", "Iniciar Sesión");
 						setNavMenu(false);
 					}}>
 					<div className="_navbar-login-effect">
@@ -52,7 +56,7 @@ export const Navbar = () => {
 						className="_navbar-link"
 						to="#"
 						onClick={() => {
-							actions.setPopup("booking");
+							actions.setPopup("booking", "¿Qué estás buscando?");
 							setNavMenu(false);
 						}}>
 						Reserva
@@ -79,11 +83,11 @@ export const Navbar = () => {
 			</nav>
 
 			{store.popup === "booking" ? (
-				<Popup type={store.popup} title="¿Qué estás buscando?" />
+				<Popup />
 			) : store.popup === "login" ? (
-				<Popup type={store.popup} title="Iniciar Sesión" />
+				<Popup />
 			) : store.popup === "signup" ? (
-				<Popup type={store.popup} title="Únete" />
+				<Popup />
 			) : null}
 		</header>
 	);
