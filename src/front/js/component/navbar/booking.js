@@ -1,11 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { Context } from "../../store/appContext";
 import { Calendar } from "../calendar/calendar";
 
 export const Booking = () => {
+	const { actions, store } = useContext(Context);
 	let [calendar, setCalendar] = useState(false);
 
 	const renderCalendar = () => {
 		setCalendar(true);
+		actions.setPopupTitle("¿Cuándo?");
 	};
 
 	return (

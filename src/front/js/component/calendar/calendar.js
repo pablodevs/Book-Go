@@ -98,7 +98,7 @@ export const Calendar = () => {
 			// Añado el efecto al mouse
 			if (window.innerWidth > 767.9) document.body.addEventListener("mousemove", mouseEffectFunc);
 
-			window.addEventListener("resize", () => {
+			const handleCalendarResize = () => {
 				if (window.innerWidth <= 767.9) {
 					document.body.removeEventListener("mousemove", mouseEffectFunc);
 					if (document.querySelector(".month-blur-effect"))
@@ -109,7 +109,9 @@ export const Calendar = () => {
 					if (document.querySelector(".month-blur-effect"))
 						document.querySelector(".month-blur-effect").style.display = "block";
 				}
-			});
+				if (!store.popup) window.removeEventListener("resize", handleCalendarResize);
+			};
+			window.addEventListener("resize", handleCalendarResize);
 		},
 		[weeks]
 	);

@@ -1,6 +1,5 @@
 import React, { useContext, useState } from "react";
 import { Context } from "../../store/appContext";
-import { Link } from "react-router-dom";
 
 export const Signup = () => {
 	const { actions, store } = useContext(Context);
@@ -98,7 +97,7 @@ export const Signup = () => {
 					</button>
 					<div className="d-flex w-100 justify-content-center">
 						¿Ya eres miembro?&nbsp;
-						<button className="text-primary" onClick={() => actions.setPopup("login")}>
+						<button className="text-primary" onClick={() => actions.setPopup("login", "Iniciar Sesión")}>
 							Iniciar Sesión
 						</button>
 					</div>

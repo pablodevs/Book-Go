@@ -54,10 +54,14 @@ export const Footer = () => (
 					<form>
 						<h5>Subscribe to our newsletter</h5>
 						<p>Monthly digest of whats new and exciting from us.</p>
-						<div className="d-flex w-100 gap-2">
-							<label className="visually-hidden">Email address</label>
-							<input id="newsletter1" type="text" className="form-control" placeholder="Email address" />
-							<button className="btn btn-primary" type="button">
+						<div className="row gap-2">
+							<input
+								id="newsletter1"
+								type="text"
+								className="col-md-7 col-sm-12"
+								placeholder="Email address"
+							/>
+							<button className="btn btn-primary col-md-5 col-sm-12" type="button">
 								Subscribe
 							</button>
 						</div>
