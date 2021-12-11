@@ -1,15 +1,17 @@
 /*===== General styles import =====*/
-@import "./colors"; // paleta de colores
-@import "./fonts";  // estilo de las fuentes
+@import "../colors"; // paleta de colores
+@import "../fonts";  // estilo de las fuentes
 
 .popup {
+    z-index: 9999;
     display: flex;
     align-items: center;
     justify-content: center;
-    position: absolute;
-    top: 100%;
+    flex-direction: column;
+    position: fixed;
+    top: 50%;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translate(-50%, -50%);
     width: 65vh;
     border-radius: 2%;
     background-color: white;
@@ -25,11 +27,15 @@
     }
 }
 .popup-header {
-    padding: 1rem 2rem 0.5rem 2rem;
-    display: flex;
-    justify-content: space-between;
+    padding-block: 1rem;
     width: 100%;
+    text-align: center;
+    font-size: 1.8rem;
 }
-.popup-heading {
-    text-align: start;
+.popup-close {
+    display: flex;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    color: $--color-grey-regular;
 }

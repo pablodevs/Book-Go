@@ -1,20 +1,20 @@
 import React, { useContext, useState } from "react";
 import { Context } from "../../store/appContext";
-import { Link } from "react-router-dom";
 
-export const Login_form = () => {
+export const Login = () => {
 	const { actions, store } = useContext(Context);
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 
 	return (
-		<div className="container">
+		<div className="container-fluid">
 			<div className="row">
-				<div className="col-5 mx-auto m-5  p-4 border border-success border-rounded">
+				<div className="col-10 mx-auto mb-4" style={{ display: "grid", gap: "1rem" }}>
 					<input
 						onChange={e => {
 							setEmail(e.target.value);
-							actions.changeMessage({ message: "Tic.tac.tic.tac..." });
+							// ⚠️NO FUNCIONA, NO EXISTE LA FUNCIÓN CHANGEMESSAGE⚠️
+							// actions.changeMessage({ message: "Tic.tac.tic.tac..." });
 						}}
 						className="form-control"
 						type="mail"
@@ -25,7 +25,8 @@ export const Login_form = () => {
 					<input
 						onChange={e => {
 							setPassword(e.target.value);
-							actions.changeMessage({ message: "Tic.tac.tic.tac..." });
+							// ⚠️NO FUNCIONA, NO EXISTE LA FUNCIÓN CHANGEMESSAGE⚠️
+							// actions.changeMessage({ message: "Tic.tac.tic.tac..." });
 						}}
 						className="form-control"
 						type="password"
@@ -33,17 +34,20 @@ export const Login_form = () => {
 						name="password"
 						placeholder="password"
 					/>
-					<Link to="/signup">
-						<p className="text-end text-primary">Never here?, Sign Up!</p>
-					</Link>
 					<button
 						onClick={() => {
 							actions.generate_token(email, password);
 						}}
-						className="btn btn-warning mt-3 border-success"
+						className="btn btn-warning w-100"
 						type="submit">
-						Enviar !
+						Acceder
 					</button>
+					<div className="d-flex w-100 justify-content-center">
+						¿Aún no eres miembro?&nbsp;
+						<button className="text-primary" onClick={() => actions.setPopup("signup")}>
+							Únete ahora
+						</button>
+					</div>
 				</div>
 			</div>
 		</div>
