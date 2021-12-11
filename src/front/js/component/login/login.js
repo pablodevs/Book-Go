@@ -44,7 +44,7 @@ export const Login = () => {
 					</button>
 					<div className="d-flex w-100 justify-content-center">
 						¿Aún no eres miembro?&nbsp;
-						<button className="text-primary" onClick={() => actions.setPopup("signup")}>
+						<button className="text-primary" onClick={() => actions.setPopup("signup", "Únete")}>
 							Únete ahora
 						</button>
 					</div>
