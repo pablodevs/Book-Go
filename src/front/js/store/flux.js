@@ -29,7 +29,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				else setStore({ popup: type, popupTitle: title });
 			},
 			setPopupTitle: newTitle => setStore({ popupTitle: newTitle }), //cambia el título del popup
-			closePopup: () => setStore({ popup: null, popupTitle: "" }),  //cierra el popup
+			closePopup: () => setStore({ popup: null, popupTitle: "" }), //cierra el popup
 			// Meto todas las acciones del componente calendario en calendarActions:
 			calendarActions: {
 				//inicia el calendario
