@@ -14,18 +14,24 @@ const getState = ({ getStore, getActions, setStore }) => {
 			popup: null,
 			products: [],
 			oneProduct: [],
-			message: ""
+			message: "",
+			token: null,
+			user_id: null
 		},
+
 		actions: {
 			setPopup: type => {
+				//Hace que se abra el popup para el login, register o calendario de reservas
 				let store = getStore();
 				let actions = getActions();
 				if (type === store.popup) actions.closePopup();
 				else setStore({ popup: type });
 			},
-			closePopup: () => setStore({ popup: null }),
+
+			closePopup: () => setStore({ popup: null }), // cierra el popup de login, register y calendario
 			// Meto todas las acciones del componente calendario en calendarActions:
 			calendarActions: {
+				//inicia el calendario
 				setInitialCalendar: () => {
 					// Inicializa el calendario con la fecha actual al cargar la página
 					let today = new Date();
@@ -40,6 +46,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						}
 					});
 				},
+				// actualiza el calendario
 				updateCalendar: month => {
 					/*
 						Esta función recibe los onClick de los botones que cambian de mes
@@ -112,6 +119,27 @@ const getState = ({ getStore, getActions, setStore }) => {
 					.then(data => {
 						console.log(data);
 						setStore({ message: "Usuario creado Correctamente. Ya puede ir al login y acceder!" });
+					})
+					.catch(error => console.error(error));
+			},
+
+			generate_token: async (email, password) => {
+				//genera el token cuando haces login
+				await fetch(process.env.BACKEND_URL + `/token`, {
+					method: "POST",
+					body: JSON.stringify({ email: email, password: password }),
+					headers: {
+						"Content-Type": "application/json"
+					}
+				})
+					.then(response => {
+						console.log(response.ok);
+						console.log(response.status);
+						return response.json();
+					})
+					.then(data => {
+						console.log(data);
+						setStore({ message: data.message, token: data.token, user_id: data.user_id });
 					})
 					.catch(error => console.error(error));
 			}

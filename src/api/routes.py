@@ -8,6 +8,13 @@ import cloudinary
 import cloudinary.uploader
 import os
 
+#para la autenticación y generar el token
+from flask_jwt_extended import create_access_token
+from flask_jwt_extended import get_jwt_identity
+from flask_jwt_extended import jwt_required
+
+
+
 
 api = Blueprint('api', __name__)
 
@@ -67,3 +74,22 @@ def create_new_user():
     return jsonify(user.serialize()), 200
     
 
+#GENERATE TOKEN
+@api.route('/token', methods=['POST'])
+def generate_token():
+
+    # fetch for create token
+    email_recieved = request.json.get("email", None)
+    password_recieved = request.json.get("password", None)
+       # Query your database for username and password
+    user = User.query.filter_by(email=email_recieved, password=password_recieved).first()
+    if user is None:
+        # the user was not found on the database
+        return jsonify({"message": "Usuario o contraseña incorrectos"}), 401
+    
+    # create a new token with the user id inside
+    access_token = create_access_token(identity=user.id)
+    return jsonify({"message": "Acceso correcto", "token": access_token, "user_id": user.id })
+
+ 
+    

@@ -1,5 +1,6 @@
 import React, { useContext, useState } from "react";
 import { Context } from "../../store/appContext";
+import { Redirect } from "react-router-dom";
 
 export const Login = () => {
 	const { actions, store } = useContext(Context);
@@ -11,10 +12,9 @@ export const Login = () => {
 			<div className="row">
 				<div className="col-10 mx-auto mb-4" style={{ display: "grid", gap: "1rem" }}>
 					<input
+						required
 						onChange={e => {
 							setEmail(e.target.value);
-							// ⚠️NO FUNCIONA, NO EXISTE LA FUNCIÓN CHANGEMESSAGE⚠️
-							// actions.changeMessage({ message: "Tic.tac.tic.tac..." });
 						}}
 						className="form-control"
 						type="mail"
@@ -23,10 +23,9 @@ export const Login = () => {
 						placeholder="email"
 					/>
 					<input
+						required
 						onChange={e => {
 							setPassword(e.target.value);
-							// ⚠️NO FUNCIONA, NO EXISTE LA FUNCIÓN CHANGEMESSAGE⚠️
-							// actions.changeMessage({ message: "Tic.tac.tic.tac..." });
 						}}
 						className="form-control"
 						type="password"
@@ -48,6 +47,20 @@ export const Login = () => {
 							Únete ahora
 						</button>
 					</div>
+
+					{store.token ? (
+						(actions.closePopup(), <Redirect to={"/dashboard"} />)
+					) : (
+						<div>
+							{store.message != "" ? (
+								<div className="alert alert-danger" role="alert">
+									{store.message}
+								</div>
+							) : (
+								""
+							)}
+						</div>
+					)}
 				</div>
 			</div>
 		</div>

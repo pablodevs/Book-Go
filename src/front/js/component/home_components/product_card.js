@@ -19,7 +19,7 @@ export const Product_card = props => {
 						actions.getProduct(props.product.id);
 					}}>
 					<Link to={"/info/" + props.product.id}>
-						<span className="text-whit ">Más Info</span>
+						<span className="text-white">Más Info</span>
 					</Link>
 				</button>
 			</div>

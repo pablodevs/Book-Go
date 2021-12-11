@@ -13,8 +13,25 @@ export const Home = () => {
 
 	return (
 		<div className="container-fluid">
-			<h1 className="text-center">Bienvenidos a Home relax !</h1>
-			<Carrousel />
+			<div className="row">
+				<div className="col">
+					<h1 className="text-center pt-5">Healh inside !</h1>
+					<h5 className="p-5">
+						Lorem ipsum, dolor sit amet consectetur adipisicing elit. Asperiores voluptatum cupiditate
+						aliquam repellat sapiente nisi nemo similique impedit aliquid? Hic, saepe harum. Autem est
+						consequuntur, vel inventore nam similique reprehenderit.
+					</h5>
+					<h5 className="p-5">
+						Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab quaerat voluptatem odit impedit
+						suscipit fugiat, nostrum distinctio dicta voluptates libero corrupti recusandae, quo id vero
+						quis, non minima amet doloremque.
+					</h5>
+				</div>
+				<div className="col">
+					<Carrousel />
+				</div>
+			</div>
+
 			<div className="container-fluid">
 				{store.products.length > 0 ? (
 					<div className="row">
