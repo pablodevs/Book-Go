@@ -1,3 +1,5 @@
+// ⚠️ SUBIR A CARPETA ./component ⚠️
+
 import React, { useContext, useEffect, useState } from "react";
 import { Context } from "../../store/appContext.js";
 import { Login } from "../login/login.js";
@@ -26,10 +28,15 @@ export const Popup = () => {
 	return (
 		<div className="popup-grey">
 			<div className="popup">
-				<button className="popup-close" onClick={() => actions.closePopup()}>
-					<i className="fas fa-times" />
-				</button>
-				<h1 className="popup-header">{store.popupTitle}</h1>
+				<div className="popup-header">
+					<button className="popup-return" onClick={() => undefined}>
+						<i className="fas fa-arrow-left" />
+					</button>
+					<h1>{store.popupTitle}</h1>
+					<button className="popup-close" onClick={() => actions.closePopup()}>
+						<i className="fas fa-times" />
+					</button>
+				</div>
 				{store.popup === "login" ? (
 					<Login />
 				) : store.popup === "signup" ? (

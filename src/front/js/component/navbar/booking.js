@@ -17,7 +17,7 @@ export const Booking = () => {
 				""
 			) : (
 				<div>
-					<h3 className="text-danger py-3">Aquí aparecerán todos los productos</h3>
+					<p className="text-danger fs-4 py-3">Aquí aparecerán todos los productos</p>
 					<button className="btn btn-info mb-4" onClick={renderCalendar}>
 						Producto x
 					</button>

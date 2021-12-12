@@ -36,9 +36,9 @@ export const Signup = () => {
 	};
 
 	return (
-		<div className="container-fluid">
+		<div className="container-fluid my-auto">
 			<div className="row">
-				<form onSubmit={submitForm} className="col-10 mx-auto mb-4" style={{ display: "grid", gap: "1rem" }}>
+				<form onSubmit={submitForm} className="col mx-4 mb-4" style={{ display: "grid", gap: "1rem" }}>
 					<input
 						required
 						onChange={e => {
