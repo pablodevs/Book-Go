@@ -10,24 +10,33 @@ import "../../../styles/components/popup.scss";
 export const Popup = () => {
 	const { store, actions } = useContext(Context);
 
-	useEffect(() => {
-		const handleKeyDown = event => {
-			if (event.key === "Escape") actions.closePopup();
-			if (store.popup === null) document.removeEventListener("keydown", handleKeyDown);
-		};
-		document.addEventListener("keydown", handleKeyDown);
-
-		document.addEventListener("click", function handleDocClick(e) {
-			if (e.target === document.querySelector(".popup-grey")) {
-				actions.closePopup();
-				document.removeEventListener("click", handleDocClick);
+	useEffect(
+		() => {
+			const handleKeyDown = event => {
+				if (event.key === "Escape") {
+					actions.closePopup();
+					document.removeEventListener("keydown", handleKeyDown);
+					document.removeEventListener("click", handleDocClick);
+				}
+			};
+			const handleDocClick = event => {
+				if (event.target === document.querySelector(".popup-bg")) {
+					actions.closePopup();
+					document.removeEventListener("keydown", handleKeyDown);
+					document.removeEventListener("click", handleDocClick);
+				}
+			};
+			if (store.popup !== null) {
+				document.addEventListener("keydown", handleKeyDown);
+				document.addEventListener("click", handleDocClick);
 			}
-		});
-	}, []);
+		},
+		[store.popup]
+	);
 
 	return (
-		<div className="popup-grey">
-			<div className="popup">
+		<div className={"popup-bg" + (store.popup ? " popup-bg-show" : "")}>
+			<div className={"popup" + (store.popup ? " popup-show" : "")}>
 				<div className="popup-header">
 					<button className="popup-return" onClick={() => undefined}>
 						<i className="fas fa-arrow-left" />
@@ -43,9 +52,7 @@ export const Popup = () => {
 					<Signup />
 				) : store.popup === "booking" ? (
 					<Booking />
-				) : (
-					<h1>ERROR</h1>
-				)}
+				) : null}
 			</div>
 		</div>
 	);
