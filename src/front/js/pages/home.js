@@ -12,7 +12,7 @@ export const Home = () => {
 	}, []);
 
 	return (
-		<div className="container-fluid">
+		<div className="container-fluid view">
 			<div className="row">
 				<div className="col">
 					<h1 className="text-center pt-5">Healh inside !</h1>

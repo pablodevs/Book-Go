@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useContext } from "react";
+import { Context } from "./store/appContext.js";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import ScrollToTop from "./component/scrollToTop";
 import injectContext from "./store/appContext";
@@ -12,14 +13,23 @@ import { Calendar } from "./component/calendar/calendar";
 import { Home } from "./pages/home";
 import { Info } from "./pages/info";
 import { Dashboard } from "./pages/dashboard";
+import { Popup } from "./component/navbar/popup";
 
 const Layout = () => {
+	const { store, actions } = useContext(Context);
 	const basename = process.env.BASENAME || "";
 
 	return (
 		<BrowserRouter basename={basename}>
 			<ScrollToTop>
 				<Navbar />
+				{store.popup === "booking" ? (
+					<Popup />
+				) : store.popup === "login" ? (
+					<Popup />
+				) : store.popup === "signup" ? (
+					<Popup />
+				) : null}
 				<Switch>
 					<Route exact path="/">
 						<Home />
