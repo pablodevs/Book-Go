@@ -23,13 +23,7 @@ const Layout = () => {
 		<BrowserRouter basename={basename}>
 			<ScrollToTop>
 				<Navbar />
-				{store.popup === "booking" ? (
-					<Popup />
-				) : store.popup === "login" ? (
-					<Popup />
-				) : store.popup === "signup" ? (
-					<Popup />
-				) : null}
+				<Popup />
 				<Switch>
 					<Route exact path="/">
 						<Home />
