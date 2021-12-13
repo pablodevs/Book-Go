@@ -28,17 +28,39 @@ export const Navbar = () => {
 						Inicio
 					</NavLink>
 				</span>
-				<button
-					className="_navbar-login"
-					onClick={() => {
-						actions.setPopup("login", "Iniciar Sesión");
-						setNavMenu(false);
-					}}>
-					<div className="_navbar-login-effect">
-						<span>Acceder</span>
-						<i className="far fa-user" />
+				{store.token ? (
+					<div>
+						<img
+							src={store.img_url}
+							alt="foto_perfil"
+							style={{ width: "50px", borderRadius: "50%" }}
+							className="m-2"
+						/>
+						<button
+							className="_navbar-login"
+							onClick={() => {
+								actions.logout();
+							}}>
+							<div className="">
+								<span>Salir </span>
+								<i className="far fa-user" />
+							</div>
+						</button>
 					</div>
-				</button>
+				) : (
+					<button
+						className="_navbar-login"
+						onClick={() => {
+							actions.setPopup("login", "Iniciar Sesión");
+							setNavMenu(false);
+						}}>
+						<div className="_navbar-login-effect">
+							<span>Acceder</span>
+							<i className="far fa-user" />
+						</div>
+					</button>
+				)}
+
 				<button className="_navbar-toggle" onClick={() => setNavMenu(!navMenu)}>
 					{navMenu ? <i className="fas fa-times" /> : <i className="fas fa-bars" />}
 				</button>
