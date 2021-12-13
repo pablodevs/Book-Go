@@ -21,9 +21,13 @@ const getState = ({ getStore, getActions, setStore }) => {
 		},
 
 		actions: {
-
+			logout: () => {
+				// al pulsar el botón de salir cambia el token a null
+				let store = getStore();
+				setStore({ token: null });
+			},
 			setPopup: (type, title) => {
-		  	//Hace que se abra el popup para el login, register o calendario de reservas
+				//Hace que se abra el popup para el login, register o calendario de reservas
 				let store = getStore();
 				let actions = getActions();
 				if (type === store.popup) actions.closePopup();
@@ -32,7 +36,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			closePopup: () => setStore({ popup: null }), // cierra el popup de login, register y calendario
 			setPopupTitle: newTitle => setStore({ popupTitle: newTitle }),
-
 
 			// Meto todas las acciones del componente calendario en calendarActions:
 			calendarActions: {
@@ -144,7 +147,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 					})
 					.then(data => {
 						console.log(data);
-						setStore({ message: data.message, token: data.token, user_id: data.user_id });
+						setStore({
+							message: data.message,
+							token: data.token,
+							user_id: data.user_id,
+							img_url: data.profile_image_url
+						});
 					})
 					.catch(error => console.error(error));
 			}
