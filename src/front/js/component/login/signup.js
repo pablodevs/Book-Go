@@ -97,7 +97,7 @@ export const Signup = () => {
 					</button>
 					<div className="d-flex w-100 justify-content-center">
 						¿Ya eres miembro?&nbsp;
-						<button className="text-primary" onClick={() => actions.setPopup("login", "Iniciar Sesión")}>
+						<button className="text-primary" onClick={() => actions.goToPrevPopup()}>
 							Iniciar Sesión
 						</button>
 					</div>

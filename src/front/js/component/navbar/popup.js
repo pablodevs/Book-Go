@@ -1,10 +1,11 @@
 // ⚠️ SUBIR A CARPETA ./component ⚠️
 
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import { Context } from "../../store/appContext.js";
 import { Login } from "../login/login.js";
 import { Signup } from "../login/signup.js";
 import { Booking } from "../navbar/booking.js";
+import { Calendar } from "../calendar/calendar.js";
 import "../../../styles/components/popup.scss";
 
 export const Popup = () => {
@@ -38,7 +39,7 @@ export const Popup = () => {
 		<div className={"popup-bg" + (store.popup ? " popup-bg-show" : "")}>
 			<div className={"popup" + (store.popup ? " popup-show" : "")}>
 				<div className="popup-header">
-					<button className="popup-return" onClick={() => undefined}>
+					<button className="popup-return" onClick={() => actions.goToPrevPopup()}>
 						<i className="fas fa-arrow-left" />
 					</button>
 					<h1>{store.popupTitle}</h1>
@@ -52,6 +53,8 @@ export const Popup = () => {
 					<Signup />
 				) : store.popup === "booking" ? (
 					<Booking />
+				) : store.popup === "calendar" ? (
+					<Calendar />
 				) : null}
 			</div>
 		</div>

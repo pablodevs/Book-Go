@@ -9,6 +9,7 @@
     position: fixed;
     height: 100vh;
     width: 100vw;
+    opacity: 0;
 }
 .popup {
     position: absolute;
@@ -56,7 +57,7 @@
 .popup-return { display: flex; margin-right: 1rem }
 .popup-close { display: flex; margin-left: auto }
 
-.popup-bg-show { visibility: visible }
+.popup-bg-show { visibility: visible; opacity: 1; transition: all 0.2s ease-out }
 .popup-show {
     transform: translate(-50%, -50%);
     opacity: 1;
