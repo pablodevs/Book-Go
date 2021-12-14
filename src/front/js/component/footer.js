@@ -5,6 +5,7 @@ export const Footer = () => (
 	<footer className="footer py-3 text-center sticky-bottom">
 		<div className="container">
 			<div className="row">
+				{/* Contact Data */}
 				<div className="col">
 					<h5>Contact Us</h5>
 					<ul className="nav flex-column">
@@ -19,7 +20,7 @@ export const Footer = () => (
 						</li>
 					</ul>
 				</div>
-
+				{/* Social Media buttons */}
 				<div className="col">
 					<h5>Follow Us</h5>
 					<ul className="nav justify-content-center p-3">
@@ -49,7 +50,7 @@ export const Footer = () => (
 						</li>
 					</ul>
 				</div>
-
+				{/* Form to subscribe to newsletter */}
 				<div className="col">
 					<form>
 						<h5>Subscribe to our newsletter</h5>
@@ -58,7 +59,7 @@ export const Footer = () => (
 							<input
 								id="newsletter1"
 								type="text"
-								className="col-md-7 col-sm-12"
+								className="col-md-12 col-sm-12"
 								placeholder="Email address"
 							/>
 							<button className="btn btn-primary col-md-5 col-sm-12" type="button">
@@ -67,7 +68,7 @@ export const Footer = () => (
 						</div>
 					</form>
 				</div>
-
+				{/* Other column */}
 				<div className="col">
 					<h5>Boring Stuff</h5>
 					<p className="text-start">
@@ -77,8 +78,9 @@ export const Footer = () => (
 				</div>
 			</div>
 		</div>
+		{/* Copyrights */}
 		<div>
-			<p>&#169; Pablo, Chavi & Clara. 2021 All rigths reserved</p>
+			<p>&#169; Pablo, Chavi & Clara. 2021 All rights reserved</p>
 		</div>
 	</footer>
 );
