@@ -1,0 +1,68 @@
+/*===== General styles import =====*/
+@import "../colors"; // paleta de colores
+@import "../fonts";  // estilo de las fuentes
+
+$--color-grey-profile-light: #ebebeb;
+$--profile-border-style: 1px solid $--color-grey-profile-light;
+
+.profile-wrapper {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    padding: 2rem 5rem 4rem 5rem;
+    max-width: 1400px;
+    // &, & * { border: 1px dashed red}
+}
+
+.profile-aside {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    border-right: $--profile-border-style;
+    &::after {
+        content: '';
+        background-color: $--color-grey-profile-light;
+        width: 1px;
+        height: 200%;
+        position: absolute;
+        right: 0;
+        top: 0;
+        transform: translateY(-25%);
+        z-index: -1;
+    }
+}
+.profile-user-info {
+    padding: 2rem 1rem 2rem 0 ;
+    & .profile-info { margin-left: 1rem }
+}
+.profile-img {
+    // width: 50px;
+    // height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+    & img {
+        object-fit: cover;
+        object-position: top;
+    }
+}
+.profile-username {
+    width: max-content;
+    font-size: 1.5rem;
+}
+.profile-aside {
+    & ul { border-top: $--profile-border-style }
+    & ul li {
+        border-bottom: $--profile-border-style;
+        & button {
+            padding-block: 1.3rem;
+            width: 100%;
+            text-align: start;
+            &:hover { background-color: $--color-blue-light }
+        }
+    }
+}
+
+.profile-content {
+    width: 100%;
+    background-color: $--color-grey-profile-light;
+}

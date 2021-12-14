@@ -8,5 +8,5 @@ export const Dashboard = () => {
 
 	useEffect(() => {}, []);
 
-	return <div className="view">{store.token ? <h1>Estás en tu escritorio privado</h1> : <Redirect to="/" />}</div>;
+	return <div className="view">{store.token ? <Redirect to="/profile" /> : <Redirect to="/" />}</div>;
 };

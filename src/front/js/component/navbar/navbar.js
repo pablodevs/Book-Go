@@ -32,8 +32,14 @@ export const Navbar = () => {
 						<img
 							src={store.img_url}
 							alt="foto_perfil"
-							style={{ width: "50px", borderRadius: "50%" }}
-							className="m-2"
+							width="30"
+							height="30"
+							style={{
+								borderRadius: "50%",
+								objectFit: "cover",
+								objectPosition: "top",
+								marginRight: "1rem"
+							}}
 						/>
 						<button
 							className="_navbar-login"
