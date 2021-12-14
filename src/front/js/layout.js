@@ -1,5 +1,4 @@
-import React, { useContext } from "react";
-import { Context } from "./store/appContext.js";
+import React from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import ScrollToTop from "./component/scrollToTop";
 import injectContext from "./store/appContext";
@@ -13,10 +12,9 @@ import { Calendar } from "./component/calendar/calendar";
 import { Home } from "./pages/home";
 import { Info } from "./pages/info";
 import { Dashboard } from "./pages/dashboard";
-import { Popup } from "./component/navbar/popup";
+import { Popup } from "./component/popup";
 
 const Layout = () => {
-	const { store, actions } = useContext(Context);
 	const basename = process.env.BASENAME || "";
 
 	return (

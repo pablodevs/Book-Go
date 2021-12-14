@@ -1,12 +1,10 @@
-// ⚠️ SUBIR A CARPETA ./component ⚠️
-
 import React, { useContext, useEffect } from "react";
-import { Context } from "../../store/appContext.js";
-import { Login } from "../login/login.js";
-import { Signup } from "../login/signup.js";
-import { Booking } from "../navbar/booking.js";
-import { Calendar } from "../calendar/calendar.js";
-import "../../../styles/components/popup.scss";
+import { Context } from "../store/appContext.js";
+import { Login } from "./login/login.js";
+import { Signup } from "./login/signup.js";
+import { Booking } from "./navbar/booking.js";
+import { Calendar } from "./calendar/calendar.js";
+import "../../styles/components/popup.scss";
 
 export const Popup = () => {
 	const { store, actions } = useContext(Context);

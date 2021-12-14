@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Context } from "../../store/appContext.js";
 import { NavLink } from "react-router-dom";
-import { Popup } from "./popup.js";
 import "../../../styles/components/navbar.scss";
 
 export const Navbar = () => {
