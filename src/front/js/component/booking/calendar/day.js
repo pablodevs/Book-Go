@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
-import { Context } from "../../store/appContext";
+import { Context } from "../../../store/appContext";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import "../../../styles/components/calendar.scss";
+import "../../../../styles/components/calendar.scss";
 
 export const Day = props => {
 	const { store, actions } = useContext(Context);

@@ -6,7 +6,7 @@ import injectContext from "./store/appContext";
 // Components
 import { Navbar } from "./component/navbar/navbar";
 import { Footer } from "./component/footer";
-import { Calendar } from "./component/calendar/calendar";
+import { Calendar } from "./component/booking/calendar/calendar";
 
 // Views
 import { Home } from "./pages/home";
