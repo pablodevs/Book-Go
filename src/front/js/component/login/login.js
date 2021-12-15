@@ -8,9 +8,9 @@ export const Login = () => {
 	const [password, setPassword] = useState("");
 
 	return (
-		<div className="container-fluid">
+		<div className="container-fluid my-auto">
 			<div className="row">
-				<div className="col-10 mx-auto mb-4" style={{ display: "grid", gap: "1rem" }}>
+				<div className="col mx-4 mb-4" style={{ display: "grid", gap: "1rem" }}>
 					<input
 						required
 						onChange={e => {
@@ -47,21 +47,20 @@ export const Login = () => {
 							Únete ahora
 						</button>
 					</div>
-
-					{store.token ? (
-						(actions.closePopup(), <Redirect to={"/dashboard"} />)
-					) : (
-						<div>
-							{store.message != "" ? (
-								<div className="alert alert-danger" role="alert">
-									{store.message}
-								</div>
-							) : (
-								""
-							)}
-						</div>
-					)}
 				</div>
+				{store.token ? (
+					(actions.closePopup(), <Redirect to={"/dashboard"} />)
+				) : (
+					<div>
+						{store.message != "" ? (
+							<div className="alert alert-danger" role="alert">
+								{store.message}
+							</div>
+						) : (
+							""
+						)}
+					</div>
+				)}
 			</div>
 		</div>
 	);

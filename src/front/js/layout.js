@@ -6,12 +6,13 @@ import injectContext from "./store/appContext";
 // Components
 import { Navbar } from "./component/navbar/navbar";
 import { Footer } from "./component/footer";
-import { Calendar } from "./component/calendar/calendar";
+import { Calendar } from "./component/booking/calendar/calendar";
 
 // Views
 import { Home } from "./pages/home";
 import { Info } from "./pages/info";
 import { Dashboard } from "./pages/dashboard";
+import { Popup } from "./component/popup";
 
 const Layout = () => {
 	const basename = process.env.BASENAME || "";
@@ -20,6 +21,7 @@ const Layout = () => {
 		<BrowserRouter basename={basename}>
 			<ScrollToTop>
 				<Navbar />
+				<Popup />
 				<Switch>
 					<Route exact path="/">
 						<Home />
