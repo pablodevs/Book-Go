@@ -1,0 +1,89 @@
+/*===== General styles import =====*/
+@import "../colors"; // paleta de colores
+@import "../fonts";  // estilo de las fuentes
+
+$--color-grey-profile-light: #ebebeb;
+$--profile-border-style: 1px solid $--color-grey-profile-light;
+
+.profile-wrapper {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    margin-block: auto;
+    padding: 0 5rem;
+    max-width: 1400px;
+    & aside { padding-block: 3rem }
+    & .profile-content { margin-block: 3rem }
+}
+
+.profile-aside {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    &::after {
+        content: '';
+        background-color: $--color-grey-profile-light;
+        width: 1px;
+        height: 100%;
+        position: absolute;
+        right: 0;
+        top: 0;
+        z-index: -1;
+        transform: scaleY(2);
+        -o-transform: scaleY(2);
+        -moz-transform: scaleY(2);
+        -webkit-transform: scaleY(2);
+    }
+}
+.profile-user-info { padding: 2rem 1rem 2rem 0 }
+.profile-info {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    height: 100%;
+    margin-left: 1rem;
+    & p {
+        color: $--color-grey-light;
+        font-size: 0.9rem;
+    }
+}
+
+.profile-img {
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: top;
+}
+.profile-username {
+    width: max-content;
+    font-size: 1.5rem;
+}
+.profile-aside ul {
+    border-top: $--profile-border-style;
+    & li {
+        border-bottom: $--profile-border-style;
+        & button {
+            padding-block: 1.3rem;
+            width: 100%;
+            text-align: start;
+            &:hover {
+                transform-origin: left;
+                -o-transform-origin: left;
+                -moz-transform-origin: left;
+                -webkit-transform-origin: left;
+                transform: scale(1.08);
+                -o-transform: scale(1.08);
+                -moz-transform: scale(1.08);
+                -webkit-transform: scale(1.08);
+                font-weight: 600;
+            }
+        }
+    }
+}
+.logout {
+    color: $--color-pink-dark;
+}
+
+.profile-content {
+    width: 100%;
+    background-color: $--color-grey-profile-light;
+}

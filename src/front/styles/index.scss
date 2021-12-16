@@ -10,6 +10,10 @@
     -webkit-box-sizing: border-box;
 }
 
+html {
+    overflow: hidden scroll;
+}
+
 body {
     scroll-behavior: smooth;
     transition: 0.5s; // Esto se aplicará a toda la webpage así qeu habrá que ver si es una buena idea
@@ -18,6 +22,7 @@ body {
 
 #app, html, body {
     min-height: 100vh;
+    width: 100%;
 }
 
 a {

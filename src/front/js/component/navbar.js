@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useContext } from "react";
-import { Context } from "../../store/appContext.js";
-import { NavLink } from "react-router-dom";
-import "../../../styles/components/navbar.scss";
+import { Context } from "../store/appContext.js";
+import { Link, NavLink } from "react-router-dom";
+import default_user from "../../img/profile/default_user.png";
+import "../../styles/components/navbar.scss";
 
 export const Navbar = () => {
 	let [navMenu, setNavMenu] = useState(false);
@@ -27,25 +28,16 @@ export const Navbar = () => {
 						Inicio
 					</NavLink>
 				</span>
-				{store.token ? (
-					<div>
+				{store.user.token ? (
+					<Link to="/dashboard">
 						<img
-							src={store.img_url}
+							className="_navbar-profile-img"
+							src={store.user.img_url || default_user}
 							alt="foto_perfil"
-							style={{ width: "50px", borderRadius: "50%" }}
-							className="m-2"
+							width="30"
+							height="30"
 						/>
-						<button
-							className="_navbar-login"
-							onClick={() => {
-								actions.logout();
-							}}>
-							<div className="">
-								<span>Salir </span>
-								<i className="far fa-user" />
-							</div>
-						</button>
-					</div>
+					</Link>
 				) : (
 					<button
 						className="_navbar-login"
