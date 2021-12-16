@@ -11,8 +11,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 				year: null,
 				totDays: null
 			},
+
 			popup: null,
 			popupTitle: "",
+			prevPopup: [],
+
 			products: [],
 			oneProduct: [],
 			message: "",
@@ -21,16 +24,34 @@ const getState = ({ getStore, getActions, setStore }) => {
 		},
 
 		actions: {
-			setPopup: (type, title) => {
-				//Hace que se abra el popup para el login, register o calendario de reservas
+			logout: () => {
+				// al pulsar el botón de salir cambia el token a null
 				let store = getStore();
-				let actions = getActions();
-				if (type === store.popup) actions.closePopup();
-				else setStore({ popup: type, popupTitle: title });
+				setStore({ token: null });
 			},
-
-			closePopup: () => setStore({ popup: null }), // cierra el popup de login, register y calendario
-			setPopupTitle: newTitle => setStore({ popupTitle: newTitle }),
+			setPopup: (type, title) => {
+				// Para abrir el popup del login, register o reservas
+				let store = getStore();
+				setStore({
+					prevPopup: [...store.prevPopup, { popup: store.popup, popupTitle: store.popupTitle }],
+					popup: type,
+					popupTitle: title
+				});
+			},
+			closePopup: () =>
+				setStore({
+					popup: null,
+					popupTitle: "",
+					prevPopup: []
+				}), // cierra el popup de login, register y calendario
+			goToPrevPopup: () => {
+				let store = getStore();
+				setStore({
+					popup: store.prevPopup[store.prevPopup.length - 1].popup,
+					popupTitle: store.prevPopup[store.prevPopup.length - 1].popupTitle,
+					prevPopup: [...store.prevPopup.slice(0, store.prevPopup.length - 1)]
+				});
+			}, // Te lleva al popup anterior
 
 			// Meto todas las acciones del componente calendario en calendarActions:
 			calendarActions: {
@@ -142,7 +163,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 					})
 					.then(data => {
 						console.log(data);
-						setStore({ message: data.message, token: data.token, user_id: data.user_id });
+						setStore({
+							message: data.message,
+							token: data.token,
+							user_id: data.user_id,
+							img_url: data.profile_image_url
+						});
 					})
 					.catch(error => console.error(error));
 			}

@@ -12,9 +12,9 @@ export const Home = () => {
 	}, []);
 
 	return (
-		<div className="container-fluid">
+		<div className="container-fluid view">
 			<div className="row">
-				<div className="col">
+				<div className="col-md-12 col-lg-6">
 					<h1 className="text-center pt-5">Healh inside !</h1>
 					<h5 className="p-5">
 						Lorem ipsum, dolor sit amet consectetur adipisicing elit. Asperiores voluptatum cupiditate
@@ -27,7 +27,7 @@ export const Home = () => {
 						quis, non minima amet doloremque.
 					</h5>
 				</div>
-				<div className="col">
+				<div className="col-md-12 col-lg-6">
 					<Carrousel />
 				</div>
 			</div>

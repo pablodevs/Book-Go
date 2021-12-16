@@ -2,41 +2,68 @@
 @import "../colors"; // paleta de colores
 @import "../fonts";  // estilo de las fuentes
 
-.popup {
-    overflow: hidden;
+.popup-bg {
+    visibility: hidden;
     z-index: 9999;
+    background-color: rgba(0,0,0,.3);
+    position: fixed;
+    height: 100vh;
+    width: 100vw;
+    opacity: 0;
+}
+.popup {
+    position: absolute;
+    top: 50%;
+    left: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    overflow: hidden;
     width: 65vh;
-    border-radius: 2%;
+    border-radius: 7px;
     background-color: white;
-    box-shadow: $--color-grey-regular 0px 5px 15px;
+    box-shadow: -1px 1px 3px 0 rgba(0,0,0,0.2);
+    
+    transform: translate(-50%, -65%);
+    opacity: 0;
+
     @media screen and (max-width: 767.9px) {
-        position: fixed;
+        justify-content: flex-start;
         top: 0;
         left: 0;
-        transform: translateX(0);
-        width: 100vw;
-        height: 100vh;
+        transform: translate(0, 100%);
+        width: 100%;
+        height: 100%;
         border-radius: 0;
+        opacity: 1;
+        transition: all 0.3s ease-out;
     }
 }
 .popup-header {
-    padding-block: 1rem;
-    width: 100%;
-    text-align: center;
-    font-size: 1.8rem;
-}
-.popup-close {
     display: flex;
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    color: $--color-grey-regular;
+    align-items: center;
+    padding: 1rem 2rem;
+    width: 100%;
+    box-shadow: 0 0 5px 1px rgba(9, 30, 66, 0.13);
+
+    margin-bottom: 1.3rem;
+    @media screen and (max-width: 767.9px) { margin-bottom: 0 }
+    
+    & h1 { font-size: 1.4rem; font-weight: 600; }
+    & i { font-size: 1rem; color: $--color-grey-dark }
+}
+
+.popup-return { display: flex; margin-right: 1rem }
+.popup-close { display: flex; margin-left: auto }
+
+.popup-bg-show { visibility: visible; opacity: 1; transition: all 0.2s ease-out }
+.popup-show {
+    transform: translate(-50%, -50%);
+    opacity: 1;
+    transition: all 0.3s ease-out;
+}
+
+@media screen and (max-width: 767.9px) {
+    .popup-show { transform: translateY(0) }
 }

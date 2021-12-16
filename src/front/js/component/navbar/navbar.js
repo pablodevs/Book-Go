@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Context } from "../../store/appContext.js";
 import { NavLink } from "react-router-dom";
-import { Popup } from "./popup.js";
 import "../../../styles/components/navbar.scss";
 
 export const Navbar = () => {
@@ -10,15 +9,12 @@ export const Navbar = () => {
 
 	useEffect(
 		() => {
-			const handleResize = () => {
-				if (window.innerWidth <= 767.9 && (navMenu || store.popup)) document.body.style.overflowY = "hidden";
-				else document.body.style.overflowY = "scroll";
-				if (!navMenu && !store.popup) window.removeEventListener("resize", handleResize);
-			};
 			if (navMenu || store.popup) {
-				window.addEventListener("resize", handleResize);
+				document.querySelector("html").style.position = "fixed";
+				document.querySelector("html").style.overflowY = "scroll";
+			} else {
+				document.querySelector("html").style.position = "initial";
 			}
-			handleResize();
 		},
 		[navMenu, store.popup]
 	);
@@ -27,27 +23,43 @@ export const Navbar = () => {
 		<header>
 			<nav className="_navbar">
 				<span className="_navbar-logo-wrapper center">
-					<NavLink
-						className="_navbar-logo _navbar-link"
-						to="/"
-						onClick={() => {
-							setNavMenu(false);
-							actions.closePopup();
-						}}>
+					<NavLink className="_navbar-logo _navbar-link" to="/" onClick={() => setNavMenu(false)}>
 						Inicio
 					</NavLink>
 				</span>
-				<button
-					className="_navbar-login"
-					onClick={() => {
-						actions.setPopup("login", "Iniciar Sesión");
-						setNavMenu(false);
-					}}>
-					<div className="_navbar-login-effect">
-						<span>Acceder</span>
-						<i className="far fa-user" />
+				{store.token ? (
+					<div>
+						<img
+							src={store.img_url}
+							alt="foto_perfil"
+							style={{ width: "50px", borderRadius: "50%" }}
+							className="m-2"
+						/>
+						<button
+							className="_navbar-login"
+							onClick={() => {
+								actions.logout();
+							}}>
+							<div className="">
+								<span>Salir </span>
+								<i className="far fa-user" />
+							</div>
+						</button>
 					</div>
-				</button>
+				) : (
+					<button
+						className="_navbar-login"
+						onClick={() => {
+							actions.setPopup("login", "Iniciar Sesión");
+							setNavMenu(false);
+						}}>
+						<div className="_navbar-login-effect">
+							<span>Acceder</span>
+							<i className="far fa-user" />
+						</div>
+					</button>
+				)}
+
 				<button className="_navbar-toggle" onClick={() => setNavMenu(!navMenu)}>
 					{navMenu ? <i className="fas fa-times" /> : <i className="fas fa-bars" />}
 				</button>
@@ -61,34 +73,14 @@ export const Navbar = () => {
 						}}>
 						Reserva
 					</NavLink>
-					<NavLink
-						className="_navbar-link"
-						to="#"
-						onClick={() => {
-							setNavMenu(false);
-							actions.closePopup();
-						}}>
+					<NavLink className="_navbar-link" to="#" onClick={() => setNavMenu(false)}>
 						Productos
 					</NavLink>
-					<NavLink
-						className="_navbar-link"
-						to="#"
-						onClick={() => {
-							setNavMenu(false);
-							actions.closePopup();
-						}}>
+					<NavLink className="_navbar-link" to="#" onClick={() => setNavMenu(false)}>
 						Contacto
 					</NavLink>
 				</ul>
 			</nav>
-
-			{store.popup === "booking" ? (
-				<Popup />
-			) : store.popup === "login" ? (
-				<Popup />
-			) : store.popup === "signup" ? (
-				<Popup />
-			) : null}
 		</header>
 	);
 };

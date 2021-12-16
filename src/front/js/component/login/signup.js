@@ -36,9 +36,9 @@ export const Signup = () => {
 	};
 
 	return (
-		<div className="container-fluid">
+		<div className="container-fluid my-auto">
 			<div className="row">
-				<form onSubmit={submitForm} className="col-10 mx-auto mb-4" style={{ display: "grid", gap: "1rem" }}>
+				<form onSubmit={submitForm} className="col mx-4 mb-4" style={{ display: "grid", gap: "1rem" }}>
 					<input
 						required
 						onChange={e => {
@@ -97,7 +97,7 @@ export const Signup = () => {
 					</button>
 					<div className="d-flex w-100 justify-content-center">
 						¿Ya eres miembro?&nbsp;
-						<button className="text-primary" onClick={() => actions.setPopup("login", "Iniciar Sesión")}>
+						<button className="text-primary" onClick={() => actions.goToPrevPopup()}>
 							Iniciar Sesión
 						</button>
 					</div>
