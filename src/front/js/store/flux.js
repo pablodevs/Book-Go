@@ -19,16 +19,16 @@ const getState = ({ getStore, getActions, setStore }) => {
 			products: [],
 			oneProduct: [],
 			message: "",
-			token: null,
-			user_id: null
+			user: {
+				token: null,
+				id: null,
+				name: null,
+				lastname: null,
+				img_url: null
+			}
 		},
 
 		actions: {
-			logout: () => {
-				// al pulsar el botón de salir cambia el token a null
-				let store = getStore();
-				setStore({ token: null });
-			},
 			setPopup: (type, title) => {
 				// Para abrir el popup del login, register o reservas
 				let store = getStore();
@@ -164,13 +164,31 @@ const getState = ({ getStore, getActions, setStore }) => {
 					.then(data => {
 						console.log(data);
 						setStore({
-							message: data.message,
-							token: data.token,
-							user_id: data.user_id,
-							img_url: data.profile_image_url
+							user: {
+								token: data.token,
+								user_id: data.user_id,
+								name: data.name,
+								lastname: data.lastname,
+								img_url: data.profile_image_url
+							},
+							message: data.message
 						});
 					})
 					.catch(error => console.error(error));
+			},
+			logout: () => {
+				// al pulsar el botón de salir cambia el token a null
+				let store = getStore();
+				setStore({
+					user: {
+						token: null,
+						user_id: null,
+						name: null,
+						lastname: null,
+						img_url: null
+					},
+					message: ""
+				});
 			}
 		}
 	};

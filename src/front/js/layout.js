@@ -4,7 +4,7 @@ import ScrollToTop from "./component/scrollToTop";
 import injectContext from "./store/appContext";
 
 // Components
-import { Navbar } from "./component/navbar/navbar";
+import { Navbar } from "./component/navbar";
 import { Footer } from "./component/footer";
 import { Popup } from "./component/popup";
 
@@ -12,7 +12,6 @@ import { Popup } from "./component/popup";
 import { Home } from "./pages/home";
 import { Info } from "./pages/info";
 import { Dashboard } from "./pages/dashboard";
-import { Profile } from "./pages/profile";
 
 const Layout = () => {
 	const basename = process.env.BASENAME || "";
@@ -31,9 +30,6 @@ const Layout = () => {
 					</Route>
 					<Route exact path="/dashboard">
 						<Dashboard />
-					</Route>
-					<Route exact path="/profile">
-						<Profile />
 					</Route>
 					<Route>
 						<div className="view">

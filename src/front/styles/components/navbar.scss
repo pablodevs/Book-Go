@@ -36,6 +36,14 @@ a._navbar-link {
     padding: 0.2rem 0;
 }
 
+._navbar-profile-img {
+    border: 2px solid $--color-blue-light;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: top;
+    margin-right: 1rem
+}
+
 $--login-link-border: 2px;
 $--login-link-h: 2rem;
 

@@ -48,8 +48,8 @@ export const Login = () => {
 						</button>
 					</div>
 				</div>
-				{store.token ? (
-					(actions.closePopup(), <Redirect to={"/dashboard"} />)
+				{store.user.token ? (
+					actions.closePopup()
 				) : (
 					<div>
 						{store.message != "" ? (
