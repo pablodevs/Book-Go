@@ -7,12 +7,12 @@ export const Product_card = props => {
 	const { actions, store } = useContext(Context);
 
 	return (
-		<div className="card m-3" style={{ width: "18rem" }}>
+		<div className="card m-3" style={{ width: "18rem", height: "400px" }}>
 			<img
 				src={require(`./../../../img/${props.product.name.toLowerCase()}.jpg`)}
 				className="card-img-top"
 				alt="..."
-				style={{ width: "18rem" }}
+				style={{ width: "18rem", height: "200px" }}
 			/>
 			<div className="card-body">
 				<h5 className="card-title">{props.product.name}</h5>
