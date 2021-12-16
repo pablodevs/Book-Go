@@ -21,9 +21,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 		},
 
 		actions: {
-
 			setPopup: (type, title) => {
-		  	//Hace que se abra el popup para el login, register o calendario de reservas
+				//Hace que se abra el popup para el login, register o calendario de reservas
 				let store = getStore();
 				let actions = getActions();
 				if (type === store.popup) actions.closePopup();
@@ -32,7 +31,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			closePopup: () => setStore({ popup: null }), // cierra el popup de login, register y calendario
 			setPopupTitle: newTitle => setStore({ popupTitle: newTitle }),
-
 
 			// Meto todas las acciones del componente calendario en calendarActions:
 			calendarActions: {
