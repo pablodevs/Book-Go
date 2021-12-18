@@ -163,6 +163,7 @@ export const Calendar = () => {
 						style={{ left: `${mouseEffect.X}px`, top: `${mouseEffect.Y}px` }}
 					/>
 				</div>
+				<div className="row">estas son las horas</div>
 			</div>
 		</div>
 	);

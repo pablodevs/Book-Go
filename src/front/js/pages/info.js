@@ -1,4 +1,6 @@
 import React, { useContext } from "react";
+import { Link } from "react-router-dom";
+
 import { Context } from "../store/appContext";
 
 export const Info = () => {
@@ -16,8 +18,13 @@ export const Info = () => {
 					</div>
 
 					<div className="col text-end">
+						<button className="btn btn-secondary border-warning shadow btn-lg m-2">
+							<Link to="/" className="text-white m-2">
+								Volver
+							</Link>
+						</button>
 						<span
-							className="btn btn-success border-warning shadow btn-lg"
+							className="btn btn-success border-warning shadow btn-lg text-white"
 							href="#"
 							role="button"
 							onClick={() => {
