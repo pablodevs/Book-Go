@@ -9,7 +9,8 @@ export const Signup = () => {
 		name: "",
 		lastname: "",
 		email: "",
-		password: ""
+		password: "",
+		phone: ""
 	});
 
 	const submitForm = event => {
@@ -21,6 +22,7 @@ export const Signup = () => {
 		body.append("name", data.name);
 		body.append("lastname", data.lastname);
 		body.append("email", data.email);
+		body.append("phone", data.phone);
 		body.append("password", data.password);
 		if (files != null) {
 			body.append("profile_image", files[0]);
@@ -50,7 +52,6 @@ export const Signup = () => {
 						name="name"
 						placeholder="Nombre..."
 					/>
-
 					<input
 						required
 						onChange={e => {
@@ -61,6 +62,17 @@ export const Signup = () => {
 						id="lastname"
 						name="lastname"
 						placeholder="Apellidos..."
+					/>
+					<input
+						required
+						onChange={e => {
+							handleInputChange(e);
+						}}
+						className="form-control"
+						type="phone"
+						id="phone"
+						name="phone"
+						placeholder="Teléfono..."
 					/>
 					<input
 						required

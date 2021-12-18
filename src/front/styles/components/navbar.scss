@@ -15,6 +15,7 @@ header {
     justify-content: start;
     flex-wrap: wrap;
 
+    height: 55px;
     line-height: 1rem;
     margin-inline: auto;
     padding: 0.6rem 3rem;
@@ -34,6 +35,14 @@ a._navbar-logo {
 a._navbar-link {
     position: relative;
     padding: 0.2rem 0;
+}
+
+._navbar-profile-img {
+    border: 2px solid $--color-blue-light;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: top;
+    margin-right: 1rem
 }
 
 $--login-link-border: 2px;
