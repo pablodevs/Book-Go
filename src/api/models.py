@@ -98,5 +98,4 @@ class Dispo(db.Model):
             #"date" : self.date.strptime(self.date.strftime("%d/%m/%Y"),"%d/%m/%Y").timestamp()*1000,
             "time" : str(self.time),
             "available" : self.available
-
         }
