@@ -45,11 +45,12 @@ def get_one_product(id):
 def create_new_user():
 
     # fetch for the user
-    name_recieved = request.form.get("name", None)
-    lastname_recieved = request.form.get("lastname", None)
-    email_recieved = request.form.get("email", None)
-    password_recieved = request.form.get("password", None)
-    user = User(email= email_recieved, password = password_recieved, name= name_recieved , lastname = lastname_recieved)
+    name_received = request.form.get("name", None)
+    lastname_received = request.form.get("lastname", None)
+    email_received = request.form.get("email", None)
+    phone_received = request.form.get("phone", None)
+    password_received = request.form.get("password", None)
+    user = User(email = email_received, phone = phone_received, password = password_received, name = name_received , lastname = lastname_received)
  
     
 
@@ -77,22 +78,22 @@ def create_new_user():
 def generate_token():
 
     # fetch for create token
-    email_recieved = request.json.get("email", None)
-    password_recieved = request.json.get("password", None)
+    email_received = request.json.get("email", None)
+    password_received = request.json.get("password", None)
        # Query your database for username and password
-    user = User.query.filter_by(email=email_recieved, password=password_recieved).first()
+    user = User.query.filter_by(email=email_received, password=password_received).first()
     if user is None:
         # the user was not found on the database
         return jsonify({"message": "Usuario o contraseña incorrectos"}), 401
     
     # create a new token with the user id inside
     access_token = create_access_token(identity=user.id)
-    return jsonify({"message": "Acceso correcto", "token": access_token, "user_id": user.id, "profile_image_url" : user.profile_image_url, "name": user.name, "lastname": user.lastname, "email": user.email })
+    return jsonify({"message": "Acceso correcto", "token": access_token, "id": user.id, "profile_image_url" : user.profile_image_url, "name": user.name, "lastname": user.lastname, "email": user.email, "phone": str(user.phone) })
 
 
 
 
- # GET AVAILABILITY OF A PRODCUT
+ # GET AVAILABILITY OF A PRODUCT
 @api.route('/dispo/<product_name>', methods=['GET'])
 def get_product_dispo(product_name):
     print('###############################################')
@@ -101,3 +102,35 @@ def get_product_dispo(product_name):
     all_dispo = list(map(lambda x: x.serialize(), product_query))
     return jsonify(all_dispo)
     
+
+
+# CHANGE USER INFO
+@api.route('/user/<int:user_id>', methods=['PUT'])
+def handle_single_user(user_id):
+    """
+    Single user
+    """
+    user = User.query.get(user_id)
+
+    # Data validation
+    if user is None:
+        raise APIException('User not found in data base', status_code=404)
+    
+    # Query body
+    request_body = request.json
+
+    # Check body's info
+    if "name" in request_body:
+        user.name = request_body["name"]
+    if "lastname" in request_body:
+        user.lastname = request_body["lastname"]
+    if "email" in request_body:
+        user.email = request_body["email"]
+    if "phone" in request_body:
+        user.phone = request_body["phone"]
+    # if "password" in request_body:
+    #     user.password = request_body["password"]
+
+    db.session.commit()
+
+    return jsonify(user.serialize()), 200

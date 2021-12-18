@@ -97,39 +97,51 @@ $--padding-top: 2rem;
     color: $--color-pink-dark;
 }
 
-/*===== Account =====*/
-
-.dashboard-account-wrapper {
+//  Títulos
+h1.dashboard-content-title {
+    font-weight: bold;
+    font-size: 1.8rem;
+}
+.dashboard-account-wrapper, .dashboard-reservations-wrapper {
     display: flex;
     flex-direction: column;
     gap: 2rem;
     width: 100%;
-    //  Título
-    & h1 {
-        font-weight: bold;
-        font-size: 1.8rem;
-    }
 }
+
+/*===== Content: Account =====*/
 
 .dashboard-account-wrapper div {
     max-width: 500px;
     display: flex;
     flex-direction: column;
-    & .dashboard-label {
-        color: $--color-grey-light;
-    }
-    & input:focus-visible {
-        outline: none;
-        border: 1px solid $--color-blue-light;
-        box-shadow: inset 0 0 0 1px $--color-blue-light;
-    }
+    & .dashboard-label { color: $--color-grey-light }
 }
-
 .dashboard-account-wrapper input, .change-password {
     border-radius: 5px;
     border: 1px solid $--color-grey-light;
     flex: 1;
     padding: 0.3rem 0.6rem;
+}
+.dashboard-account-wrapper input:focus-visible {
+    outline: none;
+    border: 1px solid $--color-blue-light;
+    box-shadow: inset 0 0 0 1px $--color-blue-light;
+}
+.dashboard-account-wrapper input.input-error, .dashboard-account-wrapper input.input-error:focus-visible {
+    box-shadow: inset 0 0 0 2px red;
+}
+.dashboard-input { position: relative }
+button.clear-input {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    right: 1rem;
+    color: $--color-grey-light
+}
+.dashboard-account-wrapper input:focus-visible ~ button.clear-input {
+    color: $--color-blue-dark
 }
 
 .change-password:hover {
@@ -145,3 +157,5 @@ $--padding-top: 2rem;
     color: $--color-blue-dark;
     font-weight: bold;
 }
+
+/*===== Content: Reservations =====*/

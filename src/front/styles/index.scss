@@ -88,10 +88,12 @@ button {
     @include displayCenter();
     flex-direction: column;
 }
+
 .center {
     @include displayCenter();
 }
-button.disabled {
+
+button.disabled, a.disabled {
     pointer-events: none;
     background: none;
     color: $--color-grey-light;

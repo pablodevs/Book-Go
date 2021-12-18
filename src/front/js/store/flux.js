@@ -156,13 +156,40 @@ const getState = ({ getStore, getActions, setStore }) => {
 					body: data
 				})
 					.then(response => {
-						console.log(response.ok);
+						/* ⚠️⚠️⚠️ Habría que incluir el típico mensajito de "Hay otra cuenta usando pabloalamovargas@gmail.com" si se repite un mail
+						(o sea, si devuelve error, habrá que ver cuál error corresponde a esta situación y modificar el endpoint '/user' en routes.py) ⚠️⚠️⚠️ */
 						console.log(response.status);
 						return response.json();
 					})
 					.then(data => {
-						console.log(data);
 						setStore({ message: "Usuario creado Correctamente. Ya puede ir al login y acceder!" });
+					})
+					.catch(error => console.error(error));
+			},
+
+			updateUser: async data => {
+				let store = getStore();
+				await fetch(process.env.BACKEND_URL + `/user/${store.user.id}`, {
+					method: "PUT",
+					body: JSON.stringify(data),
+					headers: {
+						"Content-Type": "application/json"
+					}
+				})
+					.then(response => {
+						return response.json();
+					})
+					.then(resp => {
+						setStore({
+							user: {
+								...store.user,
+								name: data.name,
+								lastname: data.lastname,
+								phone: data.phone,
+								email: data.email
+								// img_url: data.profile_image_url
+							}
+						});
 					})
 					.catch(error => console.error(error));
 			},
@@ -182,11 +209,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 						return response.json();
 					})
 					.then(data => {
-						console.log(data);
 						setStore({
 							user: {
 								token: data.token,
-								user_id: data.user_id,
+								id: data.id,
 								name: data.name,
 								lastname: data.lastname,
 								phone: data.phone,
@@ -200,11 +226,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 			logout: () => {
 				// al pulsar el botón de salir cambia el token a null
-				let store = getStore();
 				setStore({
 					user: {
 						token: null,
-						user_id: null,
+						id: null,
 						name: null,
 						lastname: null,
 						phone: null,

@@ -5,25 +5,27 @@ import default_user from "../../img/profile/default_user.png";
 import home from "../../img/profile/home_transparent.png";
 import "../../styles/pages/dashboard.scss";
 import { DashboardAccount } from "../component/dashboard/dashboardAccount";
+import { ReservationsHistory } from "../component/dashboard/reservationsHistory";
 
 export const Dashboard = () => {
 	const { actions, store } = useContext(Context);
 	let [content, setContent] = useState(null);
 
-	useEffect(
-		() => {
-			if (store.user.name)
-				setContent(
+	useEffect(() => {
+		store.user.name
+			? setContent(
 					<div
 						className="center"
 						style={{ flexDirection: "column", gap: "1.3rem", marginInline: "auto", color: "lightgray" }}>
 						<h2>¡Hola {store.user.name.charAt(0).toUpperCase() + store.user.name.slice(1)}!</h2>
 						<img src={home} width="100" height="100" style={{ filter: "opacity(15%)" }} />
 					</div>
-				);
-		},
-		[store.user.name]
-	);
+			  )
+			: null;
+	}, []);
+
+	const pretyPhone = phone =>
+		phone.slice(0, 3) + " " + phone.slice(3, 5) + " " + phone.slice(5, 7) + " " + phone.slice(7, 9);
 
 	return !store.user.token ? (
 		<Redirect to="/" />
@@ -42,16 +44,16 @@ export const Dashboard = () => {
 								store.user.lastname.charAt(0).toUpperCase() +
 								store.user.lastname.slice(1)}
 						</h1>
-						<p>695 565 910</p>
+						<p>{pretyPhone(store.user.phone)}</p>
 					</div>
 				</div>
 				<nav>
 					<ul>
 						<li>
-							<button>Citas</button>
+							<button onClick={() => setContent(<ReservationsHistory />)}>Reservas</button>
 						</li>
 						<li>
-							<button onClick={() => setContent(<DashboardAccount />)}>Cuenta & Configuración</button>
+							<button onClick={() => setContent(<DashboardAccount />)}>Cuenta y Configuración</button>
 						</li>
 						<li>
 							<button className="logout" onClick={() => actions.logout()}>
