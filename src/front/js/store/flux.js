@@ -24,13 +24,32 @@ const getState = ({ getStore, getActions, setStore }) => {
 				id: null,
 				name: null,
 				lastname: null,
+				phone: null,
 				email: null,
 				img_url: null
 			}
 		},
 
 		actions: {
-			setPopup: (type, title) => {
+			logout: () => {
+				// al pulsar el botón de salir cambia el token a null
+				let store = getStore();
+				setStore({ token: null });
+			},
+			setPopup: async (type, title, productName) => {
+				if (productName) {
+					//si recibe productname entonces busca la disponibilidad de días y horas de ese producto
+					await fetch(process.env.BACKEND_URL + `/dispo/${productName}`)
+						.then(response => {
+							console.log(response.ok);
+							console.log(response.status);
+							return response.json();
+						})
+						.then(data => {
+							setStore({ dispo: data });
+						})
+						.catch(error => console.error(error));
+				}
 				// Para abrir el popup del login, register o reservas
 				let store = getStore();
 				setStore({
@@ -170,6 +189,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 								user_id: data.user_id,
 								name: data.name,
 								lastname: data.lastname,
+								phone: data.phone,
 								email: data.email,
 								img_url: data.profile_image_url
 							},
@@ -187,6 +207,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						user_id: null,
 						name: null,
 						lastname: null,
+						phone: null,
 						email: null,
 						img_url: null
 					},

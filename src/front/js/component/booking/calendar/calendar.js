@@ -63,6 +63,11 @@ export const Calendar = () => {
 									? true
 									: false
 							}
+							isDisabled={
+								!store.dispo.map(element => element.date).includes(date.toLocaleDateString())
+									? true
+									: false
+							}
 						/>
 					);
 				}
@@ -157,6 +162,7 @@ export const Calendar = () => {
 						style={{ left: `${mouseEffect.X}px`, top: `${mouseEffect.Y}px` }}
 					/>
 				</div>
+				<div className="row">estas son las horas</div>
 			</div>
 		</div>
 	);

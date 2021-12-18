@@ -2,7 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User, Product
+from api.models import db, User, Product , Dispo
 from api.utils import generate_sitemap, APIException
 import cloudinary
 import cloudinary.uploader
@@ -24,7 +24,6 @@ api = Blueprint('api', __name__)
 
 # GET ALL PRODUCTS
 @api.route('/products', methods=['GET'])
-
 def get_all_products():
 
     product_query = Product.query.all()
@@ -35,7 +34,6 @@ def get_all_products():
 
 # GET ONE PRODUCT
 @api.route('/products/<int:id>', methods=['GET'])
-
 def get_one_product(id):
 
     product_query = Product.query.get(id)
@@ -91,5 +89,15 @@ def generate_token():
     access_token = create_access_token(identity=user.id)
     return jsonify({"message": "Acceso correcto", "token": access_token, "user_id": user.id, "profile_image_url" : user.profile_image_url, "name": user.name, "lastname": user.lastname, "email": user.email })
 
- 
+
+
+
+ # GET AVAILABILITY OF A PRODCUT
+@api.route('/dispo/<product_name>', methods=['GET'])
+def get_product_dispo(product_name):
+    print('###############################################')
+    print (product_name)
+    product_query = Dispo.query.filter_by(product = product_name).all()
+    all_dispo = list(map(lambda x: x.serialize(), product_query))
+    return jsonify(all_dispo)
     

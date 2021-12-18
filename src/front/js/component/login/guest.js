@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import { Context } from "../../store/appContext";
 
-export const Signup = () => {
+export const Guest = () => {
 	const { actions, store } = useContext(Context);
 	const [files, setFiles] = useState(null);
 
@@ -9,7 +9,6 @@ export const Signup = () => {
 		name: "",
 		lastname: "",
 		email: "",
-		password: "",
 		phone: ""
 	});
 
@@ -23,11 +22,6 @@ export const Signup = () => {
 		body.append("lastname", data.lastname);
 		body.append("email", data.email);
 		body.append("phone", data.phone);
-		body.append("password", data.password);
-		if (files != null) {
-			body.append("profile_image", files[0]);
-		}
-		actions.createUser(body);
 	};
 
 	const handleInputChange = e => {
@@ -52,6 +46,7 @@ export const Signup = () => {
 						name="name"
 						placeholder="Nombre..."
 					/>
+
 					<input
 						required
 						onChange={e => {
@@ -69,50 +64,25 @@ export const Signup = () => {
 							handleInputChange(e);
 						}}
 						className="form-control"
+						type="mail"
+						id="email"
+						name="email"
+						placeholder="Correo electrónico..."
+					/>
+					<input
+						required
+						onChange={e => {
+							handleInputChange(e);
+						}}
+						className="form-control"
 						type="phone"
 						id="phone"
 						name="phone"
 						placeholder="Teléfono..."
 					/>
-					<input
-						required
-						onChange={e => {
-							handleInputChange(e);
-						}}
-						className="form-control"
-						type="mail"
-						id="email"
-						name="email"
-						placeholder="Correo electrónico"
-					/>
-					<input
-						required
-						onChange={e => {
-							handleInputChange(e);
-						}}
-						className="form-control"
-						type="password"
-						id="password"
-						name="password"
-						placeholder="password"
-					/>
-
-					<input
-						type="file"
-						// accept=".jpg/.png"
-						onChange={e => {
-							setFiles(e.target.files);
-						}}
-					/>
 					<button className="btn btn-warning w-100" type="submit">
-						Únete
+						Confirmar
 					</button>
-					<div className="d-flex w-100 justify-content-center">
-						¿Ya eres miembro?&nbsp;
-						<button className="text-primary" onClick={() => actions.goToPrevPopup()}>
-							Iniciar Sesión
-						</button>
-					</div>
 				</form>
 				{store.message ? (
 					<div className={`alert alert-${store.message != "" ? "success" : "danger"}`} role="alert">

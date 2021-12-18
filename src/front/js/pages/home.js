@@ -14,7 +14,10 @@ export const Home = () => {
 	return (
 		<div className="container-fluid view">
 			<div className="row">
-				<div className="col">
+				<div className="mx-auto col-md-12 col-xl-5">
+					<Carrousel />
+				</div>
+				<div className="mx-auto col-md-12 col-xl-5">
 					<h1 className="text-center pt-5">Healh inside !</h1>
 					<h5 className="p-5">
 						Lorem ipsum, dolor sit amet consectetur adipisicing elit. Asperiores voluptatum cupiditate
@@ -26,9 +29,6 @@ export const Home = () => {
 						suscipit fugiat, nostrum distinctio dicta voluptates libero corrupti recusandae, quo id vero
 						quis, non minima amet doloremque.
 					</h5>
-				</div>
-				<div className="col">
-					<Carrousel />
 				</div>
 			</div>
 
