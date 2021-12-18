@@ -25,6 +25,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				name: null,
 				lastname: null,
 				phone: null,
+				email: null,
 				img_url: null
 			}
 		},
@@ -189,6 +190,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 								name: data.name,
 								lastname: data.lastname,
 								phone: data.phone,
+								email: data.email,
 								img_url: data.profile_image_url
 							},
 							message: data.message
@@ -206,6 +208,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						name: null,
 						lastname: null,
 						phone: null,
+						email: null,
 						img_url: null
 					},
 					message: ""
