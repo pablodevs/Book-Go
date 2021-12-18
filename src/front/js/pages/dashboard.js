@@ -14,9 +14,11 @@ export const Dashboard = () => {
 		() => {
 			if (store.user.name)
 				setContent(
-					<div className="center" style={{ flexDirection: "column", gap: "1.3rem", marginInline: "auto" }}>
+					<div
+						className="center"
+						style={{ flexDirection: "column", gap: "1.3rem", marginInline: "auto", color: "lightgray" }}>
 						<h2>¡Hola {store.user.name.charAt(0).toUpperCase() + store.user.name.slice(1)}!</h2>
-						<img src={home} width="100" height="100" />
+						<img src={home} width="100" height="100" style={{ filter: "opacity(15%)" }} />
 					</div>
 				);
 		},

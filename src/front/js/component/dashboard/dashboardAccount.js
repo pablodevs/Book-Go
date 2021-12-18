@@ -37,7 +37,7 @@ export const DashboardAccount = () => {
 	return (
 		<div className="dashboard-account-wrapper">
 			<h1>Cuenta & Configuración</h1>
-			<h3>Detalles</h3>
+			<h4>Detalles</h4>
 			<div>
 				<label className="dashboard-label" htmlFor="name">
 					Nombre
