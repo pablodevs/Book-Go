@@ -1,8 +1,8 @@
 import React, { useEffect, useContext } from "react";
-import "../../styles/pages/home.scss";
 import { Product_card } from "../component/home_components/product_card";
 import { Carrousel } from "../component/home_components/carrousel";
 import { Context } from "../store/appContext";
+import "../../styles/pages/home.scss";
 
 export const Home = () => {
 	const { actions, store } = useContext(Context);

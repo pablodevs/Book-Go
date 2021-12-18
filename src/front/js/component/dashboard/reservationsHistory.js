@@ -10,9 +10,9 @@ export const ReservationsHistory = () => {
 	return (
 		<div className="dashboard-reservations-wrapper">
 			<h1 className="dashboard-content-title">Reservas</h1>
-			<h3>Próximas reservas</h3>
+			<h2 className="dashboard-content-subtitle">Próximas reservas</h2>
 			<BookingCard />
-			<h3>Reservas pasadas</h3>
+			<h2 className="dashboard-content-subtitle">Reservas pasadas</h2>
 			<BookingCard />
 		</div>
 	);

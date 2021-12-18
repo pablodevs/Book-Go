@@ -2,7 +2,7 @@
 @import "../colors"; // paleta de colores
 @import "../fonts";  // estilo de las fuentes
 
-$--color-grey-profile-light: #ebebeb;
+$--color-grey-profile-light: #e6e6e6;
 $--profile-border-style: 1px solid $--color-grey-profile-light;
 $--margin-inline: 4vw;
 $--padding-top: 2rem;
@@ -84,10 +84,10 @@ $--padding-top: 2rem;
                 -o-transform-origin: left;
                 -moz-transform-origin: left;
                 -webkit-transform-origin: left;
-                transform: scale(1.08);
-                -o-transform: scale(1.08);
-                -moz-transform: scale(1.08);
-                -webkit-transform: scale(1.08);
+                transform: translateX(10px);
+                -o-transform: translateX(10px);
+                -moz-transform: translateX(10px);
+                -webkit-transform: translateX(10px);
                 font-weight: 600;
             }
         }
@@ -98,9 +98,12 @@ $--padding-top: 2rem;
 }
 
 //  Títulos
-h1.dashboard-content-title {
+.dashboard-content-title {
     font-weight: bold;
-    font-size: 1.8rem;
+    font-size: 2rem;
+}
+.dashboard-content-subtitle {
+    font-size: 1.5rem;
 }
 .dashboard-account-wrapper, .dashboard-reservations-wrapper {
     display: flex;
@@ -115,7 +118,7 @@ h1.dashboard-content-title {
     max-width: 500px;
     display: flex;
     flex-direction: column;
-    & .dashboard-label { color: $--color-grey-light }
+    & .dashboard-label { font-size: 0.8rem; color: $--color-grey-light }
 }
 .dashboard-account-wrapper input, .change-password {
     border-radius: 5px;
@@ -148,7 +151,7 @@ button.clear-input {
     background-color: $--color-grey-profile-light;
 }
 
-.save-button {
+.save-button, .book-again-btn {
     box-shadow: inset 0 0 0 2px $--color-blue-dark;
     border-radius: 20px;
     padding: 0.3rem 3rem;
@@ -159,3 +162,47 @@ button.clear-input {
 }
 
 /*===== Content: Reservations =====*/
+
+.bookingcard-content { grid-area: card-content }
+.bookingcard-img-wrapper { grid-area: card-img }
+.bookingcard-wrapper {
+    display: grid;
+    grid-template-columns: 65% 35%;
+    grid-template-areas: "card-content card-img";
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+.bookingcard-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+}
+.bookingcard-title {
+    font-size: 1.3rem;
+    font-weight: bold;
+    padding-bottom: 0.4em;
+    border-bottom: $--profile-border-style;
+}
+.bookingcard-date {
+    letter-spacing: 0.8px;
+    font-weight: bold;
+}
+.bookingcard-status {
+    color: $--color-green-confirm;
+    font-weight: bold;
+}
+.book-again-btn {
+    margin-right: auto;
+    margin-left: 0;
+}
+
+.bookingcard-img-wrapper {
+    display: flex;
+}
+.bookingcard-img {
+    width: 100%;
+    object-fit: cover;
+    object-position: top;
+}

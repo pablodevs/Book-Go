@@ -63,7 +63,7 @@ export const Dashboard = () => {
 					</ul>
 				</nav>
 			</aside>
-			<div className="profile-content">{content}</div>
+			<secction className="profile-content">{content}</secction>
 		</div>
 	);
 };
