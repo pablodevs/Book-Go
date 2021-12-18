@@ -1,7 +1,6 @@
 import React, { useContext } from "react";
 import { Context } from "../../../store/appContext";
 import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
 import "../../../../styles/components/calendar.scss";
 
 export const Day = props => {
@@ -19,7 +18,7 @@ export const Day = props => {
 			onClick={
 				props.isChangeMonthDay || props.isChangeMonthDay === 0
 					? () => actions.calendarActions.updateCalendar(props.isChangeMonthDay)
-					: () => actions... // ⚠️⚠️⚠️⚠️⚠️
+					: () => undefined // ⚠️⚠️⚠️⚠️⚠️
 			}>
 			{props.date.getDate()}
 		</button>
