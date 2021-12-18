@@ -71,7 +71,7 @@ export const Navbar = () => {
 							actions.setPopup("booking", "¿Qué estás buscando?");
 							setNavMenu(false);
 						}}>
-						Reserva
+						Reservar
 					</NavLink>
 					<NavLink className="_navbar-link" to="#" onClick={() => setNavMenu(false)}>
 						Productos

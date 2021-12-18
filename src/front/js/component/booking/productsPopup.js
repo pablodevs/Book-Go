@@ -8,14 +8,13 @@ export const ProductsPopup = () => {
 
 	return (
 		<div>
-			<p className="text-danger fs-4 py-3">Aquí aparecerán todos los productos</p>
 			<div className="container">
 				<div className="row">
 					{store.products.map((item, index) => (
 						<div className="col text-center" key={index}>
 							<button
 								className="btn btn-info mb-4"
-								onClick={() => actions.setPopup("calendar", "¿Cuándo?")}>
+								onClick={() => actions.setPopup("calendar", "¿Cuándo?", item.name)}>
 								{item.name}
 							</button>
 						</div>

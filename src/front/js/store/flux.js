@@ -29,14 +29,25 @@ const getState = ({ getStore, getActions, setStore }) => {
 				let store = getStore();
 				setStore({ token: null });
 			},
-			setPopup: (type, title) => {
-				// Para abrir el popup del login, register o reservas
-				let store = getStore();
-				setStore({
-					prevPopup: [...store.prevPopup, { popup: store.popup, popupTitle: store.popupTitle }],
-					popup: type,
-					popupTitle: title
-				});
+			setPopup: async (type, title, productName) => {
+				//si recibe productname entonces busca la disponibilidad de días y horas de ese producto
+				await fetch(process.env.BACKEND_URL + `/dispo/${productName}`)
+					.then(response => {
+						console.log(response.ok);
+						console.log(response.status);
+						return response.json();
+					})
+					.then(data => {
+						setStore({ dispo: data });
+						// Para abrir el popup del login, register o reservas
+						let store = getStore();
+						setStore({
+							prevPopup: [...store.prevPopup, { popup: store.popup, popupTitle: store.popupTitle }],
+							popup: type,
+							popupTitle: title
+						});
+					})
+					.catch(error => console.error(error));
 			},
 			closePopup: () =>
 				setStore({

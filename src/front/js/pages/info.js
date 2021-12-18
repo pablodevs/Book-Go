@@ -16,7 +16,13 @@ export const Info = () => {
 					</div>
 
 					<div className="col text-end">
-						<span className="btn btn-success border-warning shadow btn-lg" href="#" role="button">
+						<span
+							className="btn btn-success border-warning shadow btn-lg"
+							href="#"
+							role="button"
+							onClick={() => {
+								actions.setPopup("calendar", "Selecciona el día", store.oneProduct.name);
+							}}>
 							Reservar
 						</span>
 					</div>

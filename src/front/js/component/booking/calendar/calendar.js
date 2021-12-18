@@ -63,6 +63,12 @@ export const Calendar = () => {
 									? true
 									: false
 							}
+							isAvailable={
+								// comprobamos si es un día disponible para ese producto y poder reservar
+								date.toLocaleDateString() === store.dispo[0].date
+									? console.log("BINGO")
+									: console.log("NADA")
+							}
 						/>
 					);
 				}
