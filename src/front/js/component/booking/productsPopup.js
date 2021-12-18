@@ -4,7 +4,7 @@ import "../../../styles/components/productsPopup.scss";
 
 export const ProductsPopup = () => {
 	const { actions, store } = useContext(Context);
-	console.log(store.products);
+	// console.log(store.products);
 
 	return (
 		<div>

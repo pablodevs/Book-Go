@@ -69,9 +69,11 @@ $--days-box-shadow: inset 0 0 0 1.5px white;
     color: $--color-grey-dark;
     font-size: clamp(1.4rem, 5vw, 1.4rem);
     box-shadow: $--days-box-shadow;
+    background-color: $--color-green-light;
     &:hover {
         box-shadow: inset 0 0 0 2px $--color-blue-dark;
         color: $--color-grey-dark;
+        font-weight: bold;
     }
     aspect-ratio: 1;
     @media screen and (max-width: 767.9px) {
@@ -88,9 +90,10 @@ $--days-box-shadow: inset 0 0 0 1.5px white;
                 inset 0 0 0 3px white,
                 inset 0 0 0 4.5px $--color-blue-dark; // Uso box-shadow porque el estilo 'border' modifica el tamaño del div mientras que box shadow NO
 }
-.week a.light-fc-day {
+.week button.light-fc-day {
     color: $--color-grey-light;
     cursor: default;
+    background: none;
     &:hover {
         box-shadow: $--days-box-shadow;
         @media screen and (max-width: 767.9px) { box-shadow: inset 0 0 0 1.5px $--color-grey-lighter }
