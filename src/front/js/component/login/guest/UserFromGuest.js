@@ -1,15 +1,12 @@
 import React, { useContext, useState } from "react";
-import { Context } from "../../store/appContext";
+import { Context } from "../../../store/appContext";
 
-export const Guest = () => {
+export const UserFromGuest = () => {
 	const { actions, store } = useContext(Context);
 	const [files, setFiles] = useState(null);
 
 	const [data, setData] = useState({
-		name: "",
-		lastname: "",
-		email: "",
-		phone: ""
+		password: ""
 	});
 
 	const submitForm = event => {
@@ -41,46 +38,19 @@ export const Guest = () => {
 							handleInputChange(e);
 						}}
 						className="form-control"
-						type="text"
-						id="name"
-						name="name"
-						placeholder="Nombre..."
-					/>
-
-					<input
-						required
-						onChange={e => {
-							handleInputChange(e);
-						}}
-						className="form-control"
-						type="text"
-						id="lastname"
-						name="lastname"
-						placeholder="Apellidos..."
+						type="password"
+						id="password"
+						name="password"
+						placeholder="password"
 					/>
 					<input
-						required
+						type="file"
+						// accept=".jpg/.png"
 						onChange={e => {
-							handleInputChange(e);
+							setFiles(e.target.files);
 						}}
-						className="form-control"
-						type="mail"
-						id="email"
-						name="email"
-						placeholder="Correo electrónico..."
 					/>
-					<input
-						required
-						onChange={e => {
-							handleInputChange(e);
-						}}
-						className="form-control"
-						type="phone"
-						id="phone"
-						name="phone"
-						placeholder="Teléfono..."
-					/>
-					<button className="btn btn-warning w-100" type="submit">
+					<button className="btn btn-warning w-100" type="submit" onClick={() => actions.setPopup("", "")}>
 						Confirmar
 					</button>
 				</form>

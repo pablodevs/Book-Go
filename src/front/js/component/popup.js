@@ -2,7 +2,9 @@ import React, { useContext, useEffect } from "react";
 import { Context } from "../store/appContext.js";
 import { Login } from "./login/login.js";
 import { Signup } from "./login/signup.js";
-import { Guest } from "./login/guest.js";
+import { Guest } from "./login/guest/guest.js";
+import { GuestConfirm } from "./login/guest/guestConfirm.js";
+import { UserFromGuest } from "./login/guest/UserFromGuest.js";
 import { ProductsPopup } from "./booking/productsPopup.js";
 import { Calendar } from "./booking/calendar/calendar.js";
 import "../../styles/components/popup.scss";
@@ -56,6 +58,10 @@ export const Popup = () => {
 					<Calendar />
 				) : store.popup === "guest" ? (
 					<Guest />
+				) : store.popup === "guestConfirm" ? (
+					<GuestConfirm />
+				) : store.popup === "userFromGuest" ? (
+					<UserFromGuest />
 				) : null}
 			</div>
 		</div>

@@ -26,6 +26,13 @@ const getState = ({ getStore, getActions, setStore }) => {
 				lastname: null,
 				phone: null,
 				img_url: null
+			},
+			guest: {
+				id: null,
+				name: null,
+				lastname: null,
+				phone: null
+				// mail: null  No se si tengo que ponerlo
 			}
 		},
 
