@@ -8,7 +8,8 @@ export const Guest = () => {
 	const [data, setData] = useState({
 		name: "",
 		lastname: "",
-		email: ""
+		email: "",
+		phone: ""
 	});
 
 	const submitForm = event => {
@@ -20,6 +21,7 @@ export const Guest = () => {
 		body.append("name", data.name);
 		body.append("lastname", data.lastname);
 		body.append("email", data.email);
+		body.append("phone", data.phone);
 	};
 
 	const handleInputChange = e => {
@@ -65,7 +67,18 @@ export const Guest = () => {
 						type="mail"
 						id="email"
 						name="email"
-						placeholder="Correo electrónico"
+						placeholder="Correo electrónico..."
+					/>
+					<input
+						required
+						onChange={e => {
+							handleInputChange(e);
+						}}
+						className="form-control"
+						type="phone"
+						id="phone"
+						name="phone"
+						placeholder="Teléfono..."
 					/>
 					<button className="btn btn-warning w-100" type="submit">
 						Confirmar
