@@ -63,6 +63,12 @@ export const Calendar = () => {
 									? true
 									: false
 							}
+							isAvailable={
+								// comprobamos si es un día disponible para ese producto y poder reservar
+								date.toLocaleDateString() === store.dispo[0].date
+									? console.log("BINGO")
+									: console.log("NADA")
+							}
 						/>
 					);
 				}
@@ -157,6 +163,7 @@ export const Calendar = () => {
 						style={{ left: `${mouseEffect.X}px`, top: `${mouseEffect.Y}px` }}
 					/>
 				</div>
+				<div className="row">estas son las horas</div>
 			</div>
 		</div>
 	);
