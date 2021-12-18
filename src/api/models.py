@@ -93,7 +93,7 @@ class Dispo(db.Model):
             "id": self.id,
             "product": self.product,
             #esto te devuelve la fecha en el formato español
-            "date" : self.date.strftime("%d/%m/%Y"),
+            "date" : self.date.strftime("%-d/%-m/%Y"),
             #este otro en milisegundos
             #"date" : self.date.strptime(self.date.strftime("%d/%m/%Y"),"%d/%m/%Y").timestamp()*1000,
             "time" : str(self.time),
