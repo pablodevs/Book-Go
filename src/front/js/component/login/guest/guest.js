@@ -83,7 +83,7 @@ export const Guest = () => {
 					<button
 						className="btn btn-warning w-100"
 						type="submit"
-						onClick={() => actions.setPopup("guestConfirm", "GuestConfirm")}>
+						onClick={() => actions.setPopup("guestConfirm", "Sigue con nosotros")}>
 						Confirmar
 					</button>
 				</form>

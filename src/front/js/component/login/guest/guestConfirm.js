@@ -16,7 +16,7 @@ export const GuestConfirm = () => {
 						Sí, ¡Gracias!
 					</button>
 					<div className="d-flex w-100 justify-content-center" onClick={() => actions.setPopup("", "")}>
-						<button className="text-primary">Continuar sin guardar</button>
+						<button className="text-muted">Continuar sin guardar</button>
 					</div>
 				</div>
 			</div>
