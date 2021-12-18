@@ -89,7 +89,7 @@ def generate_token():
     
     # create a new token with the user id inside
     access_token = create_access_token(identity=user.id)
-    return jsonify({"message": "Acceso correcto", "token": access_token, "user_id": user.id, "profile_image_url" : user.profile_image_url, "name": user.name, "lastname": user.lastname })
+    return jsonify({"message": "Acceso correcto", "token": access_token, "user_id": user.id, "profile_image_url" : user.profile_image_url, "name": user.name, "lastname": user.lastname, "email": user.email })
 
  
     

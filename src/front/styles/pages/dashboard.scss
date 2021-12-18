@@ -4,38 +4,47 @@
 
 $--color-grey-profile-light: #ebebeb;
 $--profile-border-style: 1px solid $--color-grey-profile-light;
+$--margin-inline: 4vw;
+$--padding-top: 2rem;
 
+.profile-content { grid-area: content }
+.profile-aside { grid-area: aside }
 .profile-wrapper {
-    display: flex;
+    align-self: center;
+    display: grid;
+    grid-template-columns: 35% 65%;
+    grid-template-areas: "aside content";
+    @media screen and (max-width: 767.9px) {
+        grid-template-columns: 100%;
+        grid-template-areas: "aside"
+                             "content";
+        grid-template-columns: auto;
+    }
     width: 100%;
     height: 100%;
-    margin-block: auto;
-    padding: 0 5rem;
-    max-width: 1400px;
-    & aside { padding-block: 3rem }
-    & .profile-content { margin-block: 3rem }
+    max-width: 1000px;
+    min-height: 95vh;
+}
+
+.profile-content {
+    display: flex;
+    justify-content: start;
+    align-items: flex-start;
+    margin: 3rem $--margin-inline 3rem 0;
+    padding: $--padding-top 0 0 3rem;
 }
 
 .profile-aside {
     position: relative;
     display: flex;
     flex-direction: column;
-    &::after {
-        content: '';
-        background-color: $--color-grey-profile-light;
-        width: 1px;
-        height: 100%;
-        position: absolute;
-        right: 0;
-        top: 0;
-        z-index: -1;
-        transform: scaleY(2);
-        -o-transform: scaleY(2);
-        -moz-transform: scaleY(2);
-        -webkit-transform: scaleY(2);
-    }
+    padding: 3rem 0 3rem $--margin-inline;
+    border-right: $--profile-border-style;
 }
-.profile-user-info { padding: 2rem 1rem 2rem 0 }
+.profile-user-info {
+    display: flex;
+    padding: $--padding-top 0.8rem 1rem 0;
+}
 .profile-info {
     display: flex;
     justify-content: center;
@@ -44,10 +53,9 @@ $--profile-border-style: 1px solid $--color-grey-profile-light;
     margin-left: 1rem;
     & p {
         color: $--color-grey-light;
-        font-size: 0.9rem;
+        font-size: 0.8rem;
     }
 }
-
 .profile-img {
     border-radius: 50%;
     object-fit: cover;
@@ -55,7 +63,9 @@ $--profile-border-style: 1px solid $--color-grey-profile-light;
 }
 .profile-username {
     width: max-content;
-    font-size: 1.5rem;
+    font-size: 1.3rem;
+    font-weight: bold;
+    margin-bottom: 0.15em;
 }
 .profile-aside ul {
     border-top: $--profile-border-style;
@@ -83,7 +93,50 @@ $--profile-border-style: 1px solid $--color-grey-profile-light;
     color: $--color-pink-dark;
 }
 
-.profile-content {
+/*===== Account =====*/
+
+.dashboard-account-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
     width: 100%;
+    & h1 {
+        font-weight: bold;
+        font-size: 2.1rem;
+    }
+}
+
+.dashboard-account-wrapper div {
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    & .dashboard-label {
+        color: $--color-grey-light;
+    }
+    & input:focus-visible {
+        outline: none;
+        border: 1px solid $--color-blue-light;
+        box-shadow: inset 0 0 0 1px $--color-blue-light;
+    }
+}
+
+.dashboard-account-wrapper input, .change-password {
+    border-radius: 5px;
+    border: 1px solid $--color-grey-light;
+    flex: 1;
+    padding: 0.3rem 0.6rem;
+}
+
+.change-password:hover {
     background-color: $--color-grey-profile-light;
+}
+
+.save-button {
+    box-shadow: inset 0 0 0 2px $--color-blue-dark;
+    border-radius: 20px;
+    padding: 0.3rem 3rem;
+    margin-inline: auto;
+    width: fit-content;
+    color: $--color-blue-dark;
+    font-weight: bold;
 }
