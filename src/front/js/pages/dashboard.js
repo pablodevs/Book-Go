@@ -31,7 +31,9 @@ export const Dashboard = () => {
 		<div className="profile-wrapper">
 			<aside className="profile-aside">
 				<div className="profile-user-info">
-					<img className="profile-img" src={store.user.img_url || default_user} width="70" height="70" />
+					<div className="profile-img-wrapper">
+						<img className="profile-img" src={store.user.img_url || default_user} />
+					</div>
 					<div className="profile-info">
 						<h1 className="profile-username">
 							{store.user.name.charAt(0).toUpperCase() +

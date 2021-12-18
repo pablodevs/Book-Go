@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Context } from "../../store/appContext";
 
 export const DashboardAccount = () => {
@@ -11,6 +11,15 @@ export const DashboardAccount = () => {
 		email: "",
 		password: ""
 	});
+
+	useEffect(() => {
+		setData({
+			...data,
+			[e.target.name]: store.user.name.charAt(0).toUpperCase() + store.user.name.slice(1),
+			[e.target.lastname]: store.user.lastname.charAt(0).toUpperCase() + store.user.lastname.slice(1),
+			[e.target.email]: store.user.email
+		});
+	}, []);
 
 	const submitForm = event => {
 		event.preventDefault();
@@ -84,6 +93,22 @@ export const DashboardAccount = () => {
 					name="email"
 					value={store.user.email}
 					placeholder="Email"
+				/>
+			</div>
+			<div>
+				<label className="dashboard-label" htmlFor="phone">
+					Número de teléfono
+				</label>
+				<input
+					required
+					onChange={e => {
+						handleInputChange(e);
+					}}
+					type="tel"
+					id="phone"
+					name="phone"
+					value={store.user.phone}
+					placeholder="Número de teléfono"
 				/>
 			</div>
 			<div>
