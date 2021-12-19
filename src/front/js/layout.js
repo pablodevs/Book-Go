@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { BrowserRouter, Link, Route, Switch } from "react-router-dom";
 import ScrollToTop from "./component/scrollToTop";
 import injectContext from "./store/appContext";
 
@@ -37,7 +37,11 @@ const Layout = () => {
 					</Route>
 					<Route>
 						<div className="view">
-							<h3>404 - Page Not Found</h3>
+							<h1 style={{ fontWeight: "bold", fontSize: "6rem", letterSpacing: "10px" }}>404</h1>
+							<h3>Page not found</h3>
+							<Link className="_navbar-login back-home-btn" to="/">
+								Back to Home
+							</Link>
 						</div>
 					</Route>
 				</Switch>

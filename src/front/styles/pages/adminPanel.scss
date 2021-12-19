@@ -2,10 +2,15 @@
 @import "../colors"; // paleta de colores
 @import "../fonts";  // estilo de las fuentes
 
-.dashboard-wrapper, .admin-panel {
+.dashboard-wrapper.admin-panel {
     position: fixed;
-    z-index: 1001;
+    grid-template-columns: 20% auto;
+    z-index: 1050;
     height: 100vh;
     max-width: 100%;
     background-color: white;
+}
+
+.admin-logo {
+    color: $--color-blue-dark
 }

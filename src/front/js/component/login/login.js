@@ -53,6 +53,7 @@ export const Login = () => {
 						</button>
 					</div>
 				</div>
+				{store.user.is_admin ? <Redirect to="/admin" /> : null}
 				{store.user.token ? (
 					actions.closePopup()
 				) : (

@@ -100,3 +100,18 @@ button.disabled, a.disabled {
     cursor: default;
     &:hover { background: none }
 }
+
+._navbar-login.back-home-btn {
+    color: $--color-blue-dark;
+    box-shadow: inset 0 0 0 2px $--color-blue-dark;
+    width: auto;
+    height: auto;
+    font-weight: bold;
+    font-size: 1.15rem;
+    margin-top: 1rem;
+    &:hover {
+        background-color: $--color-blue-dark;
+        color: white;
+        box-shadow: none;
+    }
+}
