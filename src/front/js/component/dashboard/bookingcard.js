@@ -19,7 +19,13 @@ export const BookingCard = () => {
 					</span>
 				</div>
 				<div>
-					Estado: <span className="bookingcard-status">Confirmada</span>
+					Estado:{" "}
+					<span className="bookingcard-confirmed">
+						Confirmada <i className="far fa-check-circle" />
+					</span>
+					{/* <span className="bookingcard-canceled">
+						Cancelada <i className="fas fa-ban" />
+					</span> */}
 				</div>
 				<button
 					className="book-again-btn"

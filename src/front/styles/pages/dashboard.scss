@@ -208,8 +208,12 @@ button.clear-input {
     letter-spacing: 0.8px;
     font-weight: bold;
 }
-.bookingcard-status {
+.bookingcard-confirmed {
     color: $--color-green-confirm;
+    font-weight: bold;
+}
+.bookingcard-canceled {
+    color: $--color-pink-dark;
     font-weight: bold;
 }
 .book-again-btn {
