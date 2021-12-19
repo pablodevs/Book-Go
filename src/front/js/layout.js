@@ -12,6 +12,7 @@ import { Popup } from "./component/popup";
 import { Home } from "./pages/home";
 import { Info } from "./pages/info";
 import { Dashboard } from "./pages/dashboard";
+import { AdminPanel } from "./pages/adminPanel";
 
 const Layout = () => {
 	const basename = process.env.BASENAME || "";
@@ -30,6 +31,9 @@ const Layout = () => {
 					</Route>
 					<Route exact path="/dashboard">
 						<Dashboard />
+					</Route>
+					<Route exact path="/admin">
+						<AdminPanel />
 					</Route>
 					<Route>
 						<div className="view">

@@ -2,14 +2,14 @@
 @import "../colors"; // paleta de colores
 @import "../fonts";  // estilo de las fuentes
 
-$--color-grey-profile-light: #e6e6e6;
-$--profile-border-style: 1px solid $--color-grey-profile-light;
+$--color-grey-dashboard-light: #e6e6e6;
+$--dashboard-border-style: 1px solid $--color-grey-dashboard-light;
 $--margin-inline: 4vw;
 $--padding-top: 2rem;
 
-.profile-content { grid-area: content }
-.profile-aside { grid-area: aside }
-.profile-wrapper {
+.dashboard-content { grid-area: content }
+.dashboard-aside { grid-area: aside }
+.dashboard-wrapper {
     align-self: center;
     display: grid;
     grid-template-columns: 35% 65%;
@@ -21,7 +21,7 @@ $--padding-top: 2rem;
     min-height: 95vh;
 }
 
-.profile-content {
+.dashboard-content {
     display: flex;
     justify-content: start;
     align-items: flex-start;
@@ -29,18 +29,18 @@ $--padding-top: 2rem;
     padding: $--padding-top 0 0 3rem;
 }
 
-.profile-aside {
+.dashboard-aside {
     position: relative;
     display: flex;
     flex-direction: column;
     padding: 3rem 0 3rem $--margin-inline;
-    border-right: $--profile-border-style;
+    border-right: $--dashboard-border-style;
 }
-.profile-user-info {
+.dashboard-user-info {
     display: flex;
     padding: $--padding-top 0.8rem 1rem 0;
 }
-.profile-info {
+.dashboard-info {
     display: flex;
     justify-content: center;
     flex-direction: column;
@@ -51,25 +51,25 @@ $--padding-top: 2rem;
         font-size: 0.8rem;
     }
 }
-.profile-img-wrapper {
+.dashboard-img-wrapper {
     width: max-content;
 }
-.profile-img {
+.dashboard-img {
     width: 70px;
     height: 70px;
     border-radius: 50%;
     object-fit: cover;
     object-position: top;
 }
-.profile-username {
+.dashboard-username {
     font-size: 1.3rem;
     font-weight: bold;
     margin-bottom: 0.15em;
 }
-.profile-aside ul {
-    border-top: $--profile-border-style;
+.dashboard-aside ul {
+    border-top: $--dashboard-border-style;
     & li {
-        border-bottom: $--profile-border-style;
+        border-bottom: $--dashboard-border-style;
         & button {
             padding-block: 1.3rem;
             width: 100%;
@@ -110,18 +110,18 @@ $--padding-top: 2rem;
 }
 
 @media screen and (max-width: 767.9px) {
-    .profile-wrapper {
+    .dashboard-wrapper {
         grid-template-columns: 100%;
         grid-template-areas: "aside"
                              "content";
         grid-template-columns: auto;
     }
-    .profile-aside { padding: 3rem 4vw }
-    .profile-content {
+    .dashboard-aside { padding: 3rem 4vw }
+    .dashboard-content {
         margin: 0 4vw 3rem 4vw;
         padding: 0;
     }
-    .profile-user-info { padding: 0 0 1rem 0 }
+    .dashboard-user-info { padding: 0 0 1rem 0 }
 }
 /*===== Content: Account =====*/
 
@@ -159,7 +159,7 @@ button.clear-input {
 }
 
 .change-password:hover {
-    background-color: $--color-grey-profile-light;
+    background-color: $--color-grey-dashboard-light;
 }
 
 .save-button, .book-again-btn {
@@ -194,7 +194,7 @@ button.clear-input {
     font-size: 1.3rem;
     font-weight: bold;
     padding-bottom: 0.4em;
-    border-bottom: $--profile-border-style;
+    border-bottom: $--dashboard-border-style;
 }
 .bookingcard-date {
     letter-spacing: 0.8px;

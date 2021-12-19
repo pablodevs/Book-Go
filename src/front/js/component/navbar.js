@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Context } from "../store/appContext.js";
 import { Link, NavLink } from "react-router-dom";
-import default_user from "../../img/profile/default_user.png";
+import default_user from "../../img/dashboard/default_user.png";
 import "../../styles/components/navbar.scss";
 
 export const Navbar = () => {
@@ -29,7 +29,7 @@ export const Navbar = () => {
 					</NavLink>
 				</span>
 				{store.user.token ? (
-					<Link to="/dashboard">
+					<Link to={store.user.is_admin ? "/admin" : "/dashboard"}>
 						<img
 							className="_navbar-profile-img"
 							src={store.user.img_url || default_user}

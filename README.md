@@ -30,6 +30,8 @@ Make sure you have Python 3.8:
 2. Run the migrations: `$ pipenv run upgrade`
 3. Run the application: `$ pipenv run start`
 
+pipenv run upgrade && pipenv run start
+
 ### Front-End Manual Installation:
 
 - Make sure you are using node version 14+ and that you have already successfully installed and runned the backend.

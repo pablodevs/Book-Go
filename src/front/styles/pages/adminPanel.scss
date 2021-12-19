@@ -1,0 +1,11 @@
+/*===== General styles import =====*/
+@import "../colors"; // paleta de colores
+@import "../fonts";  // estilo de las fuentes
+
+.dashboard-wrapper, .admin-panel {
+    position: fixed;
+    z-index: 1001;
+    height: 100vh;
+    max-width: 100%;
+    background-color: white;
+}

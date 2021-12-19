@@ -26,7 +26,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 				lastname: null,
 				phone: null,
 				email: null,
-				img_url: null
+				img_url: null,
+				is_admin: false
 			}
 		},
 
@@ -217,7 +218,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 								lastname: data.lastname,
 								phone: data.phone,
 								email: data.email,
-								img_url: data.profile_image_url
+								img_url: data.profile_image_url,
+								is_admin: data.is_admin
 							},
 							message: data.message
 						});
@@ -234,7 +236,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 						lastname: null,
 						phone: null,
 						email: null,
-						img_url: null
+						img_url: null,
+						is_admin: false
 					},
 					message: ""
 				});

@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Context } from "../store/appContext";
 import { Redirect } from "react-router-dom";
-import default_user from "../../img/profile/default_user.png";
-import home from "../../img/profile/home_transparent.png";
-import "../../styles/pages/dashboard.scss";
 import { DashboardAccount } from "../component/dashboard/dashboardAccount";
 import { ReservationsHistory } from "../component/dashboard/reservationsHistory";
+import default_user from "../../img/dashboard/default_user.png";
+import home from "../../img/dashboard/home_transparent.png";
+import "../../styles/pages/dashboard.scss";
 
 export const Dashboard = () => {
 	const { actions, store } = useContext(Context);
@@ -30,14 +30,14 @@ export const Dashboard = () => {
 	return !store.user.token ? (
 		<Redirect to="/" />
 	) : (
-		<div className="profile-wrapper">
-			<aside className="profile-aside">
-				<div className="profile-user-info">
-					<div className="profile-img-wrapper">
-						<img className="profile-img" src={store.user.img_url || default_user} />
+		<div className="dashboard-wrapper">
+			<aside className="dashboard-aside">
+				<div className="dashboard-user-info">
+					<div className="dashboard-img-wrapper">
+						<img className="dashboard-img" src={store.user.img_url || default_user} />
 					</div>
-					<div className="profile-info">
-						<h1 className="profile-username">
+					<div className="dashboard-info">
+						<h1 className="dashboard-username">
 							{store.user.name.charAt(0).toUpperCase() +
 								store.user.name.slice(1) +
 								" " +
@@ -63,7 +63,7 @@ export const Dashboard = () => {
 					</ul>
 				</nav>
 			</aside>
-			<secction className="profile-content">{content}</secction>
+			<secction className="dashboard-content">{content}</secction>
 		</div>
 	);
 };
