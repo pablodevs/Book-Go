@@ -8,7 +8,7 @@ export const ReservationsHistory = () => {
 	useEffect(() => {}, []);
 
 	return (
-		<div className="dashboard-reservations-wrapper">
+		<div className="dashboard-content-wrapper">
 			<h1 className="dashboard-content-title">Reservas</h1>
 			<h2 className="dashboard-content-subtitle">Próximas reservas</h2>
 			<BookingCard />

@@ -34,7 +34,8 @@ export const AdminPanel = () => {
 								className="dashboard-tab"
 								onClick={() =>
 									setContent(
-										<div className="dashboard-reservations-wrapper">
+										// Aquí iría un <Componente/> con el contenido que queramos mostrar en cada caso
+										<div className="dashboard-content-wrapper">
 											<h1 className="dashboard-content-title">Productos y Disponibilidad</h1>
 										</div>
 									)
@@ -47,7 +48,8 @@ export const AdminPanel = () => {
 								className="dashboard-tab"
 								onClick={() =>
 									setContent(
-										<div className="dashboard-reservations-wrapper">
+										// Aquí iría un <Componente/> con el contenido que queramos mostrar en cada caso
+										<div className="dashboard-content-wrapper">
 											<h1 className="dashboard-content-title">Estadísticas</h1>
 										</div>
 									)
@@ -60,7 +62,8 @@ export const AdminPanel = () => {
 								className="dashboard-tab"
 								onClick={() =>
 									setContent(
-										<div className="dashboard-reservations-wrapper">
+										// Aquí iría un <Componente/> con el contenido que queramos mostrar en cada caso
+										<div className="dashboard-content-wrapper">
 											<h1 className="dashboard-content-title">Cuenta y Configuración</h1>
 										</div>
 									)

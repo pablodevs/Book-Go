@@ -37,7 +37,7 @@ export const DashboardAccount = () => {
 	};
 
 	return (
-		<form onSubmit={submitForm} className="dashboard-account-wrapper">
+		<form onSubmit={submitForm} className="dashboard-content-wrapper set-account">
 			<h1 className="dashboard-content-title">Cuenta y Configuración</h1>
 			<div>
 				<label className="dashboard-label" htmlFor="name">
