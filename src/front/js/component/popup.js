@@ -11,7 +11,6 @@ export const Popup = () => {
 	const { store, actions } = useContext(Context);
 
 	const handleKeyDown = event => {
-		console.log("existo KEY");
 		if (event.key === "Escape") {
 			actions.closePopup();
 			document.removeEventListener("keydown", handleKeyDown);
@@ -19,11 +18,9 @@ export const Popup = () => {
 		}
 	};
 	const handleMouseDown = e => {
-		console.log("existo Down");
 		if (e.target === document.querySelector(".popup-bg")) document.addEventListener("mouseup", handleMouseUp);
 	};
 	const handleMouseUp = e => {
-		console.log("existo UP");
 		if (e.target === document.querySelector(".popup-bg")) {
 			actions.closePopup();
 			document.removeEventListener("mouseup", handleMouseUp);
