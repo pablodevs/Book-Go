@@ -14,11 +14,9 @@ export const Dashboard = () => {
 	useEffect(() => {
 		store.user.name
 			? setContent(
-					<div
-						className="center"
-						style={{ flexDirection: "column", gap: "1.3rem", marginInline: "auto", color: "lightgray" }}>
+					<div className="center dashboard-welcome">
 						<h2>¡Hola {store.user.name.charAt(0).toUpperCase() + store.user.name.slice(1)}!</h2>
-						<img src={home} width="100" height="100" style={{ filter: "opacity(15%)" }} />
+						<img src={home} width="100" height="100" />
 					</div>
 			  )
 			: null;
@@ -49,21 +47,25 @@ export const Dashboard = () => {
 				</div>
 				<nav>
 					<ul>
-						<li>
-							<button onClick={() => setContent(<ReservationsHistory />)}>Reservas</button>
+						<li className="dashboard-li">
+							<button className="dashboard-tab" onClick={() => setContent(<ReservationsHistory />)}>
+								Reservas
+							</button>
 						</li>
-						<li>
-							<button onClick={() => setContent(<DashboardAccount />)}>Cuenta y Configuración</button>
+						<li className="dashboard-li">
+							<button className="dashboard-tab" onClick={() => setContent(<DashboardAccount />)}>
+								Cuenta y Configuración
+							</button>
 						</li>
-						<li>
-							<button className="logout" onClick={() => actions.logout()}>
+						<li className="dashboard-li">
+							<button className="logout dashboard-tab" onClick={() => actions.logout()}>
 								Salir
 							</button>
 						</li>
 					</ul>
 				</nav>
 			</aside>
-			<secction className="dashboard-content">{content}</secction>
+			<section className="dashboard-content">{content}</section>
 		</div>
 	);
 };

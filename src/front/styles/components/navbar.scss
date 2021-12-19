@@ -50,22 +50,16 @@ $--login-link-h: 2rem;
 
 ._navbar-login {
     overflow: hidden;
-    align-items: flex-start;
-    text-align: center;
     height: $--login-link-h;
     width: 100px;
-    padding: 0.5rem 1rem;
-    border-radius: 50px;
     box-shadow: inset 0 0 0 $--login-link-border $--color-pink-dark;
     color: $--color-pink-dark;
-    font-weight: 600;
-    transition: all 0.3s ease-out;
-    -o-transition: all 0.3s ease-out;
-    -moz-transition: all 0.3s ease-out;
-    -webkit-transition: all 0.3s ease-out;
+    font-size: initial;
+    margin-top: 0;
     &:hover, &:focus-visible {
         outline: none;
         box-shadow: inset 0 0 0 $--login-link-border $--color-pink-light;
+        background: none;
         color: $--color-pink-light;
     }
 }

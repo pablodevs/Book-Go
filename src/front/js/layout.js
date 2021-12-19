@@ -39,7 +39,7 @@ const Layout = () => {
 						<div className="view">
 							<h1 style={{ fontWeight: "bold", fontSize: "6rem", letterSpacing: "10px" }}>404</h1>
 							<h3>Page not found</h3>
-							<Link className="_navbar-login back-home-btn" to="/">
+							<Link className="coolbtn" to="/" style={{ fontSize: "1.15rem" }}>
 								Back to Home
 							</Link>
 						</div>

@@ -7,6 +7,14 @@ $--dashboard-border-style: 1px solid $--color-grey-dashboard-light;
 $--margin-inline: 4vw;
 $--padding-top: 2rem;
 
+.dashboard-welcome {
+    flex-direction: column;
+    gap: 1.3rem;
+    margin-inline: auto;
+    color: $--color-grey-light;
+    & img { filter: opacity(15%) }
+}
+
 .dashboard-content { grid-area: content }
 .dashboard-aside { grid-area: aside }
 .dashboard-wrapper {
@@ -68,10 +76,10 @@ $--padding-top: 2rem;
 }
 .dashboard-aside ul {
     border-top: $--dashboard-border-style;
-    & li {
+    & .dashboard-li {
         border-bottom: $--dashboard-border-style;
-        & button {
-            padding-block: 1.3rem;
+        & .dashboard-tab {
+            padding: 1.3rem 1.3rem 1.3rem 0;
             width: 100%;
             text-align: start;
             &:hover {
@@ -112,12 +120,12 @@ $--padding-top: 2rem;
 @media screen and (max-width: 767.9px) {
     .dashboard-wrapper {
         grid-template-columns: 100%;
+        grid-template-rows: auto 1fr;
         grid-template-areas: "aside"
                              "content";
-        grid-template-columns: auto;
     }
-    .dashboard-aside { padding: 3rem 4vw }
-    .dashboard-content {
+    .dashboard-aside, aside.admin-aside { padding: 3rem 4vw }
+    .dashboard-content, section.admin-content {
         margin: 0 4vw 3rem 4vw;
         padding: 0;
     }
