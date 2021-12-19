@@ -50,7 +50,7 @@ module.exports = {
       Dropdown: "exports-loader?Dropdown!bootstrap/js/dist/dropdown"
     }),
     new HtmlWebpackPlugin({
-        // Icono de ejemplo:
+        // Icono de ejemplo que se debería ver en la pestaña abierta del navegador:
         favicon: 'logo.png',
         template: 'template.html'
     }),
