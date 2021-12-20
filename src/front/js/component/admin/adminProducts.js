@@ -30,6 +30,7 @@ export const AdminProducts = () => {
 	};
 
 	return (
+		// ⚠️ Reorganizar para aprovechar espacio en pantallas más grandes
 		<div className="dashboard-content-wrapper">
 			<h1 className="dashboard-content-title">Productos y Disponibilidad</h1>
 			<section className="products-info">
