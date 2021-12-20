@@ -40,7 +40,7 @@ $--padding-top: 2rem;
 }
 
 .dashboard-aside {
-    position: relative;
+    position: sticky;
     display: flex;
     flex-direction: column;
     padding: 3rem 0 3rem $--margin-inline;

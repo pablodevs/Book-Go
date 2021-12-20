@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Context } from "../store/appContext";
 import { Redirect } from "react-router-dom";
-import { DashboardAccount } from "../component/dashboard/dashboardAccount";
+import { AccountSettings } from "../component/dashboard/accountSettings";
 import { ReservationsHistory } from "../component/dashboard/reservationsHistory";
 import default_user from "../../img/dashboard/default_user.png";
 import home from "../../img/dashboard/home_transparent.png";
@@ -53,7 +53,7 @@ export const Dashboard = () => {
 							</button>
 						</li>
 						<li className="dashboard-li">
-							<button className="dashboard-tab" onClick={() => setContent(<DashboardAccount />)}>
+							<button className="dashboard-tab" onClick={() => setContent(<AccountSettings />)}>
 								Cuenta y Configuración
 							</button>
 						</li>

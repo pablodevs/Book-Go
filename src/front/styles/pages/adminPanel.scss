@@ -3,13 +3,19 @@
 @import "../fonts";  // estilo de las fuentes
 @import "./dashboard";  // estilo de las fuentes
 
-.dashboard-wrapper.admin-panel {
-    position: fixed;
-    grid-template-columns: auto 1fr;
+.admin-panel-wrapper {
+    position: absolute;
     z-index: 1050;
     height: 100vh;
-    max-width: 100%;
+    width: 100%;
     background-color: white;
+}
+
+.dashboard-wrapper.admin-panel {
+    grid-template-columns: auto 1fr;
+    margin-inline: auto;
+    max-width: none;
+    width: calc(min(100%, 1400px));
 }
 
 .admin-logo { color: $--color-blue-dark }
@@ -47,9 +53,35 @@
     }
 }
 
-.disponibility {
-    padding-top: 2rem;
-    border-top: $--dashboard-border-style;
+/*===== Products y Disponibilidad =====*/
+
+.admin-products, .admin-sections-wrapper{
+    width: 100%;
+    height: 100%;
+}
+
+.admin-sections-wrapper {
+    display: flex;
+    flex-flow: row wrap;
+    align-content: flex-start;
+    justify-content: space-between;
+    gap: 3rem;
+}
+
+.products-info, .disponibility {
+    min-width: 500px;
+    box-shadow: inset $--color-grey-dashboard-light 0px 0px 0px 1px;
+    padding: 1.5rem;
+}
+
+@media screen and (min-width: 1500px) {
+    .products-info { grid-area: info; min-width: 100% }
+    .disponibility { grid-area: dispo; min-width: 100% }
+    .admin-sections-wrapper {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-areas: "info dispo";
+    }
 }
 
 .price-input {
@@ -79,4 +111,14 @@ div.admin-form-group {
 div.disponibility-title.admin-form-group {
     justify-content: start;
     align-items: baseline;
+}
+
+@media screen and (max-width: 767.9px) {
+    .products-info, .disponibility {
+        min-width: 100%;
+    }
+    div.admin-form-group {
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
 }

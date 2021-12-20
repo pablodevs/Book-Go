@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Context } from "../../store/appContext";
 
-export const DashboardAccount = () => {
+export const AccountSettings = () => {
 	const { actions, store } = useContext(Context);
 
 	const [data, setData] = useState({
