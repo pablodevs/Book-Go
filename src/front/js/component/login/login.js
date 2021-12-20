@@ -12,6 +12,7 @@ export const Login = () => {
 			<div className="row">
 				<div className="col mx-4 mb-4" style={{ display: "grid", gap: "1rem" }}>
 					<input
+						autoFocus
 						required
 						onChange={e => {
 							setEmail(e.target.value);

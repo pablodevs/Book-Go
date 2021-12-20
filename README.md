@@ -18,7 +18,7 @@
   - /.../, methods: '': Comment ...frontURL/.../
   - ...
 
-## License 👻
+## License
 
 Open license
 

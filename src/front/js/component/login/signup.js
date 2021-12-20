@@ -42,6 +42,7 @@ export const Signup = () => {
 			<div className="row">
 				<form onSubmit={submitForm} className="col mx-4 mb-4" style={{ display: "grid", gap: "1rem" }}>
 					<input
+						autoFocus
 						required
 						onChange={e => {
 							handleInputChange(e);

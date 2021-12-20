@@ -11,7 +11,9 @@ $--padding-top: 2rem;
     flex-direction: column;
     gap: 1.3rem;
     margin-inline: auto;
-    color: $--color-grey-light;
+    color: #d9d9d9;
+    font-weight: bold;
+    font-size: calc(1.35rem + 0.9vw);
     & img { filter: opacity(15%) }
 }
 
@@ -110,12 +112,13 @@ $--padding-top: 2rem;
 }
 
 // Content
-.dashboard-content-wrapper {
+.dashboard-content-wrapper, .dashboard-forms {
     display: flex;
     flex-direction: column;
     gap: 2rem;
-    width: 100%;
+    width: calc(min(100%, 500px));
 }
+.dashboard-forms { gap: 1.5rem }
 
 @media screen and (max-width: 767.9px) {
     .dashboard-wrapper {
@@ -133,24 +136,24 @@ $--padding-top: 2rem;
 }
 /*===== Content: Account =====*/
 
-.set-account div {
+.dashboard-forms > div, .dashboard-input {
     max-width: 500px;
     display: flex;
     flex-direction: column;
     & .dashboard-label { font-size: 0.8rem; color: $--color-grey-light }
 }
-.set-account input, .change-password {
+.dashboard-forms input, .change-password {
     border-radius: 5px;
     border: 1px solid $--color-grey-light;
     flex: 1;
     padding: 0.3rem 0.6rem;
 }
-.set-account input:focus-visible {
+.dashboard-forms input:focus-visible {
     outline: none;
     border: 1px solid $--color-blue-light;
     box-shadow: inset 0 0 0 1px $--color-blue-light;
 }
-.set-account input.input-error, .set-account input.input-error:focus-visible {
+.dashboard-forms input.input-error, .dashboard-forms input.input-error:focus-visible {
     box-shadow: inset 0 0 0 2px red;
 }
 .dashboard-input { position: relative }
@@ -162,7 +165,7 @@ button.clear-input {
     right: 1rem;
     color: $--color-grey-light
 }
-.set-account input:focus-visible ~ button.clear-input {
+.dashboard-forms input:focus-visible ~ button.clear-input {
     color: $--color-blue-dark
 }
 

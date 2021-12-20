@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Redirect } from "react-router-dom";
 import { Context } from "../store/appContext";
+import { AdminProducts } from "../component/admin/adminProducts";
 import gears from "../../img/dashboard/gears.png";
 import "../../styles/pages/adminPanel.scss";
 
@@ -12,7 +13,7 @@ export const AdminPanel = () => {
 		store.user.name
 			? setContent(
 					<div className="center dashboard-welcome">
-						<h2>¡Hola {store.user.name.charAt(0).toUpperCase() + store.user.name.slice(1)}!</h2>
+						<span>¡Hola {store.user.name.charAt(0).toUpperCase() + store.user.name.slice(1)}!</span>
 						<img src={gears} height="100" />
 					</div>
 			  )
@@ -30,16 +31,7 @@ export const AdminPanel = () => {
 				<nav>
 					<ul>
 						<li className="dashboard-li">
-							<button
-								className="dashboard-tab"
-								onClick={() =>
-									setContent(
-										// Aquí iría un <Componente/> con el contenido que queramos mostrar en cada caso
-										<div className="dashboard-content-wrapper">
-											<h1 className="dashboard-content-title">Productos y Disponibilidad</h1>
-										</div>
-									)
-								}>
+							<button className="dashboard-tab" onClick={() => setContent(<AdminProducts />)}>
 								Productos y Disponibilidad
 							</button>
 						</li>

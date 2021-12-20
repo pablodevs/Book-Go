@@ -46,3 +46,37 @@
         border-bottom: $--dashboard-border-style
     }
 }
+
+.disponibility {
+    padding-top: 2rem;
+    border-top: $--dashboard-border-style;
+}
+
+.price-input {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    width: fit-content;
+    & input {
+        width: 75px;
+        text-align: center;
+    }
+    & span { font-weight: bold }
+}
+
+div.admin-form-group {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 2rem;
+}
+.products-input { flex: 1 }
+.admin-form-subgroup {
+    display: flex;
+    flex-direction: column;
+}
+
+div.disponibility-title.admin-form-group {
+    justify-content: start;
+    align-items: baseline;
+}
