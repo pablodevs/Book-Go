@@ -37,7 +37,7 @@ export const AccountSettings = () => {
 	};
 
 	return (
-		<form onSubmit={submitForm} className="dashboard-content-wrapper dashboard-forms">
+		<form onSubmit={submitForm} className="dashboard-forms">
 			<h1 className="dashboard-content-title">Cuenta y Configuración</h1>
 			<div>
 				<label className="dashboard-label" htmlFor="name">
@@ -154,8 +154,12 @@ export const AccountSettings = () => {
 				</div>
 			</div>
 			<div>
-				<p className="dashboard-label">Contraseña</p>
-				<button className="change-password">Cambiar contraseña</button>
+				<label htmlFor="password" className="dashboard-label">
+					Contraseña
+				</label>
+				<button type="button" id="password" className="input-button">
+					Cambiar contraseña
+				</button>
 			</div>
 			<div>
 				<button type="submit" className="save-button">

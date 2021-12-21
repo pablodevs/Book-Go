@@ -44,7 +44,9 @@ li {
 button {
     padding: 0;
 }
-
+textarea {
+    resize: vertical;
+}
 /* Bootstrap styles */
 .row, .row > * {
     margin: 0;

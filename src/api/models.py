@@ -12,7 +12,7 @@ class User(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     phone = db.Column(db.String(9), unique=True, nullable=False) # Cambiar a Nulable False
     password = db.Column(db.String(80), unique=False, nullable=False)
-    is_admin= db.Column(db.Boolean(), nullable=False, default=False)
+    is_admin= db.Column(db.Boolean(), nullable=False, default=False) # Una duda, no habría que hacer que is_admin sea Unique=True ??? de otra forma podría haberr 2 o más admins
     profile_image_url = db.Column(db.String(255), unique=False, nullable=True)
 
     def __repr__(self):

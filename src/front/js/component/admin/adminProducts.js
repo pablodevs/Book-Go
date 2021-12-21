@@ -4,29 +4,36 @@ import { Context } from "../../store/appContext";
 export const AdminProducts = () => {
 	const { actions, store } = useContext(Context);
 
+	const [dispoChecked, setDispoChecked] = useState(true);
 	const [productList, setProductList] = useState([]);
 	const [data, setData] = useState({
-		product: null, // con 'name' no funciona bien
-		price: null,
-		description: null
+		product: "", // con 'name' no funciona bien
+		price: "",
+		description: ""
 	});
 
 	useEffect(() => {
 		setProductList(store.products.map(element => element.name));
 	}, []);
 
-	const handleproductListChange = e => console.log(productList[e.target.value]);
-
 	const submitForm = event => {
 		event.preventDefault();
-		// actions.updateUser(data);
+		// actions.updateProduct(data);
 	};
 
 	const handleInputChange = e => {
-		setData({
-			...data,
-			[e.target.name]: e.target.value
-		});
+		if (e.target.name === "product" && productList.includes(e.target.value)) {
+			let prod = store.products.find(prod => prod.name === e.target.value);
+			setData({
+				product: prod.name, // esto de que se llamen diferente no me convence
+				price: prod.price,
+				description: prod.description
+			});
+		} else
+			setData({
+				...data,
+				[e.target.name]: e.target.value
+			});
 	};
 
 	return (
@@ -37,17 +44,18 @@ export const AdminProducts = () => {
 					<form onSubmit={submitForm} className="dashboard-forms">
 						<h2 className="dashboard-content-subtitle">Información del producto</h2>
 						<div className="admin-form-group">
-							<div className="admin-form- products-input">
+							<div className="admin-form-subgroup">
 								<label className="dashboard-label" htmlFor="product">
 									Producto
 								</label>
 								<div className="dashboard-input">
 									<input
 										onBlur={e => {
-											if (!productList.includes(e.target.value))
+											if (!productList.includes(e.target.value) && e.target.value)
 												e.target.classList.add("input-error");
 											else e.target.classList.remove("input-error");
 										}}
+										onFocus={e => e.target.classList.remove("input-error")}
 										onChange={e => handleInputChange(e)}
 										type="text"
 										id="product"
@@ -69,14 +77,27 @@ export const AdminProducts = () => {
 										className="clear-input"
 										style={{ right: "2.5rem" }}
 										onClick={() => {
+											document.querySelector("#product").classList.remove("input-error");
 											setData({
-												...data,
-												product: ""
+												product: "",
+												price: "",
+												description: ""
 											});
 										}}>
 										<i className="fas fa-times" />
 									</button>
 								</div>
+							</div>
+							<div className="admin-form-subgroup">
+								<label htmlFor="new-product" className="dashboard-label">
+									Nuevo producto
+								</label>
+								<button type="button" id="new-product" className="input-button">
+									{/* ⚠️ OJITO: si añadimos uno nuevo, se tiene que actualizar el hook productList */}
+									{/* Además hay que programar el botón de eliminar producto: <i className="fas fa-trash-alt"></i> */}
+									<span>Añadir</span>
+									<i className="fas fa-plus" />
+								</button>
 							</div>
 							<div className="admin-form-subgroup">
 								<label className="dashboard-label" htmlFor="price">
@@ -88,13 +109,25 @@ export const AdminProducts = () => {
 										id="price"
 										name="price"
 										min="0"
-										onChange={e => {
-											handleInputChange(e);
-										}}
+										onChange={e => handleInputChange(e)}
 										value={data.price}
 									/>
 									<span>€</span>
 								</div>
+							</div>
+						</div>
+						<div className="admin-form-group">
+							<div className="admin-form-subgroup">
+								<label htmlFor="description" className="dashboard-label">
+									Descripción
+								</label>
+								<textarea
+									id="description"
+									name="description"
+									rows="3"
+									value={data.description}
+									onChange={e => handleInputChange(e)}
+								/>
 							</div>
 						</div>
 						<div>
@@ -104,12 +137,11 @@ export const AdminProducts = () => {
 						</div>
 					</form>
 				</section>
-				{/* <div className="horizontal-divider" /> */}
 				<section className="disponibility">
 					<form className="dashboard-forms" onSubmit={submitForm}>
 						<div className="disponibility-title admin-form-group">
 							<h2 className="dashboard-content-subtitle">Disponibilidad:</h2>
-							<span>
+							<span className={productList.includes(data.product) ? "text-confirm" : "text-cancel"}>
 								{productList.includes(data.product) ? data.product : "Ningún producto seleccionado"}
 							</span>
 						</div>
@@ -125,6 +157,19 @@ export const AdminProducts = () => {
 									Hora
 								</label>
 								<input type="time" id="time" name="time" />
+							</div>
+							<div className="admin-form-subgroup availability-checkbox">
+								<input
+									type="checkbox"
+									id="available"
+									name="available"
+									value="available"
+									defaultChecked={dispoChecked}
+									onChange={() => setDispoChecked(!dispoChecked)}
+								/>
+								<label className="dashboard-label" htmlFor="available">
+									Disponible
+								</label>
 							</div>
 						</div>
 						<div>
