@@ -15,12 +15,17 @@ class User(db.Model):
     is_admin= db.Column(db.Boolean(), nullable=False, default=False)
     profile_image_url = db.Column(db.String(255), unique=False, nullable=True)
 
+    reserva = db.relationship('Book', backref='user', lazy=True)
+
     def __repr__(self):
         return '<User %r>' % self.name
 
     def serialize(self):
         return {
             "id": self.id,
+            "name" :self.name,
+            "lastname" : self.lastname,
+            "phone" : self.phone,
             "email": self.email,
             "is_admin" : self.is_admin,
             "profile_image_url": self.profile_image_url,
@@ -37,6 +42,9 @@ class Product(db.Model):
     name = db.Column(db.String(120), nullable=False)
     price = db.Column(db.Integer,nullable=False)
     description = db.Column(db.String(150),nullable=False)
+    
+    disponibilidad = db.relationship('Dispo', backref='product', lazy=True)
+    reserva = db.relationship('Book', backref='product', lazy=True)
 
     def __repr__(self):
         return '<Product %r>' % self.name
@@ -56,12 +64,14 @@ class Product(db.Model):
 #TABLA DE RESERVAS
 class Book(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    product = db.Column(db.String(120), nullable=False)
-    # ⚠️⚠️ Digo yo que habría que tener el user_id en lugar de el mail ⚠️⚠️
-    email = db.Column(db.String(120), unique=True, nullable=False)
+   
     date = db.Column(db.DateTime, nullable=False)
     time = db.Column(db.Time,nullable=False)
     created = db.Column(db.DateTime,onupdate=datetime.now)
+
+    product_id = db.Column(db.Integer,db.ForeignKey('product.id') ,nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'),nullable=False)
+
 
     def __repr__(self):
         return '<Book %r>' % self.product
@@ -70,9 +80,9 @@ class Book(db.Model):
         return {
             "id": self.id,
             "product": self.product,
-            "email": self.email,
             "date" : self.date,
             "time" : self.time
+        
 
         }
 
@@ -80,10 +90,12 @@ class Book(db.Model):
 #TABLA DE DISPONIBILIDAD
 class Dispo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    product = db.Column(db.String(120), nullable=False)
     date = db.Column(db.DateTime, nullable=False)
     time = db.Column(db.Time,nullable=False)
     available= db.Column(db.Boolean(), unique=False, nullable=False)
+
+    product_id = db.Column(db.Integer, db.ForeignKey('product.id'),
+        nullable=False)
 
     def __repr__(self):
         return '<Dispo %r>' % self.product
@@ -91,7 +103,7 @@ class Dispo(db.Model):
     def serialize(self):
         return {
             "id": self.id,
-            "product": self.product,
+            "product_id": self.product_id,
             #esto te devuelve la fecha en el formato español
             "date" : self.date.strftime("%-d/%-m/%Y"),
             #este otro en milisegundos
