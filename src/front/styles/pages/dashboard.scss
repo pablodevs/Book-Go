@@ -40,7 +40,6 @@ $--padding-top: 2rem;
 }
 
 .dashboard-aside {
-    position: sticky;
     display: flex;
     flex-direction: column;
     padding: 3rem 0 3rem $--margin-inline;
@@ -129,7 +128,7 @@ $--padding-top: 2rem;
     }
     .dashboard-aside, aside.admin-aside { padding: 3rem 4vw }
     .dashboard-content, section.admin-content {
-        margin: 0 4vw 3rem 4vw;
+        margin: 0 4vw 4vw 4vw;
         padding: 0;
     }
     .dashboard-user-info { padding: 0 0 1rem 0 }

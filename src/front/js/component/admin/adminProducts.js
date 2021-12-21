@@ -7,6 +7,7 @@ export const AdminProducts = () => {
 	const [dispoChecked, setDispoChecked] = useState(true);
 	const [productList, setProductList] = useState([]);
 	const [data, setData] = useState({
+		id: null,
 		product: "", // con 'name' no funciona bien
 		price: "",
 		description: ""
@@ -16,15 +17,20 @@ export const AdminProducts = () => {
 		setProductList(store.products.map(element => element.name));
 	}, []);
 
-	const submitForm = event => {
+	const submitFirstForm = event => {
 		event.preventDefault();
-		// actions.updateProduct(data);
+		if (data.product !== "" && productList.includes(data.product)) actions.updateProduct(data);
+	};
+	const submitSecondForm = event => {
+		event.preventDefault();
+		// actions.updateDispo(data);
 	};
 
 	const handleInputChange = e => {
 		if (e.target.name === "product" && productList.includes(e.target.value)) {
 			let prod = store.products.find(prod => prod.name === e.target.value);
 			setData({
+				id: prod.id,
 				product: prod.name, // esto de que se llamen diferente no me convence
 				price: prod.price,
 				description: prod.description
@@ -41,7 +47,7 @@ export const AdminProducts = () => {
 			<h1 className="dashboard-content-title">Productos y Disponibilidad</h1>
 			<div className="admin-sections-wrapper">
 				<section className="products-info">
-					<form onSubmit={submitForm} className="dashboard-forms">
+					<form onSubmit={submitFirstForm} className="dashboard-forms">
 						<h2 className="dashboard-content-subtitle">Información del producto</h2>
 						<div className="admin-form-group">
 							<div className="admin-form-subgroup">
@@ -79,6 +85,7 @@ export const AdminProducts = () => {
 										onClick={() => {
 											document.querySelector("#product").classList.remove("input-error");
 											setData({
+												id: null,
 												product: "",
 												price: "",
 												description: ""
@@ -94,12 +101,22 @@ export const AdminProducts = () => {
 								</label>
 								<button type="button" id="new-product" className="input-button">
 									{/* ⚠️ OJITO: si añadimos uno nuevo, se tiene que actualizar el hook productList */}
-									{/* Además hay que programar el botón de eliminar producto: <i className="fas fa-trash-alt"></i> */}
 									<span>Añadir</span>
 									<i className="fas fa-plus" />
 								</button>
 							</div>
 							<div className="admin-form-subgroup">
+								<label htmlFor="del-product" className="dashboard-label">
+									Eliminar producto
+								</label>
+								<button type="button" id="del-product" className="input-button">
+									<span>Elminiar</span>
+									<i className="fas fa-trash-alt" />
+								</button>
+							</div>
+						</div>
+						<div className="admin-form-group">
+							<div className="admin-form-subgroup price-subgroup">
 								<label className="dashboard-label" htmlFor="price">
 									Precio
 								</label>
@@ -115,8 +132,6 @@ export const AdminProducts = () => {
 									<span>€</span>
 								</div>
 							</div>
-						</div>
-						<div className="admin-form-group">
 							<div className="admin-form-subgroup">
 								<label htmlFor="description" className="dashboard-label">
 									Descripción
@@ -129,6 +144,21 @@ export const AdminProducts = () => {
 									onChange={e => handleInputChange(e)}
 								/>
 							</div>
+							<div className="admin-form-subgroup img-subgroup">
+								<div className="admin-product-img-wrapper">
+									<small className="img-placeholder">imagen</small>
+									<img
+										src={
+											productList.includes(data.product)
+												? require(`../../../img/${data.product.toLowerCase()}.jpg`)
+												: ""
+										}
+										onError={e => e.target.classList.add("border-darkblue")}
+										onLoad={e => e.target.classList.remove("border-darkblue")}
+										className="admin-product-img"
+									/>
+								</div>
+							</div>
 						</div>
 						<div>
 							<button type="submit" className="save-button">
@@ -138,7 +168,7 @@ export const AdminProducts = () => {
 					</form>
 				</section>
 				<section className="disponibility">
-					<form className="dashboard-forms" onSubmit={submitForm}>
+					<form className="dashboard-forms" onSubmit={submitSecondForm}>
 						<div className="disponibility-title admin-form-group">
 							<h2 className="dashboard-content-subtitle">Disponibilidad:</h2>
 							<span className={productList.includes(data.product) ? "text-confirm" : "text-cancel"}>

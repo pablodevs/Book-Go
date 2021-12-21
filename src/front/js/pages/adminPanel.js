@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Redirect } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import { Context } from "../store/appContext";
 import { AdminProducts } from "../component/admin/adminProducts";
 import { AccountSettings } from "../component/dashboard/accountSettings";
@@ -62,6 +62,10 @@ export const AdminPanel = () => {
 									<span>Salir</span>
 									<i className="fas fa-sign-out-alt" />
 								</button>
+								<Link className="coolbtn" to="/">
+									{/* style={{ fontSize: "1.15rem" }}> */}
+									Home
+								</Link>
 							</li>
 						</ul>
 					</nav>

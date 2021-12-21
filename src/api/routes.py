@@ -50,7 +50,13 @@ def create_new_user():
     email_received = request.form.get("email", None)
     phone_received = request.form.get("phone", None)
     password_received = request.form.get("password", None)
-    user = User(email = email_received, phone = phone_received, password = password_received, name = name_received , lastname = lastname_received)
+    user = User(
+        email = email_received,
+        phone = phone_received,
+        password = password_received,
+        name = name_received,
+        lastname = lastname_received
+        )
  
     
 
@@ -134,3 +140,31 @@ def handle_single_user(user_id):
     db.session.commit()
 
     return jsonify(user.serialize()), 200
+
+
+# CHANGE PRODUCT INFO
+@api.route('/product/<int:product_id>', methods=['PUT'])
+def handle_single_product(product_id):
+    """
+    Single product
+    """
+    product = Product.query.get(product_id)
+
+    # Data validation
+    if product is None:
+        raise APIException('Product not found in data base', status_code=404)
+    
+    # Query body
+    request_body = request.json
+
+    # Check body's info
+    if "name" in request_body:
+        product.name = request_body["name"]
+    if "price" in request_body:
+        product.price = request_body["price"]
+    if "description" in request_body:
+        product.description = request_body["description"]
+
+    db.session.commit()
+
+    return jsonify(product.serialize()), 200

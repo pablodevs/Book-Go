@@ -150,6 +150,36 @@ const getState = ({ getStore, getActions, setStore }) => {
 					.catch(error => console.error(error));
 			},
 
+			//Change ONE product
+			updateProduct: data => {
+				let store = getStore();
+				fetch(process.env.BACKEND_URL + `/product/${data.id}`, {
+					method: "PUT",
+					body: JSON.stringify(data),
+					headers: {
+						"Content-Type": "application/json"
+					}
+				})
+					.then(response => {
+						return response.json();
+					})
+					.then(resp => {
+						let storeAux = store.products.filter(element => element.id !== data.id);
+						setStore({
+							products: [
+								...storeAux,
+								{
+									id: resp.id,
+									name: resp.name,
+									price: resp.price,
+									description: resp.description
+								}
+							]
+						});
+					})
+					.catch(error => console.error(error));
+			},
+
 			//Create NEW USER
 			createUser: async data => {
 				await fetch(process.env.BACKEND_URL + `/user`, {
@@ -167,10 +197,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 					})
 					.catch(error => console.error(error));
 			},
-
-			updateUser: async data => {
+			updateUser: data => {
 				let store = getStore();
-				await fetch(process.env.BACKEND_URL + `/user/${store.user.id}`, {
+				fetch(process.env.BACKEND_URL + `/user/${store.user.id}`, {
 					method: "PUT",
 					body: JSON.stringify(data),
 					headers: {
@@ -184,17 +213,16 @@ const getState = ({ getStore, getActions, setStore }) => {
 						setStore({
 							user: {
 								...store.user,
-								name: data.name,
-								lastname: data.lastname,
-								phone: data.phone,
-								email: data.email
-								// img_url: data.profile_image_url
+								name: resp.name,
+								lastname: resp.lastname,
+								phone: resp.phone,
+								email: resp.email,
+								img_url: resp.profile_image_url
 							}
 						});
 					})
 					.catch(error => console.error(error));
 			},
-
 			generate_token: async (email, password) => {
 				//genera el token cuando haces login
 				await fetch(process.env.BACKEND_URL + `/token`, {
@@ -209,19 +237,19 @@ const getState = ({ getStore, getActions, setStore }) => {
 						console.log(response.status);
 						return response.json();
 					})
-					.then(data => {
+					.then(resp => {
 						setStore({
 							user: {
-								token: data.token,
-								id: data.id,
-								name: data.name,
-								lastname: data.lastname,
-								phone: data.phone,
-								email: data.email,
-								img_url: data.profile_image_url,
-								is_admin: data.is_admin
+								token: resp.token,
+								id: resp.id,
+								name: resp.name,
+								lastname: resp.lastname,
+								phone: resp.phone,
+								email: resp.email,
+								img_url: resp.profile_image_url,
+								is_admin: resp.is_admin
 							},
-							message: data.message
+							message: resp.message
 						});
 					})
 					.catch(error => console.error(error));

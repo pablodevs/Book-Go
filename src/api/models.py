@@ -21,7 +21,10 @@ class User(db.Model):
     def serialize(self):
         return {
             "id": self.id,
+            "name": self.name,
+            "lastname": self.lastname,
             "email": self.email,
+            "phone": str(self.phone),
             "is_admin" : self.is_admin,
             "profile_image_url": self.profile_image_url,
             # do not serialize the password, its a security breach
@@ -50,9 +53,6 @@ class Product(db.Model):
         }
 
 
-
-
-
 #TABLA DE RESERVAS
 class Book(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -73,7 +73,6 @@ class Book(db.Model):
             "email": self.email,
             "date" : self.date,
             "time" : self.time
-
         }
 
 
