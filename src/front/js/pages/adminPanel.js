@@ -35,7 +35,8 @@ export const AdminPanel = () => {
 							{/* ⚠️ Reorganizar en pantallas pequeñas para que se vean en horizontal */}
 							<li className="dashboard-li">
 								<button className="dashboard-tab" onClick={() => setContent(<AdminProducts />)}>
-									Productos y Disponibilidad
+									<i className="far fa-calendar-alt" />
+									<span>Productos & Disponibilidad</span>
 								</button>
 							</li>
 							<li className="dashboard-li">
@@ -49,12 +50,14 @@ export const AdminPanel = () => {
 											</div>
 										)
 									}>
+									<i className="far fa-chart-bar" />
 									Estadísticas
 								</button>
 							</li>
 							<li className="dashboard-li">
 								<button className="dashboard-tab" onClick={() => setContent(<AccountSettings />)}>
-									Cuenta y Configuración
+									<i className="fas fa-cog" />
+									<span>Configuración</span>
 								</button>
 							</li>
 							<li className="admin-logout">

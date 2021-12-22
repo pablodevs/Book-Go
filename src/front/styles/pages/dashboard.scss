@@ -80,9 +80,15 @@ $--padding-top: 2rem;
     & .dashboard-li {
         border-bottom: $--dashboard-border-style;
         & .dashboard-tab {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
             padding: 1.3rem 1.3rem 1.3rem 0;
-            width: 100%;
             text-align: start;
+            color: $--color-grey-dark;
+            & > i {
+                color: $--color-blue-dark;
+            }
             &:hover {
                 transform-origin: left;
                 -o-transform-origin: left;
@@ -152,7 +158,7 @@ $--padding-top: 2rem;
         color: $--color-grey-light;
         display: block
 }
-.dashboard-forms input, .input-button, textarea {
+.dashboard-forms input, .input-button, textarea, select {
     width: 100%;
     border-radius: 5px;
     border: 1px solid $--color-grey-light;
@@ -162,7 +168,7 @@ $--padding-top: 2rem;
     background-color: $--color-blue-light;
     &:hover { background-color: $--color-blue-lighter }
 }
-.dashboard-forms input:focus-visible, textarea:focus-visible {
+.dashboard-forms input:focus-visible, textarea:focus-visible, select:focus-visible {
     outline: none;
     border: 1px solid $--color-blue-light;
     box-shadow: inset 0 0 0 1px $--color-blue-light;
@@ -171,7 +177,7 @@ $--padding-top: 2rem;
     box-shadow: inset 0 0 0 2px red;
 }
 .dashboard-input { position: relative }
-button.clear-input {
+button.clear-input, button.edit-input {
     position: absolute;
     display: flex;
     align-items: center;

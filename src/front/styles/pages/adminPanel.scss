@@ -89,6 +89,22 @@
     }
 }
 
+div.product-input {
+    flex-direction: row;
+    gap: 0.4rem
+}
+
+button.edit-input {
+    background-color: $--color-blue-light;
+    color: $--color-blue-dark;
+    position: relative;
+    margin-block: auto;
+    right: 0;
+    padding: 0.3rem;
+    border-radius: 3px;
+    height: 100%;
+}
+
 .price-input {
     display: flex;
     align-items: center;

@@ -54,44 +54,27 @@ export const AdminProducts = () => {
 								<label className="dashboard-label" htmlFor="product">
 									Producto
 								</label>
-								<div className="dashboard-input">
-									<input
-										onBlur={e => {
-											if (!productList.includes(e.target.value) && e.target.value)
-												e.target.classList.add("input-error");
-											else e.target.classList.remove("input-error");
-										}}
-										onFocus={e => e.target.classList.remove("input-error")}
-										onChange={e => handleInputChange(e)}
-										type="text"
-										id="product"
-										name="product" // ⚠️ no puede ser name porque google lo identifica como el Nombre de una persona, habrá que cambiar la database
-										value={data.product}
-										placeholder="Elige un producto"
-										list="products-list"
-										autoComplete="off"
-										autoFocus
-									/>
-									{/* Habrá que hacer un get products y un map de la resp para cargar esto: */}
-									<datalist id="products-list">
+								<div className="dashboard-input product-input">
+									<select onChange={e => handleInputChange(e)} id="product" name="product">
+										<option hidden selected disabled value="">
+											Elige un producto...
+										</option>
 										{productList.map((prod, idx) => (
-											<option key={idx} value={prod} />
+											<option key={idx} value={prod}>
+												{prod}
+											</option>
 										))}
-									</datalist>
+									</select>
 									<button
 										type="button"
-										className="clear-input"
-										style={{ right: "2.5rem" }}
+										className="edit-input"
+										// On click: abrir un cuadro de dialogo pequeño para cambiar el nombre del producto
 										onClick={() => {
-											document.querySelector("#product").classList.remove("input-error");
-											setData({
-												id: null,
-												product: "",
-												price: "",
-												description: ""
-											});
+											return data.product !== ""
+												? actions.setPopup("edit-product", `Editar ${data.product}`)
+												: "";
 										}}>
-										<i className="fas fa-times" />
+										<i className="far fa-edit" />
 									</button>
 								</div>
 							</div>
@@ -149,7 +132,7 @@ export const AdminProducts = () => {
 									<small className="img-placeholder">imagen</small>
 									<img
 										src={
-											productList.includes(data.product)
+											data.product !== ""
 												? require(`../../../img/${data.product.toLowerCase()}.jpg`)
 												: ""
 										}
@@ -172,7 +155,7 @@ export const AdminProducts = () => {
 						<div className="disponibility-title admin-form-group">
 							<h2 className="dashboard-content-subtitle">Disponibilidad:</h2>
 							<span className={productList.includes(data.product) ? "text-confirm" : "text-cancel"}>
-								{productList.includes(data.product) ? data.product : "Ningún producto seleccionado"}
+								{data.product || "Ningún producto seleccionado"}
 							</span>
 						</div>
 						<div className="admin-form-group">
