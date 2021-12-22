@@ -9,7 +9,8 @@ import "../../styles/pages/dashboard.scss";
 
 export const Dashboard = () => {
 	const { actions, store } = useContext(Context);
-	let [content, setContent] = useState(null);
+	const [content, setContent] = useState(null);
+	const [activeTab, setActiveTab] = useState("");
 
 	useEffect(() => {
 		store.user.name
@@ -48,13 +49,30 @@ export const Dashboard = () => {
 				<nav>
 					<ul>
 						<li className="dashboard-li">
-							<button className="dashboard-tab" onClick={() => setContent(<ReservationsHistory />)}>
-								Reservas
+							<button
+								className={"dashboard-tab" + (activeTab === "Reservas" ? " tab-active" : "")}
+								onClick={() => {
+									setActiveTab("Reservas");
+									setContent(<ReservationsHistory />);
+								}}>
+								<i className="far fa-calendar-alt" />
+								<span>Reservas</span>
 							</button>
 						</li>
 						<li className="dashboard-li">
-							<button className="dashboard-tab" onClick={() => setContent(<AccountSettings />)}>
-								Cuenta y Configuración
+							<button
+								className={"dashboard-tab" + (activeTab === "Cuenta" ? " tab-active" : "")}
+								onClick={() => {
+									setActiveTab("Cuenta");
+									setContent(
+										<div className="dashboard-content-wrapper">
+											<h1 className="dashboard-content-title">Cuenta y Configuración</h1>
+											<AccountSettings />
+										</div>
+									);
+								}}>
+								<i className="fas fa-cog" />
+								<span>Cuenta y Configuración</span>
 							</button>
 						</li>
 						<li className="dashboard-li">

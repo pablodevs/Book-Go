@@ -103,14 +103,13 @@ button.disabled, a.disabled {
     &:hover { background: none }
 }
 
-.coolbtn {
+.btn-cool {
     border-radius: 50px;
     color: $--color-blue-dark;
     box-shadow: inset 0 0 0 2px $--color-blue-dark;
-    width: fit-content;
+    width: auto;
     height: auto;
     font-weight: bold;
-    margin-top: 1rem;
     padding: 0.5rem 1rem;
 
     transition: all 0.3s ease-out;
@@ -121,5 +120,13 @@ button.disabled, a.disabled {
         background-color: $--color-blue-dark;
         color: white;
         box-shadow: none;
+    }
+}
+.btn-cool.btn-confirm {
+    box-shadow: inset 0 0 0 2px $--color-green-confirm;
+    color: $--color-green-confirm;
+    &:hover {
+        background: none;
+        color: $--color-green-confirm;
     }
 }

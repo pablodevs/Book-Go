@@ -21,10 +21,20 @@ export const EditInput = props => {
 
 	return (
 		<div className="popup-body">
-			<form onSubmit={handleSubmit}>
-				<input type="text" value={data.name} onChange={e => setData({ ...data, name: e.target.value })} />
-				<button type="submit" className="save-button">
-					Confirmar
+			<form className="dashboard-form" onSubmit={handleSubmit}>
+				<div className="admin-form-subgroup">
+					<label className="dashboard-label" htmlFor="product-edit">
+						Nuevo nombre:
+					</label>
+					<input
+						id="product-edit"
+						type="text"
+						value={data.name}
+						onChange={e => setData({ ...data, name: e.target.value })}
+					/>
+				</div>
+				<button type="submit" className="btn-cool btn-confirm">
+					Confirmar cambios
 				</button>
 			</form>
 		</div>

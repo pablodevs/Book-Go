@@ -37,8 +37,8 @@ export const AccountSettings = () => {
 	};
 
 	return (
-		<form onSubmit={submitForm} className="dashboard-forms">
-			<h1 className="dashboard-content-title">Cuenta y Configuración</h1>
+		<form onSubmit={submitForm} className="dashboard-form">
+			<h2 className="dashboard-content-subtitle">Detalles de la cuenta</h2>
 			<div>
 				<label className="dashboard-label" htmlFor="name">
 					Nombre

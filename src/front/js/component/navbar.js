@@ -40,7 +40,7 @@ export const Navbar = () => {
 					</Link>
 				) : (
 					<button
-						className="_navbar-login coolbtn"
+						className="_navbar-login btn-cool"
 						onClick={() => {
 							actions.setPopup("login", "Iniciar Sesión");
 							setNavMenu(false);

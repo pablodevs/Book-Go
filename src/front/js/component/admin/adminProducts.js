@@ -46,8 +46,8 @@ export const AdminProducts = () => {
 		<div className="dashboard-content-wrapper admin-products">
 			<h1 className="dashboard-content-title">Productos y Disponibilidad</h1>
 			<div className="admin-sections-wrapper">
-				<section className="products-info">
-					<form onSubmit={submitFirstForm} className="dashboard-forms">
+				<section className="dashboard-first-section">
+					<form onSubmit={submitFirstForm} className="dashboard-form">
 						<h2 className="dashboard-content-subtitle">Información del producto</h2>
 						<div className="admin-form-group">
 							<div className="admin-form-subgroup">
@@ -129,17 +129,30 @@ export const AdminProducts = () => {
 							</div>
 							<div className="admin-form-subgroup img-subgroup">
 								<div className="admin-product-img-wrapper">
-									<small className="img-placeholder">imagen</small>
+									<small className="img-placeholder">
+										<i className="fas fa-camera" />
+									</small>
 									<img
 										src={
 											data.product !== ""
 												? require(`../../../img/${data.product.toLowerCase()}.jpg`)
 												: ""
 										}
-										onError={e => e.target.classList.add("border-darkblue")}
-										onLoad={e => e.target.classList.remove("border-darkblue")}
+										onLoad={e => e.target.classList.add("border-none")}
 										className="admin-product-img"
 									/>
+									<button
+										type="button"
+										className="edit-input edit-img"
+										// On click: abrir un cuadro de dialogo pequeño para cambiar el nombre del producto
+										onClick={() => {
+											return;
+											// return data.product !== ""
+											// 	? actions.setPopup("edit-product", `Editar ${data.product}`)
+											// 	: "";
+										}}>
+										<i className="fas fa-camera" />
+									</button>
 								</div>
 							</div>
 						</div>
@@ -150,8 +163,8 @@ export const AdminProducts = () => {
 						</div>
 					</form>
 				</section>
-				<section className="disponibility">
-					<form className="dashboard-forms" onSubmit={submitSecondForm}>
+				<section className="dashboard-second-section">
+					<form className="dashboard-form" onSubmit={submitSecondForm}>
 						<div className="disponibility-title admin-form-group">
 							<h2 className="dashboard-content-subtitle">Disponibilidad:</h2>
 							<span className={productList.includes(data.product) ? "text-confirm" : "text-cancel"}>

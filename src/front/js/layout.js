@@ -37,9 +37,11 @@ const Layout = () => {
 					</Route>
 					<Route>
 						<div className="view">
-							<h1 style={{ fontWeight: "bold", fontSize: "6rem", letterSpacing: "10px" }}>404</h1>
-							<h3>Page not found</h3>
-							<Link className="coolbtn" to="/" style={{ fontSize: "1.15rem" }}>
+							<h1 style={{ fontWeight: "bold", fontSize: "calc(4.5rem + 2vw)", letterSpacing: "10px" }}>
+								404
+							</h1>
+							<span style={{ fontSize: "calc(1.3rem + 1vw)" }}>Page not found</span>
+							<Link className="btn-cool" to="/" style={{ fontSize: "1.15rem", marginTop: "1rem" }}>
 								Back to Home
 							</Link>
 						</div>

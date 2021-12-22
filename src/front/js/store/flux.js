@@ -28,6 +28,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 				email: null,
 				img_url: null,
 				is_admin: false
+			},
+			socialMedia: {
+				facebook: "https://facebook.com/spa-center",
+				instagram: "https://instagram.com/spa-center",
+				twitter: "https://twitter.com/spa-center"
 			}
 		},
 
@@ -269,7 +274,15 @@ const getState = ({ getStore, getActions, setStore }) => {
 					},
 					message: ""
 				});
-			}
+			},
+			updateSocialMedia: data =>
+				setStore({
+					socialMedia: {
+						facebook: data.facebook,
+						instagram: data.instagram,
+						twitter: data.twitter
+					}
+				})
 		}
 	};
 };

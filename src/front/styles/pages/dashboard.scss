@@ -36,7 +36,7 @@ $--padding-top: 2rem;
     justify-content: start;
     align-items: flex-start;
     margin: 3rem $--margin-inline 3rem 0;
-    padding: $--padding-top 0 0 3rem;
+    padding: $--padding-top 0 0 4vw;
 }
 
 .dashboard-aside {
@@ -77,32 +77,35 @@ $--padding-top: 2rem;
 }
 .dashboard-aside ul {
     border-top: $--dashboard-border-style;
-    & .dashboard-li {
-        border-bottom: $--dashboard-border-style;
-        & .dashboard-tab {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 1.3rem 1.3rem 1.3rem 0;
-            text-align: start;
-            color: $--color-grey-dark;
-            & > i {
-                color: $--color-blue-dark;
-            }
-            &:hover {
-                transform-origin: left;
-                -o-transform-origin: left;
-                -moz-transform-origin: left;
-                -webkit-transform-origin: left;
-                transform: translateX(10px);
-                -o-transform: translateX(10px);
-                -moz-transform: translateX(10px);
-                -webkit-transform: translateX(10px);
-                font-weight: 600;
-            }
-        }
-    }
 }
+.dashboard-li {
+    border-bottom: $--dashboard-border-style;
+}
+.dashboard-tab {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1.3rem 1.3rem 1.3rem 0;
+    text-align: start;
+    color: $--color-grey-dark;
+    & > i {
+        color: $--color-blue-dark;
+    }
+    &:hover, &.tab-active {
+        transform-origin: left;
+        -o-transform-origin: left;
+        -moz-transform-origin: left;
+        -webkit-transform-origin: left;
+        transform: translateX(10px);
+        -o-transform: translateX(10px);
+        -moz-transform: translateX(10px);
+        -webkit-transform: translateX(10px);
+        font-weight: 600;
+    }
+    
+}
+
 .logout {
     color: $--color-pink-dark;
 }
@@ -117,13 +120,13 @@ $--padding-top: 2rem;
 }
 
 // Content
-.dashboard-content-wrapper, .dashboard-forms {
+.dashboard-content-wrapper, .dashboard-form {
     display: flex;
     flex-direction: column;
     gap: 2rem;
     width: calc(min(100%, 500px));
 }
-.dashboard-forms { gap: 1.5rem }
+.dashboard-form { gap: 1.5rem }
 
 @media screen and (max-width: 767.9px) {
     .dashboard-wrapper {
@@ -139,7 +142,7 @@ $--padding-top: 2rem;
     }
     .dashboard-user-info { padding: 0 0 1rem 0 }
     .dashboard-content-wrapper { margin-inline: auto }
-    .dashboard-forms {
+    .dashboard-form {
         margin-inline: auto;
         justify-content: center;
         & > div { width: 100% }
@@ -148,17 +151,17 @@ $--padding-top: 2rem;
 }
 /*===== Content: Account =====*/
 
-.dashboard-forms > div, .dashboard-input {
+.dashboard-form > div, .dashboard-input {
     max-width: 500px;
     display: flex;
     flex-direction: column;
 }
 .dashboard-label {
-        font-size: 0.8rem;
-        color: $--color-grey-light;
-        display: block
+    font-size: 0.8rem;
+    color: $--color-grey-light;
+    display: block
 }
-.dashboard-forms input, .input-button, textarea, select {
+.dashboard-form input, .input-button, textarea, select {
     width: 100%;
     border-radius: 5px;
     border: 1px solid $--color-grey-light;
@@ -168,12 +171,12 @@ $--padding-top: 2rem;
     background-color: $--color-blue-light;
     &:hover { background-color: $--color-blue-lighter }
 }
-.dashboard-forms input:focus-visible, textarea:focus-visible, select:focus-visible {
+.dashboard-form input:focus-visible, textarea:focus-visible, select:focus-visible {
     outline: none;
-    border: 1px solid $--color-blue-light;
-    box-shadow: inset 0 0 0 1px $--color-blue-light;
+    border: 1px solid $--color-blue-regular;
+    box-shadow: 0 0 3px 0 $--color-blue-regular;
 }
-.dashboard-forms input.input-error, .dashboard-forms input.input-error:focus-visible {
+.dashboard-form input.input-error, .dashboard-form input.input-error:focus-visible {
     box-shadow: inset 0 0 0 2px red;
 }
 .dashboard-input { position: relative }
@@ -185,10 +188,9 @@ button.clear-input, button.edit-input {
     right: 1rem;
     color: $--color-grey-light
 }
-.dashboard-forms input:focus-visible ~ button.clear-input {
+.dashboard-form input:focus-visible ~ button.clear-input {
     color: $--color-blue-dark
 }
-
 
 .save-button, .book-again-btn {
     box-shadow: inset 0 0 0 2px $--color-blue-dark;
