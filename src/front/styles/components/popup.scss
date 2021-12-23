@@ -43,6 +43,7 @@
     height: 100%;
     padding: 2rem;
     margin-block: auto;
+    & .btn-confirm { margin-inline: auto }
 }
 .popup-return { display: flex; margin-right: 1rem }
 .popup-close { display: flex; margin-left: auto }

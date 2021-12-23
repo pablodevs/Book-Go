@@ -49,6 +49,15 @@ export const AdminProducts = () => {
 				<section className="dashboard-first-section">
 					<form onSubmit={submitFirstForm} className="dashboard-form">
 						<h2 className="dashboard-content-subtitle">Información del producto</h2>
+						<div className="admin-icon-btn-group">
+							<button type="button" className="admin-icon-btn icon-btn" data-tooltip="añadir producto">
+								<i className="fas fa-plus" />
+							</button>
+							{/* ⚠️ OJITO: si añadimos o eliminamos un prod, se tiene que actualizar el hook productList */}
+							<button type="button" className="admin-icon-btn icon-btn" data-tooltip="eliminar producto">
+								<i className="fas fa-trash-alt" />
+							</button>
+						</div>
 						<div className="admin-form-group">
 							<div className="admin-form-subgroup">
 								<label className="dashboard-label" htmlFor="product">
@@ -67,7 +76,8 @@ export const AdminProducts = () => {
 									</select>
 									<button
 										type="button"
-										className="edit-input"
+										className={"icon-btn" + (data.product !== "" ? "" : " inactive")}
+										data-tooltip="cambiar nombre"
 										// On click: abrir un cuadro de dialogo pequeño para cambiar el nombre del producto
 										onClick={() => {
 											return data.product !== ""
@@ -77,25 +87,6 @@ export const AdminProducts = () => {
 										<i className="far fa-edit" />
 									</button>
 								</div>
-							</div>
-							<div className="admin-form-subgroup">
-								<label htmlFor="new-product" className="dashboard-label">
-									Nuevo producto
-								</label>
-								<button type="button" id="new-product" className="input-button">
-									{/* ⚠️ OJITO: si añadimos uno nuevo, se tiene que actualizar el hook productList */}
-									<span>Añadir</span>
-									<i className="fas fa-plus" />
-								</button>
-							</div>
-							<div className="admin-form-subgroup">
-								<label htmlFor="del-product" className="dashboard-label">
-									Eliminar producto
-								</label>
-								<button type="button" id="del-product" className="input-button">
-									<span>Elminiar</span>
-									<i className="fas fa-trash-alt" />
-								</button>
 							</div>
 						</div>
 						<div className="admin-form-group">
@@ -143,7 +134,7 @@ export const AdminProducts = () => {
 									/>
 									<button
 										type="button"
-										className="edit-input edit-img"
+										className={"edit-img" + (data.product !== "" ? "" : " inactive")}
 										// On click: abrir un cuadro de dialogo pequeño para cambiar el nombre del producto
 										onClick={() => {
 											return;

@@ -120,6 +120,13 @@ $--padding-top: 2rem;
 }
 
 // Content
+.dashboard-forms input, textarea {
+    width: 100%;
+    border-radius: 5px;
+    border: 1px solid $--color-grey-light;
+    padding: 0.3rem 0.6rem;
+}
+
 .dashboard-content-wrapper, .dashboard-form {
     display: flex;
     flex-direction: column;
@@ -161,15 +168,11 @@ $--padding-top: 2rem;
     color: $--color-grey-light;
     display: block
 }
-.dashboard-form input, .input-button, textarea, select {
+.dashboard-form input, textarea, select, .input-button {
     width: 100%;
     border-radius: 5px;
     border: 1px solid $--color-grey-light;
     padding: 0.3rem 0.6rem;
-}
-.input-button {
-    background-color: $--color-blue-light;
-    &:hover { background-color: $--color-blue-lighter }
 }
 .dashboard-form input:focus-visible, textarea:focus-visible, select:focus-visible {
     outline: none;
@@ -180,7 +183,7 @@ $--padding-top: 2rem;
     box-shadow: inset 0 0 0 2px red;
 }
 .dashboard-input { position: relative }
-button.clear-input, button.edit-input {
+button.clear-input, .edit-input {
     position: absolute;
     display: flex;
     align-items: center;
@@ -190,6 +193,11 @@ button.clear-input, button.edit-input {
 }
 .dashboard-form input:focus-visible ~ button.clear-input {
     color: $--color-blue-dark
+}
+
+.input-button {
+    background-color: $--color-blue-light;
+    &:hover { background-color: $--color-blue-lighter }
 }
 
 .save-button, .book-again-btn {
