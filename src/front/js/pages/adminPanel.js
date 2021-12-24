@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Link, Redirect } from "react-router-dom";
 import { Context } from "../store/appContext";
+import { ClientList } from "../component/admin/clientList";
 import { AdminProducts } from "../component/admin/adminProducts";
-import { AccountSettings } from "../component/dashboard/accountSettings";
 import { BusinessSettings } from "../component/admin/businessSettings";
+import { AccountSettings } from "../component/dashboard/accountSettings";
 import gears from "../../img/dashboard/gears.png";
 import "../../styles/pages/adminPanel.scss";
 
@@ -40,12 +41,54 @@ export const AdminPanel = () => {
 							{/* ⚠️ Reorganizar en pantallas pequeñas para que se vean en horizontal */}
 							<li className="dashboard-li">
 								<button
+									className={"dashboard-tab" + (activeTab === "Reservas" ? " tab-active" : "")}
+									onClick={() => {
+										setActiveTab("Reservas");
+										setContent(
+											<div className="dashboard-content-wrapper admin-products">
+												<h1 className="dashboard-content-title">Próximas reservas</h1>
+											</div>
+										);
+									}}>
+									<i className="far fa-calendar-alt" />
+									<span>Reservas</span>
+								</button>
+							</li>
+							<li className="dashboard-li">
+								<button
+									className={"dashboard-tab" + (activeTab === "Clientes" ? " tab-active" : "")}
+									onClick={() => {
+										setActiveTab("Clientes");
+										setContent(<ClientList />);
+									}}>
+									<i className="fas fa-user-friends" />
+									<span>Clientes</span>
+								</button>
+							</li>
+							<li className="dashboard-li">
+								<button
+									className={"dashboard-tab" + (activeTab === "Estadísticas" ? " tab-active" : "")}
+									onClick={() => {
+										setActiveTab("Estadísticas");
+										setContent(
+											// Aquí iría un <Componente/> con el contenido que queramos mostrar en cada caso
+											<div className="dashboard-content-wrapper">
+												<h1 className="dashboard-content-title">Estadísticas</h1>
+											</div>
+										);
+									}}>
+									<i className="far fa-chart-bar" />
+									<span>Estadísticas</span>
+								</button>
+							</li>
+							<li className="dashboard-li">
+								<button
 									className={"dashboard-tab" + (activeTab === "Productos" ? " tab-active" : "")}
 									onClick={() => {
 										setActiveTab("Productos");
 										setContent(<AdminProducts />);
 									}}>
-									<i className="far fa-calendar-alt" />
+									<i className="fas fa-cog" />
 									<span>Productos & Disponibilidad</span>
 								</button>
 							</li>
@@ -63,22 +106,6 @@ export const AdminPanel = () => {
 									}}>
 									<i className="fas fa-store-alt" />
 									<span>Negocio</span>
-								</button>
-							</li>
-							<li className="dashboard-li">
-								<button
-									className={"dashboard-tab" + (activeTab === "Estadísticas" ? " tab-active" : "")}
-									onClick={() => {
-										setActiveTab("Estadísticas");
-										setContent(
-											// Aquí iría un <Componente/> con el contenido que queramos mostrar en cada caso
-											<div className="dashboard-content-wrapper">
-												<h1 className="dashboard-content-title">Estadísticas</h1>
-											</div>
-										);
-									}}>
-									<i className="far fa-chart-bar" />
-									<span>Estadísticas</span>
 								</button>
 							</li>
 							<li className="dashboard-li">
