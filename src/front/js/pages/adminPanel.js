@@ -12,7 +12,8 @@ export const AdminPanel = () => {
 	const [content, setContent] = useState(null);
 	const [activeTab, setActiveTab] = useState("");
 
-	useEffect(() => {
+	const showWelcome = () => {
+		setActiveTab("Welcome");
 		store.user.name
 			? setContent(
 					<div className="center dashboard-welcome">
@@ -21,7 +22,9 @@ export const AdminPanel = () => {
 					</div>
 			  )
 			: null;
-	}, []);
+	};
+
+	useEffect(showWelcome, []);
 
 	return !store.user.token && !store.user.is_admin ? (
 		<Redirect to="/" />
@@ -29,9 +32,9 @@ export const AdminPanel = () => {
 		<main className="admin-panel-wrapper">
 			<div className="dashboard-wrapper admin-panel">
 				<aside className="dashboard-aside admin-aside">
-					<div className="dashboard-user-info">
-						<h1 className="dashboard-username admin-logo">Admin Panel</h1>
-					</div>
+					<span className="admin-logo" onClick={showWelcome}>
+						Admin Panel
+					</span>
 					<nav>
 						<ul>
 							{/* ⚠️ Reorganizar en pantallas pequeñas para que se vean en horizontal */}

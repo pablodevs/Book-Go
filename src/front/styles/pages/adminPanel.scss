@@ -18,7 +18,13 @@
     width: calc(min(100%, 1400px));
 }
 
-.admin-logo { color: $--color-blue-dark }
+.admin-logo {
+    color: $--color-blue-dark;
+    font-size: 1.3rem;
+    font-weight: bold;
+    padding: 2rem 0.8rem 1rem 0;
+    cursor: pointer
+}
 .admin-aside {
     padding: 0rem 0 1rem 2vw;
     & ul {
