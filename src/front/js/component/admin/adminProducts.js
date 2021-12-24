@@ -50,7 +50,11 @@ export const AdminProducts = () => {
 					<form onSubmit={submitFirstForm} className="dashboard-form">
 						<h2 className="dashboard-content-subtitle">Información del producto</h2>
 						<div className="admin-icon-btn-group">
-							<button type="button" className="admin-icon-btn icon-btn" data-tooltip="añadir producto">
+							<button
+								type="button"
+								className="admin-icon-btn icon-btn"
+								data-tooltip="añadir producto"
+								onClick={() => actions.setPopup("add-product", "Añadir producto")}>
 								<i className="fas fa-plus" />
 							</button>
 							{/* ⚠️ OJITO: si añadimos o eliminamos un prod, se tiene que actualizar el hook productList */}
@@ -64,8 +68,12 @@ export const AdminProducts = () => {
 									Producto
 								</label>
 								<div className="dashboard-input product-input">
-									<select onChange={e => handleInputChange(e)} id="product" name="product">
-										<option hidden selected disabled value="">
+									<select
+										onChange={e => handleInputChange(e)}
+										id="product"
+										name="product"
+										defaultValue={"DEFAULT"}>
+										<option value="DEFAULT" disabled hidden>
 											Elige un producto...
 										</option>
 										{productList.map((prod, idx) => (
@@ -84,7 +92,7 @@ export const AdminProducts = () => {
 												? actions.setPopup("edit-product", `Editar ${data.product}`)
 												: "";
 										}}>
-										<i className="far fa-edit" />
+										<i className="fas fa-pen" />
 									</button>
 								</div>
 							</div>

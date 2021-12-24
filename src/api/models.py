@@ -40,6 +40,7 @@ class Product(db.Model):
     name = db.Column(db.String(120), nullable=False)
     price = db.Column(db.Integer,nullable=False)
     description = db.Column(db.String(150),nullable=False)
+    # Habrá que meter sí o sí las imágenes en una url (product_img_url) unidas al id del producto
 
     def __repr__(self):
         return '<Product %r>' % self.name
@@ -50,6 +51,7 @@ class Product(db.Model):
             "name": self.name,
             "price" : self.price,
             "description" : self.description
+            # "product_img_url": self.product_img_url
         }
 
 

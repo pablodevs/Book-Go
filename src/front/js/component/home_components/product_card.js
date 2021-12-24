@@ -7,25 +7,21 @@ export const Product_card = props => {
 	const { actions, store } = useContext(Context);
 
 	return (
-		<div className="card m-3" style={{ width: "18rem", height: "400px" }}>
+		<div
+			className="card shadow rounded-3"
+			style={{ border: "none", width: "15rem", height: "380px", overflow: "hidden" }}>
 			<img
 				src={require(`./../../../img/${props.product.name.toLowerCase()}.jpg`)}
 				className="card-img-top"
 				alt="..."
-				style={{ width: "18rem", height: "200px" }}
+				style={{ width: "100%", height: "100%", objectFit: "cover", position: "absolute" }}
 			/>
-			<div className="card-body">
-				<h5 className="card-title">{props.product.name}</h5>
+			<div className="card-body d-flex flex-column text-light" style={{ zIndex: "1" }}>
+				<h5 className="card-title border-bottom pb-1">{props.product.name}</h5>
 				<p className="card-text">{props.product.description}</p>
-				<button
-					className="btn btn-success mt-2"
-					onClick={() => {
-						actions.getProduct(props.product.id);
-					}}>
-					<Link to={"/info/" + props.product.id}>
-						<span className="text-white">Más Info</span>
-					</Link>
-				</button>
+				<Link type="button" to={"/info/" + props.product.id} className="btn btn-info mt-auto">
+					Más Info
+				</Link>
 			</div>
 		</div>
 	);

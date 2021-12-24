@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { Context } from "../../store/appContext";
+import { Context } from "../../../store/appContext";
 
 export const EditInput = props => {
 	const { actions, store } = useContext(Context);
@@ -23,11 +23,11 @@ export const EditInput = props => {
 		<div className="popup-body">
 			<form className="dashboard-form" onSubmit={handleSubmit}>
 				<div className="admin-form-subgroup">
-					<label className="dashboard-label" htmlFor="product-edit">
+					<label className="dashboard-label" htmlFor="popup-product-edit">
 						Nuevo nombre:
 					</label>
 					<input
-						id="product-edit"
+						id="popup-product-edit"
 						type="text"
 						value={data.name}
 						onChange={e => setData({ ...data, name: e.target.value })}

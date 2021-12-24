@@ -17,6 +17,9 @@ html {
 
 body {
     transition: 0.5s; // Esto se aplicará a toda la webpage así qeu habrá que ver si es una buena idea
+    -o-transition: 0.5s;
+    -moz-transition: 0.5s;
+    -webkit-transition: 0.5s;
     overflow-x: hidden;
 }
 
@@ -155,6 +158,9 @@ button.disabled, a.disabled {
     top: -45px;
     left: 50%;
     transform: translate(-50%, 5px);
+    -o-transform: translate(-50%, 5px);
+    -moz-transform: translate(-50%, 5px);
+    -webkit-transform: translate(-50%, 5px);
     width: max-content;
     padding: 0.25rem 0.5rem;
     
@@ -174,6 +180,9 @@ button.disabled, a.disabled {
     top: -17px;
     left: 50%;
     transform: translate(-50%, 5px);
+    -o-transform: translate(-50%, 5px);
+    -moz-transform: translate(-50%, 5px);
+    -webkit-transform: translate(-50%, 5px);
     border-width: 9px 7px 0 7px;
     border-color: $--color-grey-dark transparent transparent transparent;
 }
@@ -182,10 +191,16 @@ button.disabled, a.disabled {
     visibility: hidden;
     opacity: 0;
     transition: opacity 0.3s linear, transform 0.2s linear;
+    -o-transition: opacity 0.3s linear, transform 0.2s linear;
+    -moz-transition: opacity 0.3s linear, transform 0.2s linear;
+    -webkit-transition: opacity 0.3s linear, transform 0.2s linear;
 }
 
 [data-tooltip]:hover::after, [data-tooltip]:hover::before {
     visibility: visible;
     opacity: 1;
     transform: translate(-50%, 0);
+    -o-transform: translate(-50%, 0);
+    -moz-transform: translate(-50%, 0);
+    -webkit-transform: translate(-50%, 0);
 }

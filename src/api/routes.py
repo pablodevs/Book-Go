@@ -22,7 +22,7 @@ api = Blueprint('api', __name__)
 # @api.route('/route', methods=['POST', 'GET', '...'])
 # def function():
 
-# GET ALL PRODUCTS
+# GET ALL PRODUCTS or CREATE A PRODUCT
 @api.route('/products', methods=['GET'])
 def get_all_products():
 
@@ -30,14 +30,41 @@ def get_all_products():
     all_products = list(map(lambda x: x.serialize(), product_query))
     return jsonify(all_products)
 
-
-
 # GET ONE PRODUCT
 @api.route('/products/<int:id>', methods=['GET'])
 def get_one_product(id):
 
     product_query = Product.query.get(id)
     return jsonify(product_query.serialize()),200
+
+# CHANGE PRODUCT INFO
+@api.route('/product/<int:product_id>', methods=['PUT'])
+def handle_single_product(product_id):
+    """
+    Single product
+    """
+    product = Product.query.get(product_id)
+
+    # Data validation
+    if product is None:
+        raise APIException('Product not found in data base', status_code=404)
+    
+    # Query body
+    request_body = request.json
+
+    # Check body's info
+    if "name" in request_body:
+        product.name = request_body["name"]
+    if "price" in request_body:
+        product.price = request_body["price"]
+    if "description" in request_body:
+        product.description = request_body["description"]
+
+    db.session.commit()
+
+    return jsonify(product.serialize()), 200
+
+
 
 
 #CREATE NEW USER
@@ -141,30 +168,3 @@ def handle_single_user(user_id):
 
     return jsonify(user.serialize()), 200
 
-
-# CHANGE PRODUCT INFO
-@api.route('/product/<int:product_id>', methods=['PUT'])
-def handle_single_product(product_id):
-    """
-    Single product
-    """
-    product = Product.query.get(product_id)
-
-    # Data validation
-    if product is None:
-        raise APIException('Product not found in data base', status_code=404)
-    
-    # Query body
-    request_body = request.json
-
-    # Check body's info
-    if "name" in request_body:
-        product.name = request_body["name"]
-    if "price" in request_body:
-        product.price = request_body["price"]
-    if "description" in request_body:
-        product.description = request_body["description"]
-
-    db.session.commit()
-
-    return jsonify(product.serialize()), 200

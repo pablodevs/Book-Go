@@ -34,7 +34,8 @@
     padding: 1rem 2rem;
     width: 100%;
     box-shadow: 0 0 5px 1px rgba(9, 30, 66, 0.13);
-    
+    margin-bottom: 1.5rem;
+        
     & h1 { font-size: 1.4rem; font-weight: 600; }
     & i { font-size: 1rem; color: $--color-grey-dark }
 }
@@ -68,8 +69,11 @@
         transition: all 0.3s ease-out;
     }
     .popup-show { transform: translateY(0) }
+    .popup-header {
+        margin-bottom: 0;
+    }
     .popup-body {
         height: auto;
-        padding: 0;
+        padding: 1rem;
     }
 }

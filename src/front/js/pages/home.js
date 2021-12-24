@@ -32,11 +32,11 @@ export const Home = () => {
 				</div>
 			</div>
 
-			<div className="container-fluid">
+			<div className="container my-5">
 				{store.products.length > 0 ? (
-					<div className="row">
+					<div className="row gap-5 justify-content-center">
 						{store.products.map((item, index) => (
-							<div className="col" key={index}>
+							<div className="col-auto" key={index}>
 								<Product_card product={item} />
 							</div>
 						))}

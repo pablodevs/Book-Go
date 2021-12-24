@@ -32,7 +32,7 @@ export const Guest = () => {
 	};
 
 	return (
-		<div className="container-fluid my-auto">
+		<div className="container-fluid my-auto mb-md-auto mt-md-4">
 			<div className="row">
 				<form onSubmit={submitForm} className="col mx-4 mb-4" style={{ display: "grid", gap: "1rem" }}>
 					<input

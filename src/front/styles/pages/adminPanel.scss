@@ -130,15 +130,27 @@ button.inactive {
 }
 
 .price-input {
+    position: relative;
     display: flex;
     align-items: center;
     gap: 0.4rem;
     width: fit-content;
     & input {
-        width: 75px;
+        padding-left: 1.5rem;
+        width: 83px;
         text-align: center;
     }
-    & span { font-weight: bold }
+    & span {
+        position: absolute;
+        left: 0;
+        height: 64%;
+        width: 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        border-right: 1px solid lightgrey;
+    }
 }
 
 div.socialMedia-input {
@@ -197,29 +209,44 @@ div.disponibility-title.admin-form-group {
     width: 100%;
     object-fit: cover;
     border-radius: 10px;
-    border: 1px dashed $--color-grey-light;
     overflow: hidden;
 }
-.img-placeholder { z-index: -1; color: $--color-grey-light }
-.img-placeholder, div button.edit-img {
+.img-placeholder {
+    z-index: -1;
+    color: $--color-grey-light;
+    border-radius: 10px;
+    border: 1px dashed $--color-grey-light;
+}
+.img-placeholder, .edit-img {
     display: flex;
     align-items: center;
     justify-content: center;
     position: absolute;
+    top: 0;
+    left: 0;
     height: 100%;
     width: 100%;
 }
-button.edit-img {
+.edit-img {
     background: none;
-    color: white;
+    color: $--color-grey-dark;
     font-size: 1.5rem;
     border-radius: 10px;
     opacity: 0;
+    padding: 0.6rem;
+    box-shadow: 0 4px 10px 0 rgba(0,0,0,0.14);
     transition: all 0.1s ease-out;
     &:hover {
         opacity: 1;
         background-color: unset;
         background-image: linear-gradient(0deg, #41414196, transparent);
+        border-radius: 10px;
+    }
+    & > i {
+        padding: 0.6rem;
+        background: white;
+        box-shadow: 0 4px 10px 0 rgba(0,0,0,0.14);
+        border-radius: 50%;
     }
 }
 

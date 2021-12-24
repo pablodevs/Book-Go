@@ -37,11 +37,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 		},
 
 		actions: {
-			logout: () => {
-				// al pulsar el botón de salir cambia el token a null
-				let store = getStore();
-				setStore({ token: null });
-			},
+			// Force render without change data
+			forceRender: () => setStore({}),
+
+			// Cambia el popups
 			setPopup: async (type, title, productName) => {
 				if (productName) {
 					//si recibe productname entonces busca la disponibilidad de días y horas de ese producto
@@ -141,19 +140,19 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			//get ONE product
-			getProduct: async id => {
-				await fetch(process.env.BACKEND_URL + `/products/${id}`)
-					.then(response => {
-						console.log(response.ok);
-						console.log(response.status);
-						return response.json();
-					})
-					.then(data => {
-						console.log(data);
-						setStore({ oneProduct: data });
-					})
-					.catch(error => console.error(error));
-			},
+			// getProduct: async id => {
+			// 	await fetch(process.env.BACKEND_URL + `/products/${id}`)
+			// 		.then(response => {
+			// 			console.log(response.ok);
+			// 			console.log(response.status);
+			// 			return response.json();
+			// 		})
+			// 		.then(data => {
+			// 			console.log(data);
+			// 			setStore({ oneProduct: data });
+			// 		})
+			// 		.catch(error => console.error(error));
+			// },
 
 			//Change ONE product
 			updateProduct: data => {
@@ -186,21 +185,28 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			//Create NEW USER
-			createUser: async data => {
-				await fetch(process.env.BACKEND_URL + `/user`, {
+			createUser: async (data, files) => {
+				const actions = getActions();
+
+				// we are about to send this to the backend.
+				let body = new FormData();
+				body.append("name", data.name);
+				body.append("lastname", data.lastname);
+				body.append("email", data.email);
+				body.append("phone", data.phone);
+				body.append("password", data.password);
+				if (files !== null) {
+					body.append("profile_image", files[0]);
+				}
+				const options = {
 					method: "POST",
-					body: data
-				})
-					.then(response => {
-						/* ⚠️⚠️⚠️ Habría que incluir el típico mensajito de "Hay otra cuenta usando pabloalamovargas@gmail.com" si se repite un mail
-						(o sea, si devuelve error, habrá que ver cuál error corresponde a esta situación y modificar el endpoint '/user' en routes.py) ⚠️⚠️⚠️ */
-						console.log(response.status);
-						return response.json();
-					})
-					.then(data => {
-						setStore({ message: "Usuario creado Correctamente. Ya puede ir al login y acceder!" });
-					})
-					.catch(error => console.error(error));
+					body: body
+				};
+				const response = await fetch(process.env.BACKEND_URL + "/user", options);
+				const resp = await response.json();
+				if (response.status === 401) return false;
+				actions.generate_token(data.email, data.password);
+				return true;
 			},
 			updateUser: data => {
 				let store = getStore();
@@ -228,7 +234,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 					})
 					.catch(error => console.error(error));
 			},
+
+			// al pulsar el botón de salir cambia el token a null
+			logout: () => setStore({ token: null }),
+
 			generate_token: async (email, password) => {
+				const actions = getActions();
 				//genera el token cuando haces login
 				await fetch(process.env.BACKEND_URL + `/token`, {
 					method: "POST",
@@ -256,6 +267,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 							},
 							message: resp.message
 						});
+						actions.closePopup();
 					})
 					.catch(error => console.error(error));
 			},

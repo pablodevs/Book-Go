@@ -61,7 +61,7 @@ $--padding-top: 2rem;
     }
 }
 .dashboard-img-wrapper {
-    width: max-content;
+    position: relative;
 }
 .dashboard-img {
     width: 70px;
@@ -70,6 +70,43 @@ $--padding-top: 2rem;
     object-fit: cover;
     object-position: top;
 }
+// Default avatar
+.avatar {
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 9999px;
+    padding: 8px;
+}
+.dashboard-avatar {
+    height: 64px;
+    width: 64px;
+}
+.avatar__img {
+    fill: none;
+    height: 100%;
+    stroke: rgb(255, 255, 255);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1;
+    width: 100%;
+}
+button.dashboard-edit-img {
+    bottom: 0;
+    opacity: 1;
+    height: fit-content;
+    width: auto;
+    margin-top: auto;
+    font-size: 0.8rem;
+    padding: 0.4rem;
+    background: white;
+    border-radius: 50%;
+    &:hover {
+        border-radius: 50%;
+        background: white;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.35)
+    }
+    & > i { padding: 0; box-shadow: none }
+}
+
 .dashboard-username {
     font-size: 1.3rem;
     font-weight: bold;

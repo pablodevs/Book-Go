@@ -15,19 +15,7 @@ export const Signup = () => {
 
 	const submitForm = event => {
 		event.preventDefault();
-
-		// we are about to send this to the backend.
-		console.log("This are the files", files);
-		let body = new FormData();
-		body.append("name", data.name);
-		body.append("lastname", data.lastname);
-		body.append("email", data.email);
-		body.append("phone", data.phone);
-		body.append("password", data.password);
-		if (files != null) {
-			body.append("profile_image", files[0]);
-		}
-		actions.createUser(body);
+		actions.createUser(data, files);
 	};
 
 	const handleInputChange = e => {
@@ -38,7 +26,7 @@ export const Signup = () => {
 	};
 
 	return (
-		<div className="container-fluid my-auto">
+		<div className="container-fluid my-auto mb-md-auto mt-md-4">
 			<div className="row">
 				<form onSubmit={submitForm} className="col mx-4 mb-4" style={{ display: "grid", gap: "1rem" }}>
 					<input

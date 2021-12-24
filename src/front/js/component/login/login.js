@@ -8,7 +8,7 @@ export const Login = () => {
 	const [password, setPassword] = useState("");
 
 	return (
-		<div className="container-fluid my-auto">
+		<div className="container-fluid my-auto mb-md-auto mt-md-4">
 			<div className="row">
 				<div className="col mx-4 mb-4" style={{ display: "grid", gap: "1rem" }}>
 					<input
