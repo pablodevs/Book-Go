@@ -231,7 +231,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 			// Create NEW USER
 			createUser: async (data, files) => {
 				const actions = getActions();
-
 				// we are about to send this to the backend.
 				let body = new FormData();
 				body.append("name", data.name);
@@ -244,7 +243,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 				const options = {
 					method: "POST",
-					body: body
+					headers: {
+						"Content-type": "application/json"
+					},
+					body: JSON.stringify(data)
 				};
 				const response = await fetch(process.env.BACKEND_URL + "/user", options);
 				const resp = await response.json();
@@ -279,9 +281,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 					.catch(error => console.error(error));
 			},
 
-			// al pulsar el botón de salir cambia el token a null
-			logout: () => setStore({ token: null }),
-
 			generate_token: async (email, password) => {
 				const actions = getActions();
 				//genera el token cuando haces login
@@ -289,7 +288,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					method: "POST",
 					body: JSON.stringify({ email: email, password: password }),
 					headers: {
-						"Content-Type": "application/json"
+						"Content-type": "application/json"
 					}
 				})
 					.then(response => {
@@ -315,6 +314,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					})
 					.catch(error => console.error(error));
 			},
+
 			logout: () => {
 				// al pulsar el botón de salir cambia el token a null
 				setStore({
@@ -331,6 +331,17 @@ const getState = ({ getStore, getActions, setStore }) => {
 					message: ""
 				});
 			},
+
+			// Obtener la lista de clientes
+			getClients: async () => {
+				const response = await fetch(process.env.BACKEND_URL + "/user");
+				if (response.status === 401) return false;
+				const resp = await response.json();
+				setStore({ clients: resp });
+				return true;
+			},
+
+			// Redes sociales
 			updateSocialMedia: data =>
 				setStore({
 					socialMedia: {

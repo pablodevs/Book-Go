@@ -94,44 +94,55 @@ def handle_single_product(product_id):
         return jsonify({"message": "The product has been deleted"}), 200
 
     return "Invalid Method", 404
-    
-
-#CREATE NEW USER
-@api.route('/user', methods=['POST'])
-def create_new_user():
-
-    # fetch for the user
-    name_received = request.form.get("name", None)
-    lastname_received = request.form.get("lastname", None)
-    email_received = request.form.get("email", None)
-    phone_received = request.form.get("phone", None)
-    password_received = request.form.get("password", None)
-    user = User(
-        email = email_received,
-        phone = phone_received,
-        password = password_received,
-        name = name_received,
-        lastname = lastname_received
-        )
-
-
-    # validate that the front-end request was built correctly
-    if 'profile_image' in request.files:
-        # upload file to uploadcare
-        cloudinary.config( 
-        cloud_name = os.getenv('CLOUD_NAME'), 
-        api_key = os.getenv('API_KEY'), 
-        api_secret = os.getenv('API_SECRET') 
-        )
-
-        result = cloudinary.uploader.upload(request.files['profile_image'])
-        # update the user with the given cloudinary image URL
-        user.profile_image_url = result['secure_url']
-
         
-    db.session.add(user)
-    db.session.commit()
-    return jsonify(user.serialize()), 200
+#CREATE NEW USER or GET ALL USERS
+@api.route('/user', methods=['GET', 'POST'])
+def handle_users():
+    """
+    All Users
+    """
+    # GET all users
+    if request.method == 'GET':
+        users = User.query.all()
+        all_users = list(map(lambda x: x.serialize(), users))
+        return jsonify(all_users), 200
+
+    # Create (POST) a new user
+    if request.method == 'POST':
+        body_user = request.json
+
+        # Data validation
+        if body_user is None:
+            raise APIException("You need to specify the request body as a json object", status_code=400)
+        if 'name' not in body_user or body_user['name'] == "":
+            raise APIException('You need to specify the name', status_code=400)
+        if 'lastname' not in body_user or body_user['lastname'] == "":
+            raise APIException('You need to specify the lastname', status_code=400)
+        if 'email' not in body_user or body_user['email'] == "":
+            raise APIException('You need to create a email', status_code=400)
+        if 'phone' not in body_user or body_user['phone'] == "":
+            raise APIException('You need to specify the phone', status_code=400)
+        if 'password' not in body_user or body_user['password'] == "":
+            raise APIException('You need to specify the password', status_code=400)
+            # validate that the front-end request was built correctly
+        # if 'profile_image' in request.files:
+        #     # upload file to uploadcare
+        #     cloudinary.config( 
+        #     cloud_name = os.getenv('CLOUD_NAME'), 
+        #     api_key = os.getenv('API_KEY'), 
+        #     api_secret = os.getenv('API_SECRET') 
+        #     )
+        # cloudinary_result = cloudinary.uploader.upload(request.files['profile_image'])
+
+        new_user = User(name = body_user["name"], lastname = body_user["lastname"], email = body_user["email"], phone = body_user["phone"], password = body_user["password"])
+        # update the user with the given cloudinary image URL
+        # user.profile_image_url = cloudinary_result['secure_url']
+
+        db.session.add(new_user)
+        db.session.commit()
+        return jsonify(new_user.serialize()), 200
+
+    return "Invalid Method", 404
     
 
 #GENERATE TOKEN

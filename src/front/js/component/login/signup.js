@@ -9,8 +9,8 @@ export const Signup = () => {
 		name: "",
 		lastname: "",
 		email: "",
-		password: "",
-		phone: ""
+		phone: "",
+		password: ""
 	});
 
 	const submitForm = event => {
