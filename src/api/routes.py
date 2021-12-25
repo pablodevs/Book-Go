@@ -38,6 +38,7 @@ def get_one_product(id):
     return jsonify(product_query.serialize()),200
 
 # CHANGE PRODUCT INFO
+# ⚠️ debería ser PUT pero me dió muchos errores y me volvió loco
 @api.route('/product/<int:product_id>', methods=['PUT'])
 def handle_single_product(product_id):
     """

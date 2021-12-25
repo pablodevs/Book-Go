@@ -158,7 +158,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			updateProduct: data => {
 				let store = getStore();
 				fetch(process.env.BACKEND_URL + `/product/${data.id}`, {
-					method: "PUT",
+					method: "PUT", // Imposible conseguirlo con PUT
 					body: JSON.stringify(data),
 					headers: {
 						"Content-Type": "application/json"

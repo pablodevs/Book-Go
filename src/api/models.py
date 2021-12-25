@@ -39,7 +39,7 @@ class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120), nullable=False)
     price = db.Column(db.Integer,nullable=False)
-    description = db.Column(db.String(150),nullable=False)
+    description = db.Column(db.String(1000),nullable=False)
     # Habrá que meter sí o sí las imágenes en una url (product_img_url) unidas al id del producto
 
     def __repr__(self):
