@@ -3,6 +3,8 @@ const getNumOfDaysInMonth = (year, month) => new Date(year, month + 1, 0).getDat
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
+			message: "",
+
 			calendar: {
 				todayDate: new Date(),
 				date: null,
@@ -16,9 +18,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 			popupTitle: "",
 			prevPopup: [],
 
+			new_product: null,
 			products: [],
-			oneProduct: [],
-			message: "",
+			// oneProduct: [],
+
 			user: {
 				token: null,
 				id: null,
@@ -29,6 +32,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				img_url: null,
 				is_admin: false
 			},
+
 			socialMedia: {
 				facebook: "https://facebook.com/spa-center",
 				instagram: "https://instagram.com/spa-center",
@@ -141,6 +145,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			// create a product
 			addProduct: async data => {
+				const store = getStore();
 				const options = {
 					method: "POST",
 					headers: {
@@ -151,7 +156,31 @@ const getState = ({ getStore, getActions, setStore }) => {
 				const response = await fetch(process.env.BACKEND_URL + "/products", options);
 				const resp = await response.json();
 				if (response.status === 401) return false;
-				return resp;
+				setStore({
+					products: [...store.products, resp],
+					new_product: resp
+				});
+				return true;
+			},
+
+			resetNewProduct: () => setStore({ new_product: null }),
+
+			// eliminar producto
+			removeProduct: id => {
+				let store = getStore();
+				fetch(process.env.BACKEND_URL + `/products/${id}`, {
+					method: "DELETE"
+				})
+					.then(response => {
+						return response.json();
+					})
+					.then(msg => {
+						let remainProducts = store.products.filter(element => element.id !== id);
+						setStore({
+							products: remainProducts
+						});
+					})
+					.catch(error => console.error("This is the error:", error));
 			},
 
 			//get ONE product
@@ -199,22 +228,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 					.catch(error => console.error(error));
 			},
 
-			// eliminar producto
-			removeProduct: id => {
-				fetch(process.env.BACKEND_URL + `/products/${id}`, {
-					method: "DELETE"
-				})
-					.then(response => {
-						return response.json();
-					})
-					.then(msg => {
-						let remainProducts = store.products.filter(element => element.id !== id);
-						setStore({
-							products: remainProducts
-						});
-					})
-					.catch(error => console.error(error));
-			},
 			// Create NEW USER
 			createUser: async (data, files) => {
 				const actions = getActions();

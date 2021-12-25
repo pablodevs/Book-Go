@@ -37,9 +37,9 @@ class User(db.Model):
 #TABLA DE PRODUCTOS
 class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(120), nullable=False)
+    name = db.Column(db.String(120), unique=True, nullable=False) # ⚠️ Unique True porque si no da problemas en AdminiProducts que ahora no se solucionar
     price = db.Column(db.Integer,nullable=False)
-    description = db.Column(db.String(1000),nullable=False)
+    description = db.Column(db.String(1000),nullable=True)
     # Habrá que meter sí o sí las imágenes en una url (product_img_url) unidas al id del producto
 
     def __repr__(self):

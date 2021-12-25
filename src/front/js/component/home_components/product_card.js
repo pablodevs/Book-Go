@@ -8,7 +8,7 @@ export const Product_card = props => {
 
 	return (
 		<div
-			className="card shadow rounded-3 card-background"
+			className="product-card card shadow rounded-3 card-background"
 			style={{ border: "none", width: "15rem", height: "380px", overflow: "hidden" }}>
 			<img
 				src={require(`./../../../img/${props.product.name.toLowerCase()}.jpg`)}
@@ -16,10 +16,8 @@ export const Product_card = props => {
 				alt="..."
 				style={{ width: "100%", height: "100%", objectFit: "cover", position: "absolute" }}
 			/>
-			<div
-				className="card-body d-flex flex-column text-light"
-				style={{ zIndex: "1", flex: "unset", height: "175px", marginTop: "auto" }}>
-				<span className="card-title border-bottom">{props.product.name}</span>
+			<div className="card-body d-flex flex-column text-light" style={{ zIndex: "1", height: "175px" }}>
+				<span className="card-title">{props.product.name}</span>
 				<small className="card-text">{props.product.description}</small>
 				<Link type="button" to={"/info/" + props.product.id} className="btn btn-info mt-auto">
 					Más Info

@@ -14,7 +14,7 @@ export const AddProduct = () => {
 
 	const handleSubmit = event => {
 		event.preventDefault();
-		if (data.name !== "") {
+		if (data.name !== "" && data.price !== "" && data.description !== "") {
 			actions.addProduct(data);
 			actions.closePopup();
 		}

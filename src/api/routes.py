@@ -55,6 +55,8 @@ def handle_products():
 
     return "Invalid Method", 404
 
+
+# GET MODIFY OF DELETE A PRODUCT BY id
 @api.route('/products/<int:product_id>', methods=['PUT', 'GET', 'DELETE'])
 def handle_single_product(product_id):
     """
@@ -89,7 +91,7 @@ def handle_single_product(product_id):
     elif request.method == 'DELETE':
         db.session.delete(product)
         db.session.commit()
-        return "Product deleted", 200
+        return jsonify({"message": "The product has been deleted"}), 200
 
     return "Invalid Method", 404
     

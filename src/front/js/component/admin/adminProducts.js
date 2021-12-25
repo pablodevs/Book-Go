@@ -8,18 +8,28 @@ export const AdminProducts = () => {
 	const [productList, setProductList] = useState([]);
 	const [data, setData] = useState({
 		id: null,
-		product: "", // con 'name' no funciona bien
+		product: "DEFAULT", // con 'name' no funciona bien
 		price: "",
 		description: ""
 	});
 
-	useEffect(() => {
-		setProductList(store.products.map(element => element.name));
-	}, []);
+	useEffect(
+		() => {
+			setProductList(store.products.map(element => element.name));
+			if (store.new_product)
+				setData({
+					id: store.new_product.id,
+					product: store.new_product.name, // esto de que se llamen diferente no me convence
+					price: store.new_product.price,
+					description: store.new_product.description
+				});
+		},
+		[store.products, store.new_product]
+	);
 
 	const submitFirstForm = event => {
 		event.preventDefault();
-		if (data.id !== "" && productList.includes(data.product)) actions.updateProduct(data);
+		if (data.id && productList.includes(data.product)) actions.updateProduct(data);
 	};
 	const submitSecondForm = event => {
 		event.preventDefault();
@@ -35,6 +45,7 @@ export const AdminProducts = () => {
 				price: prod.price,
 				description: prod.description
 			});
+			actions.resetNewProduct();
 		} else
 			setData({
 				...data,
@@ -60,10 +71,19 @@ export const AdminProducts = () => {
 							{/* ⚠️ OJITO: si añadimos o eliminamos un prod, se tiene que actualizar el hook productList */}
 							<button
 								type="button"
-								className="admin-icon-btn icon-btn"
+								className={"admin-icon-btn icon-btn" + (data.id ? "" : " inactive")}
 								data-tooltip="eliminar producto"
 								onClick={() => {
-									if (data.id) actions.removeProduct(data.id);
+									if (data.id) {
+										actions.removeProduct(data.id);
+										actions.resetNewProduct();
+									}
+									setData({
+										id: null,
+										product: "DEFAULT",
+										price: "",
+										description: ""
+									});
 								}}>
 								<i className="fas fa-trash-alt" />
 							</button>
@@ -78,7 +98,7 @@ export const AdminProducts = () => {
 										onChange={e => handleInputChange(e)}
 										id="product"
 										name="product"
-										defaultValue={"DEFAULT"}>
+										value={data.product}>
 										<option value="DEFAULT" disabled hidden>
 											Elige un producto...
 										</option>
@@ -90,11 +110,11 @@ export const AdminProducts = () => {
 									</select>
 									<button
 										type="button"
-										className={"icon-btn" + (data.id !== "" ? "" : " inactive")}
+										className={"icon-btn" + (data.id ? "" : " inactive")}
 										data-tooltip="cambiar nombre"
 										// On click: abrir un cuadro de dialogo pequeño para cambiar el nombre del producto
 										onClick={() => {
-											return data.id !== ""
+											return data.id
 												? actions.setPopup("edit-product", `Editar ${data.product}`)
 												: "";
 										}}>
@@ -138,21 +158,17 @@ export const AdminProducts = () => {
 										<i className="fas fa-camera" />
 									</small>
 									<img
-										src={
-											data.id !== ""
-												? require(`../../../img/${data.product.toLowerCase()}.jpg`)
-												: ""
-										}
+										src={data.id ? require(`../../../img/${data.product.toLowerCase()}.jpg`) : ""}
 										onLoad={e => e.target.classList.add("border-none")}
 										className="admin-product-img"
 									/>
 									<button
 										type="button"
-										className={"edit-img" + (data.id !== "" ? "" : " inactive")}
+										className={"edit-img" + (data.id ? "" : " inactive")}
 										// On click: abrir un cuadro de dialogo pequeño para cambiar el nombre del producto
 										onClick={() => {
 											return;
-											// return data.id !== ""
+											// return data.id
 											// 	? actions.setPopup("edit-product", `Editar ${data.product}`)
 											// 	: "";
 										}}>
@@ -173,7 +189,7 @@ export const AdminProducts = () => {
 						<div className="disponibility-title admin-form-group">
 							<h2 className="dashboard-content-subtitle">Disponibilidad:</h2>
 							<span className={productList.includes(data.product) ? "text-confirm" : "text-cancel"}>
-								{data.product || "Ningún producto seleccionado"}
+								{data.product === "DEFAULT" ? "Ningún producto seleccionado" : data.product}
 							</span>
 						</div>
 						<div className="admin-form-group">
