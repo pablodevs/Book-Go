@@ -172,8 +172,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 			//Change ONE product
 			updateProduct: data => {
 				let store = getStore();
-				fetch(process.env.BACKEND_URL + `/product/${data.id}`, {
-					method: "PUT", // Imposible conseguirlo con PUT
+				fetch(process.env.BACKEND_URL + `/products/${data.id}`, {
+					method: "PUT",
 					body: JSON.stringify(data),
 					headers: {
 						"Content-Type": "application/json"
@@ -199,7 +199,23 @@ const getState = ({ getStore, getActions, setStore }) => {
 					.catch(error => console.error(error));
 			},
 
-			//Create NEW USER
+			// eliminar producto
+			removeProduct: id => {
+				fetch(process.env.BACKEND_URL + `/products/${id}`, {
+					method: "DELETE"
+				})
+					.then(response => {
+						return response.json();
+					})
+					.then(msg => {
+						let remainProducts = store.products.filter(element => element.id !== id);
+						setStore({
+							products: remainProducts
+						});
+					})
+					.catch(error => console.error(error));
+			},
+			// Create NEW USER
 			createUser: async (data, files) => {
 				const actions = getActions();
 

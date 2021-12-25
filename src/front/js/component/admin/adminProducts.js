@@ -19,7 +19,7 @@ export const AdminProducts = () => {
 
 	const submitFirstForm = event => {
 		event.preventDefault();
-		if (data.product !== "" && productList.includes(data.product)) actions.updateProduct(data);
+		if (data.id !== "" && productList.includes(data.product)) actions.updateProduct(data);
 	};
 	const submitSecondForm = event => {
 		event.preventDefault();
@@ -28,7 +28,7 @@ export const AdminProducts = () => {
 
 	const handleInputChange = e => {
 		if (e.target.name === "product" && productList.includes(e.target.value)) {
-			let prod = store.products.find(prod => prod.name === e.target.value);
+			let prod = store.products.find(prod => prod.name === e.target.value); // ⚠️ Si 2 tienen el mismo nombre esto falla
 			setData({
 				id: prod.id,
 				product: prod.name, // esto de que se llamen diferente no me convence
@@ -58,7 +58,13 @@ export const AdminProducts = () => {
 								<i className="fas fa-plus" />
 							</button>
 							{/* ⚠️ OJITO: si añadimos o eliminamos un prod, se tiene que actualizar el hook productList */}
-							<button type="button" className="admin-icon-btn icon-btn" data-tooltip="eliminar producto">
+							<button
+								type="button"
+								className="admin-icon-btn icon-btn"
+								data-tooltip="eliminar producto"
+								onClick={() => {
+									if (data.id) actions.removeProduct(data.id);
+								}}>
 								<i className="fas fa-trash-alt" />
 							</button>
 						</div>
@@ -84,11 +90,11 @@ export const AdminProducts = () => {
 									</select>
 									<button
 										type="button"
-										className={"icon-btn" + (data.product !== "" ? "" : " inactive")}
+										className={"icon-btn" + (data.id !== "" ? "" : " inactive")}
 										data-tooltip="cambiar nombre"
 										// On click: abrir un cuadro de dialogo pequeño para cambiar el nombre del producto
 										onClick={() => {
-											return data.product !== ""
+											return data.id !== ""
 												? actions.setPopup("edit-product", `Editar ${data.product}`)
 												: "";
 										}}>
@@ -133,7 +139,7 @@ export const AdminProducts = () => {
 									</small>
 									<img
 										src={
-											data.product !== ""
+											data.id !== ""
 												? require(`../../../img/${data.product.toLowerCase()}.jpg`)
 												: ""
 										}
@@ -142,11 +148,11 @@ export const AdminProducts = () => {
 									/>
 									<button
 										type="button"
-										className={"edit-img" + (data.product !== "" ? "" : " inactive")}
+										className={"edit-img" + (data.id !== "" ? "" : " inactive")}
 										// On click: abrir un cuadro de dialogo pequeño para cambiar el nombre del producto
 										onClick={() => {
 											return;
-											// return data.product !== ""
+											// return data.id !== ""
 											// 	? actions.setPopup("edit-product", `Editar ${data.product}`)
 											// 	: "";
 										}}>

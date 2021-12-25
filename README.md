@@ -41,9 +41,9 @@ pipenv run upgrade && pipenv run start
 
 If having this problem: `npm ERR!` during running `$ npm install` try:
 
-  brew install node@14 && brew link node@14 && npm run start
+ ⚠️ brew install node@14 && brew link node@14 && npm run start
 
-  nvm install 14 && rm -rf node_modules && npm install
+ ⚠️ nvm install 14 && rm -rf node_modules && npm install
 
 1. `$ brew install node@14`
 2. `$ brew unlink node`

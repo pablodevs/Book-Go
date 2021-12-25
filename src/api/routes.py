@@ -55,17 +55,7 @@ def handle_products():
 
     return "Invalid Method", 404
 
-
-# GET ONE PRODUCT
-@api.route('/products/<int:id>', methods=['GET'])
-def get_one_product(id):
-
-    product_query = Product.query.get(id)
-    return jsonify(product_query.serialize()),200
-
-# CHANGE PRODUCT INFO
-# ⚠️ debería ser PUT pero me dió muchos errores y me volvió loco
-@api.route('/product/<int:product_id>', methods=['PUT'])
+@api.route('/products/<int:product_id>', methods=['PUT', 'GET', 'DELETE'])
 def handle_single_product(product_id):
     """
     Single product
@@ -75,22 +65,34 @@ def handle_single_product(product_id):
     # Data validation
     if product is None:
         raise APIException('Product not found in data base', status_code=404)
+        
+    # Modify (PUT) a product
+    if request.method == 'PUT':
+        request_body = request.json
+
+        # Check body's info
+        if "name" in request_body:
+            product.name = request_body["name"]
+        if "price" in request_body:
+            product.price = request_body["price"]
+        if "description" in request_body:
+            product.description = request_body["description"]
+
+        db.session.commit()
+        return jsonify(product.serialize()), 200
+
+    # GET a product
+    elif request.method == 'GET':
+        return jsonify(product.serialize()), 200
     
-    # Query body
-    request_body = request.json
+    # DELETE a product
+    elif request.method == 'DELETE':
+        db.session.delete(product)
+        db.session.commit()
+        return "Product deleted", 200
 
-    # Check body's info
-    if "name" in request_body:
-        product.name = request_body["name"]
-    if "price" in request_body:
-        product.price = request_body["price"]
-    if "description" in request_body:
-        product.description = request_body["description"]
-
-    db.session.commit()
-
-    return jsonify(product.serialize()), 200
-
+    return "Invalid Method", 404
+    
 
 #CREATE NEW USER
 @api.route('/user', methods=['POST'])
