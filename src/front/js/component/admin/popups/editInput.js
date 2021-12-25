@@ -20,7 +20,7 @@ export const EditInput = props => {
 	};
 
 	return (
-		<div className="popup-body">
+		<div className="popup-body center">
 			<form className="dashboard-form" onSubmit={handleSubmit}>
 				<div className="admin-form-subgroup">
 					<label className="dashboard-label" htmlFor="popup-product-edit">

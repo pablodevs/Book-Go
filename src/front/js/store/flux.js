@@ -139,6 +139,21 @@ const getState = ({ getStore, getActions, setStore }) => {
 					.catch(error => console.error(error));
 			},
 
+			// create a product
+			addProduct: async data => {
+				const options = {
+					method: "POST",
+					headers: {
+						"Content-type": "application/json"
+					},
+					body: JSON.stringify(data)
+				};
+				const response = await fetch(process.env.BACKEND_URL + "/products", options);
+				const resp = await response.json();
+				if (response.status === 401) return false;
+				return resp;
+			},
+
 			//get ONE product
 			// getProduct: async id => {
 			// 	await fetch(process.env.BACKEND_URL + `/products/${id}`)
@@ -206,7 +221,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				const resp = await response.json();
 				if (response.status === 401) return false;
 				actions.generate_token(data.email, data.password);
-				return true;
+				return resp;
 			},
 			updateUser: data => {
 				let store = getStore();

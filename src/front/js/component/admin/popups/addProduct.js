@@ -4,7 +4,6 @@ import { Context } from "../../../store/appContext";
 export const AddProduct = () => {
 	const { actions, store } = useContext(Context);
 	const [data, setData] = useState({
-		id: null,
 		name: "",
 		price: "",
 		description: ""
@@ -16,13 +15,13 @@ export const AddProduct = () => {
 	const handleSubmit = event => {
 		event.preventDefault();
 		if (data.name !== "") {
-			actions.updateProduct(data);
+			actions.addProduct(data);
 			actions.closePopup();
 		}
 	};
 
 	return (
-		<div className="popup-body">
+		<div className="popup-body center">
 			<form onSubmit={handleSubmit} className="dashboard-form">
 				<p>Puedes modificar la información del producto más adelante</p>
 				<div className="admin-form-group">

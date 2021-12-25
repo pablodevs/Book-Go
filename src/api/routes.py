@@ -23,12 +23,38 @@ api = Blueprint('api', __name__)
 # def function():
 
 # GET ALL PRODUCTS or CREATE A PRODUCT
-@api.route('/products', methods=['GET'])
-def get_all_products():
+@api.route('/products', methods=['GET', 'POST'])
+def handle_products():
+    """
+    All Products
+    """
+    # GET all users
+    if request.method == 'GET':
+        products = Product.query.all()
+        all_products = list(map(lambda x: x.serialize(), products))
+        return jsonify(all_products), 200
 
-    product_query = Product.query.all()
-    all_products = list(map(lambda x: x.serialize(), product_query))
-    return jsonify(all_products)
+    # Create (POST) a new user
+    if request.method == 'POST':
+        body_product = request.json
+
+        # Data validation
+        if body_product is None:
+            raise APIException("You need to specify the request body as a json object", status_code=400)
+        if 'name' not in body_product or body_product['name'] == "":
+            raise APIException('You need to specify the name', status_code=400)
+        if 'price' not in body_product or body_product['price'] == "":
+            raise APIException('You need to specify the price', status_code=400)
+        if 'description' not in body_product or body_product['description'] == "":
+            raise APIException('You need to create a description', status_code=400)
+
+        new_product = Product(name = body_product["name"], price = body_product["price"], description = body_product["description"])
+        db.session.add(new_product)
+        db.session.commit()
+        return jsonify(new_product.serialize()), 200
+
+    return "Invalid Method", 404
+
 
 # GET ONE PRODUCT
 @api.route('/products/<int:id>', methods=['GET'])
@@ -66,8 +92,6 @@ def handle_single_product(product_id):
     return jsonify(product.serialize()), 200
 
 
-
-
 #CREATE NEW USER
 @api.route('/user', methods=['POST'])
 def create_new_user():
@@ -85,8 +109,7 @@ def create_new_user():
         name = name_received,
         lastname = lastname_received
         )
- 
-    
+
 
     # validate that the front-end request was built correctly
     if 'profile_image' in request.files:
@@ -96,7 +119,7 @@ def create_new_user():
         api_key = os.getenv('API_KEY'), 
         api_secret = os.getenv('API_SECRET') 
         )
-  
+
         result = cloudinary.uploader.upload(request.files['profile_image'])
         # update the user with the given cloudinary image URL
         user.profile_image_url = result['secure_url']

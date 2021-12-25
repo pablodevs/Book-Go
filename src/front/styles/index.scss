@@ -49,6 +49,7 @@ button {
 }
 textarea {
     resize: vertical;
+    max-height: 300px;
 }
 /* Bootstrap styles */
 .row, .row > * {
