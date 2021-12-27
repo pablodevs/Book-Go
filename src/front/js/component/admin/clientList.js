@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Context } from "../../store/appContext";
+import { ClientTab } from "./clientTab";
 
 export const ClientList = () => {
 	const { actions, store } = useContext(Context);
@@ -13,24 +14,6 @@ export const ClientList = () => {
 		profile_image_url: "https://res.cloudinary.com/dxmbcy20g/image/upload/v1640399168/j3lqxalgevo7rdmortz3.png"
 	});
 
-	useEffect(() => {
-		actions.getClients();
-	}, []);
-
-	useEffect(
-		() => {
-			if (store.clients)
-				setList(
-					store.clients.map((client, idx) => (
-						<li className="li-client" key={idx}>
-							{client.name}
-						</li>
-					))
-				);
-		},
-		[store.clients]
-	);
-
 	const handleSearchOnChange = e => {
 		setSrchInput(e.target.value);
 	};
@@ -40,6 +23,32 @@ export const ClientList = () => {
 		console.log(srchInput);
 		setSrchInput("");
 	};
+
+	const getClientInfo = newClient => {
+		setClient({
+			name: newClient.name,
+			lastname: newClient.lastname,
+			email: newClient.email,
+			phone: newClient.phone,
+			profile_image_url: newClient.profile_image_url
+		});
+	};
+
+	useEffect(() => {
+		actions.getClients();
+	}, []);
+
+	useEffect(
+		() => {
+			if (store.clients)
+				setList(
+					store.clients.map((client, idx) => (
+						<ClientTab client={client} key={idx} sendClientInfo={getClientInfo} />
+					))
+				);
+		},
+		[store.clients]
+	);
 
 	return store.clients ? (
 		<div className="dashboard-content-wrapper admin-products">

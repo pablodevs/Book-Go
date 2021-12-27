@@ -37,13 +37,12 @@ a._navbar-link {
     padding: 0.2rem 0;
 }
 
-._navbar-avatar {
+.avatar-miniature {
     height: 35px;
     width: 35px;
 }
 
 ._navbar-profile-img {
-    border: 2px solid $--color-blue-light;
     border-radius: 50%;
     object-fit: cover;
     object-position: top;

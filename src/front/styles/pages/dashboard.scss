@@ -36,7 +36,7 @@ $--padding-top: 2rem;
     justify-content: start;
     align-items: flex-start;
     margin: 3rem $--margin-inline 3rem 0;
-    padding: $--padding-top 0 0 4vw;
+    padding: $--padding-top 0 0 2vw;
 }
 
 .dashboard-aside {
@@ -74,11 +74,13 @@ $--padding-top: 2rem;
 .avatar {
     background-color: rgba(0, 0, 0, 0.3);
     border-radius: 9999px;
-    padding: 8px;
+    padding: 6px;
+    display: flex;
 }
 .dashboard-avatar {
     height: 64px;
     width: 64px;
+    &.avatar { padding: 8px }
 }
 .avatar__img {
     fill: none;

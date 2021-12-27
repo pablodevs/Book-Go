@@ -272,7 +272,7 @@ div.disponibility-title.admin-form-group {
     display: flex;
 }
 .clients-list {
-    padding: 1rem;
+    padding: 1rem 0 1rem 1rem;
     background-color: #e6e6e6;
     border-radius: 10px;
 }
@@ -281,13 +281,60 @@ div.disponibility-title.admin-form-group {
     margin-top: 2rem;
 }
 .search-client {
-    margin-bottom: 1.7rem;
+    margin: 0 1.5rem 1.7rem 0.5rem;
 }
 input.search-client-input, input.search-client-input:focus-visible {
     border: none;
 }
-.li-client {
-    padding-block: 1rem;
+
+$--br-client-tab: 5px;
+$--br-client-tab-x2: 10px;
+
+.li-client { position: relative }
+.curved-corner-top , .curved-corner-bottom {
+    visibility: hidden;
+    position: absolute;
+    bottom: -#{$--br-client-tab-x2};
+    right: 0;
+    overflow: hidden;
+    width: $--br-client-tab-x2;
+    height: $--br-client-tab-x2;
+    &::before {
+        content: '';
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: calc(#{$--br-client-tab-x2} + #{$--br-client-tab-x2});
+        height: calc(#{$--br-client-tab-x2} + #{$--br-client-tab-x2});
+        border-radius: 50%;
+        box-shadow: $--br-client-tab-x2 -#{$--br-client-tab-x2} 0 0 white;
+    }
+}
+.curved-corner-top {
+    top: -#{$--br-client-tab-x2};
+    &::before {
+        bottom: 0;
+        top: auto;
+        box-shadow: $--br-client-tab-x2 $--br-client-tab-x2 0 0 white;
+    }
+}
+.show-curved-corner { visibility: visible }
+.client-tab {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    width: 100%;
+    border-bottom-left-radius: $--br-client-tab;
+    border-top-left-radius: $--br-client-tab;
+}
+.client-tab-active {
+    box-shadow: -7px 5px 7px 0px #5f5f5f17;
+    background-color: white
+}
+.client-tab-name {
+    flex: 1;
+    text-align: left;
 }
 
 .client-details {

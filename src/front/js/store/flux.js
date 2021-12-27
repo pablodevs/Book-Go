@@ -341,6 +341,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 				return true;
 			},
 
+			setActiveClientTab: key => setStore({ activeClientTab: key }),
+
 			// Redes sociales
 			updateSocialMedia: data =>
 				setStore({
