@@ -266,3 +266,38 @@ div.disponibility-title.admin-form-group {
 
 /*===== Clientes =====*/
 
+.clients-wrapper {
+    width: 100%;
+    height: 100%;
+    display: flex;
+}
+.clients-list {
+    padding: 1rem;
+    background-color: #e6e6e6;
+    border-radius: 10px;
+}
+.clients-list ul {
+    height: 100%;
+    margin-top: 2rem;
+}
+.search-client {
+    margin-bottom: 1.7rem;
+}
+input.search-client-input, input.search-client-input:focus-visible {
+    border: none;
+}
+.li-client {
+    padding-block: 1rem;
+}
+
+.client-details {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding: 1rem;
+    width: 100%;
+}
+.client-details-name {
+    font-weight: bold;
+    font-size: 2rem;
+}

@@ -147,6 +147,58 @@ button.disabled, a.disabled {
     &:hover { background-color: $--color-blue-lighter }
 }
 
+/*===== Inputs =====*/
+input, textarea, select, .input-button, .search-input {
+    width: 100%;
+    border-radius: 5px;
+    border: 1px solid $--color-grey-light;
+    padding: 0.3rem 0.6rem;
+}
+input:focus-visible, textarea:focus-visible, select:focus-visible, .search-input:focus-visible {
+    outline: none;
+    border: 1px solid $--color-blue-regular;
+    box-shadow: 0 0 3px 0 $--color-blue-regular;
+}
+input.input-error, input.input-error:focus-visible {
+    box-shadow: inset 0 0 0 2px red;
+    border-color: transparent;
+}
+.search-wrapper {
+    width: fit-content;
+    position: relative;
+    & > i, .search-clear {
+        position: absolute;
+        top: 0;
+        left: 0.7rem;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        color: $--color-grey-light;
+    }
+    & > .search-clear {
+        left: auto;
+        right: 0.7rem;
+    }
+}
+.search-input {
+    width: 190px;
+    padding: 0.3rem 1.9rem 0.3rem 2.2rem;
+}
+/* clears the 'X' from search inputs in Internet Explorer */
+input.search-input[type=search]::-ms-clear,
+input.search-input[type=search]::-ms-reveal {
+  display: none;
+  width: 0;
+  height: 0; 
+}
+/* clears the 'X' from search inputs in Chrome */
+input.search-input[type="search"]::-webkit-search-decoration,
+input.search-input[type="search"]::-webkit-search-cancel-button,
+input.search-input[type="search"]::-webkit-search-results-button,
+input.search-input[type="search"]::-webkit-search-results-decoration {
+  display: none; 
+}
+
 /*===== Tooltips =====*/
 [data-tooltip] {
     position: relative;

@@ -101,11 +101,11 @@ def handle_users():
     """
     All Users
     """
-    # GET all users
+    # GET all clients
     if request.method == 'GET':
-        users = User.query.all()
-        all_users = list(map(lambda x: x.serialize(), users))
-        return jsonify(all_users), 200
+        all_users = sorted(User.query.all(), key = lambda user: user.serialize()["name"].lower())
+        all_clients = [user.serialize() for user in all_users if not user.serialize()["is_admin"]]
+        return jsonify(all_clients), 200
 
     # Create (POST) a new user
     if request.method == 'POST':

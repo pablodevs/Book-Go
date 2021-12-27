@@ -81,6 +81,7 @@ class Book(db.Model):
 #TABLA DE DISPONIBILIDAD
 class Dispo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    # ⚠️⚠️ Debería ser el product id ⚠️⚠️
     product = db.Column(db.String(120), nullable=False)
     date = db.Column(db.DateTime, nullable=False)
     time = db.Column(db.Time,nullable=False)

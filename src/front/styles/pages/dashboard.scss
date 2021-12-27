@@ -157,13 +157,6 @@ button.dashboard-edit-img {
 }
 
 // Content
-.dashboard-forms input, textarea {
-    width: 100%;
-    border-radius: 5px;
-    border: 1px solid $--color-grey-light;
-    padding: 0.3rem 0.6rem;
-}
-
 .dashboard-content-wrapper, .dashboard-form {
     display: flex;
     flex-direction: column;
@@ -201,23 +194,9 @@ button.dashboard-edit-img {
     flex-direction: column;
 }
 .dashboard-label {
-    font-size: 0.8rem;
-    color: $--color-grey-light;
+    font-size: 0.87rem;
+    color: $--color-grey-regular;
     display: block
-}
-.dashboard-form input, textarea, select, .input-button {
-    width: 100%;
-    border-radius: 5px;
-    border: 1px solid $--color-grey-light;
-    padding: 0.3rem 0.6rem;
-}
-.dashboard-form input:focus-visible, textarea:focus-visible, select:focus-visible {
-    outline: none;
-    border: 1px solid $--color-blue-regular;
-    box-shadow: 0 0 3px 0 $--color-blue-regular;
-}
-.dashboard-form input.input-error, .dashboard-form input.input-error:focus-visible {
-    box-shadow: inset 0 0 0 2px red;
 }
 .dashboard-input { position: relative }
 button.clear-input, .edit-input {
@@ -284,8 +263,7 @@ button.clear-input, .edit-input {
     font-weight: bold;
 }
 .book-again-btn {
-    margin-right: auto;
-    margin-left: 0;
+    margin: auto auto 0 0;
 }
 
 .bookingcard-img-wrapper {

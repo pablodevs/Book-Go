@@ -16,7 +16,7 @@ export const Guest = () => {
 		event.preventDefault();
 
 		// we are about to send this to the backend.
-		console.log("This are the files", files);
+		// console.log("This are the files", files);
 		let body = new FormData();
 		body.append("name", data.name);
 		body.append("lastname", data.lastname);
