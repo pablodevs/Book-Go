@@ -289,9 +289,11 @@ div.disponibility-title.admin-form-group {
     flex-direction: column;
     gap: 0.3rem;
     padding: 1rem 0 1rem 1rem;
+    width: 265px;
 }
 .search-client {
-    margin: 2rem 1.5rem 1rem 1.5rem;
+    margin: 2rem 0 1rem 0;
+    margin-inline: auto;
 }
 input.search-client-input, input.search-client-input:focus-visible {
     border: none;
@@ -333,7 +335,7 @@ $--br-client-tab-x2: 10px;
     display: flex;
     align-items: center;
     gap: 1rem;
-    padding: 1rem;
+    padding: 1rem 2rem 1rem 1rem;
     width: 100%;
     border-bottom-left-radius: $--br-client-tab;
     border-top-left-radius: $--br-client-tab;
@@ -355,13 +357,14 @@ $--br-client-tab-x2: 10px;
 .clients-list ul {
     direction: rtl;
     & li { direction: ltr; }
+}
+.clients-list ul, textarea {
     overflow-y: auto;
     &::-webkit-scrollbar { width: 0.4em }
     &::-webkit-scrollbar-thumb {
         background-color: transparent;
         border-radius: 100vw;
     }
-    // Checkear en firefox:
     @supports (scrollbar-color: red blue) {
         & {
             scrollbar-color: transparent transparent;
@@ -383,7 +386,6 @@ $--br-client-tab-x2: 10px;
         }
     }
 }
-
 // Client Details
 .client-details {
     display: flex;

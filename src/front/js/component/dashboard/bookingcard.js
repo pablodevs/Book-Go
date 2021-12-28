@@ -3,7 +3,7 @@ import { Context } from "../../store/appContext";
 
 export const BookingCard = () => {
 	const { actions, store } = useContext(Context);
-	let product = "Spa";
+	let product = "Depilación";
 
 	useEffect(() => {}, []);
 

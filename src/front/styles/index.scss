@@ -164,7 +164,6 @@ input.input-error, input.input-error:focus-visible {
     border-color: transparent;
 }
 .select-wrapper {
-    // width: 100%;
     flex: 1;
     width: 100%;
     position: relative;
@@ -175,9 +174,9 @@ input.input-error, input.input-error:focus-visible {
         bottom: 0;
         right: 0.7rem;
         height: 63%;
-        border-top: 0.5em solid $--color-grey-regular;
-        border-right: 0.5em solid transparent;
-        border-left: 0.5em solid transparent;
+        border-top: 0.4em solid $--color-grey-regular;
+        border-right: 0.4em solid transparent;
+        border-left: 0.4em solid transparent;
     }
 }
 select {
