@@ -6,6 +6,10 @@ import { ReservationsHistory } from "../component/dashboard/reservationsHistory"
 import home from "../../img/dashboard/home_transparent.png";
 import "../../styles/pages/dashboard.scss";
 
+export function PretyPhone(phone) {
+	return phone.slice(0, 3) + " " + phone.slice(3, 5) + " " + phone.slice(5, 7) + " " + phone.slice(7, 9);
+}
+
 export const Dashboard = () => {
 	const { actions, store } = useContext(Context);
 	const [content, setContent] = useState(null);
@@ -21,9 +25,6 @@ export const Dashboard = () => {
 			  )
 			: null;
 	}, []);
-
-	const pretyPhone = phone =>
-		phone.slice(0, 3) + " " + phone.slice(3, 5) + " " + phone.slice(5, 7) + " " + phone.slice(7, 9);
 
 	return !store.user.token ? (
 		<Redirect to="/" />
@@ -57,7 +58,7 @@ export const Dashboard = () => {
 								store.user.lastname.charAt(0).toUpperCase() +
 								store.user.lastname.slice(1)}
 						</h1>
-						<p>{pretyPhone(store.user.phone)}</p>
+						<p>{PretyPhone(store.user.phone)}</p>
 					</div>
 				</div>
 				<nav>

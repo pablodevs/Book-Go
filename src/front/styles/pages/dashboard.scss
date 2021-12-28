@@ -77,8 +77,8 @@ $--padding-top: 2rem;
     display: flex;
 }
 .dashboard-avatar {
-    height: 64px;
-    width: 64px;
+    height: 70px;
+    width: 70px;
     &.avatar { padding: 8px }
 }
 .avatar__img {
@@ -128,7 +128,7 @@ button.dashboard-edit-img {
     text-align: start;
     color: $--color-grey-dark;
     & > i {
-        color: $--color-blue-dark;
+        color: $--color-grey-light;
     }
     &:hover, &.tab-active {
         transform-origin: left;
@@ -140,6 +140,9 @@ button.dashboard-edit-img {
         -moz-transform: translateX(10px);
         -webkit-transform: translateX(10px);
         font-weight: 600;
+        & > i {
+            color: $--color-blue-dark;
+        }
     }
     
 }

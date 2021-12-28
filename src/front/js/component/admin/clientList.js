@@ -1,18 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Context } from "../../store/appContext";
 import { ClientTab } from "./clientTab";
+import { PretyPhone } from "../../pages/dashboard.js";
 
 export const ClientList = () => {
 	const { actions, store } = useContext(Context);
 	const [list, setList] = useState([]);
 	const [srchInput, setSrchInput] = useState("");
-	const [client, setClient] = useState({
-		name: "Name",
-		lastname: "Lastname",
-		email: "email@example.com",
-		phone: "654 65 46 54",
-		profile_image_url: "https://res.cloudinary.com/dxmbcy20g/image/upload/v1640399168/j3lqxalgevo7rdmortz3.png"
-	});
+	const [client, setClient] = useState({});
 
 	const handleSearchOnChange = e => {
 		setSrchInput(e.target.value);
@@ -34,6 +29,7 @@ export const ClientList = () => {
 
 	useEffect(() => {
 		actions.getClients();
+		actions.setActiveClientTab(null);
 	}, []);
 
 	useEffect(
@@ -64,7 +60,7 @@ export const ClientList = () => {
 		<div className="dashboard-content-wrapper admin-products">
 			<div className="clients-wrapper">
 				<aside className="clients-list">
-					<h1 className="dashboard-content-title">Clientes</h1>
+					<h1 className="dashboard-content-title client-list-title">Clientes</h1>
 					<div className="search-client search-wrapper">
 						<i className="fas fa-search" />
 						<input
@@ -84,29 +80,50 @@ export const ClientList = () => {
 					</div>
 					<ul>{list}</ul>
 				</aside>
-				<div className="client-details">
-					<div className="dashboard-img-wrapper">
-						{client.profile_image_url ? (
-							<img className="dashboard-img" src={client.profile_image_url} />
-						) : (
-							<div className="avatar dashboard-avatar">
-								<svg viewBox="0 0 24 24" className="avatar__img">
-									<path
-										d="M12,3.5c2.347,0,4.25,1.903,4.25,4.25S14.347,12,12,12s-4.25-1.903-4.25-4.25S9.653,3.5,12,3.5z
+				{Object.keys(client).length ? (
+					<div className="client-details">
+						<div className="client-details-info">
+							<div className="dashboard-img-wrapper">
+								{client.profile_image_url ? (
+									<img className="dashboard-img" src={client.profile_image_url} />
+								) : (
+									<div className="avatar dashboard-avatar">
+										<svg viewBox="0 0 24 24" className="avatar__img">
+											<path
+												d="M12,3.5c2.347,0,4.25,1.903,4.25,4.25S14.347,12,12,12s-4.25-1.903-4.25-4.25S9.653,3.5,12,3.5z
                                 M5,20.5
                                 c0-3.866,3.134-7,7-7s7,3.134,7,7H5z"
-									/>
-								</svg>
+											/>
+										</svg>
+									</div>
+								)}
+								<button type="button" className="edit-img dashboard-edit-img" onClick={() => undefined}>
+									<i className="fas fa-camera" />
+								</button>
 							</div>
-						)}
-						<button type="button" className="edit-img dashboard-edit-img" onClick={() => undefined}>
-							<i className="fas fa-camera" />
-						</button>
+							<div className="client-details-name">
+								{client.name} {client.lastname}
+							</div>
+							<div className="client-details-group">
+								<div className="client-details-subgroup">
+									<i className="fas fa-phone-alt" />
+									<span>{PretyPhone(client.phone)}</span>
+								</div>
+								<div className="client-details-subgroup">
+									<i className="fas fa-envelope" />
+									<span>{client.email}</span>
+								</div>
+							</div>
+						</div>
+						<div className="center">
+							Aquí irá la información del número de: reservas realizadas, inasistencias, cancelaciones,
+							ingresos que ha generado (ingresos totales). Alomejor un textarea con observaciones.
+							<br />Y por último faltarían los botones de modificar usuario y realizar una nueva cita
+						</div>
 					</div>
-					<div className="client-details-name">
-						{client.name} {client.lastname}
-					</div>
-				</div>
+				) : (
+					""
+				)}
 			</div>
 		</div>
 	) : null;

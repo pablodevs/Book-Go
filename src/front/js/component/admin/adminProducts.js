@@ -55,11 +55,11 @@ export const AdminProducts = () => {
 
 	return (
 		<div className="dashboard-content-wrapper admin-products">
-			<h1 className="dashboard-content-title">Productos y Disponibilidad</h1>
+			<h1 className="dashboard-content-title">Servicios</h1>
 			<div className="admin-sections-wrapper">
 				<section className="dashboard-first-section">
 					<form onSubmit={submitFirstForm} className="dashboard-form">
-						<h2 className="dashboard-content-subtitle">Información del producto</h2>
+						<h2 className="dashboard-content-subtitle">Información del servicio</h2>
 						<div className="admin-icon-btn-group">
 							<button
 								type="button"
@@ -94,20 +94,22 @@ export const AdminProducts = () => {
 									Producto
 								</label>
 								<div className="dashboard-input product-input">
-									<select
-										onChange={e => handleInputChange(e)}
-										id="product"
-										name="product"
-										value={data.product}>
-										<option value="DEFAULT" disabled hidden>
-											Elige un producto...
-										</option>
-										{productList.map((prod, idx) => (
-											<option key={idx} value={prod}>
-												{prod}
+									<div className="select-wrapper">
+										<select
+											onChange={e => handleInputChange(e)}
+											id="product"
+											name="product"
+											value={data.product}>
+											<option value="DEFAULT" disabled hidden>
+												Elige un producto...
 											</option>
-										))}
-									</select>
+											{productList.map((prod, idx) => (
+												<option key={idx} value={prod}>
+													{prod}
+												</option>
+											))}
+										</select>
+									</div>
 									<button
 										type="button"
 										className={"icon-btn" + (data.id ? "" : " inactive")}
@@ -157,11 +159,15 @@ export const AdminProducts = () => {
 									<small className="img-placeholder">
 										<i className="fas fa-camera" />
 									</small>
-									<img
-										src={data.id ? require(`../../../img/${data.product.toLowerCase()}.jpg`) : ""}
-										onLoad={e => e.target.classList.add("border-none")}
-										className="admin-product-img"
-									/>
+									{data.id ? (
+										<img
+											src={require(`../../../img/${data.product.toLowerCase()}.jpg`)}
+											onLoad={e => e.target.classList.add("border-none")}
+											className="admin-product-img"
+										/>
+									) : (
+										""
+									)}
 									<button
 										type="button"
 										className={"edit-img" + (data.id ? "" : " inactive")}

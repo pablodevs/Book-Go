@@ -30,9 +30,16 @@ export const ClientTab = props => {
 					props.sendClientInfo(props.client);
 				}}
 				onMouseEnter={() => setFocus(true)}
+				onFocus={() => setFocus(true)}
+				onBlur={() => setFocus(false)}
 				onMouseLeave={() => setFocus(false)}>
 				{props.client.profile_image_url ? (
-					<img className="_navbar-profile-img" src={props.client.profile_image_url} width="35" height="35" />
+					<img
+						className="_navbar-profile-img client-tab-img"
+						src={props.client.profile_image_url}
+						width="35"
+						height="35"
+					/>
 				) : (
 					<div className="avatar avatar-miniature">
 						<svg viewBox="0 0 24 24" className="avatar__img">

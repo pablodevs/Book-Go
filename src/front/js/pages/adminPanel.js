@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Link, Redirect } from "react-router-dom";
 import { Context } from "../store/appContext";
+import { Reservations } from "../component/admin/reservations";
 import { ClientList } from "../component/admin/clientList";
 import { AdminProducts } from "../component/admin/adminProducts";
 import { BusinessSettings } from "../component/admin/businessSettings";
@@ -44,11 +45,7 @@ export const AdminPanel = () => {
 									className={"dashboard-tab" + (activeTab === "Reservas" ? " tab-active" : "")}
 									onClick={() => {
 										setActiveTab("Reservas");
-										setContent(
-											<div className="dashboard-content-wrapper admin-products">
-												<h1 className="dashboard-content-title">Próximas reservas</h1>
-											</div>
-										);
+										setContent(<Reservations />);
 									}}>
 									<i className="far fa-calendar-alt" />
 									<span>Reservas</span>
@@ -89,7 +86,7 @@ export const AdminPanel = () => {
 										setContent(<AdminProducts />);
 									}}>
 									<i className="fas fa-cog" />
-									<span>Productos & Disponibilidad</span>
+									<span>Servicios</span>
 								</button>
 							</li>
 							<li className="dashboard-li">
