@@ -20,8 +20,6 @@ export const ClientList = () => {
 
 	const handleSearchSubmit = e => {
 		e.preventDefault();
-		console.log(srchInput);
-		setSrchInput("");
 	};
 
 	const getClientInfo = newClient => {
@@ -40,14 +38,26 @@ export const ClientList = () => {
 
 	useEffect(
 		() => {
-			if (store.clients)
-				setList(
-					store.clients.map((client, idx) => (
-						<ClientTab client={client} key={idx} sendClientInfo={getClientInfo} />
-					))
+			let clientsList = [];
+			if (store.clients) {
+				clientsList = store.clients.filter(
+					client =>
+						(client.name + " " + client.lastname).toLowerCase().includes(srchInput.toLowerCase()) ||
+						client.id == srchInput
 				);
+				clientsList = clientsList.map((client, idx) => (
+					<ClientTab client={client} key={idx + 1} sendClientInfo={getClientInfo} />
+				));
+			}
+			clientsList.length
+				? setList(clientsList)
+				: setList([
+						<li style={{ textAlign: "center", paddingRight: "1rem" }} key={0}>
+							Sin resultados
+						</li>
+				  ]);
 		},
-		[store.clients]
+		[store.clients, srchInput]
 	);
 
 	return store.clients ? (
@@ -55,28 +65,24 @@ export const ClientList = () => {
 			<div className="clients-wrapper">
 				<aside className="clients-list">
 					<h1 className="dashboard-content-title">Clientes</h1>
-					<ul>
-						<li className="search-client">
-							<form onSubmit={handleSearchSubmit} className="search-wrapper">
-								<i className="fas fa-search" />
-								<input
-									type="search"
-									className="search-input search-client-input"
-									placeholder="Buscar cliente..."
-									onChange={handleSearchOnChange}
-									value={srchInput}
-								/>
-								{srchInput !== "" ? (
-									<button type="button" className="search-clear" onClick={() => setSrchInput("")}>
-										<i className="fas fa-times" />
-									</button>
-								) : (
-									""
-								)}
-							</form>
-						</li>
-						{list}
-					</ul>
+					<div className="search-client search-wrapper">
+						<i className="fas fa-search" />
+						<input
+							type="search"
+							className="search-input search-client-input"
+							placeholder="Buscar cliente o ID"
+							onChange={handleSearchOnChange}
+							value={srchInput}
+						/>
+						{srchInput !== "" ? (
+							<button type="button" className="search-clear" onClick={() => setSrchInput("")}>
+								<i className="fas fa-times" />
+							</button>
+						) : (
+							""
+						)}
+					</div>
+					<ul>{list}</ul>
 				</aside>
 				<div className="client-details">
 					<div className="dashboard-img-wrapper">
