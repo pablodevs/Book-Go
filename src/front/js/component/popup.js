@@ -7,6 +7,7 @@ import { ProductsPopup } from "./booking/productsPopup.js";
 import { Calendar } from "./booking/calendar/calendar.js";
 import { EditInput } from "./admin/popups/editInput.js";
 import { AddProduct } from "./admin/popups/addProduct.js";
+import { ConfirmPopup } from "./confirmPopup.js";
 import "../../styles/components/popup.scss";
 
 export const Popup = () => {
@@ -76,6 +77,8 @@ export const Popup = () => {
 					<EditInput input={store.popupTitle.split(" ")[store.popupTitle.split(" ").length - 1]} />
 				) : store.popup === "add-product" ? (
 					<AddProduct />
+				) : store.popup === "confirm" ? (
+					<ConfirmPopup />
 				) : null}
 			</div>
 		</div>

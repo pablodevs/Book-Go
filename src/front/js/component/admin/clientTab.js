@@ -5,34 +5,25 @@ import PropTypes from "prop-types";
 export const ClientTab = props => {
 	const { actions, store } = useContext(Context);
 	const [focus, setFocus] = useState(false);
-	const [active, setActive] = useState(false);
 
 	return (
 		<li className="li-client">
 			<div
 				className={
-					"curved-corner-top" +
-					(focus || store.activeClientTab === props.client.id ? " show-curved-corner" : "")
+					"curved-corner-top" + (store.activeClientTab === props.client.id ? " show-curved-corner" : "")
 				}
 			/>
 			<div
 				className={
-					"curved-corner-bottom" +
-					(focus || store.activeClientTab === props.client.id ? " show-curved-corner" : "")
+					"curved-corner-bottom" + (store.activeClientTab === props.client.id ? " show-curved-corner" : "")
 				}
 			/>
 			<button
-				className={
-					"client-tab" + (focus || store.activeClientTab === props.client.id ? " client-tab-active" : "")
-				}
+				className={"client-tab" + (store.activeClientTab === props.client.id ? " client-tab-active" : "")}
 				onClick={() => {
 					actions.setActiveClientTab(props.client.id);
 					props.sendClientInfo(props.client);
-				}}
-				onMouseEnter={() => setFocus(true)}
-				onFocus={() => setFocus(true)}
-				onBlur={() => setFocus(false)}
-				onMouseLeave={() => setFocus(false)}>
+				}}>
 				{props.client.profile_image_url ? (
 					<img
 						className="_navbar-profile-img client-tab-img"

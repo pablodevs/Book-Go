@@ -21,7 +21,7 @@ export const AddProduct = () => {
 	};
 
 	return (
-		<div className="popup-body center">
+		<div className="popup-body">
 			<form onSubmit={handleSubmit} className="dashboard-form">
 				<p>Puedes modificar la información del producto más adelante</p>
 				<div className="admin-form-group">

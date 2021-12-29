@@ -18,7 +18,7 @@ export const Home = () => {
 					<Carrousel />
 				</div>
 				<div className="mx-auto col-md-12 col-xl-5">
-					<h1 className="text-center pt-5">Healh inside !</h1>
+					<h1 className="text-center pt-5">Health inside!</h1>
 					<h5 className="p-5">
 						Lorem ipsum, dolor sit amet consectetur adipisicing elit. Asperiores voluptatum cupiditate
 						aliquam repellat sapiente nisi nemo similique impedit aliquid? Hic, saepe harum. Autem est

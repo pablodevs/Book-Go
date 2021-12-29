@@ -136,6 +136,18 @@ button.disabled, a.disabled {
         color: $--color-green-confirm;
     }
 }
+button.btn-cool.danger {
+    box-shadow: inset 0 0 0 2px red;
+    color: red;
+    &:hover {
+        background: none;
+        color: red;
+    }
+}
+button.icon-btn.danger, button.icon-btn.danger:hover {
+    background-color: transparent;
+    color: red;
+}
 
 .icon-btn {
     width: 40px;

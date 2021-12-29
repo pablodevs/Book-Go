@@ -16,6 +16,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			popup: null,
 			popupTitle: "",
+			popupFunct: () => undefined,
 			prevPopup: [],
 
 			new_product: null,
@@ -45,7 +46,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			forceRender: () => setStore({}),
 
 			// Cambia el popups
-			setPopup: async (type, title, productName) => {
+			setPopup: async (type, title, productName, funct = null) => {
 				if (productName) {
 					//si recibe productname entonces busca la disponibilidad de días y horas de ese producto
 					await fetch(process.env.BACKEND_URL + `/dispo/${productName}`)
@@ -66,6 +67,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					popup: type,
 					popupTitle: title
 				});
+				if (funct) setStore({ popupFunct: funct });
 			},
 			closePopup: () =>
 				setStore({
@@ -167,6 +169,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			// eliminar producto
 			removeProduct: id => {
+				let actions = getActions();
 				let store = getStore();
 				fetch(process.env.BACKEND_URL + `/products/${id}`, {
 					method: "DELETE"
@@ -181,6 +184,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 						});
 					})
 					.catch(error => console.error("This is the error:", error));
+
+				actions.resetNewProduct();
+				actions.closePopup();
 			},
 
 			//get ONE product

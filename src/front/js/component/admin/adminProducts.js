@@ -23,6 +23,13 @@ export const AdminProducts = () => {
 					price: store.new_product.price,
 					description: store.new_product.description
 				});
+			else
+				setData({
+					id: null,
+					product: "DEFAULT", // con 'name' no funciona bien
+					price: "",
+					description: ""
+				});
 		},
 		[store.products, store.new_product]
 	);
@@ -71,19 +78,19 @@ export const AdminProducts = () => {
 							{/* ⚠️ OJITO: si añadimos o eliminamos un prod, se tiene que actualizar el hook productList */}
 							<button
 								type="button"
-								className={"admin-icon-btn icon-btn" + (data.id ? "" : " inactive")}
+								className={"admin-icon-btn icon-btn danger" + (data.id ? "" : " inactive")}
 								data-tooltip="eliminar producto"
 								onClick={() => {
+									const deleteFunct = () => actions.removeProduct(data.id);
 									if (data.id) {
-										actions.removeProduct(data.id);
-										actions.resetNewProduct();
-									}
-									setData({
-										id: null,
-										product: "DEFAULT",
-										price: "",
-										description: ""
-									});
+										actions.setPopup("confirm", "Eliminar el producto", undefined, deleteFunct);
+										// setData({
+										// 	id: null,
+										// 	product: "DEFAULT",
+										// 	price: "",
+										// 	description: ""
+										// });
+									} else return;
 								}}>
 								<i className="fas fa-trash-alt" />
 							</button>
