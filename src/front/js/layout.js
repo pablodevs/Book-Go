@@ -7,6 +7,7 @@ import injectContext from "./store/appContext";
 import { Navbar } from "./component/navbar";
 import { Footer } from "./component/footer";
 import { Popup } from "./component/popup";
+import { Toaster } from "react-hot-toast";
 
 // Views
 import { Home } from "./pages/home";
@@ -19,6 +20,7 @@ const Layout = () => {
 
 	return (
 		<BrowserRouter basename={basename}>
+			<Toaster />
 			<ScrollToTop>
 				<Navbar />
 				<Popup />

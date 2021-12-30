@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { Context } from "../../store/appContext";
 
 export const AdminProducts = () => {
@@ -16,7 +17,7 @@ export const AdminProducts = () => {
 	useEffect(
 		() => {
 			setProductList(store.products.map(element => element.name));
-			if (store.new_product)
+			if (Object.keys(store.new_product).length && store.new_product.id)
 				setData({
 					id: store.new_product.id,
 					product: store.new_product.name, // esto de que se llamen diferente no me convence
@@ -36,7 +37,13 @@ export const AdminProducts = () => {
 
 	const submitFirstForm = event => {
 		event.preventDefault();
-		if (data.id && productList.includes(data.product)) actions.updateProduct(data);
+		if (data.id && productList.includes(data.product)) {
+			toast.promise(actions.updateProduct(data), {
+				loading: "Guardando...",
+				success: "Guardado correctamente",
+				error: () => `Error: ${store.message}`
+			});
+		}
 	};
 	const submitSecondForm = event => {
 		event.preventDefault();
@@ -52,7 +59,7 @@ export const AdminProducts = () => {
 				price: prod.price,
 				description: prod.description
 			});
-			actions.resetNewProduct();
+			// actions.resetNewProduct();
 		} else
 			setData({
 				...data,
@@ -81,16 +88,9 @@ export const AdminProducts = () => {
 								className={"admin-icon-btn icon-btn danger" + (data.id ? "" : " inactive")}
 								data-tooltip="eliminar producto"
 								onClick={() => {
+									if (!data.id) return;
 									const deleteFunct = () => actions.removeProduct(data.id);
-									if (data.id) {
-										actions.setPopup("confirm", "Eliminar el producto", undefined, deleteFunct);
-										// setData({
-										// 	id: null,
-										// 	product: "DEFAULT",
-										// 	price: "",
-										// 	description: ""
-										// });
-									} else return;
+									actions.setPopup("confirm", "Eliminar el producto", undefined, deleteFunct);
 								}}>
 								<i className="fas fa-trash-alt" />
 							</button>

@@ -93,7 +93,7 @@ def handle_single_product(product_id):
         db.session.commit()
         return jsonify({"message": "The product has been deleted"}), 200
 
-    return "Invalid Method", 404
+    return jsonify({"message": "Invalid Method"}), 404
         
 #CREATE NEW USER or GET ALL USERS
 @api.route('/user', methods=['GET', 'POST'])

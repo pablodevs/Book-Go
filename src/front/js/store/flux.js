@@ -1,3 +1,5 @@
+import toast from "react-hot-toast";
+
 const getNumOfDaysInMonth = (year, month) => new Date(year, month + 1, 0).getDate();
 
 const getState = ({ getStore, getActions, setStore }) => {
@@ -19,7 +21,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			popupFunct: () => undefined,
 			prevPopup: [],
 
-			new_product: null,
+			new_product: {},
 			products: [],
 			// oneProduct: [],
 
@@ -134,14 +136,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 			//get all products
 			get_products: async () => {
 				await fetch(process.env.BACKEND_URL + "/products")
-					.then(response => {
-						// console.log(response.ok);
-						// console.log(response.status);
-						return response.json();
-					})
-					.then(data => {
-						setStore({ products: data });
-					})
+					.then(response => response.json())
+					.then(data => setStore({ products: data }))
 					.catch(error => console.error(error));
 			},
 
@@ -155,38 +151,48 @@ const getState = ({ getStore, getActions, setStore }) => {
 					},
 					body: JSON.stringify(data)
 				};
-				const response = await fetch(process.env.BACKEND_URL + "/products", options);
-				const resp = await response.json();
-				if (response.status === 401) return false;
-				setStore({
-					products: [...store.products, resp],
-					new_product: resp
-				});
-				return true;
+				try {
+					const response = await fetch(process.env.BACKEND_URL + "/products", options);
+					const resp = await response.json();
+					if (!response.ok) {
+						setStore({ message: resp.message });
+						throw Error(response);
+					}
+					setStore({
+						products: [...store.products, resp],
+						new_product: resp
+					});
+					return resp;
+				} catch (err) {
+					return err.json();
+				}
 			},
 
-			resetNewProduct: () => setStore({ new_product: null }),
+			resetNewProduct: () => setStore({ new_product: {} }),
 
 			// eliminar producto
-			removeProduct: id => {
-				let actions = getActions();
-				let store = getStore();
-				fetch(process.env.BACKEND_URL + `/products/${id}`, {
-					method: "DELETE"
-				})
-					.then(response => {
-						return response.json();
-					})
-					.then(msg => {
-						let remainProducts = store.products.filter(element => element.id !== id);
-						setStore({
-							products: remainProducts
-						});
-					})
-					.catch(error => console.error("This is the error:", error));
-
-				actions.resetNewProduct();
-				actions.closePopup();
+			removeProduct: async id => {
+				const actions = getActions();
+				const store = getStore();
+				try {
+					const response = await fetch(process.env.BACKEND_URL + `/products/${id}`, {
+						method: "DELETE"
+					});
+					const resp = await response.json();
+					if (!response.ok) {
+						setStore({ message: resp.message });
+						throw Error(response);
+					}
+					let remainProducts = store.products.filter(element => element.id !== id);
+					setStore({
+						products: remainProducts
+					});
+					actions.resetNewProduct();
+					actions.closePopup();
+					return resp;
+				} catch (err) {
+					return err.json();
+				}
 			},
 
 			//get ONE product
@@ -205,33 +211,38 @@ const getState = ({ getStore, getActions, setStore }) => {
 			// },
 
 			//Change ONE product
-			updateProduct: data => {
-				let store = getStore();
-				fetch(process.env.BACKEND_URL + `/products/${data.id}`, {
+			updateProduct: async data => {
+				const store = getStore();
+				const options = {
 					method: "PUT",
 					body: JSON.stringify(data),
 					headers: {
 						"Content-Type": "application/json"
 					}
-				})
-					.then(response => {
-						return response.json();
-					})
-					.then(resp => {
-						let storeAux = store.products.filter(element => element.id !== data.id);
-						setStore({
-							products: [
-								...storeAux,
-								{
-									id: resp.id,
-									name: resp.name,
-									price: resp.price,
-									description: resp.description
-								}
-							]
-						});
-					})
-					.catch(error => console.error(error));
+				};
+				try {
+					const response = await fetch(process.env.BACKEND_URL + `/products/${data.id}`, options);
+					const resp = await response.json();
+					if (!response.ok) {
+						setStore({ message: resp.message });
+						throw Error(response);
+					}
+					let storeAux = store.products.filter(element => element.id !== data.id);
+					setStore({
+						products: [
+							...storeAux,
+							{
+								id: resp.id,
+								name: resp.name,
+								price: resp.price,
+								description: resp.description
+							}
+						]
+					});
+					return resp;
+				} catch (err) {
+					return err.json();
+				}
 			},
 
 			// Create NEW USER
