@@ -198,9 +198,11 @@ button.dashboard-edit-img {
     flex-direction: column;
 }
 .dashboard-label {
+    display: flex;
+    justify-content: space-between;
+    margin-right: 5px;
     font-size: 0.87rem;
     color: $--color-grey-regular;
-    display: block
 }
 .dashboard-input { position: relative }
 button.clear-input, .edit-input {

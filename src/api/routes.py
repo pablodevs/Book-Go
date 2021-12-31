@@ -28,13 +28,13 @@ def handle_products():
     """
     All Products
     """
-    # GET all users
+    # GET all products
     if request.method == 'GET':
         products = Product.query.all()
         all_products = list(map(lambda x: x.serialize(), products))
         return jsonify(all_products), 200
 
-    # Create (POST) a new user
+    # Create (POST) a new product
     if request.method == 'POST':
         body_product = request.json
 
@@ -43,10 +43,14 @@ def handle_products():
             raise APIException("You need to specify the request body as a json object", status_code=400)
         if 'name' not in body_product or body_product['name'] == "":
             raise APIException('You need to specify the name', status_code=400)
+        elif len(body_product['name']) > 120:
+            raise APIException('El nombre no puede superar los 120 caracteres', status_code=400)
         if 'price' not in body_product or body_product['price'] == "":
             raise APIException('You need to specify the price', status_code=400)
         if 'description' not in body_product or body_product['description'] == "":
             raise APIException('You need to create a description', status_code=400)
+        elif len(body_product['description']) > 1000:
+            raise APIException('La descripción no puede superar los 1000 caracteres', status_code=400)
 
         new_product = Product(name = body_product["name"], price = body_product["price"], description = body_product["description"])
         db.session.add(new_product)

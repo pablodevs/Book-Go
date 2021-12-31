@@ -80,7 +80,6 @@
 }
 
 .dashboard-first-section, .dashboard-second-section {
-    position: relative;
     width: 510px;
     height: fit-content;
     box-shadow: inset $--color-grey-dashboard-light 0px 0px 0px 1px;
@@ -96,15 +95,17 @@
         grid-template-areas: "uno dos";
     }
 }
+.dashboard-form div.services-subtitle {
+    align-items: center;
+}
 
 div.admin-icon-btn-group {
-    position: absolute;
-    right: 1rem;
-    top: 1rem;
+    display: flex;
     flex-direction: row;
     gap: 1rem;
     max-width: unset;
     width: fit-content;
+    margin-left: auto;
 }
 
 div.product-input {

@@ -47,6 +47,22 @@ const getState = ({ getStore, getActions, setStore }) => {
 			// Force render without change data
 			forceRender: () => setStore({}),
 
+			// Genera un toast
+			setToast: (type, message, funct = null) => {
+				if (type === "error") toast.error(message);
+				else if (type === "success") toast.success(message);
+				else if (type === "blank") toast(message);
+				else if (type === "promise") {
+					const store = getStore();
+					toast.promise(funct, {
+						loading: message.loading,
+						success: message.success,
+						error: () => `Error: ${store.message !== "" ? store.message : "desconocido"}`
+					});
+					setStore({ message: "" });
+				}
+			},
+
 			// Cambia el popups
 			setPopup: async (type, title, productName, funct = null) => {
 				if (productName) {
@@ -144,6 +160,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			// create a product
 			addProduct: async data => {
 				const store = getStore();
+				const actions = getActions();
 				const options = {
 					method: "POST",
 					headers: {
@@ -162,6 +179,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						products: [...store.products, resp],
 						new_product: resp
 					});
+					actions.closePopup();
 					return resp;
 				} catch (err) {
 					return err.json();
@@ -194,21 +212,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 					return err.json();
 				}
 			},
-
-			//get ONE product
-			// getProduct: async id => {
-			// 	await fetch(process.env.BACKEND_URL + `/products/${id}`)
-			// 		.then(response => {
-			// 			console.log(response.ok);
-			// 			console.log(response.status);
-			// 			return response.json();
-			// 		})
-			// 		.then(data => {
-			// 			console.log(data);
-			// 			setStore({ oneProduct: data });
-			// 		})
-			// 		.catch(error => console.error(error));
-			// },
 
 			//Change ONE product
 			updateProduct: async data => {
@@ -243,7 +246,27 @@ const getState = ({ getStore, getActions, setStore }) => {
 				} catch (err) {
 					return err.json();
 				}
+				// toast.promise(fetchFunction(data), {
+				// 	loading: "Guardando...",
+				// 	success: "Guardado correctamente",
+				// 	error: () => `Error: ${store.message !== "" ? store.message : "desconocido"}`
+				// });
 			},
+
+			// get ONE product
+			// getProduct: async id => {
+			// 	await fetch(process.env.BACKEND_URL + `/products/${id}`)
+			// 		.then(response => {
+			// 			console.log(response.ok);
+			// 			console.log(response.status);
+			// 			return response.json();
+			// 		})
+			// 		.then(data => {
+			// 			console.log(data);
+			// 			setStore({ oneProduct: data });
+			// 		})
+			// 		.catch(error => console.error(error));
+			// },
 
 			// Create NEW USER
 			createUser: async (data, files) => {
@@ -271,31 +294,35 @@ const getState = ({ getStore, getActions, setStore }) => {
 				actions.generate_token(data.email, data.password);
 				return resp;
 			},
-			updateUser: data => {
-				let store = getStore();
-				fetch(process.env.BACKEND_URL + `/user/${store.user.id}`, {
-					method: "PUT",
-					body: JSON.stringify(data),
-					headers: {
-						"Content-Type": "application/json"
+			updateUser: async data => {
+				const store = getStore();
+				try {
+					const response = await fetch(process.env.BACKEND_URL + `/user/${store.user.id}`, {
+						method: "PUT",
+						body: JSON.stringify(data),
+						headers: {
+							"Content-Type": "application/json"
+						}
+					});
+					const resp = await response.json();
+					if (!response.ok) {
+						setStore({ message: resp.message });
+						throw Error(response);
 					}
-				})
-					.then(response => {
-						return response.json();
-					})
-					.then(resp => {
-						setStore({
-							user: {
-								...store.user,
-								name: resp.name,
-								lastname: resp.lastname,
-								phone: resp.phone,
-								email: resp.email,
-								img_url: resp.profile_image_url
-							}
-						});
-					})
-					.catch(error => console.error(error));
+					setStore({
+						user: {
+							...store.user,
+							name: resp.name,
+							lastname: resp.lastname,
+							phone: resp.phone,
+							email: resp.email,
+							img_url: resp.profile_image_url
+						}
+					});
+					return resp;
+				} catch (err) {
+					return err.json();
+				}
 			},
 
 			generate_token: async (email, password) => {

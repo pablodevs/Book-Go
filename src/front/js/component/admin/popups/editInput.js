@@ -14,7 +14,11 @@ export const EditInput = props => {
 	const handleSubmit = event => {
 		event.preventDefault();
 		if (data.name !== "") {
-			actions.updateProduct(data);
+			actions.setToast(
+				"promise",
+				{ loading: "Guardando...", success: `${data.product} guardado` },
+				actions.updateProduct(data)
+			);
 			actions.closePopup();
 		}
 	};

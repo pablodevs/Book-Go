@@ -26,7 +26,11 @@ export const AccountSettings = () => {
 
 	const submitForm = event => {
 		event.preventDefault();
-		actions.updateUser(data);
+		actions.setToast(
+			"promise",
+			{ loading: "Guardando...", success: "Cambios guardados" },
+			actions.updateUser(data)
+		);
 	};
 
 	const handleInputChange = e => {

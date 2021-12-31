@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from "react";
-import toast from "react-hot-toast";
 import { Context } from "../../../store/appContext";
 
 export const AddProduct = () => {
@@ -16,12 +15,11 @@ export const AddProduct = () => {
 	const handleSubmit = event => {
 		event.preventDefault();
 		if (data.name !== "" && data.price !== "" && data.description !== "") {
-			toast.promise(actions.addProduct(data), {
-				loading: "Añadiendo producto...",
-				success: resp => `Producto agregado: ${resp.name}`,
-				error: () => `Error: ${store.message}`
-			});
-			actions.closePopup();
+			actions.setToast(
+				"promise",
+				{ loading: "Añadiendo...", success: resp => `Producto agregado: ${resp.name}` },
+				actions.addProduct(data)
+			);
 		}
 	};
 
@@ -33,6 +31,7 @@ export const AddProduct = () => {
 					<div className="admin-form-subgroup">
 						<label className="dashboard-label" htmlFor="new-product">
 							Nuevo producto:
+							<span>{data.name.length}</span>
 						</label>
 						<div className="dashboard-input">
 							<input

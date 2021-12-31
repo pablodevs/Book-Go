@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from "react";
-import toast from "react-hot-toast";
 import { Context } from "../../store/appContext";
 
 export const AdminProducts = () => {
@@ -37,13 +36,12 @@ export const AdminProducts = () => {
 
 	const submitFirstForm = event => {
 		event.preventDefault();
-		if (data.id && productList.includes(data.product)) {
-			toast.promise(actions.updateProduct(data), {
-				loading: "Guardando...",
-				success: "Guardado correctamente",
-				error: () => `Error: ${store.message}`
-			});
-		}
+		if (data.id && productList.includes(data.product))
+			actions.setToast(
+				"promise",
+				{ loading: "Guardando...", success: `${data.product} guardado` },
+				actions.updateProduct(data)
+			);
 	};
 	const submitSecondForm = event => {
 		event.preventDefault();
@@ -73,27 +71,29 @@ export const AdminProducts = () => {
 			<div className="admin-sections-wrapper">
 				<section className="dashboard-first-section">
 					<form onSubmit={submitFirstForm} className="dashboard-form">
-						<h2 className="dashboard-content-subtitle">Información del servicio</h2>
-						<div className="admin-icon-btn-group">
-							<button
-								type="button"
-								className="admin-icon-btn icon-btn"
-								data-tooltip="añadir producto"
-								onClick={() => actions.setPopup("add-product", "Añadir producto")}>
-								<i className="fas fa-plus" />
-							</button>
-							{/* ⚠️ OJITO: si añadimos o eliminamos un prod, se tiene que actualizar el hook productList */}
-							<button
-								type="button"
-								className={"admin-icon-btn icon-btn danger" + (data.id ? "" : " inactive")}
-								data-tooltip="eliminar producto"
-								onClick={() => {
-									if (!data.id) return;
-									const deleteFunct = () => actions.removeProduct(data.id);
-									actions.setPopup("confirm", "Eliminar el producto", undefined, deleteFunct);
-								}}>
-								<i className="fas fa-trash-alt" />
-							</button>
+						<div className="admin-form-group services-subtitle">
+							<h2 className="dashboard-content-subtitle">Información del servicio</h2>
+							<div className="admin-icon-btn-group">
+								<button
+									type="button"
+									className="admin-icon-btn icon-btn"
+									data-tooltip="añadir producto"
+									onClick={() => actions.setPopup("add-product", "Añadir producto")}>
+									<i className="fas fa-plus" />
+								</button>
+								{/* ⚠️ OJITO: si añadimos o eliminamos un prod, se tiene que actualizar el hook productList */}
+								<button
+									type="button"
+									className={"admin-icon-btn icon-btn danger" + (data.id ? "" : " inactive")}
+									data-tooltip="eliminar producto"
+									onClick={() => {
+										if (!data.id) return;
+										const deleteFunct = () => actions.removeProduct(data.id);
+										actions.setPopup("confirm", "Eliminar el producto", undefined, deleteFunct);
+									}}>
+									<i className="fas fa-trash-alt" />
+								</button>
+							</div>
 						</div>
 						<div className="admin-form-group">
 							<div className="admin-form-subgroup">
