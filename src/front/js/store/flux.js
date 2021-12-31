@@ -48,17 +48,24 @@ const getState = ({ getStore, getActions, setStore }) => {
 			forceRender: () => setStore({}),
 
 			// Genera un toast
-			setToast: (type, message, funct = null) => {
+			setToast: (type, message, funct = null, classname = "") => {
 				if (type === "error") toast.error(message);
 				else if (type === "success") toast.success(message);
 				else if (type === "blank") toast(message);
 				else if (type === "promise") {
 					const store = getStore();
-					toast.promise(funct, {
-						loading: message.loading,
-						success: message.success,
-						error: () => `Error: ${store.message !== "" ? store.message : "desconocido"}`
-					});
+					toast.promise(
+						funct,
+						{
+							loading: message.loading,
+							success: message.success,
+							error: () => `Error: ${store.message !== "" ? store.message : "desconocido"}`
+						},
+						{
+							duration: 100000,
+							className: classname
+						}
+					);
 					setStore({ message: "" });
 				}
 			},

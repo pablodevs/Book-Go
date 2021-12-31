@@ -294,3 +294,13 @@ input.search-input[type="search"]::-webkit-search-results-decoration {
     -moz-transform: translate(-50%, 0);
     -webkit-transform: translate(-50%, 0);
 }
+
+/*===== Tooltips =====*/
+.toast-confirm {
+    background: #caffbd;
+    font-weight: bold;
+}
+.toast-danger {
+    background: #ff8383;
+    font-weight: bold;
+}

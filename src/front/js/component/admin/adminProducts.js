@@ -40,7 +40,8 @@ export const AdminProducts = () => {
 			actions.setToast(
 				"promise",
 				{ loading: "Guardando...", success: `${data.product} guardado` },
-				actions.updateProduct(data)
+				actions.updateProduct(data),
+				"toast-confirm"
 			);
 	};
 	const submitSecondForm = event => {

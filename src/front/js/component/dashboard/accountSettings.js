@@ -29,7 +29,8 @@ export const AccountSettings = () => {
 		actions.setToast(
 			"promise",
 			{ loading: "Guardando...", success: "Cambios guardados" },
-			actions.updateUser(data)
+			actions.updateUser(data),
+			"toast-confirm"
 		);
 	};
 
