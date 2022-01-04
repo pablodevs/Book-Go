@@ -172,11 +172,14 @@ def generate_token():
  # GET AVAILABILITY OF A PRODUCT
 @api.route('/dispo/<product_name>', methods=['GET'])
 def get_product_dispo(product_name):
-    print('###############################################')
-    print (product_name)
-    product_query = Dispo.query.filter_by(product = product_name).all()
-    all_dispo = list(map(lambda x: x.serialize(), product_query))
-    return jsonify(all_dispo)
+    #buscamos el producto en la tabla de productos
+    product_query = Product.query.filter_by(name = product_name).all()
+    product= list(map(lambda x: x.serialize(), product_query))
+    product_id = product[0]['id']
+    #buscamos la disponibilidad del producto con id = product_id
+    product_dispo = Dispo.query.filter_by(product_id = product_id).all()
+    all_days_dispo= list(map(lambda x: x.serialize(), product_dispo))
+    return jsonify(all_days_dispo)
     
 
 
