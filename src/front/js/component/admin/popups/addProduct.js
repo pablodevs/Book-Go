@@ -18,7 +18,8 @@ export const AddProduct = () => {
 			actions.setToast(
 				"promise",
 				{ loading: "Añadiendo...", success: resp => `Producto agregado: ${resp.name}` },
-				actions.addProduct(data)
+				actions.addProduct(data),
+				"toast-confirm"
 			);
 		}
 	};
@@ -41,6 +42,7 @@ export const AddProduct = () => {
 								value={data.name}
 								autoComplete="off"
 								onChange={e => setData({ ...data, name: e.target.value })}
+								autoFocus
 								required
 							/>
 							<button
@@ -78,6 +80,7 @@ export const AddProduct = () => {
 					<div className="admin-form-subgroup">
 						<label htmlFor="new-description" className="dashboard-label">
 							Descripción
+							<span>{data.description.length}</span>
 						</label>
 						<textarea
 							id="new-description"

@@ -62,8 +62,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 							error: () => `Error: ${store.message !== "" ? store.message : "desconocido"}`
 						},
 						{
-							duration: 100000,
-							className: classname
+							duration: 4000,
+							className: classname,
+							icon: null
 						}
 					);
 					setStore({ message: "" });

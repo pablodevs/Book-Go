@@ -296,11 +296,22 @@ input.search-input[type="search"]::-webkit-search-results-decoration {
 }
 
 /*===== Tooltips =====*/
-.toast-confirm {
-    background: #caffbd;
+div.toast-confirm, div.toast-danger, button.toast-close {
+    color: white;
     font-weight: bold;
 }
-.toast-danger {
-    background: #ff8383;
-    font-weight: bold;
+div.toast-confirm {
+    background: $--color-green-confirm;
+    padding-inline: 1.4rem;
+}
+div.toast-danger {
+    background: red;
+    padding-inline: 1.4rem;
+}
+button.toast-close {
+    position: absolute;
+    right: 0.5rem;
+    top: 0.5rem;
+    line-height: 9px;
+    font-size: 18px;
 }

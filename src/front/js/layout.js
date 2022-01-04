@@ -7,7 +7,7 @@ import injectContext from "./store/appContext";
 import { Navbar } from "./component/navbar";
 import { Footer } from "./component/footer";
 import { Popup } from "./component/popup";
-import { Toaster } from "react-hot-toast";
+import toast, { ToastBar, Toaster } from "react-hot-toast";
 
 // Views
 import { Home } from "./pages/home";
@@ -20,7 +20,23 @@ const Layout = () => {
 
 	return (
 		<BrowserRouter basename={basename}>
-			<Toaster />
+			<Toaster>
+				{t => (
+					<ToastBar toast={t}>
+						{({ icon, message }) => (
+							<>
+								{icon}
+								{message}
+								{t.type !== "loading" && (
+									<button className="toast-close" onClick={() => toast.dismiss(t.id)}>
+										×
+									</button>
+								)}
+							</>
+						)}
+					</ToastBar>
+				)}
+			</Toaster>
 			<ScrollToTop>
 				<Navbar />
 				<Popup />

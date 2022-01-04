@@ -44,20 +44,20 @@ def handle_products():
         if 'name' not in body_product or body_product['name'] == "":
             raise APIException('You need to specify the name', status_code=400)
         elif len(body_product['name']) > 120:
-            raise APIException('El nombre no puede superar los 120 caracteres', status_code=400)
+            return jsonify({"message": "El nombre no puede superar los 120 caracteres"}), 400
         if 'price' not in body_product or body_product['price'] == "":
             raise APIException('You need to specify the price', status_code=400)
         if 'description' not in body_product or body_product['description'] == "":
             raise APIException('You need to create a description', status_code=400)
         elif len(body_product['description']) > 1000:
-            raise APIException('La descripción no puede superar los 1000 caracteres', status_code=400)
+            return jsonify({"message": "La descripción no puede superar los 1000 caracteres"}), 400
 
         new_product = Product(name = body_product["name"], price = body_product["price"], description = body_product["description"])
         db.session.add(new_product)
         db.session.commit()
         return jsonify(new_product.serialize()), 200
 
-    return "Invalid Method", 404
+    return jsonify({"message": "Invalid Method"}), 404
 
 
 # GET MODIFY OF DELETE A PRODUCT BY id
@@ -198,10 +198,16 @@ def handle_single_user(user_id):
     # Check body's info
     if "name" in request_body:
         user.name = request_body["name"]
+    elif len(request_body['name']) > 120:
+        raise APIException('Nombre demasiado largo', status_code=400)
     if "lastname" in request_body:
         user.lastname = request_body["lastname"]
+    elif len(request_body['lastname']) > 120:
+        raise APIException('Apellido demasiado largo', status_code=400)
     if "email" in request_body:
         user.email = request_body["email"]
+    elif len(request_body['email']) > 120:
+        raise APIException('Introduce una dirección de email válida', status_code=400)
     if "phone" in request_body:
         user.phone = request_body["phone"]
     # if "password" in request_body:

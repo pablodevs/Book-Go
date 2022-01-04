@@ -18,11 +18,12 @@ export const ConfirmPopup = props => {
 			<button
 				className="btn-cool danger logout"
 				onClick={() => {
-					toast.promise(store.popupFunct(), {
-						loading: "Cargando...",
-						success: "Eliminado",
-						error: () => `Error: ${store.message}`
-					});
+					actions.setToast(
+						"promise",
+						{ loading: "Eliminando...", success: resp => "Producto eliminado" },
+						store.popupFunct(),
+						"toast-danger"
+					);
 				}}>
 				Eliminar
 				<i className="fas fa-trash-alt" />

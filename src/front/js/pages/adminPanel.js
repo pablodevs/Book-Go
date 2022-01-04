@@ -34,9 +34,10 @@ export const AdminPanel = () => {
 		<main className="admin-panel-wrapper">
 			<div className="dashboard-wrapper admin-panel">
 				<aside className="dashboard-aside admin-aside">
-					<span className="admin-logo" onClick={showWelcome}>
-						Admin Panel
-					</span>
+					<div className="admin-logo" onClick={showWelcome}>
+						<i className="fas fa-home" />
+						<span>Admin Panel</span>
+					</div>
 					<nav>
 						<ul>
 							{/* ⚠️ Reorganizar en pantallas pequeñas para que se vean en horizontal */}

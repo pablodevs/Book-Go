@@ -17,7 +17,8 @@ export const EditInput = props => {
 			actions.setToast(
 				"promise",
 				{ loading: "Guardando...", success: `${data.product} guardado` },
-				actions.updateProduct(data)
+				actions.updateProduct(data),
+				"toast-confirm"
 			);
 			actions.closePopup();
 		}

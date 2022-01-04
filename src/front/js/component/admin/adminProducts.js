@@ -11,6 +11,7 @@ export const AdminProducts = () => {
 		product: "DEFAULT", // con 'name' no funciona bien
 		price: "",
 		description: ""
+		// IMPORTANTE: AÑADIR DURACIÓN DEL SERVICIO!
 	});
 
 	useEffect(
@@ -153,6 +154,7 @@ export const AdminProducts = () => {
 							<div className="admin-form-subgroup">
 								<label htmlFor="description" className="dashboard-label">
 									Descripción
+									<span>{data.description.length}</span>
 								</label>
 								<textarea
 									id="description"
