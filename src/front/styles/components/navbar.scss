@@ -37,8 +37,12 @@ a._navbar-link {
     padding: 0.2rem 0;
 }
 
+.avatar-miniature {
+    height: 35px;
+    width: 35px;
+}
+
 ._navbar-profile-img {
-    border: 2px solid $--color-blue-light;
     border-radius: 50%;
     object-fit: cover;
     object-position: top;
@@ -151,7 +155,7 @@ $--login-link-h: 2rem;
 // Mobile size
 @media screen and (max-width: 767.9px) {
     ._navbar {
-        padding: 0.6rem 3rem;
+        padding: 0.6rem 3vw;
         column-gap: 1rem;
         transition: all 0.25s ease-out;
         -o-transition: all 0.25s ease-out;
@@ -245,10 +249,4 @@ $--login-link-h: 2rem;
         -webkit-transform: translateY(-2rem);
     }
     ._navbar-toggle { display: inline-block }
-}
-
-@media screen and (max-width: 424.9px) {
-    ._navbar {
-        padding: 0.6rem 1rem;
-    }
 }

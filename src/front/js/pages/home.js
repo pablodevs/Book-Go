@@ -18,7 +18,7 @@ export const Home = () => {
 					<Carrousel />
 				</div>
 				<div className="mx-auto col-md-12 col-xl-5">
-					<h1 className="text-center pt-5">Healh inside !</h1>
+					<h1 className="text-center pt-5">Health inside!</h1>
 					<h5 className="p-5">
 						Lorem ipsum, dolor sit amet consectetur adipisicing elit. Asperiores voluptatum cupiditate
 						aliquam repellat sapiente nisi nemo similique impedit aliquid? Hic, saepe harum. Autem est
@@ -32,11 +32,11 @@ export const Home = () => {
 				</div>
 			</div>
 
-			<div className="container-fluid">
+			<div className="container-fluid my-5 mx-auto">
 				{store.products.length > 0 ? (
-					<div className="row">
+					<div className="row gap-5 justify-content-center">
 						{store.products.map((item, index) => (
-							<div className="col" key={index}>
+							<div className="col-auto" key={index}>
 								<Product_card product={item} />
 							</div>
 						))}

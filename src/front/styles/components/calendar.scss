@@ -55,8 +55,9 @@
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    width: 65vh;
     padding: 1rem;
-    @media screen and (max-width: 767.9px) { padding: 0.3rem }
+    @media screen and (max-width: 767.9px) { padding: 0.3rem; width: auto }
 }
 
 .week, .month {
@@ -79,7 +80,7 @@ $--days-box-shadow: inset 0 0 0 1.5px white;
     @media screen and (max-width: 767.9px) {
         aspect-ratio: 0;
         box-shadow: inset 0 0 0 1.5px $--color-grey-lighter;
-        border-radius: 16%;
+        border-radius: 10px;
     }
 }
 .today {

@@ -18,8 +18,16 @@ const injectContext = PassedComponent => {
 		);
 
 		useEffect(() => {
+			if (window.localStorage["store"] !== undefined) {
+				state.store = JSON.parse(localStorage.getItem("store"));
+				state.actions.forceRender();
+			}
+			state.actions.closePopup();
 			state.actions.calendarActions.setInitialCalendar();
+			state.actions.resetNewProduct();
 		}, []);
+
+		useEffect(() => localStorage.setItem("store", JSON.stringify(state.store)));
 
 		return (
 			<Context.Provider value={state}>

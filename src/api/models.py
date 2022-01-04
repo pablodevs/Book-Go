@@ -10,9 +10,9 @@ class User(db.Model):
     name = db.Column(db.String(120), nullable=False)
     lastname = db.Column(db.String(120), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    phone = db.Column(db.String(9), unique=True, nullable=False) # Cambiar a Nulable False
+    phone = db.Column(db.String(9), unique=True, nullable=False)
     password = db.Column(db.String(80), unique=False, nullable=False)
-    is_admin= db.Column(db.Boolean(), nullable=False, default=False)
+    is_admin= db.Column(db.Boolean(), nullable=False, default=False) # Una duda, no habría que hacer que is_admin sea Unique=True ??? de otra forma podría haberr 2 o más admins
     profile_image_url = db.Column(db.String(255), unique=False, nullable=True)
 
     reserva = db.relationship('Book', backref='user', lazy=True)
@@ -23,10 +23,10 @@ class User(db.Model):
     def serialize(self):
         return {
             "id": self.id,
-            "name" :self.name,
-            "lastname" : self.lastname,
-            "phone" : self.phone,
+            "name": self.name,
+            "lastname": self.lastname,
             "email": self.email,
+            "phone": str(self.phone),
             "is_admin" : self.is_admin,
             "profile_image_url": self.profile_image_url,
             # do not serialize the password, its a security breach
@@ -39,12 +39,12 @@ class User(db.Model):
 #TABLA DE PRODUCTOS
 class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(120), nullable=False)
-    price = db.Column(db.Integer,nullable=False)
-    description = db.Column(db.String(150),nullable=False)
-    
+    name = db.Column(db.String(120), unique=True, nullable=False) # ⚠️ Unique True porque si no da problemas en AdminiProducts que ahora no se solucionar
+    price = db.Column(db.Integer,nullable=False)  
     disponibilidad = db.relationship('Dispo', backref='product', lazy=True)
     reserva = db.relationship('Book', backref='product', lazy=True)
+    description = db.Column(db.String(1000),nullable=True)
+    # Habrá que meter sí o sí las imágenes en una url (product_img_url) unidas al id del producto
 
     def __repr__(self):
         return '<Product %r>' % self.name
@@ -55,10 +55,8 @@ class Product(db.Model):
             "name": self.name,
             "price" : self.price,
             "description" : self.description
+            # "product_img_url": self.product_img_url
         }
-
-
-
 
 
 #TABLA DE RESERVAS
@@ -82,14 +80,14 @@ class Book(db.Model):
             "product": self.product,
             "date" : self.date,
             "time" : self.time
-        
-
         }
 
 
 #TABLA DE DISPONIBILIDAD
 class Dispo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    # ⚠️⚠️ Debería ser el product id ⚠️⚠️
+    product = db.Column(db.String(120), nullable=False)
     date = db.Column(db.DateTime, nullable=False)
     time = db.Column(db.Time,nullable=False)
     available= db.Column(db.Boolean(), unique=False, nullable=False)

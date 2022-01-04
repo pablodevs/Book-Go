@@ -8,8 +8,9 @@
 $--color-pink-light: #eeb6b5;
 $--color-pink-dark: rgb(208, 122, 121);
 
+$--color-blue-lighter: rgb(217, 251, 255);
 $--color-blue-light: rgb(198, 246, 252);
-$--color-blue-regular: rgb(153,206,212);
+$--color-blue-regular: #1dc3da;
 $--color-blue-dark: rgb(75,109,157);
 
 $--color-grey-lighter: rgb(204, 211, 211);
@@ -19,3 +20,7 @@ $--color-grey-dark: rgb(47, 53, 53);
 
 $--color-green-light: rgb(185, 255, 185);
 $--color-green-confirm: rgb(21, 215, 21);
+
+// particular colors
+$--color-grey-dashboard-light: rgb(230, 230, 230);
+$--scrollbar-color: rgb(177, 177, 177);

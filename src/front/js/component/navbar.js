@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Context } from "../store/appContext.js";
 import { Link, NavLink } from "react-router-dom";
-import default_user from "../../img/dashboard/default_user.png";
 import "../../styles/components/navbar.scss";
 
 export const Navbar = () => {
@@ -30,17 +29,29 @@ export const Navbar = () => {
 				</span>
 				{store.user.token ? (
 					<Link to={store.user.is_admin ? "/admin" : "/dashboard"}>
-						<img
-							className="_navbar-profile-img"
-							src={store.user.img_url || default_user}
-							alt="foto_perfil"
-							width="30"
-							height="30"
-						/>
+						{store.user.img_url ? (
+							<img
+								className="_navbar-profile-img"
+								src={store.user.img_url}
+								alt="foto_perfil"
+								width="30"
+								height="30"
+							/>
+						) : (
+							<div className="avatar avatar-miniature">
+								<svg viewBox="0 0 24 24" className="avatar__img">
+									<path
+										d="M12,3.5c2.347,0,4.25,1.903,4.25,4.25S14.347,12,12,12s-4.25-1.903-4.25-4.25S9.653,3.5,12,3.5z
+                                M5,20.5
+                                c0-3.866,3.134-7,7-7s7,3.134,7,7H5z"
+									/>
+								</svg>
+							</div>
+						)}
 					</Link>
 				) : (
 					<button
-						className="_navbar-login coolbtn"
+						className="_navbar-login btn-cool"
 						onClick={() => {
 							actions.setPopup("login", "Iniciar Sesión");
 							setNavMenu(false);

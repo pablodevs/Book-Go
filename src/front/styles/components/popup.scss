@@ -4,7 +4,7 @@
 
 .popup-bg {
     visibility: hidden;
-    z-index: 9999;
+    z-index: 9000;
     background-color: rgba(0,0,0,.3);
     position: fixed;
     height: 100vh;
@@ -20,41 +20,38 @@
     justify-content: center;
     flex-direction: column;
     overflow: hidden;
-    width: 65vh;
+    width: fit-content;
     border-radius: 7px;
     background-color: white;
     box-shadow: -1px 1px 3px 0 rgba(0,0,0,0.2);
     
     transform: translate(-50%, -65%);
     opacity: 0;
-
-    @media screen and (max-width: 767.9px) {
-        justify-content: flex-start;
-        top: 0;
-        left: 0;
-        transform: translate(0, 100%);
-        width: 100%;
-        height: 100%;
-        border-radius: 0;
-        opacity: 1;
-        transition: all 0.3s ease-out;
-    }
 }
 .popup-header {
     display: flex;
     align-items: center;
+    gap: 1rem;
     padding: 1rem 2rem;
     width: 100%;
     box-shadow: 0 0 5px 1px rgba(9, 30, 66, 0.13);
-
-    margin-bottom: 1.3rem;
-    @media screen and (max-width: 767.9px) { margin-bottom: 0 }
-    
+    margin-bottom: 1.5rem;
+        
     & h1 { font-size: 1.4rem; font-weight: 600; }
     & i { font-size: 1rem; color: $--color-grey-dark }
 }
-
-.popup-return { display: flex; margin-right: 1rem }
+.popup-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    width: fit-content;
+    height: 100%;
+    padding: 2rem;
+    margin-block: auto;
+    & .btn-confirm { margin-inline: auto }
+}
+.popup-return { display: flex }
 .popup-close { display: flex; margin-left: auto }
 
 .popup-bg-show { visibility: visible; opacity: 1; transition: all 0.2s ease-out }
@@ -65,5 +62,23 @@
 }
 
 @media screen and (max-width: 767.9px) {
+    .popup {
+        justify-content: flex-start;
+        top: 0;
+        left: 0;
+        transform: translate(0, 100%);
+        width: 100%;
+        height: 100%;
+        border-radius: 0;
+        opacity: 1;
+        transition: all 0.3s ease-out;
+    }
     .popup-show { transform: translateY(0) }
+    .popup-header {
+        margin-bottom: 0;
+    }
+    .popup-body {
+        height: auto;
+        padding: 1rem;
+    }
 }

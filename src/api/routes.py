@@ -22,55 +22,131 @@ api = Blueprint('api', __name__)
 # @api.route('/route', methods=['POST', 'GET', '...'])
 # def function():
 
-# GET ALL PRODUCTS
-@api.route('/products', methods=['GET'])
-def get_all_products():
+# GET ALL PRODUCTS or CREATE A PRODUCT
+@api.route('/products', methods=['GET', 'POST'])
+def handle_products():
+    """
+    All Products
+    """
+    # GET all products
+    if request.method == 'GET':
+        products = Product.query.all()
+        all_products = list(map(lambda x: x.serialize(), products))
+        return jsonify(all_products), 200
 
-    product_query = Product.query.all()
-    all_products = list(map(lambda x: x.serialize(), product_query))
-    return jsonify(all_products)
+    # Create (POST) a new product
+    if request.method == 'POST':
+        body_product = request.json
+
+        # Data validation
+        if body_product is None:
+            raise APIException("You need to specify the request body as a json object", status_code=400)
+        if 'name' not in body_product or body_product['name'] == "":
+            raise APIException('You need to specify the name', status_code=400)
+        elif len(body_product['name']) > 120:
+            return jsonify({"message": "El nombre no puede superar los 120 caracteres"}), 400
+        if 'price' not in body_product or body_product['price'] == "":
+            raise APIException('You need to specify the price', status_code=400)
+        if 'description' not in body_product or body_product['description'] == "":
+            raise APIException('You need to create a description', status_code=400)
+        elif len(body_product['description']) > 1000:
+            return jsonify({"message": "La descripción no puede superar los 1000 caracteres"}), 400
+
+        new_product = Product(name = body_product["name"], price = body_product["price"], description = body_product["description"])
+        db.session.add(new_product)
+        db.session.commit()
+        return jsonify(new_product.serialize()), 200
+
+    return jsonify({"message": "Invalid Method"}), 404
 
 
+# GET MODIFY OF DELETE A PRODUCT BY id
+@api.route('/products/<int:product_id>', methods=['PUT', 'GET', 'DELETE'])
+def handle_single_product(product_id):
+    """
+    Single product
+    """
+    product = Product.query.get(product_id)
 
-# GET ONE PRODUCT
-@api.route('/products/<int:id>', methods=['GET'])
-def get_one_product(id):
-
-    product_query = Product.query.get(id)
-    return jsonify(product_query.serialize()),200
-
-
-#CREATE NEW USER
-@api.route('/user', methods=['POST'])
-def create_new_user():
-
-    # fetch for the user
-    name_received = request.form.get("name", None)
-    lastname_received = request.form.get("lastname", None)
-    email_received = request.form.get("email", None)
-    phone_received = request.form.get("phone", None)
-    password_received = request.form.get("password", None)
-    user = User(email = email_received, phone = phone_received, password = password_received, name = name_received , lastname = lastname_received)
- 
-    
-
-    # validate that the front-end request was built correctly
-    if 'profile_image' in request.files:
-        # upload file to uploadcare
-        cloudinary.config( 
-        cloud_name = os.getenv('CLOUD_NAME'), 
-        api_key = os.getenv('API_KEY'), 
-        api_secret = os.getenv('API_SECRET') 
-        )
-  
-        result = cloudinary.uploader.upload(request.files['profile_image'])
-        # update the user with the given cloudinary image URL
-        user.profile_image_url = result['secure_url']
-
+    # Data validation
+    if product is None:
+        raise APIException('Product not found in data base', status_code=404)
         
-    db.session.add(user)
-    db.session.commit()
-    return jsonify(user.serialize()), 200
+    # Modify (PUT) a product
+    if request.method == 'PUT':
+        request_body = request.json
+
+        # Check body's info
+        if "name" in request_body:
+            product.name = request_body["name"]
+        if "price" in request_body:
+            product.price = request_body["price"]
+        if "description" in request_body:
+            product.description = request_body["description"]
+
+        db.session.commit()
+        return jsonify(product.serialize()), 200
+
+    # GET a product
+    elif request.method == 'GET':
+        return jsonify(product.serialize()), 200
+    
+    # DELETE a product
+    elif request.method == 'DELETE':
+        db.session.delete(product)
+        db.session.commit()
+        return jsonify({"message": "The product has been deleted"}), 200
+
+    return jsonify({"message": "Invalid Method"}), 404
+        
+#CREATE NEW USER or GET ALL USERS
+@api.route('/user', methods=['GET', 'POST'])
+def handle_users():
+    """
+    All Users
+    """
+    # GET all clients
+    if request.method == 'GET':
+        all_users = sorted(User.query.all(), key = lambda user: user.serialize()["name"].lower())
+        all_clients = [user.serialize() for user in all_users if not user.serialize()["is_admin"]]
+        return jsonify(all_clients), 200
+
+    # Create (POST) a new user
+    if request.method == 'POST':
+        body_user = request.json
+
+        # Data validation
+        if body_user is None:
+            raise APIException("You need to specify the request body as a json object", status_code=400)
+        if 'name' not in body_user or body_user['name'] == "":
+            raise APIException('You need to specify the name', status_code=400)
+        if 'lastname' not in body_user or body_user['lastname'] == "":
+            raise APIException('You need to specify the lastname', status_code=400)
+        if 'email' not in body_user or body_user['email'] == "":
+            raise APIException('You need to create a email', status_code=400)
+        if 'phone' not in body_user or body_user['phone'] == "":
+            raise APIException('You need to specify the phone', status_code=400)
+        if 'password' not in body_user or body_user['password'] == "":
+            raise APIException('You need to specify the password', status_code=400)
+            # validate that the front-end request was built correctly
+        # if 'profile_image' in request.files:
+        #     # upload file to uploadcare
+        #     cloudinary.config( 
+        #     cloud_name = os.getenv('CLOUD_NAME'), 
+        #     api_key = os.getenv('API_KEY'), 
+        #     api_secret = os.getenv('API_SECRET') 
+        #     )
+        # cloudinary_result = cloudinary.uploader.upload(request.files['profile_image'])
+
+        new_user = User(name = body_user["name"], lastname = body_user["lastname"], email = body_user["email"], phone = body_user["phone"], password = body_user["password"])
+        # update the user with the given cloudinary image URL
+        # user.profile_image_url = cloudinary_result['secure_url']
+
+        db.session.add(new_user)
+        db.session.commit()
+        return jsonify(new_user.serialize()), 200
+
+    return "Invalid Method", 404
     
 
 #GENERATE TOKEN
@@ -122,10 +198,16 @@ def handle_single_user(user_id):
     # Check body's info
     if "name" in request_body:
         user.name = request_body["name"]
+    elif len(request_body['name']) > 120:
+        raise APIException('Nombre demasiado largo', status_code=400)
     if "lastname" in request_body:
         user.lastname = request_body["lastname"]
+    elif len(request_body['lastname']) > 120:
+        raise APIException('Apellido demasiado largo', status_code=400)
     if "email" in request_body:
         user.email = request_body["email"]
+    elif len(request_body['email']) > 120:
+        raise APIException('Introduce una dirección de email válida', status_code=400)
     if "phone" in request_body:
         user.phone = request_body["phone"]
     # if "password" in request_body:
@@ -134,3 +216,4 @@ def handle_single_user(user_id):
     db.session.commit()
 
     return jsonify(user.serialize()), 200
+
