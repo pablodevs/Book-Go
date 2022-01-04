@@ -6,6 +6,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
 			message: "",
+			//hours_view muestra las horas disponibles si es true
+			hours_view: false,
+			// creamos booking_day para pasar el día seleccionado para reservar
+			booking_day: null,
 
 			calendar: {
 				todayDate: new Date(),
@@ -112,6 +116,13 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			// Meto todas las acciones del componente calendario en calendarActions:
 			calendarActions: {
+				//cambia la variable del store hours_view
+				changeHoursView: day => {
+					const store = getStore();
+					//cambiamos la variable booking_day con el día seleccionado para reservar
+					setStore({ booking_day: day });
+					// setStore({ hours_view: !store.hours_view });
+				},
 				//inicia el calendario
 				setInitialCalendar: () => {
 					// Inicializa el calendario con la fecha actual al cargar la página

@@ -18,7 +18,17 @@ export const Day = props => {
 			onClick={
 				props.isChangeMonthDay || props.isChangeMonthDay === 0
 					? () => actions.calendarActions.updateCalendar(props.isChangeMonthDay)
-					: () => undefined // ⚠️⚠️⚠️⚠️⚠️
+					: //al hacer click en un día que tiene disponibilidad.... te aparecen las horas disponibles
+					  () => {
+							actions.calendarActions.changeHoursView(
+								props.date.getDate() +
+									"/" +
+									//quito los ceros delante del mes que sea menor a 10
+									((props.date.getMonth() + 1) * 1).toString() +
+									"/" +
+									props.date.getFullYear()
+							);
+					  }
 			}>
 			{props.date.getDate()}
 		</button>
