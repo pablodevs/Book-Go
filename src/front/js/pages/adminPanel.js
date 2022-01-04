@@ -13,6 +13,7 @@ export const AdminPanel = () => {
 	const { actions, store } = useContext(Context);
 	const [content, setContent] = useState(null);
 	const [activeTab, setActiveTab] = useState("");
+	const [showMenu, setShowMenu] = useState(false);
 
 	const showWelcome = () => {
 		setActiveTab("Welcome");
@@ -32,107 +33,114 @@ export const AdminPanel = () => {
 		<Redirect to="/" />
 	) : (
 		<main className="admin-panel-wrapper">
-			<div className="dashboard-wrapper admin-panel">
-				<aside className="dashboard-aside admin-aside">
-					<div className="admin-logo" onClick={showWelcome}>
-						<i className="fas fa-home" />
-						<span>Admin Panel</span>
-					</div>
-					<nav>
-						<ul>
-							{/* ⚠️ Reorganizar en pantallas pequeñas para que se vean en horizontal */}
-							<li className="dashboard-li">
-								<button
-									className={"dashboard-tab" + (activeTab === "Reservas" ? " tab-active" : "")}
-									onClick={() => {
-										setActiveTab("Reservas");
-										setContent(<Reservations />);
-									}}>
-									<i className="far fa-calendar-alt" />
-									<span>Reservas</span>
-								</button>
-							</li>
-							<li className="dashboard-li">
-								<button
-									className={"dashboard-tab" + (activeTab === "Clientes" ? " tab-active" : "")}
-									onClick={() => {
-										setActiveTab("Clientes");
-										setContent(<ClientList />);
-									}}>
-									<i className="fas fa-user-friends" />
-									<span>Clientes</span>
-								</button>
-							</li>
-							<li className="dashboard-li">
-								<button
-									className={"dashboard-tab" + (activeTab === "Estadísticas" ? " tab-active" : "")}
-									onClick={() => {
-										setActiveTab("Estadísticas");
-										setContent(
-											// Aquí iría un <Componente/> con el contenido que queramos mostrar en cada caso
-											<div className="dashboard-content-wrapper">
-												<h1 className="dashboard-content-title">Estadísticas</h1>
-											</div>
-										);
-									}}>
-									<i className="far fa-chart-bar" />
-									<span>Estadísticas</span>
-								</button>
-							</li>
-							<li className="dashboard-li">
-								<button
-									className={"dashboard-tab" + (activeTab === "Productos" ? " tab-active" : "")}
-									onClick={() => {
-										setActiveTab("Productos");
-										setContent(<AdminProducts />);
-									}}>
-									<i className="fas fa-cog" />
-									<span>Servicios</span>
-								</button>
-							</li>
-							<li className="dashboard-li">
-								<button
-									className={"dashboard-tab" + (activeTab === "Negocio" ? " tab-active" : "")}
-									onClick={() => {
-										setActiveTab("Negocio");
-										setContent(
-											<div className="dashboard-content-wrapper admin-products">
-												<h1 className="dashboard-content-title">Configuración del negocio</h1>
-												<BusinessSettings />
-											</div>
-										);
-									}}>
-									<i className="fas fa-store-alt" />
-									<span>Negocio</span>
-								</button>
-							</li>
-							<li className="dashboard-li">
-								<button
-									className={"dashboard-tab" + (activeTab === "Perfil" ? " tab-active" : "")}
-									onClick={() => {
-										setActiveTab("Perfil");
-										setContent(
-											<div className="dashboard-content-wrapper admin-products">
-												<h1 className="dashboard-content-title">Configuración del perfil</h1>
-												<AccountSettings />
-											</div>
-										);
-									}}>
-									<i className="fas fa-user" />
-									<span>Perfil</span>
-								</button>
-							</li>
-							<li className="admin-logout">
+			<div className="admin-panel">
+				<aside className="admin-aside">
+					<div className="admin-aside-content">
+						<div className="aside-toggle-wrapper">
+							<button className="_navbar-toggle" onClick={() => setShowMenu(!showMenu)}>
+								{showMenu ? <i className="fas fa-times" /> : <i className="fas fa-bars" />}
+							</button>
+						</div>
+						<nav className={showMenu ? "show-menu" : ""}>
+							<ul>
+								{/* ⚠️ Reorganizar en pantallas pequeñas para que se vean en horizontal */}
+								<li>
+									<button
+										className={"admin-tab" + (activeTab === "Reservas" ? " tab-active" : "")}
+										onClick={() => {
+											setActiveTab("Reservas");
+											setContent(<Reservations />);
+										}}>
+										<i className="far fa-calendar-alt" />
+										<span>Reservas</span>
+									</button>
+								</li>
+								<li>
+									<button
+										className={"admin-tab" + (activeTab === "Clientes" ? " tab-active" : "")}
+										onClick={() => {
+											setActiveTab("Clientes");
+											setContent(<ClientList />);
+										}}>
+										<i className="fas fa-user-friends" />
+										<span>Clientes</span>
+									</button>
+								</li>
+								<li>
+									<button
+										className={"admin-tab" + (activeTab === "Estadísticas" ? " tab-active" : "")}
+										onClick={() => {
+											setActiveTab("Estadísticas");
+											setContent(
+												// Aquí iría un <Componente/> con el contenido que queramos mostrar en cada caso
+												<div className="dashboard-content-wrapper">
+													<h1 className="dashboard-content-title">Estadísticas</h1>
+												</div>
+											);
+										}}>
+										<i className="far fa-chart-bar" />
+										<span>Estadísticas</span>
+									</button>
+								</li>
+								<li>
+									<button
+										className={"admin-tab" + (activeTab === "Productos" ? " tab-active" : "")}
+										onClick={() => {
+											setActiveTab("Productos");
+											setContent(<AdminProducts />);
+										}}>
+										<i className="fas fa-cog" />
+										<span>Servicios</span>
+									</button>
+								</li>
+								<li>
+									<button
+										className={"admin-tab" + (activeTab === "Negocio" ? " tab-active" : "")}
+										onClick={() => {
+											setActiveTab("Negocio");
+											setContent(
+												<div className="dashboard-content-wrapper admin-products">
+													<h1 className="dashboard-content-title">
+														Configuración del negocio
+													</h1>
+													<BusinessSettings />
+												</div>
+											);
+										}}>
+										<i className="fas fa-store-alt" />
+										<span>Negocio</span>
+									</button>
+								</li>
+								<li>
+									<button
+										className={"admin-tab" + (activeTab === "Perfil" ? " tab-active" : "")}
+										onClick={() => {
+											setActiveTab("Perfil");
+											setContent(
+												<div className="dashboard-content-wrapper admin-products">
+													<h1 className="dashboard-content-title">
+														Configuración del perfil
+													</h1>
+													<AccountSettings />
+												</div>
+											);
+										}}>
+										<i className="fas fa-user" />
+										<span>Perfil</span>
+									</button>
+								</li>
+							</ul>
+							<div className="admin-logout">
+								<Link className="btn-cool" to="/">
+									Home
+								</Link>
 								<button className="logout btn-cool" onClick={() => actions.logout()}>
 									<span>Salir</span>
 									<i className="fas fa-sign-out-alt" />
 								</button>
-								<Link className="btn-cool" to="/">
-									Home
-								</Link>
-							</li>
-						</ul>
-					</nav>
+							</div>
+						</nav>
+					</div>
 				</aside>
 				<section className="dashboard-content admin-content">{content}</section>
 			</div>

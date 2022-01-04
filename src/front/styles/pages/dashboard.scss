@@ -122,10 +122,9 @@ button.dashboard-edit-img {
 .dashboard-tab {
     width: 100%;
     display: flex;
-    align-items: center;
+    align-items: baseline;
     gap: 0.5rem;
-    padding: 1.3rem 1.3rem 1.3rem 0;
-    text-align: start;
+    padding: 1.3rem 1.3rem 1.3rem 0.5rem;
     color: $--color-grey-dark;
     & > i {
         color: $--color-grey-light;
@@ -140,9 +139,8 @@ button.dashboard-edit-img {
         -moz-transform: translateX(10px);
         -webkit-transform: translateX(10px);
         font-weight: 600;
-        & > i {
-            color: $--color-blue-dark;
-        }
+        color: $--color-blue-dark;
+        & > i { color: $--color-blue-dark }
     }
     
 }
@@ -176,7 +174,7 @@ button.dashboard-edit-img {
         grid-template-areas: "aside"
                              "content";
     }
-    .dashboard-aside, aside.admin-aside { padding: 3rem 4vw }
+    .dashboard-aside { padding: 3rem 4vw }
     .dashboard-content, section.admin-content {
         margin: 0 4vw 4vw 4vw;
         padding: 0;

@@ -155,7 +155,7 @@ $--login-link-h: 2rem;
 // Mobile size
 @media screen and (max-width: 767.9px) {
     ._navbar {
-        padding: 0.6rem 3rem;
+        padding: 0.6rem 3vw;
         column-gap: 1rem;
         transition: all 0.25s ease-out;
         -o-transition: all 0.25s ease-out;
@@ -249,10 +249,4 @@ $--login-link-h: 2rem;
         -webkit-transform: translateY(-2rem);
     }
     ._navbar-toggle { display: inline-block }
-}
-
-@media screen and (max-width: 424.9px) {
-    ._navbar {
-        padding: 0.6rem 1rem;
-    }
 }

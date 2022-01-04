@@ -5,39 +5,91 @@
 
 .admin-panel-wrapper {
     position: absolute;
+    display: flex;
+    flex-direction: column;
     z-index: 1050;
     min-height: 100vh;
     width: 100%;
     background-color: white;
 }
 
-.dashboard-wrapper.admin-panel {
-    grid-template-columns: auto 1fr;
+.admin-panel {
     margin-inline: auto;
     max-width: none;
+    flex: 1;
     width: calc(min(100%, 1400px));
 }
 
-.admin-logo {
-    color: $--color-blue-dark;
-    font-size: 1.3rem;
-    font-weight: bold;
-    padding: 2rem 0.8rem 1rem 0;
-    cursor: pointer
-}
 .admin-aside {
-    padding: 0rem 0 1rem 2vw;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    height: 100vh;
+    background-color: $--color-grey-dark;
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
     & ul {
         display: flex;
         flex-direction: column;
     }
-    & nav, & ul { height: 100% }
+    & nav {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        padding: 0rem 0 1rem 2vw;
+        background-color: $--color-grey-dark;
+    }
 }
+
+.aside-toggle-wrapper {
+    display: flex;
+    justify-content: flex-end;
+    z-index: 1;
+}
+
+.admin-aside-content {
+    height: 100%;
+}
+
+.admin-tab {
+    display: grid;
+    grid-template-columns: 30px auto;
+    gap: 1rem;
+    color: $--color-grey-regular;
+    &:hover {
+        color: $--color-blue-light;
+    }
+    &.tab-active {
+        color: white;
+        font-weight: bold;
+    }
+}
+
+.admin-aside nav {
+    & span { line-height: 1rem }
+    & .admin-tab {
+        justify-content: center;
+        padding: 1.3rem 0.5rem;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .admin-aside nav {
+        & > .admin-logout, & span {
+            visibility: hidden;
+            display: none
+        }
+        &:hover {
+            & > .admin-logout, & span { visibility: visible; display: flex }
+            & .admin-tab { width: fit-content }
+        }
+    }
+}
+
 .admin-logout {
     display: flex;
     justify-content: space-between;
-    margin-top: auto;
-    padding-right: 1rem;
+    margin: auto 1.3rem 0 0;
     gap: 0.8rem
 }
 .btn-cool.logout {
@@ -50,7 +102,7 @@
         background-color: $--color-pink-dark;
     }
 }
-.admin-content { margin: 0rem 2vw 1rem 0 }
+.admin-content { margin: 0rem 2vw 1rem 7rem }
 
 @media screen and (max-width: 767.9px) {
     .dashboard-wrapper.admin-panel {
@@ -58,9 +110,33 @@
         grid-template-areas:"aside"
                             "content";
     }
-    .admin-logout {
-        padding-block: 1.3rem;
-        border-bottom: $--dashboard-border-style
+    .admin-aside {
+        width: 100%;
+        position: relative;
+        height: fit-content;
+        padding: 0.6rem 3vw;
+        & nav {
+            transform: translateY(-110%);
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            width: 100%;
+            padding: 3rem 3vw 1rem 3vw;
+        }
+    }
+    .admin-aside-content {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+    .admin-logout { margin-right: 0 }
+    nav.show-menu {
+        transform: translateY(0);
+    }
+    .admin-tab {
+        font-size: 1.5rem;
+        align-items: center;
     }
 }
 
@@ -75,7 +151,7 @@
     display: flex;
     flex-flow: row wrap;
     align-content: flex-start;
-    justify-content: space-between;
+    justify-content: flex-start;
     gap: 3rem;
 }
 
@@ -86,15 +162,15 @@
     padding: 1.5rem;
 }
 
-@media screen and (min-width: 1500px) {
-    .dashboard-first-section { grid-area: uno; min-width: 100% }
-    .dashboard-second-section { grid-area: dos; min-width: 100% }
-    .admin-sections-wrapper {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        grid-template-areas: "uno dos";
-    }
-}
+// @media screen and (min-width: 1500px) {
+//     .dashboard-first-section { grid-area: uno; min-width: 100% }
+//     .dashboard-second-section { grid-area: dos; min-width: 100% }
+//     .admin-sections-wrapper {
+//         display: grid;
+//         grid-template-columns: 1fr 1fr;
+//         grid-template-areas: "uno dos";
+//     }
+// }
 .dashboard-form div.services-subtitle {
     align-items: center;
 }
