@@ -7,6 +7,7 @@ from api.utils import generate_sitemap, APIException
 import cloudinary
 import cloudinary.uploader
 import os
+from sqlalchemy import and_
 
 #para la autenticación y generar el token
 from flask_jwt_extended import create_access_token
@@ -176,8 +177,8 @@ def get_product_dispo(product_name):
     product_query = Product.query.filter_by(name = product_name).all()
     product= list(map(lambda x: x.serialize(), product_query))
     product_id = product[0]['id']
-    #buscamos la disponibilidad del producto con id = product_id
-    product_dispo = Dispo.query.filter_by(product_id = product_id).all()
+    #buscamos la disponibilidad del producto con id = product_id y available true
+    product_dispo = Dispo.query.filter(and_(Dispo.product_id == product_id , Dispo.available == True)).all()
     all_days_dispo= list(map(lambda x: x.serialize(), product_dispo))
     return jsonify(all_days_dispo)
     
