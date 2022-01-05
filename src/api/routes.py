@@ -147,7 +147,57 @@ def handle_users():
         return jsonify(new_user.serialize()), 200
 
     return "Invalid Method", 404
+
+
+# GET MODIFY OF DELETE A USER BY id
+@api.route('/user/<int:user_id>', methods=['PUT', 'GET', 'DELETE'])
+def handle_single_user(user_id):
+    """
+    Single user
+    """
+    user = User.query.get(user_id)
+
+    # Data validation
+    if user is None:
+        raise APIException('User not found in data base', status_code=404)
+
+    # Modify (PUT) a user
+    if request.method == 'PUT':
+        # Query body
+        request_body = request.json
+
+        # Check body's info
+        if "name" in request_body:
+            user.name = request_body["name"]
+        elif len(request_body['name']) > 120:
+            raise APIException('Nombre demasiado largo', status_code=400)
+        if "lastname" in request_body:
+            user.lastname = request_body["lastname"]
+        elif len(request_body['lastname']) > 120:
+            raise APIException('Apellido demasiado largo', status_code=400)
+        if "email" in request_body:
+            user.email = request_body["email"]
+        elif len(request_body['email']) > 120:
+            raise APIException('Introduce una dirección de email válida', status_code=400)
+        if "phone" in request_body:
+            user.phone = request_body["phone"]
+        # if "password" in request_body:
+        #     user.password = request_body["password"]
+
+        db.session.commit()
+        return jsonify(user.serialize()), 200
+        
+    # GET a user
+    elif request.method == 'GET':
+        return jsonify(user.serialize()), 200
     
+    # DELETE a user
+    elif request.method == 'DELETE':
+        db.session.delete(user)
+        db.session.commit()
+        return jsonify({"message": "The user has been deleted"}), 200
+
+    return jsonify({"message": "Invalid Method"}), 404
 
 #GENERATE TOKEN
 @api.route('/token', methods=['POST'])
@@ -176,44 +226,5 @@ def get_product_dispo(product_name):
     print (product_name)
     product_query = Dispo.query.filter_by(product = product_name).all()
     all_dispo = list(map(lambda x: x.serialize(), product_query))
+
     return jsonify(all_dispo)
-    
-
-
-# CHANGE USER INFO
-@api.route('/user/<int:user_id>', methods=['PUT'])
-def handle_single_user(user_id):
-    """
-    Single user
-    """
-    user = User.query.get(user_id)
-
-    # Data validation
-    if user is None:
-        raise APIException('User not found in data base', status_code=404)
-    
-    # Query body
-    request_body = request.json
-
-    # Check body's info
-    if "name" in request_body:
-        user.name = request_body["name"]
-    elif len(request_body['name']) > 120:
-        raise APIException('Nombre demasiado largo', status_code=400)
-    if "lastname" in request_body:
-        user.lastname = request_body["lastname"]
-    elif len(request_body['lastname']) > 120:
-        raise APIException('Apellido demasiado largo', status_code=400)
-    if "email" in request_body:
-        user.email = request_body["email"]
-    elif len(request_body['email']) > 120:
-        raise APIException('Introduce una dirección de email válida', status_code=400)
-    if "phone" in request_body:
-        user.phone = request_body["phone"]
-    # if "password" in request_body:
-    #     user.password = request_body["password"]
-
-    db.session.commit()
-
-    return jsonify(user.serialize()), 200
-

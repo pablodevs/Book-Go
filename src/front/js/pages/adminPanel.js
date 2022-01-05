@@ -29,6 +29,18 @@ export const AdminPanel = () => {
 
 	useEffect(showWelcome, []);
 
+	useEffect(
+		() => {
+			if (showMenu) {
+				document.querySelector("html").style.position = "fixed";
+				document.querySelector("html").style.overflowY = "scroll";
+			} else {
+				document.querySelector("html").style.position = "initial";
+			}
+		},
+		[showMenu]
+	);
+
 	return !store.user.token && !store.user.is_admin ? (
 		<Redirect to="/" />
 	) : (
@@ -50,6 +62,7 @@ export const AdminPanel = () => {
 										onClick={() => {
 											setActiveTab("Reservas");
 											setContent(<Reservations />);
+											setShowMenu(false);
 										}}>
 										<i className="far fa-calendar-alt" />
 										<span>Reservas</span>
@@ -61,6 +74,7 @@ export const AdminPanel = () => {
 										onClick={() => {
 											setActiveTab("Clientes");
 											setContent(<ClientList />);
+											setShowMenu(false);
 										}}>
 										<i className="fas fa-user-friends" />
 										<span>Clientes</span>
@@ -77,6 +91,7 @@ export const AdminPanel = () => {
 													<h1 className="dashboard-content-title">Estadísticas</h1>
 												</div>
 											);
+											setShowMenu(false);
 										}}>
 										<i className="far fa-chart-bar" />
 										<span>Estadísticas</span>
@@ -88,6 +103,7 @@ export const AdminPanel = () => {
 										onClick={() => {
 											setActiveTab("Productos");
 											setContent(<AdminProducts />);
+											setShowMenu(false);
 										}}>
 										<i className="fas fa-cog" />
 										<span>Servicios</span>
@@ -106,6 +122,7 @@ export const AdminPanel = () => {
 													<BusinessSettings />
 												</div>
 											);
+											setShowMenu(false);
 										}}>
 										<i className="fas fa-store-alt" />
 										<span>Negocio</span>
@@ -116,14 +133,8 @@ export const AdminPanel = () => {
 										className={"admin-tab" + (activeTab === "Perfil" ? " tab-active" : "")}
 										onClick={() => {
 											setActiveTab("Perfil");
-											setContent(
-												<div className="dashboard-content-wrapper admin-products">
-													<h1 className="dashboard-content-title">
-														Configuración del perfil
-													</h1>
-													<AccountSettings />
-												</div>
-											);
+											setContent(<AccountSettings />);
+											setShowMenu(false);
 										}}>
 										<i className="fas fa-user" />
 										<span>Perfil</span>

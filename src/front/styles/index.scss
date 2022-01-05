@@ -137,6 +137,9 @@ button.disabled, a.disabled {
     }
 }
 button.btn-cool.danger {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
     box-shadow: inset 0 0 0 2px red;
     color: red;
     &:hover {

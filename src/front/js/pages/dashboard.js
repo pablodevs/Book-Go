@@ -79,12 +79,7 @@ export const Dashboard = () => {
 								className={"dashboard-tab" + (activeTab === "Cuenta" ? " tab-active" : "")}
 								onClick={() => {
 									setActiveTab("Cuenta");
-									setContent(
-										<div className="dashboard-content-wrapper">
-											<h1 className="dashboard-content-title">Cuenta y Configuración</h1>
-											<AccountSettings />
-										</div>
-									);
+									setContent(<AccountSettings />);
 								}}>
 								<i className="fas fa-cog" />
 								<span>Cuenta y Configuración</span>

@@ -302,6 +302,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 				actions.generate_token(data.email, data.password);
 				return resp;
 			},
+
+			// Update current USER
 			updateUser: async data => {
 				const store = getStore();
 				try {
@@ -327,6 +329,26 @@ const getState = ({ getStore, getActions, setStore }) => {
 							img_url: resp.profile_image_url
 						}
 					});
+					return resp;
+				} catch (err) {
+					return err.json();
+				}
+			},
+
+			// Delete current USER
+			deleteUser: async id => {
+				const actions = getActions();
+				try {
+					const response = await fetch(process.env.BACKEND_URL + `/user/${id}`, {
+						method: "DELETE"
+					});
+					const resp = await response.json();
+					if (!response.ok) {
+						setStore({ message: resp.message });
+						throw Error(response);
+					}
+					actions.logout();
+					actions.closePopup();
 					return resp;
 				} catch (err) {
 					return err.json();
