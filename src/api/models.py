@@ -83,6 +83,7 @@ class Dispo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     # ⚠️⚠️ Debería ser el product id ⚠️⚠️
     product = db.Column(db.String(120), nullable=False)
+    # ⚠️⚠️ Debería aparecer el id del usuario que hace la reserva ⚠️⚠️
     date = db.Column(db.DateTime, nullable=False)
     time = db.Column(db.Time,nullable=False)
     available= db.Column(db.Boolean(), unique=False, nullable=False)

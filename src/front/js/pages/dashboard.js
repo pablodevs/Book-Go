@@ -14,6 +14,16 @@ export const Dashboard = () => {
 	const { actions, store } = useContext(Context);
 	const [content, setContent] = useState(null);
 	const [activeTab, setActiveTab] = useState("");
+	const [token, setToken] = useState(null);
+
+	useEffect(
+		() => {
+			let localToken = JSON.parse(localStorage.getItem("store")).user.token || store.user.token;
+			if (localToken) setToken(localToken);
+			else history.push("/");
+		},
+		[store.user.token]
+	);
 
 	useEffect(() => {
 		store.user.name
@@ -26,9 +36,7 @@ export const Dashboard = () => {
 			: null;
 	}, []);
 
-	return !store.user.token ? (
-		<Redirect to="/" />
-	) : (
+	return !token ? null : (
 		<div className="dashboard-wrapper">
 			<aside className="dashboard-aside">
 				<div className="dashboard-user-info">
