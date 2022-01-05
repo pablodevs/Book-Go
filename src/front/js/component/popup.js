@@ -9,6 +9,7 @@ import { EditInput } from "./admin/popups/editInput.js";
 import { AddProduct } from "./admin/popups/addProduct.js";
 import { ConfirmPopup } from "./confirmPopup.js";
 import "../../styles/components/popup.scss";
+import { Booking_resume } from "./booking/booking_resume.jsx";
 
 export const Popup = () => {
 	const { store, actions } = useContext(Context);
@@ -71,6 +72,8 @@ export const Popup = () => {
 					<ProductsPopup />
 				) : store.popup === "calendar" ? (
 					<Calendar />
+				) : store.popup === "resume" ? (
+					<Booking_resume />
 				) : store.popup === "guest" ? (
 					<Guest />
 				) : store.popup === "edit-product" ? (

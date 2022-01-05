@@ -6,10 +6,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
 			message: "",
-			//hours_view muestra las horas disponibles si es true
-			hours_view: false,
+			//resume_view muestra el resumen de la reserva
+			resume_view: false,
 			// creamos booking_day para pasar el día seleccionado para reservar
 			booking_day: null,
+			booking: {},
 
 			calendar: {
 				todayDate: new Date(),
@@ -48,6 +49,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 		},
 
 		actions: {
+			//BOOKING
+			booking: data => {
+				let store = getStore();
+				setStore({ booking: data });
+			},
 			// Force render without change data
 			forceRender: () => setStore({}),
 
