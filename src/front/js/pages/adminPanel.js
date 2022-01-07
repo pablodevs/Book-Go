@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Link, Redirect } from "react-router-dom";
+import { Link, Redirect, useHistory } from "react-router-dom";
 import { Context } from "../store/appContext";
 import { Reservations } from "../component/admin/reservations";
 import { ClientList } from "../component/admin/clientList";
@@ -15,8 +15,9 @@ export const AdminPanel = () => {
 	const [activeTab, setActiveTab] = useState("");
 	const [showMenu, setShowMenu] = useState(false);
 
+	// let history = useHistory();
+
 	const showWelcome = () => {
-		setActiveTab("Welcome");
 		store.user.name
 			? setContent(
 					<div className="center dashboard-welcome">
@@ -29,6 +30,27 @@ export const AdminPanel = () => {
 
 	useEffect(showWelcome, []);
 
+	// useEffect(
+	// 	() => {
+	// 		let userToken = store.token || localStorage.getItem("token");
+	// 		if (userToken) actions.getProfileData(userToken);
+	// 		else history.push("/");
+	// 	},
+	// 	[store.token]
+	// );
+
+	// useEffect(
+	// 	() => {
+	// 		if (store.user.name)
+	// 			setContent(
+	// 				<div className="center dashboard-welcome">
+	// 					<h2>¡Hola {store.user.name.charAt(0).toUpperCase() + store.user.name.slice(1)}!</h2>
+	// 					<img src={house} width="100" height="100" />
+	// 				</div>
+	// 			);
+	// 	},
+	// 	[store.user.name]
+	// );
 	useEffect(
 		() => {
 			if (showMenu) {
@@ -41,7 +63,7 @@ export const AdminPanel = () => {
 		[showMenu]
 	);
 
-	return !store.user.token && !store.user.is_admin ? (
+	return !store.token && !store.user.is_admin ? (
 		<Redirect to="/" />
 	) : (
 		<main className="admin-panel-wrapper">
