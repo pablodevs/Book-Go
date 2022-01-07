@@ -1,8 +1,38 @@
 import React, { useContext, useEffect } from "react";
 import { Context } from "../../store/appContext";
+// Load Stripe.js on your website.
 
 export const Booking_resume = () => {
 	const { store, actions } = useContext(Context);
+
+	var stripe = Stripe("pk_live_QNX2lKMyvoBhnvGlERP9rffa");
+
+	const reservar = () => {
+		stripe
+			.redirectToCheckout({
+				lineItems: [{ price: "sku_KvBXtWhAKDkfz4", quantity: 1 }],
+				mode: "payment",
+				/*
+	 * Do not rely on the redirect to the successUrl for fulfilling
+	 * purchases, customers may not always reach the success_url after
+	 * a successful payment.
+	 * Instead use one of the strategies described in
+	 * https://stripe.com/docs/payments/checkout/fulfill-orders
+	 */
+				successUrl: "https://3000-gold-felidae-8otxygdm.ws-eu25.gitpod.io/dashboard",
+				cancelUrl: "https://jmanvel.com/canceled"
+			})
+			.then(function(result) {
+				if (result.error) {
+					/*
+	   * If `redirectToCheckout` fails due to a browser or network
+	   * error, display the localized error message to your customer.
+	   */
+					var displayError = document.getElementById("error-message");
+					displayError.textContent = result.error.message;
+				}
+			});
+	};
 
 	return (
 		<div className="modal-window">
@@ -23,10 +53,18 @@ export const Booking_resume = () => {
 						<button onClick={() => actions.goToPrevPopup()} type="button" className="btn btn-secondary">
 							Cerrar
 						</button>
-						<button type="button" className="btn btn-success">
+						<button
+							onClick={() => {
+								reservar();
+							}}
+							type="button"
+							className="btn btn-success"
+							id="checkout-button-sku_KvBXtWhAKDkfz4"
+							role="link">
 							RESERVAR
 						</button>
 					</div>
+					<div id="error-message" />
 				</div>
 			</div>
 		</div>

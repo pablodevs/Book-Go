@@ -122,12 +122,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			// Meto todas las acciones del componente calendario en calendarActions:
 			calendarActions: {
-				//cambia la variable del store hours_view
+				//cambia la variable del store booking_day
 				changeHoursView: day => {
 					const store = getStore();
 					//cambiamos la variable booking_day con el día seleccionado para reservar
 					setStore({ booking_day: day });
-					// setStore({ hours_view: !store.hours_view });
 				},
 				//inicia el calendario
 				setInitialCalendar: () => {
