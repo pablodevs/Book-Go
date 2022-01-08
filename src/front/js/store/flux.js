@@ -29,14 +29,14 @@ const getState = ({ getStore, getActions, setStore }) => {
 			products: [],
 			// oneProduct: [],
 
+			token: null,
 			user: {
-				token: null,
-				id: null,
-				name: null,
-				lastname: null,
-				phone: null,
-				email: null,
-				img_url: null,
+				id: "",
+				name: "",
+				lastname: "",
+				phone: "",
+				email: "",
+				img_url: "",
 				is_admin: false
 			},
 
@@ -183,7 +183,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 				const options = {
 					method: "POST",
 					headers: {
-						"Content-type": "application/json"
+						"Content-type": "application/json",
+						Authorization: "Bearer " + store.token
 					},
 					body: JSON.stringify(data)
 				};
@@ -213,7 +214,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 				const store = getStore();
 				try {
 					const response = await fetch(process.env.BACKEND_URL + `/products/${id}`, {
-						method: "DELETE"
+						method: "DELETE",
+						headers: {
+							Authorization: "Bearer " + store.token
+						}
 					});
 					const resp = await response.json();
 					if (!response.ok) {
@@ -239,7 +243,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 					method: "PUT",
 					body: JSON.stringify(data),
 					headers: {
-						"Content-Type": "application/json"
+						"Content-Type": "application/json",
+						Authorization: "Bearer " + store.token
 					}
 				};
 				try {
@@ -307,7 +312,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					},
 					body: JSON.stringify(data)
 				};
-				const response = await fetch(process.env.BACKEND_URL + "/user", options);
+				const response = await fetch(process.env.BACKEND_URL + "/users", options);
 				const resp = await response.json();
 				if (response.status === 401) return false;
 				actions.generate_token(data.email, data.password);
@@ -318,11 +323,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 			updateUser: async data => {
 				const store = getStore();
 				try {
-					const response = await fetch(process.env.BACKEND_URL + `/user/${store.user.id}`, {
+					const response = await fetch(process.env.BACKEND_URL + "/user", {
 						method: "PUT",
 						body: JSON.stringify(data),
 						headers: {
-							"Content-Type": "application/json"
+							"Content-Type": "application/json",
+							Authorization: "Bearer " + store.token
 						}
 					});
 					const resp = await response.json();
@@ -347,11 +353,15 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			// Delete current USER
-			deleteUser: async id => {
+			deleteUser: async () => {
 				const actions = getActions();
+				const store = getStore();
 				try {
-					const response = await fetch(process.env.BACKEND_URL + `/user/${id}`, {
-						method: "DELETE"
+					const response = await fetch(process.env.BACKEND_URL + "/user", {
+						method: "DELETE",
+						headers: {
+							Authorization: "Bearer " + store.token
+						}
 					});
 					const resp = await response.json();
 					if (!response.ok) {
@@ -369,7 +379,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			generate_token: async (email, password) => {
 				const actions = getActions();
 				//genera el token cuando haces login
-				await fetch(process.env.BACKEND_URL + `/token`, {
+				await fetch(process.env.BACKEND_URL + "/token", {
 					method: "POST",
 					body: JSON.stringify({ email: email, password: password }),
 					headers: {
@@ -383,18 +393,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 					})
 					.then(resp => {
 						setStore({
-							user: {
-								token: resp.token,
-								id: resp.id,
-								name: resp.name,
-								lastname: resp.lastname,
-								phone: resp.phone,
-								email: resp.email,
-								img_url: resp.profile_image_url,
-								is_admin: resp.is_admin
-							},
+							token: resp.token,
 							message: resp.message
 						});
+						actions.getProfileData(resp.token);
+						localStorage.setItem("token", resp.token);
 						actions.closePopup();
 					})
 					.catch(error => console.error(error));
@@ -402,24 +405,62 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			logout: () => {
 				// al pulsar el botón de salir cambia el token a null
+				localStorage.removeItem("token");
 				setStore({
+					token: null,
 					user: {
-						token: null,
-						id: null,
-						name: null,
-						lastname: null,
-						phone: null,
-						email: null,
-						img_url: null,
+						id: "",
+						name: "",
+						lastname: "",
+						phone: "",
+						email: "",
+						img_url: "",
 						is_admin: false
 					},
 					message: ""
 				});
 			},
 
+			// Obtener la información del usuario en Dashboard (por ejemplo)
+			getProfileData: async token => {
+				const options = {
+					method: "GET",
+					headers: {
+						Authorization: "Bearer " + token
+					}
+				};
+				try {
+					const response = await fetch(process.env.BACKEND_URL + "/user", options);
+					const resp = await response.json();
+					if (!response.ok) {
+						setStore({ message: resp.message });
+						throw Error(response);
+					}
+					setStore({
+						user: {
+							id: resp.id,
+							name: resp.name,
+							lastname: resp.lastname,
+							phone: resp.phone,
+							email: resp.email,
+							img_url: resp.profile_image_url,
+							is_admin: resp.is_admin
+						}
+					});
+					return resp;
+				} catch (error) {
+					return error.json();
+				}
+			},
+
 			// Obtener la lista de clientes
 			getClients: async () => {
-				const response = await fetch(process.env.BACKEND_URL + "/user");
+				const store = getStore();
+				const response = await fetch(process.env.BACKEND_URL + "/users", {
+					headers: {
+						Authorization: "Bearer " + store.token
+					}
+				});
 				if (response.status === 401) return false;
 				const resp = await response.json();
 				setStore({ clients: resp });

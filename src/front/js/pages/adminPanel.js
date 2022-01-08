@@ -16,7 +16,6 @@ export const AdminPanel = () => {
 	const [showMenu, setShowMenu] = useState(false);
 
 	const showWelcome = () => {
-		setActiveTab("Welcome");
 		store.user.name
 			? setContent(
 					<div className="center dashboard-welcome">
@@ -38,7 +37,7 @@ export const AdminPanel = () => {
 		}
 	}, [showMenu]);
 
-	return !store.user.token && !store.user.is_admin ? (
+	return !store.token && !store.user.is_admin ? (
 		<Redirect to="/" />
 	) : (
 		<main className="admin-panel-wrapper">
@@ -52,7 +51,6 @@ export const AdminPanel = () => {
 						</div>
 						<nav className={showMenu ? "show-menu" : ""}>
 							<ul>
-								{/* ⚠️ Reorganizar en pantallas pequeñas para que se vean en horizontal */}
 								<li>
 									<button
 										className={"admin-tab" + (activeTab === "Reservas" ? " tab-active" : "")}
@@ -139,7 +137,10 @@ export const AdminPanel = () => {
 								</li>
 							</ul>
 							<div className="admin-logout">
-								<Link className="btn-cool" to="/">
+								<Link
+									className="btn-cool"
+									to="/"
+									onClick={() => (document.querySelector("html").style.position = "initial")}>
 									Home
 								</Link>
 								<button className="logout btn-cool" onClick={() => actions.logout()}>

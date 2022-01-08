@@ -1,6 +1,5 @@
 import React, { useContext, useState } from "react";
 import { Context } from "../../store/appContext";
-import { Redirect } from "react-router-dom";
 
 export const Login = () => {
 	const { actions, store } = useContext(Context);
@@ -54,8 +53,7 @@ export const Login = () => {
 						</button>
 					</div>
 				</div>
-				{store.user.is_admin ? <Redirect to="/admin" /> : null}
-				{store.user.token ? (
+				{store.token ? (
 					actions.closePopup()
 				) : (
 					<div>

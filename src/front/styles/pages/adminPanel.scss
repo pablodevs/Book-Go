@@ -147,6 +147,16 @@ button.btn-cool.logout {
         -moz-transform: translateY(0);
         -webkit-transform: translateY(0);
     }
+    .admin-tab {
+        width: 100%;
+        &:hover {
+            color: $--color-blue-light;
+            background-color: #ffffff99;
+        }
+        & span {
+            text-align: left;
+        }
+    }
     section.admin-content { margin: 1.7rem 2vw }
 }
 

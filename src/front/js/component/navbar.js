@@ -1,12 +1,13 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Context } from "../store/appContext.js";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useHistory } from "react-router-dom";
 import "../../styles/components/navbar.scss";
 
 export const Navbar = () => {
 	let [navMenu, setNavMenu] = useState(false);
 	const { store, actions } = useContext(Context);
 
+<<<<<<< HEAD
 	useEffect(() => {
 		if (navMenu || store.popup) {
 			document.querySelector("html").style.position = "fixed";
@@ -15,6 +16,28 @@ export const Navbar = () => {
 			document.querySelector("html").style.position = "initial";
 		}
 	}, [navMenu, store.popup]);
+=======
+	let history = useHistory();
+
+	useEffect(
+		() => {
+			if (navMenu || store.popup) {
+				document.querySelector("html").style.position = "fixed";
+				document.querySelector("html").style.overflowY = "scroll";
+			} else {
+				document.querySelector("html").style.position = "initial";
+			}
+		},
+		[navMenu, store.popup]
+	);
+>>>>>>> PabloClara/PanelAdministrativo
+
+	useEffect(
+		() => {
+			if (store.user.is_admin) history.push("/admin");
+		},
+		[store.user.is_admin]
+	);
 
 	return (
 		<header>
@@ -24,7 +47,7 @@ export const Navbar = () => {
 						Inicio
 					</NavLink>
 				</span>
-				{store.user.token ? (
+				{store.token ? (
 					<Link to={store.user.is_admin ? "/admin" : "/dashboard"}>
 						{store.user.img_url ? (
 							<img
