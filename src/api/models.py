@@ -15,6 +15,8 @@ class User(db.Model):
     is_admin= db.Column(db.Boolean(), nullable=False, default=False) # Una duda, no habría que hacer que is_admin sea Unique=True ??? de otra forma podría haberr 2 o más admins
     profile_image_url = db.Column(db.String(255), unique=False, nullable=True)
 
+    reserva = db.relationship('Book', backref='user', lazy=True)
+
     def __repr__(self):
         return '<User %r>' % self.name
 
@@ -38,7 +40,9 @@ class User(db.Model):
 class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120), unique=True, nullable=False) # ⚠️ Unique True porque si no da problemas en AdminiProducts que ahora no se solucionar
-    price = db.Column(db.Integer,nullable=False)
+    price = db.Column(db.Integer,nullable=False)  
+    disponibilidad = db.relationship('Dispo', backref='product', lazy=True)
+    reserva = db.relationship('Book', backref='product', lazy=True)
     description = db.Column(db.String(1000),nullable=True)
     # Habrá que meter sí o sí las imágenes en una url (product_img_url) unidas al id del producto
 
@@ -58,12 +62,14 @@ class Product(db.Model):
 #TABLA DE RESERVAS
 class Book(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    product = db.Column(db.String(120), nullable=False)
-    # ⚠️⚠️ Digo yo que habría que tener el user_id en lugar de el mail ⚠️⚠️
-    email = db.Column(db.String(120), unique=True, nullable=False)
+   
     date = db.Column(db.DateTime, nullable=False)
     time = db.Column(db.Time,nullable=False)
     created = db.Column(db.DateTime,onupdate=datetime.now)
+
+    product_id = db.Column(db.Integer,db.ForeignKey('product.id') ,nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'),nullable=False)
+
 
     def __repr__(self):
         return '<Book %r>' % self.product
@@ -72,7 +78,6 @@ class Book(db.Model):
         return {
             "id": self.id,
             "product": self.product,
-            "email": self.email,
             "date" : self.date,
             "time" : self.time
         }
@@ -81,11 +86,13 @@ class Book(db.Model):
 #TABLA DE DISPONIBILIDAD
 class Dispo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    # ⚠️⚠️ Debería ser el product id ⚠️⚠️
-    product = db.Column(db.String(120), nullable=False)
+    product_id = db.Column(db.String(120), nullable=False)
     date = db.Column(db.DateTime, nullable=False)
     time = db.Column(db.Time,nullable=False)
     available= db.Column(db.Boolean(), unique=False, nullable=False)
+
+    product_id = db.Column(db.Integer, db.ForeignKey('product.id'),
+        nullable=False)
 
     def __repr__(self):
         return '<Dispo %r>' % self.product
@@ -93,7 +100,7 @@ class Dispo(db.Model):
     def serialize(self):
         return {
             "id": self.id,
-            "product": self.product,
+            "product_id": self.product_id,
             #esto te devuelve la fecha en el formato español
             "date" : self.date.strftime("%-d/%-m/%Y"),
             #este otro en milisegundos

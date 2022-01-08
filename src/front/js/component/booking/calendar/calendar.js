@@ -162,7 +162,18 @@ export const Calendar = () => {
 						style={{ left: `${mouseEffect.X}px`, top: `${mouseEffect.Y}px` }}
 					/>
 				</div>
-				<div className="row">estas son las horas</div>
+
+				<div>
+					{store.dispo.map((item, index) => {
+						if (item.date == store.booking_day) {
+							return (
+								<button className="btn btn-success" key={index}>
+									{item.time}
+								</button>
+							);
+						}
+					})}
+				</div>
 			</div>
 		</div>
 	);
