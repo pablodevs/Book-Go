@@ -17,14 +17,11 @@ export const Dashboard = () => {
 
 	let history = useHistory();
 
-	useEffect(
-		() => {
-			let userToken = store.token || localStorage.getItem("token");
-			if (userToken) actions.getProfileData(userToken);
-			else history.push("/");
-		},
-		[store.token]
-	);
+	useEffect(() => {
+		let userToken = store.token || localStorage.getItem("token");
+		if (userToken) actions.getProfileData(userToken);
+		else history.push("/");
+	}, [store.token]);
 
 	useEffect(() => {
 		setContent(

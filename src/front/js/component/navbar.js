@@ -7,16 +7,6 @@ export const Navbar = () => {
 	let [navMenu, setNavMenu] = useState(false);
 	const { store, actions } = useContext(Context);
 
-<<<<<<< HEAD
-	useEffect(() => {
-		if (navMenu || store.popup) {
-			document.querySelector("html").style.position = "fixed";
-			document.querySelector("html").style.overflowY = "scroll";
-		} else {
-			document.querySelector("html").style.position = "initial";
-		}
-	}, [navMenu, store.popup]);
-=======
 	let history = useHistory();
 
 	useEffect(
@@ -30,7 +20,6 @@ export const Navbar = () => {
 		},
 		[navMenu, store.popup]
 	);
->>>>>>> PabloClara/PanelAdministrativo
 
 	useEffect(
 		() => {
