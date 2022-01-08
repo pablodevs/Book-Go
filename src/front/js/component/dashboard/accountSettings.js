@@ -12,19 +12,16 @@ export const AccountSettings = () => {
 		phone: null
 	});
 
-	useEffect(
-		() => {
-			setData({
-				id: store.user.id,
-				name: store.user.name.charAt(0).toUpperCase() + store.user.name.slice(1),
-				lastname: store.user.lastname.charAt(0).toUpperCase() + store.user.lastname.slice(1),
-				email: store.user.email,
-				phone: store.user.phone
-				// img_url: store.user.img_url
-			});
-		},
-		[store.user]
-	);
+	useEffect(() => {
+		setData({
+			id: store.user.id,
+			name: store.user.name.charAt(0).toUpperCase() + store.user.name.slice(1),
+			lastname: store.user.lastname.charAt(0).toUpperCase() + store.user.lastname.slice(1),
+			email: store.user.email,
+			phone: store.user.phone
+			// img_url: store.user.img_url
+		});
+	}, [store.user]);
 
 	const submitForm = event => {
 		event.preventDefault();

@@ -7,17 +7,14 @@ export const Navbar = () => {
 	let [navMenu, setNavMenu] = useState(false);
 	const { store, actions } = useContext(Context);
 
-	useEffect(
-		() => {
-			if (navMenu || store.popup) {
-				document.querySelector("html").style.position = "fixed";
-				document.querySelector("html").style.overflowY = "scroll";
-			} else {
-				document.querySelector("html").style.position = "initial";
-			}
-		},
-		[navMenu, store.popup]
-	);
+	useEffect(() => {
+		if (navMenu || store.popup) {
+			document.querySelector("html").style.position = "fixed";
+			document.querySelector("html").style.overflowY = "scroll";
+		} else {
+			document.querySelector("html").style.position = "initial";
+		}
+	}, [navMenu, store.popup]);
 
 	return (
 		<header>

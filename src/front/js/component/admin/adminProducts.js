@@ -14,26 +14,23 @@ export const AdminProducts = () => {
 		// IMPORTANTE: AÑADIR DURACIÓN DEL SERVICIO!
 	});
 
-	useEffect(
-		() => {
-			setProductList(store.products.map(element => element.name));
-			if (Object.keys(store.new_product).length && store.new_product.id)
-				setData({
-					id: store.new_product.id,
-					product: store.new_product.name, // esto de que se llamen diferente no me convence
-					price: store.new_product.price,
-					description: store.new_product.description
-				});
-			else
-				setData({
-					id: null,
-					product: "DEFAULT", // con 'name' no funciona bien
-					price: "",
-					description: ""
-				});
-		},
-		[store.products, store.new_product]
-	);
+	useEffect(() => {
+		setProductList(store.products.map(element => element.name));
+		if (Object.keys(store.new_product).length && store.new_product.id)
+			setData({
+				id: store.new_product.id,
+				product: store.new_product.name, // esto de que se llamen diferente no me convence
+				price: store.new_product.price,
+				description: store.new_product.description
+			});
+		else
+			setData({
+				id: null,
+				product: "DEFAULT", // con 'name' no funciona bien
+				price: "",
+				description: ""
+			});
+	}, [store.products, store.new_product]);
 
 	const submitFirstForm = event => {
 		event.preventDefault();

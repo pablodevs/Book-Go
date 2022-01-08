@@ -32,15 +32,12 @@ export const Popup = () => {
 		} else document.removeEventListener("mouseup", handleMouseUp);
 	};
 
-	useEffect(
-		() => {
-			if (store.popup !== null) {
-				document.addEventListener("mousedown", handleMouseDown);
-				document.addEventListener("keydown", handleKeyDown);
-			}
-		},
-		[store.popup]
-	);
+	useEffect(() => {
+		if (store.popup !== null) {
+			document.addEventListener("mousedown", handleMouseDown);
+			document.addEventListener("keydown", handleKeyDown);
+		}
+	}, [store.popup]);
 
 	return (
 		<div

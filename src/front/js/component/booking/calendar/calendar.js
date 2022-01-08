@@ -46,8 +46,8 @@ export const Calendar = () => {
 									: i <= 0 &&
 									  ((date.getMonth() >= todayMonth && date.getFullYear() === todayYear) ||
 											date.getFullYear() > todayYear)
-										? calendar.month - 1
-										: undefined
+									? calendar.month - 1
+									: undefined
 							}
 							isToday={
 								// comprobamos si se trata del día de hoy, fue dificil hacer está comparación, en internet proponen date.getTime() == date2.getTime() pero no me funcionó...
@@ -84,42 +84,39 @@ export const Calendar = () => {
 	);
 
 	// Mouse Effect
-	useEffect(
-		() => {
+	useEffect(() => {
+		if (!document.querySelector(".month")) return;
+
+		let mouseEffectFunc = event => {
 			if (!document.querySelector(".month")) return;
 
-			let mouseEffectFunc = event => {
-				if (!document.querySelector(".month")) return;
+			// Obtengo la posición del popup (X, Y)
+			let container = document.querySelector(".month");
+			let rect = container.getBoundingClientRect();
 
-				// Obtengo la posición del popup (X, Y)
-				let container = document.querySelector(".month");
-				let rect = container.getBoundingClientRect();
+			setMouseEffect({
+				X: event.clientX - rect.left,
+				Y: event.clientY - rect.top
+			});
+		};
+		// Añado el efecto al mouse
+		if (window.innerWidth > 767.9) document.body.addEventListener("mousemove", mouseEffectFunc);
 
-				setMouseEffect({
-					X: event.clientX - rect.left,
-					Y: event.clientY - rect.top
-				});
-			};
-			// Añado el efecto al mouse
-			if (window.innerWidth > 767.9) document.body.addEventListener("mousemove", mouseEffectFunc);
-
-			const handleCalendarResize = () => {
-				if (window.innerWidth <= 767.9) {
-					document.body.removeEventListener("mousemove", mouseEffectFunc);
-					if (document.querySelector(".month-blur-effect"))
-						// Ojito! el event listener se quedará, ya que no existe el removeEventListener (habrá que implementarlo digo yo)
-						document.querySelector(".month-blur-effect").style.display = "none";
-				} else {
-					document.body.addEventListener("mousemove", mouseEffectFunc);
-					if (document.querySelector(".month-blur-effect"))
-						document.querySelector(".month-blur-effect").style.display = "block";
-				}
-				if (!store.popup) window.removeEventListener("resize", handleCalendarResize);
-			};
-			window.addEventListener("resize", handleCalendarResize);
-		},
-		[weeks]
-	);
+		const handleCalendarResize = () => {
+			if (window.innerWidth <= 767.9) {
+				document.body.removeEventListener("mousemove", mouseEffectFunc);
+				if (document.querySelector(".month-blur-effect"))
+					// Ojito! el event listener se quedará, ya que no existe el removeEventListener (habrá que implementarlo digo yo)
+					document.querySelector(".month-blur-effect").style.display = "none";
+			} else {
+				document.body.addEventListener("mousemove", mouseEffectFunc);
+				if (document.querySelector(".month-blur-effect"))
+					document.querySelector(".month-blur-effect").style.display = "block";
+			}
+			if (!store.popup) window.removeEventListener("resize", handleCalendarResize);
+		};
+		window.addEventListener("resize", handleCalendarResize);
+	}, [weeks]);
 
 	return (
 		<div className="calendar-wrapper">
