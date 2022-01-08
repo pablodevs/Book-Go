@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Link, Redirect, useHistory } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import { Context } from "../store/appContext";
 import { Reservations } from "../component/admin/reservations";
 import { ClientList } from "../component/admin/clientList";
@@ -15,8 +15,6 @@ export const AdminPanel = () => {
 	const [activeTab, setActiveTab] = useState("");
 	const [showMenu, setShowMenu] = useState(false);
 
-	// let history = useHistory();
-
 	const showWelcome = () => {
 		store.user.name
 			? setContent(
@@ -30,27 +28,6 @@ export const AdminPanel = () => {
 
 	useEffect(showWelcome, []);
 
-	// useEffect(
-	// 	() => {
-	// 		let userToken = store.token || localStorage.getItem("token");
-	// 		if (userToken) actions.getProfileData(userToken);
-	// 		else history.push("/");
-	// 	},
-	// 	[store.token]
-	// );
-
-	// useEffect(
-	// 	() => {
-	// 		if (store.user.name)
-	// 			setContent(
-	// 				<div className="center dashboard-welcome">
-	// 					<h2>¡Hola {store.user.name.charAt(0).toUpperCase() + store.user.name.slice(1)}!</h2>
-	// 					<img src={house} width="100" height="100" />
-	// 				</div>
-	// 			);
-	// 	},
-	// 	[store.user.name]
-	// );
 	useEffect(
 		() => {
 			if (showMenu) {
@@ -77,7 +54,6 @@ export const AdminPanel = () => {
 						</div>
 						<nav className={showMenu ? "show-menu" : ""}>
 							<ul>
-								{/* ⚠️ Reorganizar en pantallas pequeñas para que se vean en horizontal */}
 								<li>
 									<button
 										className={"admin-tab" + (activeTab === "Reservas" ? " tab-active" : "")}
@@ -164,7 +140,10 @@ export const AdminPanel = () => {
 								</li>
 							</ul>
 							<div className="admin-logout">
-								<Link className="btn-cool" to="/">
+								<Link
+									className="btn-cool"
+									to="/"
+									onClick={() => (document.querySelector("html").style.position = "initial")}>
 									Home
 								</Link>
 								<button className="logout btn-cool" onClick={() => actions.logout()}>

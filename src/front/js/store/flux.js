@@ -27,12 +27,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			token: null,
 			user: {
-				id: null,
-				name: null,
-				lastname: null,
-				phone: null,
-				email: null,
-				img_url: null,
+				id: "",
+				name: "",
+				lastname: "",
+				phone: "",
+				email: "",
+				img_url: "",
 				is_admin: false
 			},
 
@@ -398,12 +398,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 				setStore({
 					token: null,
 					user: {
-						id: null,
-						name: null,
-						lastname: null,
-						phone: null,
-						email: null,
-						img_url: null,
+						id: "",
+						name: "",
+						lastname: "",
+						phone: "",
+						email: "",
+						img_url: "",
 						is_admin: false
 					},
 					message: ""

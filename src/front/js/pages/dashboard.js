@@ -26,18 +26,15 @@ export const Dashboard = () => {
 		[store.token]
 	);
 
-	useEffect(
-		() => {
-			if (store.user.name)
-				setContent(
-					<div className="center dashboard-welcome">
-						<h2>¡Hola {store.user.name.charAt(0).toUpperCase() + store.user.name.slice(1)}!</h2>
-						<img src={house} width="100" height="100" />
-					</div>
-				);
-		},
-		[store.user.name]
-	);
+	useEffect(() => {
+		setContent(
+			<div className="center dashboard-welcome">
+				{/* <h2>¡Hola {store.user.name.charAt(0).toUpperCase() + store.user.name.slice(1)}!</h2> */}
+				<h2>¡Hola de nuevo!</h2>
+				<img src={house} width="100" height="100" />
+			</div>
+		);
+	}, []);
 
 	return (
 		<div className="dashboard-wrapper">
