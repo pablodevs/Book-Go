@@ -5,12 +5,12 @@ import { Context } from "../../store/appContext";
 export const Booking_resume = () => {
 	const { store, actions } = useContext(Context);
 
-	var stripe = Stripe("pk_live_QNX2lKMyvoBhnvGlERP9rffa");
+	var stripe = Stripe("pk_test_yHT02IrsuQ0eWhAT2BBbfxmR");
 
 	const reservar = () => {
 		stripe
 			.redirectToCheckout({
-				lineItems: [{ price: "sku_KvBXtWhAKDkfz4", quantity: 1 }],
+				lineItems: [{ price: "sku_KvCUm3AeHMjmrk", quantity: 1 }],
 				mode: "payment",
 				/*
 	 * Do not rely on the redirect to the successUrl for fulfilling
@@ -59,7 +59,7 @@ export const Booking_resume = () => {
 							}}
 							type="button"
 							className="btn btn-success"
-							id="checkout-button-sku_KvBXtWhAKDkfz4"
+							id="checkout-button-sku_KvCUm3AeHMjmrk"
 							role="link">
 							RESERVAR
 						</button>
