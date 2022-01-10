@@ -4,8 +4,10 @@ import { Context } from "../../store/appContext";
 export const AdminProducts = () => {
 	const { actions, store } = useContext(Context);
 
-	const [minutes, setMinutes] = useState([]);
-	const [hours, setHours] = useState([]);
+	const [minutesList, setMinutesList] = useState([]);
+	const [hoursList, setHoursList] = useState([]);
+	const [minutes, setMinutes] = useState(0);
+	const [hours, setHours] = useState(0);
 	const [dispoChecked, setDispoChecked] = useState(true);
 	const [productList, setProductList] = useState([]);
 	const [data, setData] = useState({
@@ -14,31 +16,7 @@ export const AdminProducts = () => {
 		price: "",
 		description: "",
 		duration: ""
-		// IMPORTANTE: AÑADIR DURACIÓN DEL SERVICIO!
 	});
-
-	useEffect(
-		() => {
-			setProductList(store.products.map(element => element.name));
-			if (Object.keys(store.new_product).length && store.new_product.id)
-				setData({
-					id: store.new_product.id,
-					product: store.new_product.name, // esto de que se llamen diferente no me convence
-					price: store.new_product.price,
-					description: store.new_product.description,
-					duration: store.new_product.duration
-				});
-			else
-				setData({
-					id: "",
-					product: "DEFAULT", // con 'name' no funciona bien
-					price: "",
-					description: "",
-					duration: ""
-				});
-		},
-		[store.products, store.new_product]
-	);
 
 	useEffect(() => {
 		let listOfMinutes = [];
@@ -51,13 +29,65 @@ export const AdminProducts = () => {
 			listOfHours.push(i);
 		}
 
-		setMinutes(listOfMinutes);
-		setHours(listOfHours);
-
-		// for (n of list.map(n => `${n}min`)) {
-		// 	console.log(parseInt(n), typeof parseInt(n))
-		// }
+		setMinutesList(listOfMinutes);
+		setHoursList(listOfHours);
 	}, []);
+
+	useEffect(
+		() => {
+			setProductList(store.products.map(element => element.name));
+			if (Object.keys(store.new_product).length && store.new_product.id) {
+				setHours(Math.floor(store.new_product.duration / 60));
+				setMinutes(store.new_product.duration % 60);
+				setData({
+					id: store.new_product.id,
+					product: store.new_product.name, // esto de que se llamen diferente no me convence
+					price: store.new_product.price,
+					description: store.new_product.description,
+					duration: store.new_product.duration
+				});
+			} else {
+				setHours(Math.floor(0));
+				setMinutes(0);
+				setData({
+					id: "",
+					product: "DEFAULT", // con 'name' no funciona bien
+					price: "",
+					description: "",
+					duration: ""
+				});
+			}
+		},
+		[store.products, store.new_product]
+	);
+
+	useEffect(
+		() =>
+			setData({
+				...data,
+				duration: hours * 60 + minutes
+			}),
+		[hours, minutes]
+	);
+
+	const handleInputChange = e => {
+		if (e.target.name === "product" && productList.includes(e.target.value)) {
+			let prod = store.products.find(prod => prod.name === e.target.value); // ⚠️ Si 2 tienen el mismo nombre esto falla
+			setHours(Math.floor(prod.duration / 60));
+			setMinutes(prod.duration % 60);
+			setData({
+				id: prod.id,
+				product: prod.name, // esto de que se llamen diferente no me convence
+				price: prod.price,
+				description: prod.description,
+				duration: prod.duration
+			});
+		} else
+			setData({
+				...data,
+				[e.target.name]: e.target.value
+			});
+	};
 
 	const submitFirstForm = event => {
 		event.preventDefault();
@@ -72,24 +102,6 @@ export const AdminProducts = () => {
 	const submitSecondForm = event => {
 		event.preventDefault();
 		// actions.updateDispo(data);
-	};
-
-	const handleInputChange = e => {
-		if (e.target.name === "product" && productList.includes(e.target.value)) {
-			let prod = store.products.find(prod => prod.name === e.target.value); // ⚠️ Si 2 tienen el mismo nombre esto falla
-			setData({
-				id: prod.id,
-				product: prod.name, // esto de que se llamen diferente no me convence
-				price: prod.price,
-				description: prod.description,
-				duration: prod.duration
-			});
-			// actions.resetNewProduct();
-		} else
-			setData({
-				...data,
-				[e.target.name]: e.target.value
-			});
 	};
 
 	return (
@@ -182,12 +194,8 @@ export const AdminProducts = () => {
 									Hora(s)
 								</label>
 								<div className="select-wrapper">
-									<select
-										// onChange={e => handleInputChange(e)}
-										id="hours"
-										name="hours"
-										value={Math.floor(data.duration / 60)}>
-										{hours.map((hour, idx) => (
+									<select onChange={e => setHours(parseInt(e.target.value))} id="hours" value={hours}>
+										{hoursList.map((hour, idx) => (
 											<option key={idx} value={hour}>
 												{`${hour}h`}
 											</option>
@@ -199,11 +207,10 @@ export const AdminProducts = () => {
 								</label>
 								<div className="select-wrapper">
 									<select
-										// onChange={e => handleInputChange(e)}
+										onChange={e => setMinutes(parseInt(e.target.value))}
 										id="minutes"
-										name="minutes"
-										value={data.duration % 60}>
-										{minutes.map((min, idx) => (
+										value={minutes}>
+										{minutesList.map((min, idx) => (
 											<option key={idx} value={min}>
 												{`${min}min`}
 											</option>

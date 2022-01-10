@@ -165,10 +165,12 @@ button.icon-btn.danger, button.icon-btn.danger:hover {
 /*===== Inputs =====*/
 input, textarea, select, .input-button, .search-input {
     width: 100%;
+    min-width: 100px;
     border-radius: 5px;
     border: 1px solid $--color-grey-light;
     padding: 0.3rem 0.6rem;
 }
+div input[type=checkbox] { min-width: auto }
 input:focus-visible, textarea:focus-visible, select:focus-visible, .search-input:focus-visible {
     outline: none;
     border: 1px solid $--color-blue-regular;

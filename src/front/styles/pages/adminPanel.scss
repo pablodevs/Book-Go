@@ -182,15 +182,6 @@ button.btn-cool.logout {
     padding: 1.5rem;
 }
 
-// @media screen and (min-width: 1500px) {
-//     .dashboard-first-section { grid-area: uno; min-width: 100% }
-//     .dashboard-second-section { grid-area: dos; min-width: 100% }
-//     .admin-sections-wrapper {
-//         display: grid;
-//         grid-template-columns: 1fr 1fr;
-//         grid-template-areas: "uno dos";
-//     }
-// }
 .dashboard-form div.services-subtitle {
     align-items: center;
 }
@@ -235,7 +226,6 @@ button.inactive {
     width: fit-content;
     & input {
         padding-left: 1.5rem;
-        width: 83px;
         text-align: center;
     }
     & span {
@@ -266,7 +256,7 @@ div.admin-form-group {
     gap: 1.5rem;
 }
 
-.admin-form-subgroup { flex: auto }
+.admin-form-subgroup { flex: 1 }
 
 div.disponibility-title.admin-form-group {
     justify-content: start;
@@ -290,7 +280,6 @@ div.disponibility-title.admin-form-group {
     & input { width: auto }
 }
 
-.price-subgroup { flex: unset }
 .img-subgroup {
     display: flex;
     align-items: center;
@@ -346,8 +335,6 @@ div.disponibility-title.admin-form-group {
         border-radius: 50%;
     }
 }
-
-.admin-form-subgroup textarea { min-width: 200px }
 
 .border-none { border: none }
 

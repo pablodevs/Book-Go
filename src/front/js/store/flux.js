@@ -262,7 +262,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 								id: resp.id,
 								name: resp.name,
 								price: resp.price,
-								description: resp.description
+								description: resp.description,
+								duration: resp.duration
 							}
 						]
 					});
