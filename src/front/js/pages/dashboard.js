@@ -17,17 +17,20 @@ export const Dashboard = () => {
 
 	let history = useHistory();
 
-	useEffect(() => {
-		let userToken = store.token || localStorage.getItem("token");
-		if (userToken) actions.getProfileData(userToken);
-		else history.push("/");
-	}, [store.token]);
+	useEffect(
+		() => {
+			let userToken = store.token || localStorage.getItem("token");
+			if (userToken) actions.getProfileData(userToken);
+			else history.push("/");
+		},
+		[store.token]
+	);
 
 	useEffect(() => {
 		setContent(
 			<div className="center dashboard-welcome">
 				{/* <h2>¡Hola {store.user.name.charAt(0).toUpperCase() + store.user.name.slice(1)}!</h2> */}
-				<h2>¡Hola de nuevo!</h2>
+				<span>¡Hola de nuevo!</span>
 				<img src={house} width="100" height="100" />
 			</div>
 		);

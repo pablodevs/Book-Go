@@ -47,18 +47,20 @@ def create_product():
     # Data validation
     if body_product is None:
         raise APIException("You need to specify the request body as a json object", status_code=400)
-    if 'name' not in body_product or body_product['name'] == "":
+    if 'name' not in body_product or body_product['name'] == "" or body_product['name'] == None:
         raise APIException('You need to specify the name', status_code=400)
     elif len(body_product['name']) > 120:
         return jsonify({"message": "El nombre no puede superar los 120 caracteres"}), 400
-    if 'price' not in body_product or body_product['price'] == "":
+    if 'price' not in body_product or body_product['price'] == "" or body_product['price'] == None:
         raise APIException('You need to specify the price', status_code=400)
-    if 'description' not in body_product or body_product['description'] == "":
+    if 'description' not in body_product or body_product['description'] == "" or body_product['description'] == None:
         raise APIException('You need to create a description', status_code=400)
     elif len(body_product['description']) > 1000:
         return jsonify({"message": "La descripción no puede superar los 1000 caracteres"}), 400
+    if 'duration' not in body_product or body_product['duration'] == "" or body_product['duration'] == None:
+        raise APIException('You need to specify the duration', status_code=400)
 
-    new_product = Product(name = body_product["name"], price = body_product["price"], description = body_product["description"])
+    new_product = Product(name = body_product["name"], price = body_product["price"], description = body_product["description"], duration = body_product["duration"])
     db.session.add(new_product)
     db.session.commit()
     return jsonify(new_product.serialize()), 200
@@ -70,6 +72,7 @@ def handle_single_product(product_id):
     """
     Single product
     """
+
     # Admin validation
     current_user_id = get_jwt_identity() # obtiene el id del usuario asociado al token (id == sub en jwt decode)
     user = User.query.get(current_user_id)
@@ -93,6 +96,8 @@ def handle_single_product(product_id):
             product.price = request_body["price"]
         if "description" in request_body:
             product.description = request_body["description"]
+        if "duration" in request_body:
+            product.duration = request_body["duration"]
 
         db.session.commit()
         return jsonify(product.serialize()), 200
@@ -126,15 +131,15 @@ def create_user():
     # Data validation
     if body_user is None:
         raise APIException("You need to specify the request body as a json object", status_code=400)
-    if 'name' not in body_user or body_user['name'] == "":
+    if 'name' not in body_user or body_user['name'] == "" or body_user['name'] == None:
         raise APIException('You need to specify the name', status_code=400)
-    if 'lastname' not in body_user or body_user['lastname'] == "":
+    if 'lastname' not in body_user or body_user['lastname'] == "" or body_user['lastname'] == None:
         raise APIException('You need to specify the lastname', status_code=400)
-    if 'email' not in body_user or body_user['email'] == "":
+    if 'email' not in body_user or body_user['email'] == "" or body_user['email'] == None:
         raise APIException('You need to create a email', status_code=400)
-    if 'phone' not in body_user or body_user['phone'] == "":
+    if 'phone' not in body_user or body_user['phone'] == "" or body_user['phone'] == None:
         raise APIException('You need to specify the phone', status_code=400)
-    if 'password' not in body_user or body_user['password'] == "":
+    if 'password' not in body_user or body_user['password'] == "" or body_user['password'] == None:
         raise APIException('You need to specify the password', status_code=400)
         # validate that the front-end request was built correctly
     # if 'profile_image' in request.files:

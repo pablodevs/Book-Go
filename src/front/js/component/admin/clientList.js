@@ -32,26 +32,29 @@ export const ClientList = () => {
 		actions.setActiveClientTab(null);
 	}, []);
 
-	useEffect(() => {
-		let clientsList = [];
-		if (store.clients) {
-			clientsList = store.clients.filter(
-				client =>
-					(client.name + " " + client.lastname).toLowerCase().includes(srchInput.toLowerCase()) ||
-					client.id == srchInput
-			);
-			clientsList = clientsList.map((client, idx) => (
-				<ClientTab client={client} key={idx + 1} sendClientInfo={getClientInfo} />
-			));
-		}
-		clientsList.length
-			? setList(clientsList)
-			: setList([
-					<li style={{ textAlign: "center", paddingRight: "1rem" }} key={0}>
-						Sin resultados
-					</li>
-			  ]);
-	}, [store.clients, srchInput]);
+	useEffect(
+		() => {
+			let clientsList = [];
+			if (store.clients) {
+				clientsList = store.clients.filter(
+					client =>
+						(client.name + " " + client.lastname).toLowerCase().includes(srchInput.toLowerCase()) ||
+						client.id == srchInput
+				);
+				clientsList = clientsList.map((client, idx) => (
+					<ClientTab client={client} key={idx + 1} sendClientInfo={getClientInfo} />
+				));
+			}
+			clientsList.length
+				? setList(clientsList)
+				: setList([
+						<li style={{ textAlign: "center", paddingRight: "1rem" }} key={0}>
+							Sin resultados
+						</li>
+				  ]);
+		},
+		[store.clients, srchInput]
+	);
 
 	return store.clients ? (
 		<div className="dashboard-content-wrapper admin-products">

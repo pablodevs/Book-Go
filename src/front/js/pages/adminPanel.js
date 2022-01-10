@@ -28,14 +28,17 @@ export const AdminPanel = () => {
 
 	useEffect(showWelcome, []);
 
-	useEffect(() => {
-		if (showMenu) {
-			document.querySelector("html").style.position = "fixed";
-			document.querySelector("html").style.overflowY = "scroll";
-		} else {
-			document.querySelector("html").style.position = "initial";
-		}
-	}, [showMenu]);
+	useEffect(
+		() => {
+			if (showMenu) {
+				document.querySelector("html").style.position = "fixed";
+				document.querySelector("html").style.overflowY = "scroll";
+			} else {
+				document.querySelector("html").style.position = "initial";
+			}
+		},
+		[showMenu]
+	);
 
 	return !store.token && !store.user.is_admin ? (
 		<Redirect to="/" />

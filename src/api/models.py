@@ -37,11 +37,12 @@ class User(db.Model):
 #TABLA DE PRODUCTOS
 class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(120), unique=True, nullable=False) # ⚠️ Unique True porque si no da problemas en AdminiProducts que ahora no se solucionar
-    price = db.Column(db.Integer,nullable=False)  
+    name = db.Column(db.String(120), unique=True, nullable=False) # ⚠️ Unique True porque si no da problemas con las imágenes por como lo ha hecho Chavi, en AdminiProducts
+    price = db.Column(db.Integer, nullable=False)  
+    description = db.Column(db.String(1000), nullable=False)
+    duration = db.Column(db.Integer, nullable=False)
     disponibilidad = db.relationship('Dispo', backref='product', lazy=True)
     reserva = db.relationship('Book', backref='product', lazy=True)
-    description = db.Column(db.String(1000),nullable=True)
     # Habrá que meter sí o sí las imágenes en una url (product_img_url) unidas al id del producto
     
     disponibilidad = db.relationship('Dispo', backref='product', lazy=True)
