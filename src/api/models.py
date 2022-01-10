@@ -56,7 +56,8 @@ class Product(db.Model):
             "id": self.id,
             "name": self.name,
             "price" : self.price,
-            "description" : self.description
+            "description" : self.description,
+            "duration" : self.duration
             # "product_img_url": self.product_img_url
         }
 

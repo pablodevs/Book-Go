@@ -4,13 +4,16 @@ import { Context } from "../../store/appContext";
 export const AdminProducts = () => {
 	const { actions, store } = useContext(Context);
 
+	const [minutes, setMinutes] = useState([]);
+	const [hours, setHours] = useState([]);
 	const [dispoChecked, setDispoChecked] = useState(true);
 	const [productList, setProductList] = useState([]);
 	const [data, setData] = useState({
-		id: null,
+		id: "",
 		product: "DEFAULT", // con 'name' no funciona bien
 		price: "",
-		description: ""
+		description: "",
+		duration: ""
 		// IMPORTANTE: AÑADIR DURACIÓN DEL SERVICIO!
 	});
 
@@ -22,18 +25,39 @@ export const AdminProducts = () => {
 					id: store.new_product.id,
 					product: store.new_product.name, // esto de que se llamen diferente no me convence
 					price: store.new_product.price,
-					description: store.new_product.description
+					description: store.new_product.description,
+					duration: store.new_product.duration
 				});
 			else
 				setData({
-					id: null,
+					id: "",
 					product: "DEFAULT", // con 'name' no funciona bien
 					price: "",
-					description: ""
+					description: "",
+					duration: ""
 				});
 		},
 		[store.products, store.new_product]
 	);
+
+	useEffect(() => {
+		let listOfMinutes = [];
+		let listOfHours = [];
+
+		for (let i = 0; i < 60; i += 5) {
+			listOfMinutes.push(i);
+		}
+		for (let i = 0; i <= 24; i += 1) {
+			listOfHours.push(i);
+		}
+
+		setMinutes(listOfMinutes);
+		setHours(listOfHours);
+
+		// for (n of list.map(n => `${n}min`)) {
+		// 	console.log(parseInt(n), typeof parseInt(n))
+		// }
+	}, []);
 
 	const submitFirstForm = event => {
 		event.preventDefault();
@@ -57,7 +81,8 @@ export const AdminProducts = () => {
 				id: prod.id,
 				product: prod.name, // esto de que se llamen diferente no me convence
 				price: prod.price,
-				description: prod.description
+				description: prod.description,
+				duration: prod.duration
 			});
 			// actions.resetNewProduct();
 		} else
@@ -152,17 +177,39 @@ export const AdminProducts = () => {
 								</div>
 							</div>
 							<div className="admin-form-subgroup">
-								<label htmlFor="description" className="dashboard-label">
-									Descripción
-									<span>{data.description.length}</span>
+								Duración
+								<label htmlFor="hours" className="dashboard-label">
+									Hora(s)
 								</label>
-								<textarea
-									id="description"
-									name="description"
-									rows="3"
-									value={data.description}
-									onChange={e => handleInputChange(e)}
-								/>
+								<div className="select-wrapper">
+									<select
+										// onChange={e => handleInputChange(e)}
+										id="hours"
+										name="hours"
+										value={Math.floor(data.duration / 60)}>
+										{hours.map((hour, idx) => (
+											<option key={idx} value={hour}>
+												{`${hour}h`}
+											</option>
+										))}
+									</select>
+								</div>
+								<label htmlFor="minutes" className="dashboard-label">
+									Minutos
+								</label>
+								<div className="select-wrapper">
+									<select
+										// onChange={e => handleInputChange(e)}
+										id="minutes"
+										name="minutes"
+										value={data.duration % 60}>
+										{minutes.map((min, idx) => (
+											<option key={idx} value={min}>
+												{`${min}min`}
+											</option>
+										))}
+									</select>
+								</div>
 							</div>
 							<div className="admin-form-subgroup img-subgroup">
 								<div className="admin-product-img-wrapper">
@@ -191,6 +238,21 @@ export const AdminProducts = () => {
 										<i className="fas fa-camera" />
 									</button>
 								</div>
+							</div>
+						</div>
+						<div className="admin-form-group">
+							<div className="admin-form-subgroup">
+								<label htmlFor="description" className="dashboard-label">
+									Descripción
+									<span>{data.description.length}</span>
+								</label>
+								<textarea
+									id="description"
+									name="description"
+									rows="3"
+									value={data.description}
+									onChange={e => handleInputChange(e)}
+								/>
 							</div>
 						</div>
 						<div>
