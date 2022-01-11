@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Context } from "../store/appContext";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { AccountSettings } from "../component/dashboard/accountSettings";
 import { ReservationsHistory } from "../component/dashboard/reservationsHistory";
 import house from "../../img/dashboard/home_transparent.png";
@@ -15,7 +15,18 @@ export const Dashboard = () => {
 	const [content, setContent] = useState(null);
 	const [activeTab, setActiveTab] = useState("");
 
+	const params = useParams();
 	let history = useHistory();
+
+	const showWelcome = () => {
+		setContent(
+			<div className="center dashboard-welcome">
+				{/* <h2>¡Hola {store.user.name.charAt(0).toUpperCase() + store.user.name.slice(1)}!</h2> */}
+				<span>¡Hola de nuevo!</span>
+				<img src={house} width="100" height="100" />
+			</div>
+		);
+	};
 
 	useEffect(
 		() => {
@@ -26,15 +37,18 @@ export const Dashboard = () => {
 		[store.token]
 	);
 
-	useEffect(() => {
-		setContent(
-			<div className="center dashboard-welcome">
-				{/* <h2>¡Hola {store.user.name.charAt(0).toUpperCase() + store.user.name.slice(1)}!</h2> */}
-				<span>¡Hola de nuevo!</span>
-				<img src={house} width="100" height="100" />
-			</div>
-		);
-	}, []);
+	const url = window.location.pathname.split("/").pop();
+	useEffect(
+		() => {
+			if (params.content) {
+				setActiveTab(params.content);
+				if (params.content === "welcome") showWelcome();
+				else if (params.content === "bookings") setContent(<ReservationsHistory />);
+				else if (params.content === "profile") setContent(<AccountSettings />);
+			}
+		},
+		[url]
+	);
 
 	return (
 		<div className="dashboard-wrapper">
@@ -74,10 +88,10 @@ export const Dashboard = () => {
 						<ul>
 							<li className="dashboard-li">
 								<button
-									className={"dashboard-tab" + (activeTab === "Reservas" ? " tab-active" : "")}
+									className={"dashboard-tab" + (activeTab === "bookings" ? " tab-active" : "")}
 									onClick={() => {
-										setActiveTab("Reservas");
-										setContent(<ReservationsHistory />);
+										setActiveTab("bookings");
+										history.push("/dashboard/bookings");
 									}}>
 									<i className="far fa-calendar-alt" />
 									<span>Reservas</span>
@@ -85,10 +99,10 @@ export const Dashboard = () => {
 							</li>
 							<li className="dashboard-li">
 								<button
-									className={"dashboard-tab" + (activeTab === "Cuenta" ? " tab-active" : "")}
+									className={"dashboard-tab" + (activeTab === "profile" ? " tab-active" : "")}
 									onClick={() => {
-										setActiveTab("Cuenta");
-										setContent(<AccountSettings />);
+										setActiveTab("profile");
+										history.push("/dashboard/profile");
 									}}>
 									<i className="fas fa-cog" />
 									<span>Cuenta y Configuración</span>

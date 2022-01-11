@@ -47,10 +47,10 @@ const Layout = () => {
 					<Route exact path="/info/:id">
 						<Info />
 					</Route>
-					<Route exact path="/dashboard">
+					<Route exact path="/dashboard/:content">
 						<Dashboard />
 					</Route>
-					<Route exact path="/admin">
+					<Route exact path="/admin/:content">
 						<AdminPanel />
 					</Route>
 					<Route>

@@ -486,6 +486,7 @@ $--br-client-tab-x2: 10px;
         background-color: transparent;
         border-radius: 100vw;
     }
+    &::-webkit-scrollbar-track { margin-block: 1.5em }
     @supports (scrollbar-color: red blue) {
         & {
             scrollbar-color: transparent transparent;

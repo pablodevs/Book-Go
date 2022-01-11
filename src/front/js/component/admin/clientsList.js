@@ -3,7 +3,7 @@ import { Context } from "../../store/appContext";
 import { ClientTab } from "./clientTab";
 import { PretyPhone } from "../../pages/dashboard.js";
 
-export const ClientList = () => {
+export const ClientsList = () => {
 	const { actions, store } = useContext(Context);
 	const [list, setList] = useState([]);
 	const [srchInput, setSrchInput] = useState("");
@@ -11,10 +11,6 @@ export const ClientList = () => {
 
 	const handleSearchOnChange = e => {
 		setSrchInput(e.target.value);
-	};
-
-	const handleSearchSubmit = e => {
-		e.preventDefault();
 	};
 
 	const getClientInfo = newClient => {

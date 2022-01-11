@@ -1,13 +1,11 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Context } from "../store/appContext.js";
-import { Link, NavLink, useHistory } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import "../../styles/components/navbar.scss";
 
 export const Navbar = () => {
 	let [navMenu, setNavMenu] = useState(false);
 	const { store, actions } = useContext(Context);
-
-	let history = useHistory();
 
 	useEffect(
 		() => {
@@ -21,13 +19,6 @@ export const Navbar = () => {
 		[navMenu, store.popup]
 	);
 
-	useEffect(
-		() => {
-			if (store.user.is_admin) history.push("/admin");
-		},
-		[store.user.is_admin]
-	);
-
 	return (
 		<header>
 			<nav className="_navbar">
@@ -37,7 +28,7 @@ export const Navbar = () => {
 					</NavLink>
 				</span>
 				{store.token ? (
-					<Link to={store.user.is_admin ? "/admin" : "/dashboard"}>
+					<Link to={store.user.is_admin ? "/admin/welcome" : "/dashboard/welcome"}>
 						{store.user.img_url ? (
 							<img
 								className="_navbar-profile-img"

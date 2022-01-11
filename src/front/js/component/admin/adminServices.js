@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Context } from "../../store/appContext";
 
-export const AdminProducts = () => {
+export const AdminServices = () => {
 	const { actions, store } = useContext(Context);
 
 	const [minutesList, setMinutesList] = useState([]);

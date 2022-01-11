@@ -1,10 +1,24 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import { Context } from "../../store/appContext";
 
 export const Login = () => {
 	const { actions, store } = useContext(Context);
+
+	let history = useHistory();
+
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
+
+	useEffect(
+		() => {
+			if (store.user.id) {
+				store.user.is_admin ? history.push("/admin/welcome") : null;
+				actions.closePopup();
+			}
+		},
+		[store.user]
+	);
 
 	return (
 		<div className="container-fluid my-auto mb-md-auto mt-md-4">
@@ -53,7 +67,7 @@ export const Login = () => {
 						</button>
 					</div>
 				</div>
-				{store.token ? (
+				{/* {store.token ? (
 					actions.closePopup()
 				) : (
 					<div>
@@ -65,7 +79,7 @@ export const Login = () => {
 							""
 						)}
 					</div>
-				)}
+				)} */}
 			</div>
 		</div>
 	);

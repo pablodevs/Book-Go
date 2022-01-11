@@ -399,7 +399,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 						});
 						actions.getProfileData(resp.token);
 						localStorage.setItem("token", resp.token);
-						actions.closePopup();
 					})
 					.catch(error => console.error(error));
 			},
@@ -424,6 +423,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			// Obtener la información del usuario en Dashboard (por ejemplo)
 			getProfileData: async token => {
+				const actions = getActions();
 				const options = {
 					method: "GET",
 					headers: {
@@ -433,6 +433,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				try {
 					const response = await fetch(process.env.BACKEND_URL + "/user", options);
 					const resp = await response.json();
+					if (response.status === 401) actions.logout();
 					if (!response.ok) {
 						setStore({ message: resp.message });
 						throw Error(response);
