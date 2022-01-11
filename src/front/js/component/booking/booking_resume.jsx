@@ -25,7 +25,7 @@ export const Booking_resume = () => {
 						</button>
 						<button
 							onClick={() =>
-								store.user.id != null
+								store.user.id
 									? actions.reservar(store.user.id)
 									: actions.setPopup("login", "Iniciar Sesión")
 							}

@@ -49,8 +49,8 @@ export const Login = () => {
 					/>
 					<button
 						onClick={() => {
-							store.booking != {}
-								? actions.generate_token(email, password).then(actions.reservar(store.user.id))
+							store.booking.id
+								? actions.reservar(store.user.id)
 								: actions.generate_token(email, password);
 						}}
 						className="btn btn-warning w-100"
