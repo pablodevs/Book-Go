@@ -41,9 +41,8 @@ class Product(db.Model):
     price = db.Column(db.Integer, nullable=False)  
     description = db.Column(db.String(1000), nullable=False)
     duration = db.Column(db.Integer, nullable=False)
-    disponibilidad = db.relationship('Dispo', backref='product', lazy=True)
-    reserva = db.relationship('Book', backref='product', lazy=True)
-    # Habrá que meter sí o sí las imágenes en una url (product_img_url) unidas al id del producto
+    sku = db.Column(db.String(50),nullable=True)
+     # Habrá que meter sí o sí las imágenes en una url (product_img_url) unidas al id del producto
     
     disponibilidad = db.relationship('Dispo', backref='product', lazy=True)
     reserva = db.relationship('Book', backref='product', lazy=True)
@@ -58,6 +57,7 @@ class Product(db.Model):
             "price" : self.price,
             "description" : self.description,
             "duration" : self.duration
+            #puede que falte el sku
             # "product_img_url": self.product_img_url
         }
 
@@ -80,9 +80,9 @@ class Book(db.Model):
     def serialize(self):
         return {
             "id": self.id,
-            "product": self.product,
-            "date" : self.date,
-            "time" : self.time
+            "product_id": self.product_id,
+            "date" : self.date.strftime("%-d/%-m/%Y"),
+            "time" : self.time.strftime("%-H:%M")
         }
 
 
@@ -107,6 +107,6 @@ class Dispo(db.Model):
             "date" : self.date.strftime("%-d/%-m/%Y"),
             #este otro en milisegundos
             #"date" : self.date.strptime(self.date.strftime("%d/%m/%Y"),"%d/%m/%Y").timestamp()*1000,
-            "time" : str(self.time),
+            "time" : self.time.strftime("%-H:%M"),
             "available" : self.available
         }

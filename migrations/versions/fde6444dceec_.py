@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 8db5226ec40a
+Revision ID: fde6444dceec
 Revises: 
-Create Date: 2021-12-21 19:02:16.534095
+Create Date: 2022-01-11 18:40:25.275112
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '8db5226ec40a'
+revision = 'fde6444dceec'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -22,8 +22,11 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(length=120), nullable=False),
     sa.Column('price', sa.Integer(), nullable=False),
-    sa.Column('description', sa.String(length=150), nullable=False),
-    sa.PrimaryKeyConstraint('id')
+    sa.Column('description', sa.String(length=1000), nullable=False),
+    sa.Column('duration', sa.Integer(), nullable=False),
+    sa.Column('sku', sa.String(length=50), nullable=True),
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('name')
     )
     op.create_table('user',
     sa.Column('id', sa.Integer(), nullable=False),
@@ -40,11 +43,12 @@ def upgrade():
     )
     op.create_table('book',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('product', sa.String(length=120), nullable=False),
     sa.Column('date', sa.DateTime(), nullable=False),
     sa.Column('time', sa.Time(), nullable=False),
     sa.Column('created', sa.DateTime(), nullable=True),
+    sa.Column('product_id', sa.Integer(), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=False),
+    sa.ForeignKeyConstraint(['product_id'], ['product.id'], ),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
@@ -57,9 +61,6 @@ def upgrade():
     sa.ForeignKeyConstraint(['product_id'], ['product.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
-    op.add_column('book', sa.Column('product_id', sa.Integer(), nullable=False))
-    op.create_foreign_key(None, 'book', 'product', ['product_id'], ['id'])
-    op.drop_column('book', 'product')
     # ### end Alembic commands ###
 
 
@@ -69,7 +70,4 @@ def downgrade():
     op.drop_table('book')
     op.drop_table('user')
     op.drop_table('product')
-    op.add_column('book', sa.Column('product', sa.VARCHAR(length=120), autoincrement=False, nullable=False))
-    op.drop_constraint(None, 'book', type_='foreignkey')
-    op.drop_column('book', 'product_id')
     # ### end Alembic commands ###

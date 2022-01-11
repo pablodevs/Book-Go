@@ -167,7 +167,13 @@ export const Calendar = () => {
 					{store.dispo.map((item, index) => {
 						if (item.date == store.booking_day) {
 							return (
-								<button className="btn btn-success" key={index}>
+								<button
+									className="btn btn-success p-2 m-2"
+									key={index}
+									onClick={() => {
+										actions.setPopup("resume", "Resumen de su reserva");
+										actions.booking(item);
+									}}>
 									{item.time}
 								</button>
 							);
