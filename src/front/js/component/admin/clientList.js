@@ -60,7 +60,7 @@ export const ClientList = () => {
 		<div className="dashboard-content-wrapper admin-products">
 			<div className="clients-wrapper">
 				<aside className="clients-list">
-					<h1 className="dashboard-content-title client-list-title">Clientes</h1>
+					<h1 className="dashboard-content-title clients-list-title">Clientes</h1>
 					<div className="search-client search-wrapper">
 						<i className="fas fa-search" />
 						<input

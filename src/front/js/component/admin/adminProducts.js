@@ -188,34 +188,41 @@ export const AdminProducts = () => {
 									<span>€</span>
 								</div>
 							</div>
-							<div className="admin-form-subgroup">
-								Duración
-								<label htmlFor="hours" className="dashboard-label">
-									Hora(s)
-								</label>
-								<div className="select-wrapper">
-									<select onChange={e => setHours(parseInt(e.target.value))} id="hours" value={hours}>
-										{hoursList.map((hour, idx) => (
-											<option key={idx} value={hour}>
-												{`${hour}h`}
-											</option>
-										))}
-									</select>
+							<div className="admin-form-subgroup duration-subgroup">
+								<span className="admin-form-subgroup-title">Duración</span>
+								<div>
+									<label htmlFor="hours" className="dashboard-label">
+										Hora(s)
+									</label>
+									<div className="select-wrapper">
+										<select
+											onChange={e => setHours(parseInt(e.target.value))}
+											id="hours"
+											value={hours}>
+											{hoursList.map((hour, idx) => (
+												<option key={idx} value={hour}>
+													{`${hour}h`}
+												</option>
+											))}
+										</select>
+									</div>
 								</div>
-								<label htmlFor="minutes" className="dashboard-label">
-									Minutos
-								</label>
-								<div className="select-wrapper">
-									<select
-										onChange={e => setMinutes(parseInt(e.target.value))}
-										id="minutes"
-										value={minutes}>
-										{minutesList.map((min, idx) => (
-											<option key={idx} value={min}>
-												{`${min}min`}
-											</option>
-										))}
-									</select>
+								<div>
+									<label htmlFor="minutes" className="dashboard-label">
+										Minutos
+									</label>
+									<div className="select-wrapper">
+										<select
+											onChange={e => setMinutes(parseInt(e.target.value))}
+											id="minutes"
+											value={minutes}>
+											{minutesList.map((min, idx) => (
+												<option key={idx} value={min}>
+													{`${min}min`}
+												</option>
+											))}
+										</select>
+									</div>
 								</div>
 							</div>
 							<div className="admin-form-subgroup img-subgroup">

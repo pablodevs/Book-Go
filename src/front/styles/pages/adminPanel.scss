@@ -111,7 +111,7 @@ button.btn-cool.logout {
     }
     .admin-aside {
         width: 100%;
-        position: relative;
+        position: sticky;
         height: fit-content;
         padding: 0.6rem 3vw;
         & nav {
@@ -256,7 +256,18 @@ div.admin-form-group {
     gap: 1.5rem;
 }
 
-.admin-form-subgroup { flex: 1 }
+.admin-form-subgroup {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+.admin-form-subgroup-title {
+    display: block;
+    text-align: center;
+}
+.duration-subgroup {
+    gap: 0.5rem;
+}
 
 div.disponibility-title.admin-form-group {
     justify-content: start;
@@ -364,7 +375,7 @@ div.disponibility-title.admin-form-group {
     border-radius: 10px;
     height: 93vh;
 }
-.client-list-title {
+.clients-list-title {
     padding: 1rem 0 0 1rem
 }
 .clients-list ul {
@@ -459,6 +470,9 @@ $--br-client-tab-x2: 10px;
 }
 .client-tab-img { margin: 0 }
 
+@media screen and (max-width: 767.9px) {
+    .clients-list { height: calc(100vh - 6.1rem) }
+}
 
 // Client list scroll-bar
 .clients-list ul {
