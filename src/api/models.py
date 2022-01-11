@@ -41,7 +41,7 @@ class Product(db.Model):
     price = db.Column(db.Integer, nullable=False)  
     description = db.Column(db.String(1000), nullable=False)
     duration = db.Column(db.Integer, nullable=False)
-    sku = db.Column(db.String(50),nullable=True)
+    sku = db.Column(db.String(50), nullable=True)
      # Habrá que meter sí o sí las imágenes en una url (product_img_url) unidas al id del producto
     
     disponibilidad = db.relationship('Dispo', backref='product', lazy=True)
@@ -57,7 +57,7 @@ class Product(db.Model):
             "price" : self.price,
             "description" : self.description,
             "duration" : self.duration
-            #puede que falte el sku
+            # puede que falte el sku
             # "product_img_url": self.product_img_url
         }
 
