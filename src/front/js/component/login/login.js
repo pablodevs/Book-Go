@@ -50,7 +50,8 @@ export const Login = () => {
 					<button
 						onClick={() => {
 							store.booking.id
-								? actions.reservar(store.user.id)
+								? (actions.setPopup("resume", "Resumen de la reserva"),
+								  actions.generate_token(email, password))
 								: actions.generate_token(email, password);
 						}}
 						className="btn btn-warning w-100"

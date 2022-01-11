@@ -14,6 +14,7 @@ import { Home } from "./pages/home";
 import { Info } from "./pages/info";
 import { Dashboard } from "./pages/dashboard";
 import { AdminPanel } from "./pages/adminPanel";
+import { Pago } from "./pages/pago.jsx";
 
 const Layout = () => {
 	const basename = process.env.BASENAME || "";
@@ -53,6 +54,11 @@ const Layout = () => {
 					<Route exact path="/admin/:content">
 						<AdminPanel />
 					</Route>
+
+					<Route exact path="/pago/:booking_id/:user_id">
+						<Pago />
+					</Route>
+
 					<Route>
 						<div className="view">
 							<h1 style={{ fontWeight: "bold", fontSize: "calc(4.5rem + 2vw)", letterSpacing: "10px" }}>

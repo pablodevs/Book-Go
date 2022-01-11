@@ -24,11 +24,7 @@ export const Booking_resume = () => {
 							Cerrar
 						</button>
 						<button
-							onClick={() =>
-								store.user.id
-									? actions.reservar(store.user.id)
-									: actions.setPopup("login", "Iniciar Sesión")
-							}
+							onClick={() => actions.reservar(store.user.id)}
 							type="button"
 							className="btn btn-success"
 							id="checkout-button-sku_KvCUm3AeHMjmrk"

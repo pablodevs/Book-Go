@@ -489,7 +489,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}),
 
 			// PASARELA DE PAGO DE PAGO DE STRIPE
-			reservar: user_id => {
+			reservar: () => {
 				const store = getStore();
 				const stripe = Stripe("pk_test_yHT02IrsuQ0eWhAT2BBbfxmR");
 				stripe
@@ -503,7 +503,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 				 * Instead use one of the strategies described in
 				 * https://stripe.com/docs/payments/checkout/fulfill-orders
 				 */
-						successUrl: process.env.BACKEND_URL + `/book/${store.booking.id}/${user_id}`,
+						successUrl:
+							"https://3000-gold-felidae-8otxygdm.ws-eu25.gitpod.io/pago/" +
+							`${store.booking.id}/${store.user.id}`,
 						cancelUrl: process.env.BACKEND_URL + `/error/`
 					})
 					.then(function(result) {
