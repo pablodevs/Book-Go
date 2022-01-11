@@ -36,7 +36,9 @@ export const Login = () => {
 					/>
 					<button
 						onClick={() => {
-							actions.generate_token(email, password);
+							store.booking != {}
+								? actions.generate_token(email, password).then(actions.reservar(store.user.id))
+								: actions.generate_token(email, password);
 						}}
 						className="btn btn-warning w-100"
 						type="submit">

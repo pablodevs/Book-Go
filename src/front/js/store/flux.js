@@ -1,4 +1,6 @@
 import toast from "react-hot-toast";
+import React from "react";
+import { Redirect } from "react-router-dom";
 
 const getNumOfDaysInMonth = (year, month) => new Date(year, month + 1, 0).getDate();
 
@@ -419,7 +421,38 @@ const getState = ({ getStore, getActions, setStore }) => {
 						instagram: data.instagram,
 						twitter: data.twitter
 					}
-				})
+				}),
+
+			// PASARELA DE PAGO DE PAGO DE STRIPE
+			reservar: user_id => {
+				const store = getStore();
+				const stripe = Stripe("pk_test_yHT02IrsuQ0eWhAT2BBbfxmR");
+				stripe
+					.redirectToCheckout({
+						lineItems: [{ price: "sku_KvCUm3AeHMjmrk", quantity: 1 }],
+						mode: "payment",
+						/*
+				 * Do not rely on the redirect to the successUrl for fulfilling
+				 * purchases, customers may not always reach the success_url after
+				 * a successful payment.
+				 * Instead use one of the strategies described in
+				 * https://stripe.com/docs/payments/checkout/fulfill-orders
+				 */
+						successUrl: process.env.BACKEND_URL + `/book/${store.booking.id}/${user_id}`,
+						cancelUrl: process.env.BACKEND_URL + `/error/`
+					})
+					.then(function(result) {
+						if (result.error) {
+							/*
+				   * If `redirectToCheckout` fails due to a browser or network
+				   * error, display the localized error message to your customer.
+				   */
+							var displayError = document.getElementById("error-message");
+							displayError.textContent = result.error.message;
+						}
+						<Redirect to="/admin" />;
+					});
+			}
 		}
 	};
 };

@@ -41,6 +41,7 @@ class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120), unique=True, nullable=False) # ⚠️ Unique True porque si no da problemas en AdminiProducts que ahora no se solucionar
     price = db.Column(db.Integer,nullable=False)  
+    sku = db.Column(db.String(50),nullable=True)
     disponibilidad = db.relationship('Dispo', backref='product', lazy=True)
     reserva = db.relationship('Book', backref='product', lazy=True)
     description = db.Column(db.String(1000),nullable=True)
@@ -54,7 +55,8 @@ class Product(db.Model):
             "id": self.id,
             "name": self.name,
             "price" : self.price,
-            "description" : self.description
+            "description" : self.description,
+            #puede que falte el sku
             # "product_img_url": self.product_img_url
         }
 
@@ -77,9 +79,9 @@ class Book(db.Model):
     def serialize(self):
         return {
             "id": self.id,
-            "product": self.product,
-            "date" : self.date,
-            "time" : self.time
+            "product_id": self.product_id,
+            "date" : self.date.strftime("%-d/%-m/%Y"),
+            "time" : self.time.strftime("%-H:%M")
         }
 
 
@@ -105,6 +107,6 @@ class Dispo(db.Model):
             "date" : self.date.strftime("%-d/%-m/%Y"),
             #este otro en milisegundos
             #"date" : self.date.strptime(self.date.strftime("%d/%m/%Y"),"%d/%m/%Y").timestamp()*1000,
-            "time" : str(self.time),
+            "time" : self.time.strftime("%-H:%M"),
             "available" : self.available
         }

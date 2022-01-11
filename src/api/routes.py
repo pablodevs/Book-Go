@@ -2,7 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User, Product , Dispo
+from api.models import db, User, Product , Dispo ,Book
 from api.utils import generate_sitemap, APIException
 import cloudinary
 import cloudinary.uploader
@@ -221,3 +221,23 @@ def handle_single_user(user_id):
 
     return jsonify(user.serialize()), 200
 
+
+
+
+
+# CREATE NEW BOOKING
+@api.route('/book/<int:dispo_id>/<int:user_id>', methods=['GET'])
+def create_booking(dispo_id, user_id):
+    # change is_available to False in Dispo
+    dispo = Dispo.query.get(dispo_id)
+    dispo.available = False
+    db.session.commit()
+
+    # Create a new booking
+    new_booking = Book(user_id = user_id , date = dispo.date , time = dispo.time, product = dispo.product)
+    db.session.add(new_booking)
+    db.session.commit()
+
+
+    return jsonify(new_booking.serialize()),200
+   
