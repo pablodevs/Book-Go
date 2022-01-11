@@ -10,6 +10,7 @@ from api.utils import APIException, generate_sitemap
 from api.models import db
 from api.routes import api
 from api.admin import setup_admin
+from datetime import timedelta
 
 #para la autenticación 
 from flask_jwt_extended import JWTManager
@@ -21,7 +22,8 @@ app = Flask(__name__)
 app.url_map.strict_slashes = False
 
 # Setup the Flask-JWT-Extended extension
-app.config["JWT_SECRET_KEY"] = os.getenv('FLASK_APP_KEY')  
+app.config["JWT_SECRET_KEY"] = os.getenv('FLASK_APP_KEY')
+app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(days=365)
 jwt = JWTManager(app)
 
 # database condiguration

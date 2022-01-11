@@ -80,46 +80,48 @@ export const Calendar = () => {
 			}
 			setWeeks(weeksArray); // cargo las semanas en pantalla
 		},
-		[store.calendar] // realizo este useEffect() cada vez que cambia el mes
+		[store.calendar.month] // realizo este useEffect() cada vez que cambia el mes
 	);
 
 	// Mouse Effect
-	useEffect(
-		() => {
+	useEffect(() => {
+		if (!document.querySelector(".month")) return;
+
+		let mouseEffectFunc = event => {
 			if (!document.querySelector(".month")) return;
 
-			let mouseEffectFunc = event => {
-				if (!document.querySelector(".month")) return;
+			// Obtengo la posición del popup (X, Y)
+			let container = document.querySelector(".month");
+			let rect = container.getBoundingClientRect();
 
-				// Obtengo la posición del popup (X, Y)
-				let container = document.querySelector(".month");
-				let rect = container.getBoundingClientRect();
+			setMouseEffect({
+				X: event.clientX - rect.left,
+				Y: event.clientY - rect.top
+			});
+		};
+		// Añado el efecto al mouse
+		if (window.innerWidth > 767.9) document.body.addEventListener("mousemove", mouseEffectFunc);
 
-				setMouseEffect({
-					X: event.clientX - rect.left,
-					Y: event.clientY - rect.top
-				});
-			};
-			// Añado el efecto al mouse
-			if (window.innerWidth > 767.9) document.body.addEventListener("mousemove", mouseEffectFunc);
+		const handleCalendarResize = () => {
+			if (window.innerWidth <= 767.9) {
+				document.body.removeEventListener("mousemove", mouseEffectFunc);
+				if (document.querySelector(".month-blur-effect"))
+					// Ojito! el event listener se quedará, ya que no existe el removeEventListener (habrá que implementarlo digo yo)
+					document.querySelector(".month-blur-effect").style.display = "none";
+			} else {
+				document.body.addEventListener("mousemove", mouseEffectFunc);
+				if (document.querySelector(".month-blur-effect"))
+					document.querySelector(".month-blur-effect").style.display = "block";
+			}
+		};
+		window.addEventListener("resize", handleCalendarResize);
 
-			const handleCalendarResize = () => {
-				if (window.innerWidth <= 767.9) {
-					document.body.removeEventListener("mousemove", mouseEffectFunc);
-					if (document.querySelector(".month-blur-effect"))
-						// Ojito! el event listener se quedará, ya que no existe el removeEventListener (habrá que implementarlo digo yo)
-						document.querySelector(".month-blur-effect").style.display = "none";
-				} else {
-					document.body.addEventListener("mousemove", mouseEffectFunc);
-					if (document.querySelector(".month-blur-effect"))
-						document.querySelector(".month-blur-effect").style.display = "block";
-				}
-				if (!store.popup) window.removeEventListener("resize", handleCalendarResize);
-			};
-			window.addEventListener("resize", handleCalendarResize);
-		},
-		[weeks]
-	);
+		// Cuando se cierre el componente, removemos los eventListeners:
+		return () => {
+			window.removeEventListener("resize", handleCalendarResize);
+			document.body.removeEventListener("mousemove", mouseEffectFunc);
+		};
+	}, []);
 
 	return (
 		<div className="calendar-wrapper">
@@ -127,11 +129,11 @@ export const Calendar = () => {
 				{/* Estos son los botones de cambio de mes, tienen position: absolute para colocarlos donde quiera */}
 				<button
 					className="previous-month"
-					onClick={
-						calendar.month > todayMonth || calendar.year > todayYear
-							? () => actions.calendarActions.updateCalendar(calendar.month - 1)
-							: () => undefined
-					}>
+					onClick={() => {
+						if (calendar.month > todayMonth || calendar.year > todayYear) {
+							actions.calendarActions.updateCalendar(calendar.month - 1);
+						}
+					}}>
 					<i className="fas fa-chevron-left" />
 				</button>
 				<h4 className="calendar-title">
@@ -163,7 +165,7 @@ export const Calendar = () => {
 					/>
 				</div>
 
-				<div>
+				<div className="hours-avaliable">
 					{store.dispo.map((item, index) => {
 						if (item.date == store.booking_day) {
 							return (
