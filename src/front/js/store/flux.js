@@ -386,28 +386,30 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			generate_token: async (email, password) => {
 				const actions = getActions();
-				//genera el token cuando haces login
-				await fetch(process.env.BACKEND_URL + "/token", {
-					method: "POST",
-					body: JSON.stringify({ email: email, password: password }),
-					headers: {
-						"Content-type": "application/json"
-					}
-				})
-					.then(response => {
-						// console.log(response.ok);
-						// console.log(response.status);
-						return response.json();
-					})
-					.then(resp => {
+				try {
+					const response = await fetch(process.env.BACKEND_URL + "/token", {
+						method: "POST",
+						body: JSON.stringify({ email: email, password: password }),
+						headers: {
+							"Content-type": "application/json"
+						}
+					});
+					const resp = await response.json();
+					if (!response.ok) {
+						setStore({ message: resp.message });
+						throw Error(response);
+					} else {
 						setStore({
 							token: resp.token,
 							message: resp.message
 						});
 						actions.getProfileData(resp.token);
 						localStorage.setItem("token", resp.token);
-					})
-					.catch(error => console.error(error));
+						return resp;
+					}
+				} catch (err) {
+					return err.json();
+				}
 			},
 
 			logout: () => {

@@ -300,7 +300,7 @@ input.search-input[type="search"]::-webkit-search-results-decoration {
 }
 
 /*===== Tooltips =====*/
-div.toast-confirm, div.toast-danger, button.toast-close {
+div.toast-confirm, div.toast-danger, div.toast-info, button.toast-close {
     color: white;
     font-weight: bold;
 }
@@ -310,6 +310,10 @@ div.toast-confirm {
 }
 div.toast-danger {
     background: red;
+    padding-inline: 1.4rem;
+}
+div.toast-info {
+    background: $--color-blue-regular;
     padding-inline: 1.4rem;
 }
 button.toast-close {

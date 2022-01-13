@@ -274,7 +274,6 @@ def get_product_dispo(product_name):
 # CREATE NEW BOOKING
 @api.route('/book/<int:dispo_id>/<int:user_id>', methods=['POST'])
 @jwt_required() 
- # ⚠️ si ponemos @jwt_required()  no nos funciona y debe ser porque al pasar por stripe no coge el token
 def create_booking(dispo_id, user_id):
     # change is_available to False in Dispo
     dispo = Dispo.query.get(dispo_id)
@@ -286,5 +285,19 @@ def create_booking(dispo_id, user_id):
     new_booking = Book(user_id = user_id , date = dispo.date , time = dispo.time, product = dispo.product)
     db.session.add(new_booking)
     db.session.commit()
+
+    # MAIL_SERVER : default ‘localhost’
+    # MAIL_PORT : default 25
+    # MAIL_USE_TLS : default False
+    # MAIL_USE_SSL : default False
+    # MAIL_DEBUG : default app.debug
+    # MAIL_USERNAME : default None
+    # MAIL_PASSWORD : default None
+    # MAIL_DEFAULT_SENDER : default None
+    # MAIL_MAX_EMAILS : default None
+    # MAIL_SUPPRESS_SEND : default app.testing
+    # MAIL_ASCII_ATTACHMENTS : default False
+
+
     return jsonify({"message": "Su reserva ha sido Confirmada"}), 200
    

@@ -49,10 +49,16 @@ export const Login = () => {
 					/>
 					<button
 						onClick={() => {
-							store.booking.id
-								? (actions.setPopup("resume", "Resumen de la reserva"),
-								  actions.generate_token(email, password))
-								: actions.generate_token(email, password);
+							actions.setToast(
+								"promise",
+								{ loading: "login...", success: () => "Bienvenido" },
+								actions.generate_token(email, password),
+								"toast-info"
+							);
+							// store.booking.id
+							// 	? (actions.setPopup("resume", "Resumen de la reserva"),
+							// 	  actions.generate_token(email, password))
+							// 	: actions.generate_token(email, password);
 						}}
 						className="btn btn-warning w-100"
 						type="submit">
