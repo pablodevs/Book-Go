@@ -504,9 +504,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 				 * https://stripe.com/docs/payments/checkout/fulfill-orders
 				 */
 						successUrl:
-							"https://3000-gold-felidae-8otxygdm.ws-eu25.gitpod.io/pago/" +
+							"https://3000-gold-felidae-8otxygdm.ws-eu27.gitpod.io/pago/" +
 							`${store.booking.id}/${store.user.id}`,
-						cancelUrl: "https://3000-gold-felidae-8otxygdm.ws-eu25.gitpod.io/error/"
+						cancelUrl: "https://3000-gold-felidae-8otxygdm.ws-eu27.gitpod.io/error/"
 					})
 					.then(function(result) {
 						if (result.error) {

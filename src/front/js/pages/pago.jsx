@@ -10,7 +10,7 @@ export const Pago = () => {
 	fetch(process.env.BACKEND_URL + `/book/${params.booking_id}/${params.user_id}`, {
 		method: "POST",
 		headers: {
-			Authorization: "Bearer " + store.token,
+			Authorization: "Bearer " + localStorage.getItem("token"),
 			"Content-type": "application/json"
 		}
 	})

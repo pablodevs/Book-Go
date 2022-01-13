@@ -20,6 +20,8 @@ api = Blueprint('api', __name__)
 # GET ALL PRODUCTS
 @api.route('/products', methods=['GET'])
 def get_products():
+
+    print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ funciona  @@@@@@@@@@')
     """
     All Products
     """
@@ -271,6 +273,7 @@ def get_product_dispo(product_name):
 
 # CREATE NEW BOOKING
 @api.route('/book/<int:dispo_id>/<int:user_id>', methods=['POST'])
+@jwt_required() 
  # ⚠️ si ponemos @jwt_required()  no nos funciona y debe ser porque al pasar por stripe no coge el token
 def create_booking(dispo_id, user_id):
     # change is_available to False in Dispo

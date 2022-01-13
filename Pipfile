@@ -18,6 +18,7 @@ cloudinary = "*"
 flask-admin = "*"
 flask-jwt-extended = "*"
 flask = "*"
+flask-mail = "*"
 
 [requires]
 python_version = "3.8"
