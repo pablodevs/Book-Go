@@ -6,10 +6,10 @@ export const Info = () => {
 	const { actions, store } = useContext(Context);
 	const params = useParams();
 
-	return store.products.map(prod => {
+	return store.products.map((prod, idx) => {
 		if (prod.id == params.id) {
 			return (
-				<div className="container-sm border border-rounded m-5 mx-auto bg-light">
+				<div className="container-sm border border-rounded m-5 mx-auto bg-light" key={idx}>
 					<div className="jumbotron m-3">
 						<h1 className="display-4">{prod.name}!</h1>
 						<p className="lead">{prod.description}</p>
