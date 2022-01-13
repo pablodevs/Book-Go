@@ -176,7 +176,7 @@ export const Calendar = () => {
 										store.user.id
 											? (actions.setPopup("resume", "Resumen de su reserva"),
 											  actions.booking(item))
-											: actions.setPopup("login", "Iniciar Sesión");
+											: (actions.setPopup("login", "Iniciar Sesión"), actions.booking(item));
 									}}>
 									{item.time}
 								</button>

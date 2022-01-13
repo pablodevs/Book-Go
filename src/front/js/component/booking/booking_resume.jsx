@@ -11,7 +11,7 @@ export const Booking_resume = () => {
 					<div className="modal-header">
 						<h5 className="modal-title">
 							{store.products.map(item => {
-								if (item.id == store.booking.product_id) return item.name;
+								if (store.booking.product_id == item.id) return item.name;
 							})}
 						</h5>
 					</div>
@@ -24,7 +24,14 @@ export const Booking_resume = () => {
 							Cerrar
 						</button>
 						<button
-							onClick={() => actions.reservar(store.user.id)}
+							onClick={() => {
+								store.products.map(item => {
+									if (item.id == store.booking.id) {
+										let sku = item.sku;
+										actions.reservar(sku);
+									}
+								});
+							}}
 							type="button"
 							className="btn btn-success"
 							id="checkout-button-sku_KvCUm3AeHMjmrk"

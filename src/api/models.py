@@ -56,8 +56,9 @@ class Product(db.Model):
             "name": self.name,
             "price" : self.price,
             "description" : self.description,
-            "duration" : self.duration
-            # puede que falte el sku
+            "duration" : self.duration,
+            "sku" : self.sku
+
             # "product_img_url": self.product_img_url
         }
 
