@@ -26,99 +26,103 @@
 }
 .calendar-title {
     text-align: center;
-    color: $--color-grey-dark;
     font-weight: 300;
     margin-block: auto;
 }
-.previous-month, .next-month {
-    font-size: 1rem;
-    color: $--color-blue-dark;
-    border-radius: 50%;
-    box-shadow: 1px 1px 7px 0px $--color-blue-lighter;
-    width: fit-content;
-    aspect-ratio: 1;
-}
 
-.week-days, .week {
+.week-days {
     display: flex;
     & > * {
         flex-basis: 100%;
     }
-} 
-.week-days {
-    // background-color: $--color-blue-light;
-    padding-block: 5px;
+    padding: 5px 1rem;
     border-bottom: 1px solid $--color-grey-lighter;
-    color: $--color-grey-dark;
-    font-size: clamp(0.7rem, 5vw, 1.2rem);
+    font-size: clamp(0.6rem, 5vw, 1rem);
     font-weight: 100;
-    & > td { padding: 5px }
 }
 .month {
     position: relative;
     overflow: hidden;
-    display: flex;
     flex-direction: column;
-    width: 65vh;
     padding: 1rem;
-    @media screen and (max-width: 767.9px) { padding: 0.3rem; width: auto }
+    box-shadow: inset 0 0 0 1.1rem white;
 }
 
 .week, .month {
-    gap: 0.3rem;
-    @media screen and (max-width: 767.9px) { gap: 0.2rem }
+    display: flex;
 }
 
-$--days-box-shadow: inset 0 0 0 1.5px white;
+.day-wrapper {
+    aspect-ratio: 1;
+    flex-basis: 100%;
+    border: 0.2rem solid white;
+    padding: 0.2rem;
+}
 .day {
-    color: white;
-    font-size: clamp(1.4rem, 5vw, 1.4rem);
-    box-shadow: $--days-box-shadow;
-    background-color: $--color-grey-dark;
-    &:hover {
-        box-shadow: inset 0 0 0 2px $--color-blue-dark;
-        color: $--color-grey-dark;
-        font-weight: bold;
-    }
+    width: 100%;
+    font-size: clamp(0.8rem, 5vw, 1.2rem);
+    background-color: white;
     aspect-ratio: 1;
     @media screen and (max-width: 767.9px) {
-        aspect-ratio: 0;
-        box-shadow: inset 0 0 0 1.5px $--color-grey-lighter;
-        border-radius: 10px;
+        border-radius: 0.3rem;
     }
+}
+.day.hover {
+    box-shadow: 0 0 0 0.2rem $--color-blue-regular;
+}
+.day.day-active {
+    color: white;
+    box-shadow: 0 0 0 0.2rem $--color-blue-regular;
+    background-color: $--color-blue-regular;
+    font-weight: bold;
 }
 .today {
     font-weight: 600;
-    background-color: $--color-blue-light;
-    // inset: para que esté dentro del div y no vaya hacia afuera
-    box-shadow: inset 0 0 0 1.5px $--color-blue-dark,
-                inset 0 0 0 3px white,
-                inset 0 0 0 4.5px $--color-blue-dark; // Uso box-shadow porque el estilo 'border' modifica el tamaño del div mientras que box shadow NO
+    box-shadow: 0 0 0 0.2rem $--color-blue-dark;
 }
 .week button.light-fc-day {
-    color: $--color-grey-light;
     cursor: default;
-    background: none;
-    &:hover {
-        box-shadow: $--days-box-shadow;
-        @media screen and (max-width: 767.9px) { box-shadow: inset 0 0 0 1.5px $--color-grey-lighter }
-    }
+    color: $--color-grey-lighter;
 }
 
 button.day.disabled {
-    border: 1px solid red;
+    background: white;
 }
 
-.calendar-wrapper, .calendar, .month, .week { flex: 1 }
+@media screen and (min-width: 768px) {
+    .month {
+        width: 65vh;
+    }
+    .calendar-wrapper, .calendar, .month, .week {
+        flex: 1
+    }
+}
+
+@media screen and (max-width: 767.9px) {
+    .calendar-wrapper {
+        width: 100%;
+    }
+    .calendar {
+        margin-inline: auto;
+        width: calc(min(100%, 515px));
+    }
+    .week-days {
+        padding-inline: 0.2rem;
+    }
+    .month {
+        padding: 0.2rem;
+    }
+}
 
 .month-blur-effect {
     position: absolute;
     width: 2px;
     height: 2px;
     border-radius: 50%;
-    box-shadow: 0 0 0 53px #8bf0ff,
-                0 0 0 86px #b5f5ff,
-                0 0 0 120px #d3fbffbf;
+    background-color: #60eaff91;
+    box-shadow: 0 0 0 40px #60eaff91,
+                0 0 0 80px #84efff9c,
+                0 0 0 150px #bdf9ff8a;
     filter: blur(30px);
     z-index: -1
 }

@@ -101,7 +101,7 @@ textarea {
 button.disabled, a.disabled {
     pointer-events: none;
     background: none;
-    color: $--color-grey-light;
+    color: $--color-grey-lighter;
     cursor: default;
     &:hover { background: none }
 }

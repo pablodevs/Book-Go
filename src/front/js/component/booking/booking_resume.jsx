@@ -21,7 +21,7 @@ export const Booking_resume = () => {
 					</div>
 					<div className="modal-footer">
 						<button onClick={() => actions.goToPrevPopup()} type="button" className="btn btn-secondary">
-							Cerrar
+							Volver
 						</button>
 						<button
 							onClick={() => actions.reservar(store.user.id)}
@@ -29,7 +29,7 @@ export const Booking_resume = () => {
 							className="btn btn-success"
 							id="checkout-button-sku_KvCUm3AeHMjmrk"
 							role="link">
-							RESERVAR
+							Pagar
 						</button>
 					</div>
 					<div id="error-message" />
