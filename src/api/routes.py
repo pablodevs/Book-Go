@@ -270,18 +270,18 @@ def get_product_dispo(product_name):
 
 
 # CREATE NEW BOOKING
-@api.route('/book/<int:dispo_id>/<int:user_id>', methods=['GET'])
+@api.route('/book/<int:dispo_id>/<int:user_id>', methods=['POST'])
+ # ⚠️ si ponemos @jwt_required()  no nos funciona y debe ser porque al pasar por stripe no coge el token
 def create_booking(dispo_id, user_id):
     # change is_available to False in Dispo
     dispo = Dispo.query.get(dispo_id)
     dispo.available = False
     db.session.commit()
+  
 
     # Create a new booking
     new_booking = Book(user_id = user_id , date = dispo.date , time = dispo.time, product = dispo.product)
     db.session.add(new_booking)
     db.session.commit()
-
-
-    return jsonify(new_booking.serialize()),200
+    return jsonify({"message": "Su reserva ha sido Confirmada"}), 200
    

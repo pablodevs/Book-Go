@@ -489,12 +489,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}),
 
 			// PASARELA DE PAGO DE PAGO DE STRIPE
-			reservar: () => {
+			reservar: sku => {
 				const store = getStore();
 				const stripe = Stripe("pk_test_yHT02IrsuQ0eWhAT2BBbfxmR");
 				stripe
 					.redirectToCheckout({
-						lineItems: [{ price: "sku_KvCUm3AeHMjmrk", quantity: 1 }],
+						lineItems: [{ price: sku, quantity: 1 }],
 						mode: "payment",
 						/*
 				 * Do not rely on the redirect to the successUrl for fulfilling
@@ -506,7 +506,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						successUrl:
 							"https://3000-gold-felidae-8otxygdm.ws-eu25.gitpod.io/pago/" +
 							`${store.booking.id}/${store.user.id}`,
-						cancelUrl: process.env.BACKEND_URL + `/error/`
+						cancelUrl: "https://3000-gold-felidae-8otxygdm.ws-eu25.gitpod.io/error/"
 					})
 					.then(function(result) {
 						if (result.error) {
@@ -517,7 +517,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 							var displayError = document.getElementById("error-message");
 							displayError.textContent = result.error.message;
 						}
-						<Redirect to="/admin" />;
 					});
 			}
 		}
