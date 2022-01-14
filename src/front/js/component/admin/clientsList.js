@@ -53,7 +53,7 @@ export const ClientsList = () => {
 	);
 
 	return store.clients ? (
-		<div className="dashboard-content-wrapper admin-products">
+		<div className="dashboard-content-wrapper">
 			<div className="clients-wrapper">
 				<aside className="clients-list">
 					<h1 className="dashboard-content-title clients-list-title">Clientes</h1>

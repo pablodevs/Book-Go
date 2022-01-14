@@ -162,7 +162,7 @@ button.btn-cool.logout {
 
 /*===== Products y Disponibilidad =====*/
 
-.admin-products, .admin-sections-wrapper{
+.admin-services, .admin-sections-wrapper, .dashboard-content-wrapper{
     width: 100%;
     height: 100%;
 }
@@ -175,14 +175,14 @@ button.btn-cool.logout {
     gap: 3rem;
 }
 
-.dashboard-first-section, .dashboard-second-section {
+.admin-first-section, .admin-second-section {
     width: 510px;
     height: fit-content;
     box-shadow: inset $--color-grey-dashboard-light 0px 0px 0px 1px;
     padding: 1.5rem;
 }
 
-.dashboard-form div.services-subtitle {
+.admin-form div.services-subtitle {
     align-items: center;
 }
 
@@ -217,6 +217,8 @@ button.inactive {
     color: $--color-grey-dark !important;
     pointer-events: none;
 }
+
+.price-subgroup { align-self: flex-end }
 
 .price-input {
     position: relative;
@@ -266,7 +268,9 @@ div.admin-form-group {
     text-align: center;
 }
 .duration-subgroup {
+    flex-grow: 2;
     gap: 0.5rem;
+    align-items: flex-start;
 }
 
 div.disponibility-title.admin-form-group {
@@ -293,6 +297,9 @@ div.disponibility-title.admin-form-group {
 }
 
 .img-subgroup {
+    align-self: flex-end;
+    margin-inline: auto;
+    flex: none;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -351,7 +358,7 @@ div.disponibility-title.admin-form-group {
 .border-none { border: none }
 
 @media screen and (max-width: 767.9px) {
-    .dashboard-first-section, .dashboard-second-section {
+    .admin-first-section, .admin-second-section {
         min-width: 100%;
     }
     div.admin-form-group {
@@ -548,4 +555,35 @@ $--br-client-tab-x2: 10px;
     background-color: $--color-blue-regular;
     border-radius: 50%;
     padding: 0.5rem;
+}
+
+/*===== Negocio y Horario =====*/
+
+.admin-weekdays {
+    display: flex;
+    justify-content: space-evenly;
+    margin-bottom: 1rem;
+}
+
+.admin-weekdays .icon-btn {
+    border: none;
+    background-color: $--color-grey-dashboard-light;
+    &.active {
+        color: white;
+        font-weight: bold;
+        background-color: $--color-blue-regular
+    }
+}
+
+.admin-weekdays-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.admin-weekdays-buttons .icon-btn {
+    width: auto;
+    aspect-ratio: 0;
+    padding: 0.3rem 0.6rem;
+    font-size: 0.9rem;
 }

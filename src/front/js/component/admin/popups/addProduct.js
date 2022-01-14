@@ -69,6 +69,7 @@ export const AddProduct = () => {
 								id="new-product"
 								type="text"
 								name="name"
+								maxLength="120"
 								value={data.name}
 								autoComplete="off"
 								onChange={e => setData({ ...data, name: e.target.value })}

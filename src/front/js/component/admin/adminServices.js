@@ -105,17 +105,17 @@ export const AdminServices = () => {
 	};
 
 	return (
-		<div className="dashboard-content-wrapper admin-products">
+		<div className="dashboard-content-wrapper admin-services">
 			<h1 className="dashboard-content-title">Servicios</h1>
 			<div className="admin-sections-wrapper">
-				<section className="dashboard-first-section">
+				<section className="admin-first-section">
 					<form onSubmit={submitFirstForm} className="dashboard-form">
 						<div className="admin-form-group services-subtitle">
 							<h2 className="dashboard-content-subtitle">Información del servicio</h2>
 							<div className="admin-icon-btn-group">
 								<button
 									type="button"
-									className="admin-icon-btn icon-btn"
+									className="icon-btn"
 									data-tooltip="añadir producto"
 									onClick={() => actions.setPopup("add-product", "Añadir producto")}>
 									<i className="fas fa-plus" />
@@ -123,7 +123,7 @@ export const AdminServices = () => {
 								{/* ⚠️ OJITO: si añadimos o eliminamos un prod, se tiene que actualizar el hook productList */}
 								<button
 									type="button"
-									className={"admin-icon-btn icon-btn danger" + (data.id ? "" : " inactive")}
+									className={"icon-btn danger" + (data.id ? "" : " inactive")}
 									data-tooltip="eliminar producto"
 									onClick={() => {
 										if (!data.id) return;
@@ -189,41 +189,59 @@ export const AdminServices = () => {
 								</div>
 							</div>
 							<div className="admin-form-subgroup duration-subgroup">
-								<span className="admin-form-subgroup-title">Duración</span>
-								<div>
-									<label htmlFor="hours" className="dashboard-label">
-										Hora(s)
-									</label>
-									<div className="select-wrapper">
-										<select
-											onChange={e => setHours(parseInt(e.target.value))}
-											id="hours"
-											value={hours}>
-											{hoursList.map((hour, idx) => (
-												<option key={idx} value={hour}>
-													{`${hour}h`}
-												</option>
-											))}
-										</select>
+								<span className="admin-form-subgroup-title">Duración:</span>
+								<div className="dflex-row">
+									<div>
+										<label htmlFor="hours" className="dashboard-label">
+											Hora(s)
+										</label>
+										<div className="select-wrapper">
+											<select
+												onChange={e => setHours(parseInt(e.target.value))}
+												id="hours"
+												value={hours}>
+												{hoursList.map((hour, idx) => (
+													<option key={idx} value={hour}>
+														{`${hour}h`}
+													</option>
+												))}
+											</select>
+										</div>
+									</div>
+									<div>
+										<label htmlFor="minutes" className="dashboard-label">
+											Minutos
+										</label>
+										<div className="select-wrapper">
+											<select
+												onChange={e => setMinutes(parseInt(e.target.value))}
+												id="minutes"
+												value={minutes}>
+												{minutesList.map((min, idx) => (
+													<option key={idx} value={min}>
+														{`${min}min`}
+													</option>
+												))}
+											</select>
+										</div>
 									</div>
 								</div>
-								<div>
-									<label htmlFor="minutes" className="dashboard-label">
-										Minutos
-									</label>
-									<div className="select-wrapper">
-										<select
-											onChange={e => setMinutes(parseInt(e.target.value))}
-											id="minutes"
-											value={minutes}>
-											{minutesList.map((min, idx) => (
-												<option key={idx} value={min}>
-													{`${min}min`}
-												</option>
-											))}
-										</select>
-									</div>
-								</div>
+							</div>
+						</div>
+						<div className="admin-form-group">
+							<div className="admin-form-subgroup">
+								<label htmlFor="description" className="dashboard-label">
+									Descripción
+									<span>{data.description.length}</span>
+								</label>
+								<textarea
+									id="description"
+									name="description"
+									rows="3"
+									maxLength="1000"
+									value={data.description}
+									onChange={e => handleInputChange(e)}
+								/>
 							</div>
 							<div className="admin-form-subgroup img-subgroup">
 								<div className="admin-product-img-wrapper">
@@ -254,21 +272,6 @@ export const AdminServices = () => {
 								</div>
 							</div>
 						</div>
-						<div className="admin-form-group">
-							<div className="admin-form-subgroup">
-								<label htmlFor="description" className="dashboard-label">
-									Descripción
-									<span>{data.description.length}</span>
-								</label>
-								<textarea
-									id="description"
-									name="description"
-									rows="3"
-									value={data.description}
-									onChange={e => handleInputChange(e)}
-								/>
-							</div>
-						</div>
 						<div>
 							<button type="submit" className="save-button">
 								Guardar cambios
@@ -276,7 +279,7 @@ export const AdminServices = () => {
 						</div>
 					</form>
 				</section>
-				<section className="dashboard-second-section">
+				<section className="admin-second-section">
 					<form className="dashboard-form" onSubmit={submitSecondForm}>
 						<div className="disponibility-title admin-form-group">
 							<h2 className="dashboard-content-subtitle">Disponibilidad:</h2>

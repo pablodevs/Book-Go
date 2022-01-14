@@ -47,7 +47,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 				facebook: "https://facebook.com/spa-center",
 				instagram: "https://instagram.com/spa-center",
 				twitter: "https://twitter.com/spa-center"
-			}
+			},
+
+			activeWeekDays: []
 		},
 
 		actions: {
@@ -519,6 +521,32 @@ const getState = ({ getStore, getActions, setStore }) => {
 							var displayError = document.getElementById("error-message");
 							displayError.textContent = result.error.message;
 						}
+					});
+			},
+
+			// Admin Schedule:
+			setActiveWeekDay: weekday => {
+				const store = getStore();
+				if (weekday === "all")
+					setStore({
+						activeWeekDays: ["L", "M", "X", "J", "V", "S", "D"]
+					});
+				else if (weekday === "L-V")
+					setStore({
+						activeWeekDays: ["L", "M", "X", "J", "V"]
+					});
+				else if (weekday === "0")
+					setStore({
+						activeWeekDays: []
+					});
+				else if (store.activeWeekDays.includes(weekday)) {
+					let remainWeekDays = store.activeWeekDays.filter(element => element !== weekday);
+					setStore({
+						activeWeekDays: remainWeekDays
+					});
+				} else
+					setStore({
+						activeWeekDays: [...store.activeWeekDays, weekday]
 					});
 			}
 		}

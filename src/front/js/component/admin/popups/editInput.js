@@ -16,7 +16,10 @@ export const EditInput = props => {
 		if (data.name !== "") {
 			actions.setToast(
 				"promise",
-				{ loading: "Guardando...", success: `${data.product} guardado` },
+				{
+					loading: "Guardando...",
+					success: resp => `Nuevo nombre: ${resp.name}`
+				},
 				actions.updateProduct(data),
 				"toast-confirm"
 			);
@@ -30,10 +33,12 @@ export const EditInput = props => {
 				<div className="admin-form-subgroup">
 					<label className="dashboard-label" htmlFor="popup-product-edit">
 						Nuevo nombre:
+						<span>{data.name.length}</span>
 					</label>
 					<input
 						id="popup-product-edit"
 						type="text"
+						maxLength="120"
 						value={data.name}
 						onChange={e => setData({ ...data, name: e.target.value })}
 					/>
