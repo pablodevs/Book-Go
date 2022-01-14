@@ -9,6 +9,10 @@ import cloudinary.uploader
 import os
 from sqlalchemy import and_
 
+from flask_mail import Mail, Message
+
+
+
 #para la autenticación y generar el token
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import get_jwt_identity
@@ -17,11 +21,60 @@ from flask_jwt_extended import jwt_required
 
 api = Blueprint('api', __name__)
 
+
+
+app = Flask(__name__)
+
+
+#CONFIGURACIÓN DE FLASK MAIL
+# app.config['DEBUG'] = True
+# app.config['TESTING'] = False
+# app.config['MAIL_DEBUG'] = True
+app.config['MAIL_SERVER'] = 'smtp.servidor-correo.net'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USE_SSL'] = False
+app.config['MAIL_USERNAME'] = 'spa@jmanvel.com'
+app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
+app.config['MAIL_DEFAULT_SENDER'] = 'spa@jmanvel.com'
+app.config['MAIL_MAX_EMAILS'] = None
+app.config['MAIL_SUPPRESS_SEND'] = False
+app.config['MAIL_ASCII_ATTACHMENTS'] = False
+
+mail = Mail(app)
+
+
+
+# CREATE NEW BOOKING
+@api.route('/book/<int:dispo_id>/<int:user_id>', methods=['POST'])
+@jwt_required()
+def create_booking(dispo_id, user_id):
+    # change is_available to False in Dispo
+    dispo = Dispo.query.get(dispo_id)
+    dispo.available = False
+    db.session.commit()
+
+
+    # Create a new booking
+    new_booking = Book(user_id = user_id , date = dispo.date , time = dispo.time, product = dispo.product)
+    db.session.add(new_booking)
+    db.session.commit()
+
+    # AHORA ENVIAMOS EL EMAIL DE CONFIRMACIÓN DE RESERVA
+    msg = Message("Confirmación de reserva",sender="spa@jmanvel.com",
+                recipients=["jmanteca@jmanvel.com"])
+    msg.body = "testing body"
+    msg.html = "<html lang='es'><head><meta charset='UTF-8'><meta http-equiv='X-UA-Compatible' content='IE=edge'><meta name='viewport' content='width=device-width, initial-scale=1.0'></head><body><h1>Confirmación de Reserva</h1><div><p>Estimado cliente:</p><p>Le confirmamos su reserva de nuestro servicio de " + str(dispo.product) + " para el día " + str(dispo.date.strftime("%-d/%-m/%Y"),) + " a las " + str(dispo.time.strftime("%-H:%M")) + "  </p><p>Muchas gracias por confiar en nosotros.</p></div></body></html>"
+    mail.send(msg)
+
+    return jsonify({"message": "Su reserva ha sido Confirmada"}), 200
+   
+
 # GET ALL PRODUCTS
 @api.route('/products', methods=['GET'])
 def get_products():
 
-    print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ funciona  @@@@@@@@@@')
+   
     """
     All Products
     """
@@ -265,39 +318,3 @@ def get_product_dispo(product_name):
     product_dispo = Dispo.query.filter(and_(Dispo.product_id == product_id , Dispo.available == True)).all()
     all_days_dispo= list(map(lambda x: x.serialize(), product_dispo))
     return jsonify(all_days_dispo)
-    
-
-
-
-
-
-# CREATE NEW BOOKING
-@api.route('/book/<int:dispo_id>/<int:user_id>', methods=['POST'])
-@jwt_required() 
-def create_booking(dispo_id, user_id):
-    # change is_available to False in Dispo
-    dispo = Dispo.query.get(dispo_id)
-    dispo.available = False
-    db.session.commit()
-  
-
-    # Create a new booking
-    new_booking = Book(user_id = user_id , date = dispo.date , time = dispo.time, product = dispo.product)
-    db.session.add(new_booking)
-    db.session.commit()
-
-    # MAIL_SERVER : default ‘localhost’
-    # MAIL_PORT : default 25
-    # MAIL_USE_TLS : default False
-    # MAIL_USE_SSL : default False
-    # MAIL_DEBUG : default app.debug
-    # MAIL_USERNAME : default None
-    # MAIL_PASSWORD : default None
-    # MAIL_DEFAULT_SENDER : default None
-    # MAIL_MAX_EMAILS : default None
-    # MAIL_SUPPRESS_SEND : default app.testing
-    # MAIL_ASCII_ATTACHMENTS : default False
-
-
-    return jsonify({"message": "Su reserva ha sido Confirmada"}), 200
-   

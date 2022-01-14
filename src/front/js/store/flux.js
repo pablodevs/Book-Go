@@ -492,6 +492,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			// PASARELA DE PAGO DE PAGO DE STRIPE
 			reservar: sku => {
+				console.log("este es el sku" + sku);
 				const store = getStore();
 				const stripe = Stripe("pk_test_yHT02IrsuQ0eWhAT2BBbfxmR");
 				stripe

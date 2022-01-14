@@ -55,10 +55,10 @@ export const Login = () => {
 								actions.generate_token(email, password),
 								"toast-info"
 							);
-							// store.booking.id
-							// 	? (actions.setPopup("resume", "Resumen de la reserva"),
-							// 	  actions.generate_token(email, password))
-							// 	: actions.generate_token(email, password);
+							store.booking.id
+								? (actions.setPopup("resume", "Resumen de la reserva"),
+								  actions.generate_token(email, password))
+								: actions.generate_token(email, password);
 						}}
 						className="btn btn-warning w-100"
 						type="submit">

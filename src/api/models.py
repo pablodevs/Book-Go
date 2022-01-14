@@ -48,7 +48,7 @@ class Product(db.Model):
     reserva = db.relationship('Book', backref='product', lazy=True)
 
     def __repr__(self):
-        return '<Product %r>' % self.name
+        return '%r' % self.name
 
     def serialize(self):
         return {
@@ -98,7 +98,7 @@ class Dispo(db.Model):
         nullable=False)
 
     def __repr__(self):
-        return '<Dispo %r>' % self.product
+        return '%r' % self.product
 
     def serialize(self):
         return {

@@ -26,8 +26,9 @@ export const Booking_resume = () => {
 						<button
 							onClick={() => {
 								store.products.map(item => {
-									if (item.id == store.booking.id) {
+									if (item.id == store.booking.product_id) {
 										let sku = item.sku;
+
 										actions.reservar(sku);
 									}
 								});
