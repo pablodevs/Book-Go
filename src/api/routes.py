@@ -2,7 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User, Product , Dispo ,Book
+from api.models import db, User, Product, Dispo, Book, Business
 from api.utils import generate_sitemap, APIException
 import cloudinary
 import cloudinary.uploader
@@ -21,7 +21,6 @@ api = Blueprint('api', __name__)
 @api.route('/products', methods=['GET'])
 def get_products():
 
-    print('@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ funciona  @@@@@@@@@@')
     """
     All Products
     """
@@ -42,7 +41,7 @@ def create_product():
     current_user_id = get_jwt_identity() # obtiene el id del usuario asociado al token (id == sub en jwt decode)
     user = User.query.get(current_user_id)
     if user.serialize()["is_admin"] == False:
-        raise APIException('Error de identificación', status_code=404)
+        raise APIException('Error de identificación', status_code=401)
     
     body_product = request.json
 
@@ -79,7 +78,7 @@ def handle_single_product(product_id):
     current_user_id = get_jwt_identity() # obtiene el id del usuario asociado al token (id == sub en jwt decode)
     user = User.query.get(current_user_id)
     if user.serialize()["is_admin"] == False:
-        raise APIException('Error de identificación', status_code=404)
+        raise APIException('Error de identificación', status_code=401)
 
     product = Product.query.get(product_id)
 
@@ -173,7 +172,7 @@ def get_all_users():
     current_user_id = get_jwt_identity() # obtiene el id del usuario asociado al token (id == sub en jwt decode)
     user = User.query.get(current_user_id)
     if user.serialize()["is_admin"] == False:
-        raise APIException('Error de identificación', status_code=404)
+        raise APIException('Error de identificación', status_code=401)
     
     all_users = sorted(User.query.all(), key = lambda user: user.serialize()["name"].lower())
     all_clients = [user.serialize() for user in all_users if not user.serialize()["is_admin"]]
@@ -288,3 +287,44 @@ def create_booking(dispo_id, user_id):
     db.session.commit()
     return jsonify({"message": "Su reserva ha sido Confirmada"}), 200
    
+
+# MODIFY THE BUSINESS
+@api.route('/business', methods=['PUT'])
+@jwt_required() # Cuando se recive una peticion, se valida que exista ese token y que sea valido
+def modify_business_info():
+    """
+    Business info
+    """
+
+    # Admin validation
+    current_user_id = get_jwt_identity() # obtiene el id del usuario asociado al token (id == sub en jwt decode)
+    user = User.query.get(current_user_id)
+    if user.serialize()["is_admin"] == False:
+        raise APIException('Error de identificación', status_code=401)
+
+    business = Business.query.all()[0]
+
+    # Data validation
+    if business is None:
+        raise APIException('Business not found in data base', status_code=404)
+        
+    request_body = request.json
+
+    # Check body's info
+    if "name" in request_body:
+        business.name = request_body["name"]
+    if "address" in request_body:
+        business.address = request_body["address"]
+    if "phone" in request_body:
+        business.phone = request_body["phone"]
+    if "schedule" in request_body:
+        business.schedule = request_body["schedule"]
+    if "fb_url" in request_body:
+        business.fb_url = request_body["fb_url"]
+    if "ig_url" in request_body:
+        business.ig_url = request_body["ig_url"]
+    if "twitter_url" in request_body:
+        business.twitter_url = request_body["twitter_url"]
+
+    db.session.commit()
+    return jsonify(business.serialize()), 200

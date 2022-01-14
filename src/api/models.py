@@ -34,6 +34,38 @@ class User(db.Model):
         }
 
 
+#TABLA DEL NEGOCIO
+class Business(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(120), unique=True, nullable=False)
+    address = db.Column(db.String(255), nullable=False)
+    phone = db.Column(db.String(9), unique=True, nullable=False)
+    schedule = db.Column(db.String(40), nullable=False) # ej: "L, M, X, J, V"
+    # time_from = 
+    # time_to = 
+
+    # Social media
+    fb_url = db.Column(db.String(255), unique=False, nullable=True)
+    ig_url = db.Column(db.String(255), unique=False, nullable=True)
+    twitter_url = db.Column(db.String(255), unique=False, nullable=True)
+    
+
+    def __repr__(self):
+        return '<Business %r>' % self.name
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "address" : self.address,
+            "phone" : self.phone,
+            "schedule" : self.schedule,
+            "fb_url" : self.fb_url,
+            "ig_url" : self.ig_url,
+            "twitter_url" : self.twitter_url
+        }
+
+
 #TABLA DE PRODUCTOS
 class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True)

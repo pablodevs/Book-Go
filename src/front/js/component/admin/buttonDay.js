@@ -7,6 +7,7 @@ export const ButtonDay = props => {
 
 	return (
 		<button
+			type="button"
 			onClick={() => actions.setActiveWeekDay(props.weekday)}
 			className={
 				"icon-btn" +

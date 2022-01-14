@@ -43,12 +43,22 @@ const getState = ({ getStore, getActions, setStore }) => {
 				is_admin: false
 			},
 
+			// Eliminar SocialMedia e incluirlo en Business justo abajo
 			socialMedia: {
 				facebook: "https://facebook.com/spa-center",
 				instagram: "https://instagram.com/spa-center",
 				twitter: "https://twitter.com/spa-center"
 			},
-
+			business: {
+				id: "",
+				name: "",
+				address: "",
+				phone: "",
+				schedule: "",
+				fb_url: "",
+				ig_url: "",
+				twitter_url: ""
+			},
 			activeWeekDays: []
 		},
 
@@ -548,6 +558,40 @@ const getState = ({ getStore, getActions, setStore }) => {
 					setStore({
 						activeWeekDays: [...store.activeWeekDays, weekday]
 					});
+			},
+
+			updateBusinessInfo: async data => {
+				const store = getStore();
+				try {
+					const response = await fetch(process.env.BACKEND_URL + "/business", {
+						method: "PUT",
+						body: JSON.stringify(data),
+						headers: {
+							"Content-Type": "application/json",
+							Authorization: "Bearer " + store.token
+						}
+					});
+					const resp = await response.json();
+					if (!response.ok) {
+						setStore({ message: resp.message });
+						throw Error(response);
+					}
+					setStore({
+						business: {
+							id: resp.id,
+							name: resp.name,
+							address: resp.address,
+							phone: resp.phone,
+							schedule: resp.schedule,
+							fb_url: resp.fb_url,
+							ig_url: resp.ig_url,
+							twitter_url: resp.twitter_url
+						}
+					});
+					return resp;
+				} catch (err) {
+					return err.json();
+				}
 			}
 		}
 	};

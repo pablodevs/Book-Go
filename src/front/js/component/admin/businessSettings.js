@@ -16,6 +16,8 @@ export const BusinessSettings = () => {
 		instagram: store.socialMedia.instagram,
 		twitter: store.socialMedia.twitter
 	});
+	const [timeFrom, setTimeFrom] = useState("");
+	const [timeTo, setTimeTo] = useState("");
 
 	useEffect(() => {
 		let weekDaysArray = dates["day_text"]
@@ -52,7 +54,11 @@ export const BusinessSettings = () => {
 	};
 	const submitSecondForm = event => {
 		event.preventDefault();
-		// actions.setSchedule()
+		if (timeFrom && timeTo && store.activeWeekDays.length !== 0)
+			console.log(store.activeWeekDays.join(), timeFrom, timeTo);
+		actions.updateBusinessInfo({
+			schedule: store.activeWeekDays.join()
+		});
 	};
 
 	return (
@@ -222,13 +228,22 @@ export const BusinessSettings = () => {
 							<div className="admin-form-subgroup">
 								<div className="admin-weekdays">{weekDays}</div>
 								<div className="admin-weekdays-buttons">
-									<button className="icon-btn" onClick={() => actions.setActiveWeekDay("all")}>
+									<button
+										type="button"
+										className="icon-btn"
+										onClick={() => actions.setActiveWeekDay("all")}>
 										Todos los días
 									</button>
-									<button className="icon-btn" onClick={() => actions.setActiveWeekDay("L-V")}>
-										L - V
+									<button
+										type="button"
+										className="icon-btn"
+										onClick={() => actions.setActiveWeekDay("L-V")}>
+										L ➜ V
 									</button>
-									<button className="icon-btn" onClick={() => actions.setActiveWeekDay("0")}>
+									<button
+										type="button"
+										className="icon-btn"
+										onClick={() => actions.setActiveWeekDay("0")}>
 										Ninguno
 									</button>
 								</div>
@@ -239,13 +254,23 @@ export const BusinessSettings = () => {
 								<label className="dashboard-label" htmlFor="time-from">
 									Desde
 								</label>
-								<input type="time" id="time-from" />
+								<input
+									type="time"
+									id="time-from"
+									value={timeFrom}
+									onChange={e => setTimeFrom(e.target.value)}
+								/>
 							</div>
 							<div className="admin-form-subgroup">
 								<label className="dashboard-label" htmlFor="time-to">
 									Hasta
 								</label>
-								<input type="time" id="time-to" />
+								<input
+									type="time"
+									id="time-to"
+									value={timeTo}
+									onChange={e => setTimeTo(e.target.value)}
+								/>
 							</div>
 						</div>
 						<div>
