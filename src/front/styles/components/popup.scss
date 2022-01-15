@@ -49,6 +49,7 @@
     height: 100%;
     padding: 2rem;
     margin-block: auto;
+    overflow-y: auto;
     & .btn-confirm { margin-inline: auto }
 }
 .popup-return { display: flex }

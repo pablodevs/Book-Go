@@ -9,6 +9,7 @@ export const Home = () => {
 
 	useEffect(() => {
 		actions.get_products();
+		actions.getBusinessInfo();
 	}, []);
 
 	return (
@@ -35,11 +36,14 @@ export const Home = () => {
 			<div className="container-fluid my-5 mx-auto">
 				{store.products.length > 0 ? (
 					<div className="row gap-5 justify-content-center">
-						{store.products.map((item, index) => (
-							<div className="col-auto" key={index}>
-								<Product_card product={item} />
-							</div>
-						))}
+						{store.products.map((item, index) => {
+							if (item.is_active)
+								return (
+									<div className="col-auto" key={index}>
+										<Product_card product={item} />
+									</div>
+								);
+						})}
 					</div>
 				) : (
 					""

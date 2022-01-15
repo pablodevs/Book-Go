@@ -60,8 +60,11 @@ def create_product():
         return jsonify({"message": "La descripción no puede superar los 1000 caracteres"}), 400
     if 'duration' not in body_product or body_product['duration'] == "" or body_product['duration'] == None:
         raise APIException('You need to specify the duration', status_code=400)
+    if 'is_active' not in body_product or body_product['is_active'] == "" or body_product['is_active'] == None:
+        new_product = Product(name = body_product["name"], price = body_product["price"], description = body_product["description"], duration = body_product["duration"])
+    else:
+        new_product = Product(name = body_product["name"], price = body_product["price"], description = body_product["description"], duration = body_product["duration"], is_active = body_product["is_active"])
 
-    new_product = Product(name = body_product["name"], price = body_product["price"], description = body_product["description"], duration = body_product["duration"])
     db.session.add(new_product)
     db.session.commit()
     return jsonify(new_product.serialize()), 200
@@ -99,6 +102,8 @@ def handle_single_product(product_id):
             product.description = request_body["description"]
         if "duration" in request_body:
             product.duration = request_body["duration"]
+        if "is_active" in request_body:
+            product.is_active = request_body["is_active"]
 
         db.session.commit()
         return jsonify(product.serialize()), 200
@@ -288,6 +293,22 @@ def create_booking(dispo_id, user_id):
     return jsonify({"message": "Su reserva ha sido Confirmada"}), 200
    
 
+# GET OR MODIFY THE BUSINESS
+@api.route('/business', methods=['GET'])
+def get_business_info():
+    """
+    Business info
+    """
+    try:
+        # Intenta obtener la tabla de negocio
+        business = Business.query.all()[0]
+        return jsonify(business.serialize()), 200
+
+    except IndexError as error:
+        # Si está vacía, devuelve error
+        raise APIException("Business doesn't exists", status_code=404).query.all()[0]
+
+
 # MODIFY THE BUSINESS
 @api.route('/business', methods=['PUT'])
 @jwt_required() # Cuando se recive una peticion, se valida que exista ese token y que sea valido
@@ -295,28 +316,34 @@ def modify_business_info():
     """
     Business info
     """
-
     # Admin validation
     current_user_id = get_jwt_identity() # obtiene el id del usuario asociado al token (id == sub en jwt decode)
     user = User.query.get(current_user_id)
     if user.serialize()["is_admin"] == False:
         raise APIException('Error de identificación', status_code=401)
 
-    business = Business.query.all()[0]
+    try:
+        # Intenta obtener la tabla de negocio
+        business = Business.query.all()[0]
 
-    # Data validation
-    if business is None:
-        raise APIException('Business not found in data base', status_code=404)
-        
+    except IndexError as error:
+        # Si está vacía, crea un negocio primero
+        new_business = Business()
+        db.session.add(new_business)
+        db.session.commit()
+
+        # Ahora sí puedes obtener el negocio
+        business = Business.query.all()[0]
+
     request_body = request.json
 
     # Check body's info
-    if "name" in request_body:
-        business.name = request_body["name"]
     if "address" in request_body:
         business.address = request_body["address"]
     if "phone" in request_body:
         business.phone = request_body["phone"]
+    if "weekdays" in request_body:
+        business.weekdays = request_body["weekdays"]
     if "schedule" in request_body:
         business.schedule = request_body["schedule"]
     if "fb_url" in request_body:

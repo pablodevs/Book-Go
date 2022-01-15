@@ -37,18 +37,15 @@ class User(db.Model):
 #TABLA DEL NEGOCIO
 class Business(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(120), unique=True, nullable=False)
-    address = db.Column(db.String(255), nullable=False)
-    phone = db.Column(db.String(9), unique=True, nullable=False)
-    schedule = db.Column(db.String(40), nullable=False) # ej: "L, M, X, J, V"
-    # schedule = db.Column(db.String(40), nullable=False) # ej: "10:00, 20:00"
-    # time_from = 
-    # time_to = 
+    address = db.Column(db.String(255), nullable=True, default="")
+    phone = db.Column(db.String(9), unique=True, nullable=True, default="")
+    schedule = db.Column(db.String(50), nullable=True, default="") # ej: "10:00,20:00"
+    weekdays = db.Column(db.String(50), nullable=True, default="") # ej: "L, M, X, J, V"
 
     # Social media
-    fb_url = db.Column(db.String(255), unique=False, nullable=True)
-    ig_url = db.Column(db.String(255), unique=False, nullable=True)
-    twitter_url = db.Column(db.String(255), unique=False, nullable=True)
+    fb_url = db.Column(db.String(255), unique=False, nullable=True, default="")
+    ig_url = db.Column(db.String(255), unique=False, nullable=True, default="")
+    twitter_url = db.Column(db.String(255), unique=False, nullable=True, default="")
     
 
     def __repr__(self):
@@ -57,10 +54,10 @@ class Business(db.Model):
     def serialize(self):
         return {
             "id": self.id,
-            "name": self.name,
             "address" : self.address,
             "phone" : self.phone,
             "schedule" : self.schedule,
+            "weekdays" : self.weekdays,
             "fb_url" : self.fb_url,
             "ig_url" : self.ig_url,
             "twitter_url" : self.twitter_url
@@ -71,11 +68,13 @@ class Business(db.Model):
 class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120), unique=True, nullable=False) # ⚠️ Unique True porque si no da problemas con las imágenes por como lo ha hecho Chavi, en AdminiProducts
+    is_active = db.Column(db.Boolean(), nullable=False, default=False) # Si el producto no está activo, puedes modificarlo pero no se podrán realizar reservas hasta que lo actives
     price = db.Column(db.Integer, nullable=False)  
-    description = db.Column(db.String(1000), nullable=False)
     duration = db.Column(db.Integer, nullable=False)
+    description = db.Column(db.String(1000), nullable=False)
     sku = db.Column(db.String(50), nullable=True)
-     # Habrá que meter sí o sí las imágenes en una url (product_img_url) unidas al id del producto
+    
+    # Habrá que meter sí o sí las imágenes en una url (product_img_url) unidas al id del producto
     
     disponibilidad = db.relationship('Dispo', backref='product', lazy=True)
     reserva = db.relationship('Book', backref='product', lazy=True)
@@ -87,9 +86,10 @@ class Product(db.Model):
         return {
             "id": self.id,
             "name": self.name,
+            "is_active": self.is_active,
             "price" : self.price,
-            "description" : self.description,
             "duration" : self.duration,
+            "description" : self.description,
             "sku" : self.sku
 
             # "product_img_url": self.product_img_url

@@ -1,11 +1,8 @@
-import React, { useContext, useState } from "react";
+import React from "react";
 import PropTypes from "prop-types";
-import { Context } from "../../store/appContext";
 import { Link } from "react-router-dom";
 
 export const Product_card = props => {
-	const { actions, store } = useContext(Context);
-
 	return (
 		<div
 			className="product-card card shadow rounded-3 card-background"

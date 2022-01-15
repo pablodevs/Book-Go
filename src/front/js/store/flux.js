@@ -43,31 +43,19 @@ const getState = ({ getStore, getActions, setStore }) => {
 				is_admin: false
 			},
 
-			// Eliminar SocialMedia e incluirlo en Business justo abajo
-			socialMedia: {
-				facebook: "https://facebook.com/spa-center",
-				instagram: "https://instagram.com/spa-center",
-				twitter: "https://twitter.com/spa-center"
-			},
 			business: {
 				id: "",
-				name: "",
 				address: "",
 				phone: "",
 				schedule: "",
+				weekdays: [],
 				fb_url: "",
 				ig_url: "",
 				twitter_url: ""
-			},
-			activeWeekDays: []
+			}
 		},
 
 		actions: {
-			//BOOKING
-			booking: data => {
-				let store = getStore();
-				setStore({ booking: data });
-			},
 			// Force render without change data
 			forceRender: () => setStore({}),
 
@@ -95,7 +83,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
-			// Cambia el popups
+			// Cambia los popups
 			setPopup: async (type, title, productName, funct = null) => {
 				if (productName) {
 					//si recibe productname entonces busca la disponibilidad de días y horas de ese producto
@@ -134,6 +122,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 				});
 			}, // Te lleva al popup anterior
 
+			//BOOKING
+			booking: data => {
+				setStore({ booking: data });
+			},
 			// Meto todas las acciones del componente calendario en calendarActions:
 			calendarActions: {
 				//cambia la variable del store booking_day
@@ -282,7 +274,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 								name: resp.name,
 								price: resp.price,
 								description: resp.description,
-								duration: resp.duration
+								duration: resp.duration,
+								is_active: resp.is_active
 							}
 						]
 					});
@@ -536,30 +529,74 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			// Admin Schedule:
 			setActiveWeekDay: weekday => {
-				const store = getStore();
+				const business = getStore().business;
 				if (weekday === "all")
 					setStore({
-						activeWeekDays: ["L", "M", "X", "J", "V", "S", "D"]
+						business: {
+							...business,
+							weekdays: ["L", "M", "X", "J", "V", "S", "D"]
+						}
 					});
 				else if (weekday === "L-V")
 					setStore({
-						activeWeekDays: ["L", "M", "X", "J", "V"]
+						business: {
+							...business,
+							weekdays: ["L", "M", "X", "J", "V"]
+						}
 					});
 				else if (weekday === "0")
 					setStore({
-						activeWeekDays: []
+						business: {
+							...business,
+							weekdays: []
+						}
 					});
-				else if (store.activeWeekDays.includes(weekday)) {
-					let remainWeekDays = store.activeWeekDays.filter(element => element !== weekday);
+				else if (business.weekdays.includes(weekday)) {
+					let remainWeekDays = business.weekdays.filter(element => element !== weekday);
 					setStore({
-						activeWeekDays: remainWeekDays
+						business: {
+							...business,
+							weekdays: remainWeekDays
+						}
 					});
 				} else
 					setStore({
-						activeWeekDays: [...store.activeWeekDays, weekday]
+						business: {
+							...business,
+							weekdays: [...business.weekdays, weekday]
+						}
 					});
 			},
 
+			// Obtiene los horarios, redes sociales, teléfono, etc
+			getBusinessInfo: async () => {
+				try {
+					const response = await fetch(process.env.BACKEND_URL + "/business");
+					const resp = await response.json();
+					if (!response.ok) {
+						setStore({ message: resp.message });
+						throw Error(response);
+					}
+					setStore({
+						business: {
+							id: resp.id,
+							name: resp.name,
+							address: resp.address,
+							phone: resp.phone,
+							schedule: resp.schedule,
+							weekdays: resp.weekdays.split(","),
+							fb_url: resp.fb_url,
+							ig_url: resp.ig_url,
+							twitter_url: resp.twitter_url
+						}
+					});
+					return resp;
+				} catch (err) {
+					console.error(err);
+				}
+			},
+
+			// Cambia horarios, redes sociales, teléfono, etc
 			updateBusinessInfo: async data => {
 				const store = getStore();
 				try {
@@ -583,6 +620,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 							address: resp.address,
 							phone: resp.phone,
 							schedule: resp.schedule,
+							weekdays: resp.weekdays.split(","),
 							fb_url: resp.fb_url,
 							ig_url: resp.ig_url,
 							twitter_url: resp.twitter_url

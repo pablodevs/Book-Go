@@ -12,8 +12,10 @@ export const AddProduct = () => {
 		name: "",
 		price: "",
 		description: "",
-		duration: ""
+		duration: "",
+		is_active: false
 		// product_img_url: "",
+		// sku: ""
 	});
 
 	useEffect(() => {
@@ -92,6 +94,23 @@ export const AddProduct = () => {
 				</div>
 				<div className="admin-form-group">
 					<div className="admin-form-subgroup price-subgroup">
+						<label
+							className="availability-checkbox dashboard-label"
+							htmlFor="new_is_active"
+							data-tooltip="Permitir que se pueda reservar este servicio">
+							<input
+								type="checkbox"
+								id="new_is_active"
+								checked={data.is_active}
+								onChange={() =>
+									setData({
+										...data,
+										is_active: !data.is_active
+									})
+								}
+							/>
+							Activo
+						</label>
 						<label className="dashboard-label" htmlFor="new-price">
 							Precio
 						</label>
@@ -110,46 +129,41 @@ export const AddProduct = () => {
 					</div>
 					<div className="admin-form-subgroup duration-subgroup">
 						<span className="admin-form-subgroup-title">Duración</span>
-						<div>
-							<label htmlFor="new-hours" className="dashboard-label">
-								Hora(s)
-							</label>
-							<div className="select-wrapper">
-								<select onChange={e => setHours(parseInt(e.target.value))} id="new-hours" value={hours}>
-									{hoursList.map((hour, idx) => (
-										<option key={idx} value={hour}>
-											{`${hour}h`}
-										</option>
-									))}
-								</select>
+						<div className="dflex-row">
+							<div>
+								<label htmlFor="new-hours" className="dashboard-label">
+									Hora(s)
+								</label>
+								<div className="select-wrapper">
+									<select
+										onChange={e => setHours(parseInt(e.target.value))}
+										id="new-hours"
+										value={hours}>
+										{hoursList.map((hour, idx) => (
+											<option key={idx} value={hour}>
+												{`${hour}h`}
+											</option>
+										))}
+									</select>
+								</div>
 							</div>
-						</div>
-						<div>
-							<label htmlFor="new-minutes" className="dashboard-label">
-								Minutos
-							</label>
-							<div className="select-wrapper">
-								<select
-									onChange={e => setMinutes(parseInt(e.target.value))}
-									id="new-minutes"
-									value={minutes}>
-									{minutesList.map((min, idx) => (
-										<option key={idx} value={min}>
-											{`${min}min`}
-										</option>
-									))}
-								</select>
+							<div>
+								<label htmlFor="new-minutes" className="dashboard-label">
+									Minutos
+								</label>
+								<div className="select-wrapper">
+									<select
+										onChange={e => setMinutes(parseInt(e.target.value))}
+										id="new-minutes"
+										value={minutes}>
+										{minutesList.map((min, idx) => (
+											<option key={idx} value={min}>
+												{`${min}min`}
+											</option>
+										))}
+									</select>
+								</div>
 							</div>
-						</div>
-					</div>
-					<div className="admin-form-subgroup img-subgroup">
-						<div className="admin-product-img-wrapper">
-							<small className="img-placeholder">
-								<i className="fas fa-camera" />
-							</small>
-							<button type="button" className="edit-img" onClick={() => undefined}>
-								<i className="fas fa-camera" />
-							</button>
 						</div>
 					</div>
 				</div>
@@ -167,6 +181,21 @@ export const AddProduct = () => {
 							onChange={e => handleInputChange(e)}
 							required
 						/>
+					</div>
+					<div className="admin-form-subgroup img-subgroup">
+						<div className="admin-product-img-wrapper">
+							<small className="img-placeholder">
+								<i className="fas fa-camera" />
+							</small>
+							<button
+								type="button"
+								className="edit-img"
+								onClick={() => {
+									return;
+								}}>
+								<i className="fas fa-camera" />
+							</button>
+						</div>
 					</div>
 				</div>
 				<div>

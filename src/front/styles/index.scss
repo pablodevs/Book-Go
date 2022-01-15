@@ -16,7 +16,7 @@ html {
 }
 
 body {
-    transition: 0.5s; // Esto se aplicará a toda la webpage así qeu habrá que ver si es una buena idea
+    transition: 0.5s; // Esto se aplicará a toda la web así qeu habrá que ver si es una buena idea
     -o-transition: 0.5s;
     -moz-transition: 0.5s;
     -webkit-transition: 0.5s;
@@ -29,6 +29,7 @@ body {
 
 a {
     text-decoration: none;
+    font-weight: bold;
 }
 
 button {

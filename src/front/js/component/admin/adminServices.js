@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { Context } from "../../store/appContext";
 
 export const AdminServices = () => {
@@ -8,14 +9,16 @@ export const AdminServices = () => {
 	const [hoursList, setHoursList] = useState([]);
 	const [minutes, setMinutes] = useState(0);
 	const [hours, setHours] = useState(0);
-	const [dispoChecked, setDispoChecked] = useState(true);
 	const [productList, setProductList] = useState([]);
 	const [data, setData] = useState({
 		id: "",
 		product: "DEFAULT", // con 'name' no funciona bien
 		price: "",
 		description: "",
-		duration: ""
+		duration: "",
+		is_active: false
+		// product_img_url: "",
+		// sku: ""
 	});
 
 	useEffect(() => {
@@ -31,6 +34,9 @@ export const AdminServices = () => {
 
 		setMinutesList(listOfMinutes);
 		setHoursList(listOfHours);
+
+		// Actualizamos la información de los productos
+		actions.get_products();
 	}, []);
 
 	useEffect(
@@ -44,17 +50,19 @@ export const AdminServices = () => {
 					product: store.new_product.name, // esto de que se llamen diferente no me convence
 					price: store.new_product.price,
 					description: store.new_product.description,
-					duration: store.new_product.duration
+					duration: store.new_product.duration,
+					is_active: store.new_product.is_active
 				});
 			} else {
 				setHours(Math.floor(0));
 				setMinutes(0);
 				setData({
 					id: "",
-					product: "DEFAULT", // con 'name' no funciona bien
+					product: "DEFAULT", // con 'name: "DEFAULT"' no funciona bien
 					price: "",
 					description: "",
-					duration: ""
+					duration: "",
+					is_active: false
 				});
 			}
 		},
@@ -80,7 +88,8 @@ export const AdminServices = () => {
 				product: prod.name, // esto de que se llamen diferente no me convence
 				price: prod.price,
 				description: prod.description,
-				duration: prod.duration
+				duration: prod.duration,
+				is_active: prod.is_active
 			});
 		} else
 			setData({
@@ -89,7 +98,7 @@ export const AdminServices = () => {
 			});
 	};
 
-	const submitFirstForm = event => {
+	const handleSubmitFirstForm = event => {
 		event.preventDefault();
 		if (data.id && productList.includes(data.product))
 			actions.setToast(
@@ -99,7 +108,7 @@ export const AdminServices = () => {
 				"toast-confirm"
 			);
 	};
-	const submitSecondForm = event => {
+	const handleSubmitSecondForm = event => {
 		event.preventDefault();
 		// actions.updateDispo(data);
 	};
@@ -109,7 +118,7 @@ export const AdminServices = () => {
 			<h1 className="dashboard-content-title">Servicios</h1>
 			<div className="admin-sections-wrapper">
 				<section className="admin-first-section">
-					<form onSubmit={submitFirstForm} className="dashboard-form">
+					<form onSubmit={handleSubmitFirstForm} className="dashboard-form">
 						<div className="admin-form-group services-subtitle">
 							<h2 className="dashboard-content-subtitle">Información del servicio</h2>
 							<div className="admin-icon-btn-group">
@@ -134,6 +143,10 @@ export const AdminServices = () => {
 								</button>
 							</div>
 						</div>
+						<small>
+							Modifica los servicios aquí. Recuerda crear un horario{" "}
+							<Link to="/admin/business">aquí</Link> para gestionar las horas disponibles.
+						</small>
 						<div className="admin-form-group">
 							<div className="admin-form-subgroup">
 								<label className="dashboard-label" htmlFor="product">
@@ -173,6 +186,23 @@ export const AdminServices = () => {
 						</div>
 						<div className="admin-form-group">
 							<div className="admin-form-subgroup price-subgroup">
+								<label
+									className="availability-checkbox dashboard-label"
+									htmlFor="is_active"
+									data-tooltip="Permitir que se pueda reservar este servicio">
+									<input
+										type="checkbox"
+										id="is_active"
+										checked={data.is_active}
+										onChange={() =>
+											setData({
+												...data,
+												is_active: !data.is_active
+											})
+										}
+									/>
+									Activo
+								</label>
 								<label className="dashboard-label" htmlFor="price">
 									Precio
 								</label>
@@ -280,7 +310,7 @@ export const AdminServices = () => {
 					</form>
 				</section>
 				<section className="admin-second-section">
-					<form className="dashboard-form" onSubmit={submitSecondForm}>
+					<form className="dashboard-form" onSubmit={handleSubmitSecondForm}>
 						<div className="disponibility-title admin-form-group">
 							<h2 className="dashboard-content-subtitle">Disponibilidad:</h2>
 							<span className={productList.includes(data.product) ? "text-confirm" : "text-cancel"}>
@@ -299,19 +329,6 @@ export const AdminServices = () => {
 									Hora
 								</label>
 								<input type="time" id="time" name="time" />
-							</div>
-							<div className="admin-form-subgroup availability-checkbox">
-								<input
-									type="checkbox"
-									id="available"
-									name="available"
-									value="available"
-									defaultChecked={dispoChecked}
-									onChange={() => setDispoChecked(!dispoChecked)}
-								/>
-								<label className="dashboard-label" htmlFor="available">
-									Disponible
-								</label>
 							</div>
 						</div>
 						<div>

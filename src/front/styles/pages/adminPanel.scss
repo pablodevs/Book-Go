@@ -218,7 +218,7 @@ button.inactive {
     pointer-events: none;
 }
 
-.price-subgroup { align-self: flex-end }
+.price-subgroup { align-self: stretch }
 
 .price-input {
     position: relative;
@@ -287,12 +287,12 @@ div.disponibility-title.admin-form-group {
 }
 
 .availability-checkbox {
-    margin-top: auto;
+    margin-inline: auto;
+    margin-bottom: auto;
     display: flex;
     flex-direction: row;
     align-items: center;
     gap: 0.4rem;
-    padding: 0.6rem;
     & input { width: auto }
 }
 

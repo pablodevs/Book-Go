@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Context } from "../../store/appContext";
 import PropTypes from "prop-types";
 
@@ -11,9 +11,9 @@ export const ButtonDay = props => {
 			onClick={() => actions.setActiveWeekDay(props.weekday)}
 			className={
 				"icon-btn" +
-				(store.activeWeekDays &&
-				store.activeWeekDays.length !== 0 &&
-				store.activeWeekDays.includes(props.weekday)
+				(store.business.weekdays &&
+				store.business.weekdays.length !== 0 &&
+				store.business.weekdays.includes(props.weekday)
 					? " active"
 					: "")
 			}>
