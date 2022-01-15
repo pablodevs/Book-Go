@@ -55,7 +55,7 @@ export const BusinessSettings = () => {
 	const submitSecondForm = event => {
 		event.preventDefault();
 		if (timeFrom && timeTo && store.activeWeekDays.length !== 0)
-			console.log(store.activeWeekDays.join(), timeFrom, timeTo);
+			console.log(store.activeWeekDays.join(), `${timeFrom}, ${timeTo}`);
 		actions.updateBusinessInfo({
 			schedule: store.activeWeekDays.join()
 		});
