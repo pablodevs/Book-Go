@@ -41,6 +41,7 @@ class Business(db.Model):
     address = db.Column(db.String(255), nullable=False)
     phone = db.Column(db.String(9), unique=True, nullable=False)
     schedule = db.Column(db.String(40), nullable=False) # ej: "L, M, X, J, V"
+    # schedule = db.Column(db.String(40), nullable=False) # ej: "10:00, 20:00"
     # time_from = 
     # time_to = 
 
