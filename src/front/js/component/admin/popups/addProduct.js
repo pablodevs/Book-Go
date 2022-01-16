@@ -8,14 +8,15 @@ export const AddProduct = () => {
 	const [hoursList, setHoursList] = useState([]);
 	const [minutes, setMinutes] = useState(0);
 	const [hours, setHours] = useState(0);
+	const [schedule, setSchedule] = useState(false);
 	const [data, setData] = useState({
 		name: "",
 		price: "",
 		description: "",
 		duration: "",
-		is_active: false
+		is_active: false,
+		sku: ""
 		// product_img_url: "",
-		// sku: ""
 	});
 
 	useEffect(() => {
@@ -31,7 +32,26 @@ export const AddProduct = () => {
 
 		setMinutesList(listOfMinutes);
 		setHoursList(listOfHours);
+
+		// Actualizamos la información del negocio
+		actions.getBusinessInfo();
 	}, []);
+
+	useEffect(
+		() => {
+			// Comprobamos si existe un horario
+			if (
+				store.business.schedule &&
+				store.business.weekdays &&
+				store.business.schedule !== "00:00,00:00" &&
+				store.business.schedule.split(",")[0] !== store.business.schedule.split(",")[1] &&
+				store.business.weekdays[0] !== "" &&
+				data.sku
+			)
+				setSchedule(true);
+		},
+		[data, store.business]
+	);
 
 	useEffect(
 		() =>
@@ -97,10 +117,15 @@ export const AddProduct = () => {
 						<label
 							className="availability-checkbox dashboard-label"
 							htmlFor="new_is_active"
-							data-tooltip="Permitir que se pueda reservar este servicio">
+							data-tooltip={
+								schedule
+									? "Permite que se pueda reservar este servicio"
+									: "Primero define un horario en el apartado de negocio"
+							}>
 							<input
 								type="checkbox"
 								id="new_is_active"
+								disabled={!schedule}
 								checked={data.is_active}
 								onChange={() =>
 									setData({
@@ -120,7 +145,7 @@ export const AddProduct = () => {
 								id="new-price"
 								name="price"
 								min="0"
-								onChange={e => handleInputChange(e)}
+								onChange={handleInputChange}
 								value={data.price}
 								required
 							/>
@@ -128,7 +153,7 @@ export const AddProduct = () => {
 						</div>
 					</div>
 					<div className="admin-form-subgroup duration-subgroup">
-						<span className="admin-form-subgroup-title">Duración</span>
+						<span className="admin-form-subgroup-title">Duración del servicio</span>
 						<div className="dflex-row">
 							<div>
 								<label htmlFor="new-hours" className="dashboard-label">
@@ -178,7 +203,7 @@ export const AddProduct = () => {
 							name="description"
 							rows="3"
 							value={data.description}
-							onChange={e => handleInputChange(e)}
+							onChange={handleInputChange}
 							required
 						/>
 					</div>
@@ -194,6 +219,35 @@ export const AddProduct = () => {
 									return;
 								}}>
 								<i className="fas fa-camera" />
+							</button>
+						</div>
+					</div>
+				</div>
+				<div className="admin-form-group">
+					<div className="admin-form-subgroup">
+						<label className="dashboard-label" htmlFor="new-sku">
+							Sku (código de artículo)
+						</label>
+						<div className="dashboard-input">
+							<input
+								id="new-sku"
+								type="text"
+								name="sku"
+								maxLength="150"
+								value={data.sku}
+								autoComplete="off"
+								onChange={handleInputChange}
+							/>
+							<button
+								type="button"
+								className="clear-input"
+								onClick={() => {
+									setData({
+										...data,
+										sku: ""
+									});
+								}}>
+								<i className="fas fa-times" />
 							</button>
 						</div>
 					</div>

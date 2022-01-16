@@ -9,6 +9,7 @@ export const AdminServices = () => {
 	const [hoursList, setHoursList] = useState([]);
 	const [minutes, setMinutes] = useState(0);
 	const [hours, setHours] = useState(0);
+	const [schedule, setSchedule] = useState(false);
 	const [productList, setProductList] = useState([]);
 	const [data, setData] = useState({
 		id: "",
@@ -16,9 +17,9 @@ export const AdminServices = () => {
 		price: "",
 		description: "",
 		duration: "",
-		is_active: false
+		is_active: false,
+		sku: ""
 		// product_img_url: "",
-		// sku: ""
 	});
 
 	useEffect(() => {
@@ -37,7 +38,27 @@ export const AdminServices = () => {
 
 		// Actualizamos la información de los productos
 		actions.get_products();
+		actions.resetNewProduct();
+
+		// Actualizamos la información del negocio
+		actions.getBusinessInfo();
 	}, []);
+
+	useEffect(
+		() => {
+			// Comprobamos si existe un horario
+			if (
+				store.business.schedule &&
+				store.business.weekdays &&
+				store.business.schedule !== "00:00,00:00" &&
+				store.business.schedule.split(",")[0] !== store.business.schedule.split(",")[1] &&
+				store.business.weekdays[0] !== "" &&
+				data.sku
+			)
+				setSchedule(true);
+		},
+		[data, store.business]
+	);
 
 	useEffect(
 		() => {
@@ -51,7 +72,8 @@ export const AdminServices = () => {
 					price: store.new_product.price,
 					description: store.new_product.description,
 					duration: store.new_product.duration,
-					is_active: store.new_product.is_active
+					is_active: store.new_product.is_active,
+					sku: ""
 				});
 			} else {
 				setHours(Math.floor(0));
@@ -62,7 +84,8 @@ export const AdminServices = () => {
 					price: "",
 					description: "",
 					duration: "",
-					is_active: false
+					is_active: false,
+					sku: ""
 				});
 			}
 		},
@@ -89,7 +112,8 @@ export const AdminServices = () => {
 				price: prod.price,
 				description: prod.description,
 				duration: prod.duration,
-				is_active: prod.is_active
+				is_active: prod.is_active,
+				sku: prod.sku
 			});
 		} else
 			setData({
@@ -100,6 +124,7 @@ export const AdminServices = () => {
 
 	const handleSubmitFirstForm = event => {
 		event.preventDefault();
+		actions.resetNewProduct();
 		if (data.id && productList.includes(data.product))
 			actions.setToast(
 				"promise",
@@ -107,10 +132,6 @@ export const AdminServices = () => {
 				actions.updateProduct(data),
 				"toast-confirm"
 			);
-	};
-	const handleSubmitSecondForm = event => {
-		event.preventDefault();
-		// actions.updateDispo(data);
 	};
 
 	return (
@@ -155,7 +176,7 @@ export const AdminServices = () => {
 								<div className="dashboard-input product-input">
 									<div className="select-wrapper">
 										<select
-											onChange={e => handleInputChange(e)}
+											onChange={handleInputChange}
 											id="product"
 											name="product"
 											value={data.product}>
@@ -189,10 +210,15 @@ export const AdminServices = () => {
 								<label
 									className="availability-checkbox dashboard-label"
 									htmlFor="is_active"
-									data-tooltip="Permitir que se pueda reservar este servicio">
+									data-tooltip={
+										schedule
+											? "Permite que se pueda reservar este servicio"
+											: "Primero define un horario en el apartado de negocio"
+									}>
 									<input
 										type="checkbox"
 										id="is_active"
+										disabled={!schedule}
 										checked={data.is_active}
 										onChange={() =>
 											setData({
@@ -212,14 +238,14 @@ export const AdminServices = () => {
 										id="price"
 										name="price"
 										min="0"
-										onChange={e => handleInputChange(e)}
+										onChange={handleInputChange}
 										value={data.price}
 									/>
 									<span>€</span>
 								</div>
 							</div>
 							<div className="admin-form-subgroup duration-subgroup">
-								<span className="admin-form-subgroup-title">Duración:</span>
+								<span className="admin-form-subgroup-title">Duración del servicio</span>
 								<div className="dflex-row">
 									<div>
 										<label htmlFor="hours" className="dashboard-label">
@@ -270,7 +296,7 @@ export const AdminServices = () => {
 									rows="3"
 									maxLength="1000"
 									value={data.description}
-									onChange={e => handleInputChange(e)}
+									onChange={handleInputChange}
 								/>
 							</div>
 							<div className="admin-form-subgroup img-subgroup">
@@ -302,6 +328,35 @@ export const AdminServices = () => {
 								</div>
 							</div>
 						</div>
+						<div className="admin-form-group">
+							<div className="admin-form-subgroup">
+								<label className="dashboard-label" htmlFor="sku">
+									Sku (código de artículo)
+								</label>
+								<div className="dashboard-input">
+									<input
+										id="sku"
+										type="text"
+										name="sku"
+										maxLength="150"
+										value={data.sku}
+										autoComplete="off"
+										onChange={handleInputChange}
+									/>
+									<button
+										type="button"
+										className="clear-input"
+										onClick={() => {
+											setData({
+												...data,
+												sku: ""
+											});
+										}}>
+										<i className="fas fa-times" />
+									</button>
+								</div>
+							</div>
+						</div>
 						<div>
 							<button type="submit" className="save-button">
 								Guardar cambios
@@ -309,8 +364,8 @@ export const AdminServices = () => {
 						</div>
 					</form>
 				</section>
-				<section className="admin-second-section">
-					<form className="dashboard-form" onSubmit={handleSubmitSecondForm}>
+				{/* <section className="admin-second-section">
+					<form className="dashboard-form">
 						<div className="disponibility-title admin-form-group">
 							<h2 className="dashboard-content-subtitle">Disponibilidad:</h2>
 							<span className={productList.includes(data.product) ? "text-confirm" : "text-cancel"}>
@@ -337,7 +392,7 @@ export const AdminServices = () => {
 							</button>
 						</div>
 					</form>
-				</section>
+				</section> */}
 			</div>
 		</div>
 	);

@@ -46,6 +46,7 @@ export const BusinessSettings = () => {
 					twitter_url: store.business.twitter_url
 				});
 				if (store.business.schedule) {
+					// viene en formato string: "10:00,20:00"
 					setTimeFrom(store.business.schedule.split(",")[0]);
 					setTimeTo(store.business.schedule.split(",")[1]);
 				}
@@ -88,7 +89,7 @@ export const BusinessSettings = () => {
 		if (timeFrom && timeTo) {
 			actions.setToast(
 				"promise",
-				{ loading: "Guardando...", success: `Guardado` },
+				{ loading: "Guardando...", success: `Cambios guardados` },
 				actions.updateBusinessInfo(firstData),
 				"toast-confirm"
 			);
@@ -114,8 +115,8 @@ export const BusinessSettings = () => {
 					<form onSubmit={handleSubmitFirstForm} className="dashboard-form">
 						<h2 className="dashboard-content-subtitle">Horario</h2>
 						<small>
-							Cambia el horario de apertura de tu negocio. Una vez creado el horario, ya puedes crear y
-							modificar los servicios <Link to="/admin/services">aquí.</Link>
+							Cambia el horario de apertura de tu negocio. Una vez creado el horario, ya podrás activar
+							tus servicios <Link to="/admin/services">aquí.</Link>
 						</small>
 						<div className="admin-form-group">
 							<div className="admin-form-subgroup">

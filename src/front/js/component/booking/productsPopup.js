@@ -7,19 +7,18 @@ export const ProductsPopup = () => {
 	// console.log(store.products);
 
 	return (
-		<div>
-			<div className="container">
-				<div className="row">
-					{store.products.map((item, index) => (
-						<div className="col text-center" key={index}>
-							<button
-								className="btn btn-info mb-4"
-								onClick={() => actions.setPopup("calendar", "¿Cuándo?", item.name)}>
-								{item.name}
-							</button>
-						</div>
-					))}
-				</div>
+		<div className="container popup-container popup-body">
+			Nuestros servicios:
+			<div className="row popup-row">
+				{store.products.map((item, index) => (
+					<div className="col-auto" key={index}>
+						<button
+							className="product-btn"
+							onClick={() => actions.setPopup("calendar", "¿Cuándo?", item.name)}>
+							{item.name}
+						</button>
+					</div>
+				))}
 			</div>
 		</div>
 	);

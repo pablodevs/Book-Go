@@ -72,7 +72,7 @@ class Product(db.Model):
     price = db.Column(db.Integer, nullable=False)  
     duration = db.Column(db.Integer, nullable=False)
     description = db.Column(db.String(1000), nullable=False)
-    sku = db.Column(db.String(50), nullable=True)
+    sku = db.Column(db.String(150), nullable=True)
     
     # Habrá que meter sí o sí las imágenes en una url (product_img_url) unidas al id del producto
     
