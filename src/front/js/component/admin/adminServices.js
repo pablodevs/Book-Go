@@ -10,16 +10,16 @@ export const AdminServices = () => {
 	const [minutes, setMinutes] = useState(0);
 	const [hours, setHours] = useState(0);
 	const [schedule, setSchedule] = useState(false);
-	const [productList, setProductList] = useState([]);
+	const [serviceList, setServiceList] = useState([]);
 	const [data, setData] = useState({
 		id: "",
-		product: "DEFAULT", // con 'name' no funciona bien
+		service: "DEFAULT", // con 'name' no funciona bien
 		price: "",
 		description: "",
 		duration: "",
 		is_active: false,
 		sku: ""
-		// product_img_url: "",
+		// service_img_url: "",
 	});
 
 	useEffect(() => {
@@ -36,9 +36,9 @@ export const AdminServices = () => {
 		setMinutesList(listOfMinutes);
 		setHoursList(listOfHours);
 
-		// Actualizamos la información de los productos
-		actions.get_products();
-		actions.resetNewProduct();
+		// Actualizamos la información de los servicios
+		actions.get_services();
+		actions.resetNewService();
 
 		// Actualizamos la información del negocio
 		actions.getBusinessInfo();
@@ -53,34 +53,36 @@ export const AdminServices = () => {
 				store.business.schedule !== "00:00,00:00" &&
 				store.business.schedule.split(",")[0] !== store.business.schedule.split(",")[1] &&
 				store.business.weekdays[0] !== "" &&
-				data.sku
+				data.sku &&
+				data.sku !== ""
 			)
 				setSchedule(true);
+			else setSchedule(false);
 		},
-		[data, store.business]
+		[data.sku, store.business]
 	);
 
 	useEffect(
 		() => {
-			setProductList(store.products.map(element => element.name));
-			if (Object.keys(store.new_product).length && store.new_product.id) {
-				setHours(Math.floor(store.new_product.duration / 60));
-				setMinutes(store.new_product.duration % 60);
+			setserviceList(store.services.map(element => element.name));
+			if (Object.keys(store.new_service).length && store.new_service.id) {
+				setHours(Math.floor(store.new_service.duration / 60));
+				setMinutes(store.new_service.duration % 60);
 				setData({
-					id: store.new_product.id,
-					product: store.new_product.name, // esto de que se llamen diferente no me convence
-					price: store.new_product.price,
-					description: store.new_product.description,
-					duration: store.new_product.duration,
-					is_active: store.new_product.is_active,
-					sku: ""
+					id: store.new_service.id,
+					service: store.new_service.name, // esto de que se llamen diferente no me convence
+					price: store.new_service.price,
+					description: store.new_service.description,
+					duration: store.new_service.duration,
+					is_active: store.new_service.is_active,
+					sku: store.new_service.sku
 				});
 			} else {
 				setHours(Math.floor(0));
 				setMinutes(0);
 				setData({
 					id: "",
-					product: "DEFAULT", // con 'name: "DEFAULT"' no funciona bien
+					service: "DEFAULT", // con 'name: "DEFAULT"' no funciona bien
 					price: "",
 					description: "",
 					duration: "",
@@ -89,7 +91,7 @@ export const AdminServices = () => {
 				});
 			}
 		},
-		[store.products, store.new_product]
+		[store.services, store.new_service]
 	);
 
 	useEffect(
@@ -102,18 +104,18 @@ export const AdminServices = () => {
 	);
 
 	const handleInputChange = e => {
-		if (e.target.name === "product" && productList.includes(e.target.value)) {
-			let prod = store.products.find(prod => prod.name === e.target.value); // ⚠️ Si 2 tienen el mismo nombre esto falla
-			setHours(Math.floor(prod.duration / 60));
-			setMinutes(prod.duration % 60);
+		if (e.target.name === "service" && serviceList.includes(e.target.value)) {
+			let service = store.services.find(service => service.name === e.target.value); // ⚠️ Si 2 tienen el mismo nombre esto falla
+			setHours(Math.floor(service.duration / 60));
+			setMinutes(service.duration % 60);
 			setData({
-				id: prod.id,
-				product: prod.name, // esto de que se llamen diferente no me convence
-				price: prod.price,
-				description: prod.description,
-				duration: prod.duration,
-				is_active: prod.is_active,
-				sku: prod.sku
+				id: service.id,
+				service: service.name, // esto de que se llamen diferente no me convence
+				price: service.price,
+				description: service.description,
+				duration: service.duration,
+				is_active: service.is_active,
+				sku: service.sku
 			});
 		} else
 			setData({
@@ -124,12 +126,12 @@ export const AdminServices = () => {
 
 	const handleSubmitFirstForm = event => {
 		event.preventDefault();
-		actions.resetNewProduct();
-		if (data.id && productList.includes(data.product))
+		actions.resetNewService();
+		if (data.id && serviceList.includes(data.service))
 			actions.setToast(
 				"promise",
-				{ loading: "Guardando...", success: `${data.product} guardado` },
-				actions.updateProduct(data),
+				{ loading: "Guardando...", success: `${data.service} guardado` },
+				actions.updateService(data),
 				"toast-confirm"
 			);
 	};
@@ -146,19 +148,19 @@ export const AdminServices = () => {
 								<button
 									type="button"
 									className="icon-btn"
-									data-tooltip="añadir producto"
-									onClick={() => actions.setPopup("add-product", "Añadir producto")}>
+									data-tooltip="añadir servicio"
+									onClick={() => actions.setPopup("add-service", "Añadir servicio")}>
 									<i className="fas fa-plus" />
 								</button>
-								{/* ⚠️ OJITO: si añadimos o eliminamos un prod, se tiene que actualizar el hook productList */}
+								{/* ⚠️ OJITO: si añadimos o eliminamos un servicio, se tiene que actualizar el hook serviceList */}
 								<button
 									type="button"
 									className={"icon-btn danger" + (data.id ? "" : " inactive")}
-									data-tooltip="eliminar producto"
+									data-tooltip="eliminar servicio"
 									onClick={() => {
 										if (!data.id) return;
-										const deleteFunct = () => actions.removeProduct(data.id);
-										actions.setPopup("confirm", "Eliminar el producto", undefined, deleteFunct);
+										const deleteFunct = () => actions.removeService(data.id);
+										actions.setPopup("confirm", "Eliminar el servicio", undefined, deleteFunct);
 									}}>
 									<i className="fas fa-trash-alt" />
 								</button>
@@ -170,22 +172,22 @@ export const AdminServices = () => {
 						</small>
 						<div className="admin-form-group">
 							<div className="admin-form-subgroup">
-								<label className="dashboard-label" htmlFor="product">
-									Producto
+								<label className="dashboard-label" htmlFor="service">
+									Servicio
 								</label>
-								<div className="dashboard-input product-input">
+								<div className="dashboard-input service-input">
 									<div className="select-wrapper">
 										<select
 											onChange={handleInputChange}
-											id="product"
-											name="product"
-											value={data.product}>
+											id="service"
+											name="service"
+											value={data.service}>
 											<option value="DEFAULT" disabled hidden>
-												Elige un producto...
+												Elige un servicio...
 											</option>
-											{productList.map((prod, idx) => (
-												<option key={idx} value={prod}>
-													{prod}
+											{serviceList.map((service, idx) => (
+												<option key={idx} value={service}>
+													{service}
 												</option>
 											))}
 										</select>
@@ -194,10 +196,10 @@ export const AdminServices = () => {
 										type="button"
 										className={"icon-btn" + (data.id ? "" : " inactive")}
 										data-tooltip="cambiar nombre"
-										// On click: abrir un cuadro de dialogo pequeño para cambiar el nombre del producto
+										// On click: abrir un cuadro de dialogo pequeño para cambiar el nombre del servicio
 										onClick={() => {
 											return data.id
-												? actions.setPopup("edit-product", `Editar ${data.product}`)
+												? actions.setPopup("edit-service", `Editar ${data.service}`)
 												: "";
 										}}>
 										<i className="fas fa-pen" />
@@ -300,15 +302,15 @@ export const AdminServices = () => {
 								/>
 							</div>
 							<div className="admin-form-subgroup img-subgroup">
-								<div className="admin-product-img-wrapper">
+								<div className="admin-service-img-wrapper">
 									<small className="img-placeholder">
 										<i className="fas fa-camera" />
 									</small>
 									{data.id ? (
 										<img
-											src={require(`../../../img/${data.product.toLowerCase()}.jpg`)}
+											src={require(`../../../img/${data.service.toLowerCase()}.jpg`)}
 											onLoad={e => e.target.classList.add("border-none")}
-											className="admin-product-img"
+											className="admin-service-img"
 										/>
 									) : (
 										""
@@ -316,11 +318,11 @@ export const AdminServices = () => {
 									<button
 										type="button"
 										className={"edit-img" + (data.id ? "" : " inactive")}
-										// On click: abrir un cuadro de dialogo pequeño para cambiar el nombre del producto
+										// On click: abrir un cuadro de dialogo pequeño para cambiar el nombre del servicio
 										onClick={() => {
 											return;
 											// return data.id
-											// 	? actions.setPopup("edit-product", `Editar ${data.product}`)
+											// 	? actions.setPopup("edit-service", `Editar ${data.service}`)
 											// 	: "";
 										}}>
 										<i className="fas fa-camera" />
@@ -368,8 +370,8 @@ export const AdminServices = () => {
 					<form className="dashboard-form">
 						<div className="disponibility-title admin-form-group">
 							<h2 className="dashboard-content-subtitle">Disponibilidad:</h2>
-							<span className={productList.includes(data.product) ? "text-confirm" : "text-cancel"}>
-								{data.product === "DEFAULT" ? "Ningún producto seleccionado" : data.product}
+							<span className={serviceList.includes(data.service) ? "text-confirm" : "text-cancel"}>
+								{data.service === "DEFAULT" ? "Ningún servicio seleccionado" : data.service}
 							</span>
 						</div>
 						<div className="admin-form-group">

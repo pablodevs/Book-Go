@@ -1,7 +1,7 @@
   
 import os
 from flask_admin import Admin
-from .models import db, User, Book, Product, Dispo, Business
+from .models import db, User, Book, Service, Dispo, Business
 from flask_admin.contrib.sqla import ModelView
 
 def setup_admin(app):
@@ -21,7 +21,7 @@ def setup_admin(app):
     admin.add_view(Chavi_model(User, db.session))
     admin.add_view(Chavi_model(Business, db.session))
     admin.add_view(Chavi_model(Book, db.session))
-    admin.add_view(Chavi_model(Product, db.session))
+    admin.add_view(Chavi_model(Service, db.session))
     admin.add_view(Chavi_model(Dispo, db.session))
 
     # You can duplicate that line to add mew models

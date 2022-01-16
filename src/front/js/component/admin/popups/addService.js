@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Context } from "../../../store/appContext";
 
-export const AddProduct = () => {
+export const AddService = () => {
 	const { actions, store } = useContext(Context);
 
 	const [minutesList, setMinutesList] = useState([]);
@@ -16,7 +16,7 @@ export const AddProduct = () => {
 		duration: "",
 		is_active: false,
 		sku: ""
-		// product_img_url: "",
+		// service_img_url: "",
 	});
 
 	useEffect(() => {
@@ -69,8 +69,8 @@ export const AddProduct = () => {
 		if (data.name !== "" && data.price !== "" && data.description !== "") {
 			actions.setToast(
 				"promise",
-				{ loading: "Añadiendo...", success: resp => `Producto agregado: ${resp.name}` },
-				actions.addProduct(data),
+				{ loading: "Añadiendo...", success: resp => `Servicio agregado: ${resp.name}` },
+				actions.addService(data),
 				"toast-confirm"
 			);
 		}
@@ -79,16 +79,16 @@ export const AddProduct = () => {
 	return (
 		<div className="popup-body">
 			<form onSubmit={handleSubmit} className="dashboard-form">
-				<p>Puedes modificar la información del producto más adelante</p>
+				<p>Puedes modificar la información del servicio más adelante</p>
 				<div className="admin-form-group">
 					<div className="admin-form-subgroup">
-						<label className="dashboard-label" htmlFor="new-product">
-							Nuevo producto:
+						<label className="dashboard-label" htmlFor="new-service">
+							Nuevo servicio:
 							<span>{data.name.length}</span>
 						</label>
 						<div className="dashboard-input">
 							<input
-								id="new-product"
+								id="new-service"
 								type="text"
 								name="name"
 								maxLength="120"
@@ -208,7 +208,7 @@ export const AddProduct = () => {
 						/>
 					</div>
 					<div className="admin-form-subgroup img-subgroup">
-						<div className="admin-product-img-wrapper">
+						<div className="admin-service-img-wrapper">
 							<small className="img-placeholder">
 								<i className="fas fa-camera" />
 							</small>

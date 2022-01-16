@@ -1,19 +1,18 @@
 import React, { useContext } from "react";
 import { Context } from "../../store/appContext";
-import "../../../styles/components/productsPopup.scss";
 
-export const ProductsPopup = () => {
+export const ServicesPopup = () => {
 	const { actions, store } = useContext(Context);
-	// console.log(store.products);
+	// console.log(store.services);
 
 	return (
 		<div className="container popup-container popup-body">
 			Nuestros servicios:
 			<div className="row popup-row">
-				{store.products.map((item, index) => (
+				{store.services.map((item, index) => (
 					<div className="col-auto" key={index}>
 						<button
-							className="product-btn"
+							className="service-btn"
 							onClick={() => actions.setPopup("calendar", "¿Cuándo?", item.name)}>
 							{item.name}
 						</button>

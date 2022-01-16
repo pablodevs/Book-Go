@@ -95,7 +95,7 @@ export const Signup = () => {
 							}}
 						/>
 						<i className="fas fa-camera" />
-						Selecciona una imagen de perfil
+						Añade una imagen de perfil
 					</label>
 					<button className="btn btn-warning w-100" type="submit">
 						Únete

@@ -160,7 +160,7 @@ button.btn-cool.logout {
     section.admin-content { margin: 1.7rem 2vw }
 }
 
-/*===== Products y Disponibilidad =====*/
+/*===== Servicios y Disponibilidad =====*/
 
 .admin-services, .admin-sections-wrapper, .dashboard-content-wrapper{
     width: 100%;
@@ -195,7 +195,7 @@ div.admin-icon-btn-group {
     margin-left: auto;
 }
 
-div.product-input {
+div.service-input {
     flex-direction: row;
     align-items: center;
     gap: 0.4rem
@@ -307,13 +307,13 @@ div.disponibility-title.admin-form-group {
     align-items: center;
     justify-content: center;
 }
-.admin-product-img-wrapper {
+.admin-service-img-wrapper {
     position: relative;
     width: 100px;
     height: 100px;
     display: flex;
 }
-.admin-product-img {
+.admin-service-img {
     width: 100%;
     object-fit: cover;
     border-radius: 10px;
