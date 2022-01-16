@@ -71,9 +71,14 @@ def create_service():
         else:
             new_service = Service(name = body_service["name"], price = body_service["price"], description = body_service["description"], duration = body_service["duration"], is_active = body_service["is_active"], sku = body_service["sku"])
             # Get the schedule and open days
-            schedule = business = Business.query.all()[0]["schedule"]
-            weekdays = business = Business.query.all()[0]["weekdays"]
-            print(schedule, weekdays)
+            business = Business.query.all()[0].serialize()
+            schedule = business["schedule"]
+            weekdays = business["weekdays"]
+
+            timeFrom = schedule.split(',')[0]
+            timeTo = schedule.split(',')[1]
+            weekdaysList = weekdays.split(',')
+            print(f"from {timeFrom} to {timeTo}, the days: {weekdaysList}")
 
     db.session.add(new_service)
     db.session.commit()

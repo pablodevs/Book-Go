@@ -64,7 +64,7 @@ export const AdminServices = () => {
 
 	useEffect(
 		() => {
-			setserviceList(store.services.map(element => element.name));
+			setServiceList(store.services.map(element => element.name));
 			if (Object.keys(store.new_service).length && store.new_service.id) {
 				setHours(Math.floor(store.new_service.duration / 60));
 				setMinutes(store.new_service.duration % 60);
