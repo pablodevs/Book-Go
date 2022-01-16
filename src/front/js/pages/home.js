@@ -1,5 +1,5 @@
 import React, { useEffect, useContext } from "react";
-import { Service_card } from "../component/home_components/service_card";
+import { ServiceCard } from "../component/home_components/service_card";
 import { Carrousel } from "../component/home_components/carrousel";
 import { Context } from "../store/appContext";
 import "../../styles/pages/home.scss";
@@ -40,7 +40,7 @@ export const Home = () => {
 							if (item.is_active)
 								return (
 									<div className="col-auto" key={index}>
-										<Service_card service={item} />
+										<ServiceCard service={item} />
 									</div>
 								);
 						})}

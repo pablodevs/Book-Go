@@ -66,7 +66,8 @@
 .popup-container, .popup-row { margin: auto }
 .popup-row {
     justify-content: center;
-    width: calc(min(500px, 100%))
+    width: calc(min(500px, 100%));
+    gap: 1rem;
 }
 
 @media screen and (max-width: 767.9px) {
