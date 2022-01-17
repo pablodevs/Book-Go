@@ -14,8 +14,12 @@ export const BookingCard = () => {
 				<div>
 					Fecha:{" "}
 					<span className="bookingcard-date">
-						{new Date(2022, 0, 3, 9, 5).toLocaleDateString()}{" "}
-						{new Date(2022, 0, 3, 9, 5).toLocaleTimeString().slice(0, -3)}
+						{new Date(2022, 0, 3, 9, 5).toLocaleDateString(undefined, {
+							year: "numeric",
+							month: "2-digit",
+							day: "2-digit"
+						})}{" "}
+						{new Date(2022, 0, 3, 9, 5).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
 					</span>
 				</div>
 				<div>

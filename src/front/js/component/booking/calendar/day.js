@@ -18,7 +18,12 @@ export const Day = props => {
 					(props.isToday ? " today" : "") +
 					(props.isChangeMonthDay || props.isChangeMonthDay === 0
 						? " light-fc-day"
-						: store.booking_day === props.date.toLocaleDateString()
+						: store.booking_day ===
+						  props.date.toLocaleDateString(undefined, {
+								year: "numeric",
+								month: "2-digit",
+								day: "2-digit"
+						  })
 							? " day-active"
 							: hover
 								? " hover"
@@ -32,12 +37,11 @@ export const Day = props => {
 						: //al hacer click en un día que tiene disponibilidad.... te aparecen las horas disponibles
 						  () => {
 								actions.calendarActions.changeHoursView(
-									props.date.getDate() +
-										"/" +
-										//quito los ceros delante del mes que sea menor a 10
-										((props.date.getMonth() + 1) * 1).toString() +
-										"/" +
-										props.date.getFullYear()
+									props.date.toLocaleDateString(undefined, {
+										year: "numeric",
+										month: "2-digit",
+										day: "2-digit"
+									})
 								);
 						  }
 				}>

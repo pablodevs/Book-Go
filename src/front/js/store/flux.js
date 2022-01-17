@@ -130,7 +130,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 			calendarActions: {
 				//cambia la variable del store booking_day
 				changeHoursView: day => {
-					const store = getStore();
 					//cambiamos la variable booking_day con el día seleccionado para reservar
 					setStore({ booking_day: day });
 				},

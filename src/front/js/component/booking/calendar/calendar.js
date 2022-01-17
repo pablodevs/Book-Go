@@ -64,7 +64,13 @@ export const Calendar = () => {
 									: false
 							}
 							isDisabled={
-								!store.dispo.map(element => element.date).includes(date.toLocaleDateString())
+								!store.dispo.map(element => element.date).includes(
+									date.toLocaleDateString(undefined, {
+										year: "numeric",
+										month: "2-digit",
+										day: "2-digit"
+									})
+								)
 									? true
 									: false
 							}
