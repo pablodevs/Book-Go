@@ -138,9 +138,9 @@ class Dispo(db.Model):
             "id": self.id,
             "service_id": self.service_id,
             #esto te devuelve la fecha en el formato español
-            "date" : self.date.strftime("%-d/%-m/%Y"),
+            "date" : self.date.strftime("%d/%m/%Y"),
             #este otro en milisegundos
             #"date" : self.date.strptime(self.date.strftime("%d/%m/%Y"),"%d/%m/%Y").timestamp()*1000,
-            "time" : self.time.strftime("%-H:%M"),
+            "time" : self.time.strftime("%H:%M"),
             "available" : self.available
         }

@@ -7,7 +7,7 @@ export const Info = () => {
 	const params = useParams();
 
 	return store.services.map((prod, idx) => {
-		if (prod.id == params.id) {
+		if (prod.id === params.id) {
 			return (
 				<div className="container-sm border border-rounded m-5 mx-auto bg-light" key={idx}>
 					<div className="jumbotron m-3">

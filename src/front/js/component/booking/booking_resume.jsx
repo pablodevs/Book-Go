@@ -11,7 +11,7 @@ export const Booking_resume = () => {
 					<div className="modal-header">
 						<h5 className="modal-title">
 							{store.services.map(item => {
-								if (store.booking.service_id == item.id) return item.name;
+								if (store.booking.service_id === item.id) return item.name;
 							})}
 						</h5>
 					</div>
@@ -26,7 +26,7 @@ export const Booking_resume = () => {
 						<button
 							onClick={() => {
 								store.services.map(item => {
-									if (item.id == store.booking.id) {
+									if (item.id === store.booking.id) {
 										let sku = item.sku;
 										actions.reservar(sku);
 									}

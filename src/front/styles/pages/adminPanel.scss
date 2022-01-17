@@ -218,8 +218,6 @@ button.inactive {
     pointer-events: none;
 }
 
-.price-subgroup { align-self: stretch }
-
 .price-input {
     position: relative;
     display: flex;
@@ -263,13 +261,8 @@ div.admin-form-group {
     display: flex;
     flex-direction: column;
 }
-.admin-form-subgroup-title {
-    display: block;
-    text-align: center;
-}
+
 .duration-subgroup {
-    flex-grow: 2;
-    gap: 0.5rem;
     align-items: flex-start;
 }
 
@@ -278,25 +271,15 @@ div.disponibility-title.admin-form-group {
     align-items: baseline;
 }
 
+.admin-form-subgroup-title {
+    margin-bottom: 0.5rem;
+}
 .text-confirm {
     color: $--color-green-confirm;
     font-weight: bold;
 }
 .text-cancel {
     color: $--color-pink-dark;
-}
-
-.availability-checkbox {
-    font-weight: bold;
-    color: #0075ff;
-    font-size: 1.1rem;
-    margin-inline: auto;
-    margin-bottom: auto;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 0.4rem;
-    & input { width: auto }
 }
 
 .img-subgroup {

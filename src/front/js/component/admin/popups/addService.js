@@ -113,48 +113,26 @@ export const AddService = () => {
 					</div>
 				</div>
 				<div className="admin-form-group">
-					<div className="admin-form-subgroup price-subgroup">
-						<label
-							className="availability-checkbox dashboard-label"
-							htmlFor="new_is_active"
-							data-tooltip={
-								schedule
-									? "Permite que se pueda reservar este servicio"
-									: "Primero define un horario en el apartado de negocio"
-							}>
-							<input
-								type="checkbox"
-								id="new_is_active"
-								disabled={!schedule}
-								checked={data.is_active}
-								onChange={() =>
-									setData({
-										...data,
-										is_active: !data.is_active
-									})
-								}
-							/>
-							Activo
-						</label>
-						<label className="dashboard-label" htmlFor="new-price">
-							Precio
-						</label>
-						<div className="price-input">
-							<input
-								type="number"
-								id="new-price"
-								name="price"
-								min="0"
-								onChange={handleInputChange}
-								value={data.price}
-								required
-							/>
-							<span>€</span>
-						</div>
-					</div>
 					<div className="admin-form-subgroup duration-subgroup">
 						<span className="admin-form-subgroup-title">Duración del servicio</span>
 						<div className="dflex-row">
+							<div>
+								<label className="dashboard-label" htmlFor="new-price">
+									Precio
+								</label>
+								<div className="price-input">
+									<input
+										type="number"
+										id="new-price"
+										name="price"
+										min="0"
+										onChange={handleInputChange}
+										value={data.price}
+										required
+									/>
+									<span>€</span>
+								</div>
+							</div>
 							<div>
 								<label htmlFor="new-hours" className="dashboard-label">
 									Hora(s)
@@ -171,8 +149,6 @@ export const AddService = () => {
 										))}
 									</select>
 								</div>
-							</div>
-							<div>
 								<label htmlFor="new-minutes" className="dashboard-label">
 									Minutos
 								</label>
@@ -225,6 +201,9 @@ export const AddService = () => {
 				</div>
 				<div className="admin-form-group">
 					<div className="admin-form-subgroup">
+						<span className="admin-form-subgroup-title">
+							Es necesario agregar un <i>código de artículo</i> que permitirá a tus clientes pagar online.
+						</span>
 						<label className="dashboard-label" htmlFor="new-sku">
 							Sku (código de artículo)
 						</label>
@@ -249,6 +228,39 @@ export const AddService = () => {
 								}}>
 								<i className="fas fa-times" />
 							</button>
+						</div>
+					</div>
+				</div>
+				<div className="admin-form-group">
+					<div className="admin-form-subgroup">
+						<span className="admin-form-subgroup-title">
+							Activar esta opción permitirá a tus clientes reservar el servicio.
+						</span>
+						<div className="form-check form-switch">
+							<label
+								className="form-check-label"
+								htmlFor="new_is_active"
+								data-tooltip={
+									schedule
+										? "Permite que se pueda reservar este servicio"
+										: "Primero define un horario en el apartado de negocio"
+								}>
+								<input
+									className="form-check-input"
+									type="checkbox"
+									role="switch"
+									id="new_is_active"
+									disabled={!schedule}
+									checked={data.is_active}
+									onChange={() =>
+										setData({
+											...data,
+											is_active: !data.is_active
+										})
+									}
+								/>
+								Activar servicio
+							</label>
 						</div>
 					</div>
 				</div>

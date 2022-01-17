@@ -167,7 +167,7 @@ export const Calendar = () => {
 
 				<div className="hours-avaliable">
 					{store.dispo.map((item, index) => {
-						if (item.date == store.booking_day) {
+						if (item.date === store.booking_day) {
 							return (
 								<button
 									className="btn btn-success p-2 m-2"

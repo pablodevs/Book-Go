@@ -72,6 +72,9 @@ small {
     padding: 0;
 }
 
+.form-check-input:focus {
+    box-shadow: none;
+}
 /*===== Utility styles =====*/
 /* 
     Los dos styles siguientes hacen que las Pages cojan el 100% del alto de cualquier pantalla
@@ -101,6 +104,7 @@ small {
 
 .dflex-row {
     display: flex;
+    flex-wrap: wrap;
     gap: 1rem;
     width: 100%;
     & > * { flex: 1 }

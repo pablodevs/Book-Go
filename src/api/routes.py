@@ -79,6 +79,7 @@ def create_service():
             timeTo = schedule.split(',')[1]
             weekdaysList = weekdays.split(',')
             print(f"from {timeFrom} to {timeTo}, the days: {weekdaysList}")
+            # math.floor()
 
     db.session.add(new_service)
     db.session.commit()
