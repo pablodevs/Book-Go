@@ -10,8 +10,6 @@ import os
 from sqlalchemy import and_
 
 import math
-import pytz
-
 
 #para la autenticación y generar el token
 from flask_jwt_extended import create_access_token
@@ -19,6 +17,50 @@ from flask_jwt_extended import get_jwt_identity
 from flask_jwt_extended import jwt_required
 
 api = Blueprint('api', __name__)
+
+
+### FUNCTIONS ###
+
+def resetTimeFormat(hours, minutes):
+    '''
+    Function to add 0 if < 10
+        example input: 
+            - hours (integer): 7
+            - minutes (integer): 5
+        output (string) >>> "07:05"
+    '''
+    hours = str(hours)
+    minutes = str(minutes)
+    outputList = []
+    for i in [hours, minutes]:
+        if len(i) == 1:
+            outputList.append('0' + i)
+        else: outputList.append(i)
+
+    return f"{outputList[0]}:{outputList[1]}"
+
+def getDispo(schedule, duration):
+    '''
+        Example input:
+            - schedule (array of [open, close]): ["10:00", "20:00"]
+            - duration (integer, in minutes): 45
+
+        output (array of strings) >>> ['10:00', '10:45', '11:30', '12:15', '13:00', '13:45', '14:30', '15:15', '16:00', '16:45', '17:30', '18:15', '19:00', '19:45']
+    '''
+
+    timeFrom = int(schedule[0].split(':')[0]) * 60 + int(schedule[0].split(':')[1])
+    timeTo = int(schedule[1].split(':')[0]) * 60 + int(schedule[1].split(':')[1])
+    timeInterval = (timeTo - timeFrom)
+
+    output = []
+
+    for i in range(timeFrom, timeTo, duration):
+        output.append(resetTimeFormat(math.floor(i / 60), i % 60))
+
+    return output
+
+
+### ENDPOINTS ###
 
 # GET ALL SERVICES
 @api.route('/services', methods=['GET'])
@@ -371,45 +413,6 @@ def get_dispo_hours(service_id):
     Service hours dispo
     """
 
-    # FUNCTIONS:
-    def resetTimeFormat(hours, minutes):
-        '''
-        Function to add 0 if < 10
-            example input: 
-                - hours (integer): 7
-                - minutes (integer): 5
-            output (string) >>> "07:05"
-        '''
-        hours = str(hours)
-        minutes = str(minutes)
-        outputList = []
-        for i in [hours, minutes]:
-            if len(i) == 1:
-                outputList.append('0' + i)
-            else: outputList.append(i)
-
-        return f"{outputList[0]}:{outputList[1]}"
-
-    def getDispo(schedule, duration):
-        '''
-            Example input:
-                - schedule (array of [open, close]): ["10:00", "20:00"]
-                - duration (integer, in minutes): 45
-
-            output (array of strings) >>> ['10:00', '10:45', '11:30', '12:15', '13:00', '13:45', '14:30', '15:15', '16:00', '16:45', '17:30', '18:15', '19:00', '19:45']
-        '''
-
-        timeFrom = int(schedule[0].split(':')[0]) * 60 + int(schedule[0].split(':')[1])
-        timeTo = int(schedule[1].split(':')[0]) * 60 + int(schedule[1].split(':')[1])
-        timeInterval = (timeTo - timeFrom)
-
-        output = []
-
-        for i in range(timeFrom, timeTo, duration):
-            output.append(resetTimeFormat(math.floor(i / 60), i % 60))
-
-        return output
-
     # Query:
     service = Service.query.get(service_id)
 
@@ -426,8 +429,8 @@ def get_dispo_hours(service_id):
 
         print(getDispo(schedule, duration))
 
-        return jsonify({"response": "ok"}), 200
-        # return jsonify(getDispo(schedule, duration)), 200
+        # return jsonify({"response": "ok"}), 200
+        return jsonify(getDispo(schedule, duration)), 200
 
     except IndexError as error:
         # Si está vacía, devuelve error
