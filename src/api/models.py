@@ -115,8 +115,8 @@ class Book(db.Model):
         return {
             "id": self.id,
             "service_id": self.service_id,
-            "date" : self.date.strftime("%-d/%-m/%Y"),
-            "time" : self.time.strftime("%-H:%M")
+            "date" : self.date.strftime("%d/%m/%Y"),
+            "time" : self.time.strftime("%H:%M")
         }
 
 
