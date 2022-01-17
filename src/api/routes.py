@@ -9,11 +9,14 @@ import cloudinary.uploader
 import os
 from sqlalchemy import and_
 
+import math
+import pytz
+
+
 #para la autenticación y generar el token
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import get_jwt_identity
 from flask_jwt_extended import jwt_required
-
 
 api = Blueprint('api', __name__)
 
@@ -29,7 +32,7 @@ def get_services():
 
     return jsonify(all_services), 200
 
-# CREATE A SERVICES
+# CREATE A SERVICE
 @api.route('/services', methods=['POST'])
 @jwt_required()
 def create_service():
@@ -70,16 +73,6 @@ def create_service():
             new_service = Service(name = body_service["name"], price = body_service["price"], description = body_service["description"], duration = body_service["duration"], is_active = body_service["is_active"])
         else:
             new_service = Service(name = body_service["name"], price = body_service["price"], description = body_service["description"], duration = body_service["duration"], is_active = body_service["is_active"], sku = body_service["sku"])
-            # Get the schedule and open days
-            business = Business.query.all()[0].serialize()
-            schedule = business["schedule"]
-            weekdays = business["weekdays"]
-
-            timeFrom = schedule.split(',')[0]
-            timeTo = schedule.split(',')[1]
-            weekdaysList = weekdays.split(',')
-            print(f"from {timeFrom} to {timeTo}, the days: {weekdaysList}")
-            # math.floor()
 
     db.session.add(new_service)
     db.session.commit()
@@ -321,7 +314,7 @@ def get_business_info():
 
     except IndexError as error:
         # Si está vacía, devuelve error
-        raise APIException("Business doesn't exists", status_code=404).query.all()[0]
+        raise APIException("Business doesn't exists", status_code=404)
 
 
 # MODIFY THE BUSINESS
@@ -370,3 +363,73 @@ def modify_business_info():
 
     db.session.commit()
     return jsonify(business.serialize()), 200
+
+# GET DISPO HOURS OF SERVICE WITH sevice_id
+@api.route('/services/<int:service_id>/hours', methods=['GET'])
+def get_dispo_hours(service_id):
+    """
+    Service hours dispo
+    """
+
+    # FUNCTIONS:
+    def resetTimeFormat(hours, minutes):
+        '''
+        Function to add 0 if < 10
+            example input: 
+                - hours (integer): 7
+                - minutes (integer): 5
+            output (string) >>> "07:05"
+        '''
+        hours = str(hours)
+        minutes = str(minutes)
+        outputList = []
+        for i in [hours, minutes]:
+            if len(i) == 1:
+                outputList.append('0' + i)
+            else: outputList.append(i)
+
+        return f"{outputList[0]}:{outputList[1]}"
+
+    def getDispo(schedule, duration):
+        '''
+            Example input:
+                - schedule (array of [open, close]): ["10:00", "20:00"]
+                - duration (integer, in minutes): 45
+
+            output (array of strings) >>> ['10:00', '10:45', '11:30', '12:15', '13:00', '13:45', '14:30', '15:15', '16:00', '16:45', '17:30', '18:15', '19:00', '19:45']
+        '''
+
+        timeFrom = int(schedule[0].split(':')[0]) * 60 + int(schedule[0].split(':')[1])
+        timeTo = int(schedule[1].split(':')[0]) * 60 + int(schedule[1].split(':')[1])
+        timeInterval = (timeTo - timeFrom)
+
+        output = []
+
+        for i in range(timeFrom, timeTo, duration):
+            output.append(resetTimeFormat(math.floor(i / 60), i % 60))
+
+        return output
+
+    # Query:
+    service = Service.query.get(service_id)
+
+    # Data validation
+    if service is None:
+        raise APIException('Service not found in data base', status_code=404)
+
+    # Get the schedule and open days (weekdays)
+    try:
+        # Intenta obtener el horario y la duración
+        schedule = Business.query.all()[0].serialize()["schedule"].split(',')
+        duration = service.duration
+        # weekdays = business["weekdays"].split(',')
+
+        print(getDispo(schedule, duration))
+
+        return jsonify({"response": "ok"}), 200
+        # return jsonify(getDispo(schedule, duration)), 200
+
+    except IndexError as error:
+        # Si está vacía, devuelve error
+        raise APIException("Business doesn't exists", status_code=404)
+
