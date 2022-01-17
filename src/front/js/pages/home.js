@@ -1,5 +1,6 @@
 import React, { useEffect, useContext } from "react";
 import { ServiceCard } from "../component/home_components/service_card";
+import { Panel } from "../component/home_components/panel";
 import { Carrousel } from "../component/home_components/carrousel";
 import { Context } from "../store/appContext";
 import "../../styles/pages/home.scss";
@@ -15,8 +16,8 @@ export const Home = () => {
 	return (
 		<div className="container-fluid view">
 			<div className="row">
-				<div className="mx-auto col-md-12 col-xl-5">
-					<Carrousel />
+				<div className="mx-auto col-md-12 col-xl-5 py-4">
+					<Panel />
 				</div>
 				<div className="mx-auto col-md-12 col-xl-5">
 					<h1 className="text-center pt-5">Health inside!</h1>
