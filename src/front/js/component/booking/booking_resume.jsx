@@ -10,8 +10,8 @@ export const Booking_resume = () => {
 				<div className="modal-content">
 					<div className="modal-header">
 						<h5 className="modal-title">
-							{store.products.map(item => {
-								if (store.booking.product_id == item.id) return item.name;
+							{store.services.map(item => {
+								if (store.booking.service_id == item.id) return item.name;
 							})}
 						</h5>
 					</div>
@@ -21,12 +21,14 @@ export const Booking_resume = () => {
 					</div>
 					<div className="modal-footer">
 						<button onClick={() => actions.goToPrevPopup()} type="button" className="btn btn-secondary">
-							Cerrar
+							Volver
 						</button>
 						<button
 							onClick={() => {
-								store.products.map(item => {
-									if (item.id == store.booking.product_id) {
+								// store.products.map(item => {
+								// 	if (item.id == store.booking.product_id) {
+								store.services.map(item => {
+									if (item.id == store.booking.id) {
 										let sku = item.sku;
 
 										actions.reservar(sku);
@@ -37,7 +39,7 @@ export const Booking_resume = () => {
 							className="btn btn-success"
 							id="checkout-button-sku_KvCUm3AeHMjmrk"
 							role="link">
-							RESERVAR
+							Pagar
 						</button>
 					</div>
 					<div id="error-message" />

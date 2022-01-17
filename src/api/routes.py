@@ -2,7 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User, Product , Dispo ,Book
+from api.models import db, User, Service, Dispo, Book, Business
 from api.utils import generate_sitemap, APIException
 import cloudinary
 import cloudinary.uploader
@@ -75,107 +75,133 @@ def create_booking(dispo_id, user_id):
 def get_products():
 
    
-    """
-    All Products
-    """
-    products = Product.query.all()
-    all_products = list(map(lambda x: x.serialize(), products))
+# GET ALL SERVICES
+@api.route('/services', methods=['GET'])
+def get_services():
 
-    return jsonify(all_products), 200
+    """
+    All services
+    """
+    services = Service.query.all()
+    all_services = list(map(lambda x: x.serialize(), services))
 
-# CREATE A PRODUCT
-@api.route('/products', methods=['POST'])
+    return jsonify(all_services), 200
+
+# CREATE A SERVICES
+@api.route('/services', methods=['POST'])
 @jwt_required()
-def create_product():
+def create_service():
     """
-    All Products
+    All Services
     """
 
     # Admin validation
     current_user_id = get_jwt_identity() # obtiene el id del usuario asociado al token (id == sub en jwt decode)
     user = User.query.get(current_user_id)
     if user.serialize()["is_admin"] == False:
-        raise APIException('Error de identificación', status_code=404)
+        raise APIException('Error de identificación', status_code=401)
     
-    body_product = request.json
+    body_service = request.json
 
     # Data validation
-    if body_product is None:
+    if body_service is None:
         raise APIException("You need to specify the request body as a json object", status_code=400)
-    if 'name' not in body_product or body_product['name'] == "" or body_product['name'] == None:
+    if 'name' not in body_service or body_service['name'] == "" or body_service['name'] == None:
         raise APIException('You need to specify the name', status_code=400)
-    elif len(body_product['name']) > 120:
+    elif len(body_service['name']) > 120:
         return jsonify({"message": "El nombre no puede superar los 120 caracteres"}), 400
-    if 'price' not in body_product or body_product['price'] == "" or body_product['price'] == None:
+    if 'price' not in body_service or body_service['price'] == "" or body_service['price'] == None:
         raise APIException('You need to specify the price', status_code=400)
-    if 'description' not in body_product or body_product['description'] == "" or body_product['description'] == None:
+    if 'description' not in body_service or body_service['description'] == "" or body_service['description'] == None:
         raise APIException('You need to create a description', status_code=400)
-    elif len(body_product['description']) > 1000:
+    elif len(body_service['description']) > 1000:
         return jsonify({"message": "La descripción no puede superar los 1000 caracteres"}), 400
-    if 'duration' not in body_product or body_product['duration'] == "" or body_product['duration'] == None:
+    if 'duration' not in body_service or body_service['duration'] == "" or body_service['duration'] == None:
         raise APIException('You need to specify the duration', status_code=400)
+    if 'is_active' not in body_service or body_service['is_active'] == "" or body_service['is_active'] == None:
+        if 'sku' not in body_service or body_service['sku'] == "" or body_service['sku'] == None:
+            new_service = Service(name = body_service["name"], price = body_service["price"], description = body_service["description"], duration = body_service["duration"])
+        else:
+            new_service = Service(name = body_service["name"], price = body_service["price"], description = body_service["description"], duration = body_service["duration"], sku = body_service["sku"])
+    else:
+        if 'sku' not in body_service or body_service['sku'] == "" or body_service['sku'] == None:
+            new_service = Service(name = body_service["name"], price = body_service["price"], description = body_service["description"], duration = body_service["duration"], is_active = body_service["is_active"])
+        else:
+            new_service = Service(name = body_service["name"], price = body_service["price"], description = body_service["description"], duration = body_service["duration"], is_active = body_service["is_active"], sku = body_service["sku"])
+            # Get the schedule and open days
+            business = Business.query.all()[0].serialize()
+            schedule = business["schedule"]
+            weekdays = business["weekdays"]
 
-    new_product = Product(name = body_product["name"], price = body_product["price"], description = body_product["description"], duration = body_product["duration"])
-    db.session.add(new_product)
+            timeFrom = schedule.split(',')[0]
+            timeTo = schedule.split(',')[1]
+            weekdaysList = weekdays.split(',')
+            print(f"from {timeFrom} to {timeTo}, the days: {weekdaysList}")
+
+    db.session.add(new_service)
     db.session.commit()
-    return jsonify(new_product.serialize()), 200
+    return jsonify(new_service.serialize()), 200
 
-# MODIFY OR DELETE A PRODUCT BY id
-@api.route('/products/<int:product_id>', methods=['PUT', 'DELETE'])
+# MODIFY OR DELETE A SERVICE BY id
+@api.route('/services/<int:service_id>', methods=['PUT', 'DELETE'])
 @jwt_required() # Cuando se recive una peticion, se valida que exista ese token y que sea valido
-def handle_single_product(product_id):
+def handle_single_service(service_id):
     """
-    Single product
+    Single service
     """
 
     # Admin validation
     current_user_id = get_jwt_identity() # obtiene el id del usuario asociado al token (id == sub en jwt decode)
     user = User.query.get(current_user_id)
     if user.serialize()["is_admin"] == False:
-        raise APIException('Error de identificación', status_code=404)
+        raise APIException('Error de identificación', status_code=401)
 
-    product = Product.query.get(product_id)
+    service = Service.query.get(service_id)
 
     # Data validation
-    if product is None:
-        raise APIException('Product not found in data base', status_code=404)
+    if service is None:
+        raise APIException('Service not found in data base', status_code=404)
         
-    # Modify (PUT) a product
+    # Modify (PUT) a service
     if request.method == 'PUT':
         request_body = request.json
 
         # Check body's info
         if "name" in request_body:
-            product.name = request_body["name"]
+            service.name = request_body["name"]
         if "price" in request_body:
-            product.price = request_body["price"]
+            service.price = request_body["price"]
         if "description" in request_body:
-            product.description = request_body["description"]
+            service.description = request_body["description"]
         if "duration" in request_body:
-            product.duration = request_body["duration"]
+            service.duration = request_body["duration"]
+        if "is_active" in request_body:
+            service.is_active = request_body["is_active"]
+        if "sku" in request_body:
+            service.sku = request_body["sku"]
 
         db.session.commit()
-        return jsonify(product.serialize()), 200
+        return jsonify(service.serialize()), 200
     
-    # DELETE a product
+    # DELETE a service
     elif request.method == 'DELETE':
-        db.session.delete(product)
+        db.session.delete(service)
         db.session.commit()
-        return jsonify({"message": "The product has been deleted"}), 200
+        return jsonify({"message": "The service has been deleted"}), 200
 
-# GET A PRODUCT
-@api.route('/products/<int:product_id>', methods=['GET'])
-def get_product(product_id):
+# GET A SERVICE
+@api.route('/services/<int:service_id>', methods=['GET'])
+def get_service(service_id):
     """
-    Single product
+    Single service
     """
-    product = Product.query.get(product_id)
+    service = Service.query.get(service_id)
 
     # Data validation
-    if product is None:
-        raise APIException('Product not found in data base', status_code=404)
+    if service is None:
+        raise APIException('Service not found in data base', status_code=404)
 
-    return jsonify(product.serialize()), 200
+    return jsonify(service.serialize()), 200
         
 #CREATE NEW USER
 @api.route('/users', methods=['POST'])
@@ -226,7 +252,7 @@ def get_all_users():
     current_user_id = get_jwt_identity() # obtiene el id del usuario asociado al token (id == sub en jwt decode)
     user = User.query.get(current_user_id)
     if user.serialize()["is_admin"] == False:
-        raise APIException('Error de identificación', status_code=404)
+        raise APIException('Error de identificación', status_code=401)
     
     all_users = sorted(User.query.all(), key = lambda user: user.serialize()["name"].lower())
     all_clients = [user.serialize() for user in all_users if not user.serialize()["is_admin"]]
@@ -305,16 +331,103 @@ def handle_single_user():
     return jsonify({"message": "Invalid Method"}), 404
 
 
- # GET AVAILABILITY OF A PRODUCT
-@api.route('/dispo/<product_name>', methods=['GET'])
-def get_product_dispo(product_name):
+# GET AVAILABILITY OF A SERVICE
+@api.route('/dispo/<service_name>', methods=['GET'])
+def get_service_dispo(service_name):
 
-    #buscamos el producto en la tabla de productos
-    product_query = Product.query.filter_by(name = product_name).all()
-    product= list(map(lambda x: x.serialize(), product_query))
-    product_id = product[0]['id']
+    # buscamos el servicio en la tabla de servicios
+    service_query = Service.query.filter_by(name = service_name).all()
+    service= list(map(lambda x: x.serialize(), service_query))
+    service_id = service[0]['id']
 
     #buscamos la disponibilidad del producto con id = product_id y available true
     product_dispo = Dispo.query.filter(and_(Dispo.product_id == product_id , Dispo.available == True)).all()
     all_days_dispo= list(map(lambda x: x.serialize(), product_dispo))
     return jsonify(all_days_dispo)
+    # buscamos la disponibilidad del servicio con id = service_id y available true
+    service_dispo = Dispo.query.filter(and_(Dispo.service_id == service_id , Dispo.available == True)).all()
+    all_days_dispo= list(map(lambda x: x.serialize(), service_dispo))
+    return jsonify(all_days_dispo)
+    
+
+
+# CREATE NEW BOOKING
+@api.route('/book/<int:dispo_id>/<int:user_id>', methods=['POST'])
+@jwt_required() 
+ # ⚠️ si ponemos @jwt_required()  no nos funciona y debe ser porque al pasar por stripe no coge el token
+def create_booking(dispo_id, user_id):
+    # change is_available to False in Dispo
+    dispo = Dispo.query.get(dispo_id)
+    dispo.available = False
+    db.session.commit()
+  
+
+    # Create a new booking
+    new_booking = Book(user_id = user_id , date = dispo.date , time = dispo.time, service = dispo.service)
+    db.session.add(new_booking)
+    db.session.commit()
+    return jsonify({"message": "Su reserva ha sido Confirmada"}), 200
+   
+
+# GET BUSINESS INFO
+@api.route('/business', methods=['GET'])
+def get_business_info():
+    """
+    Business info
+    """
+    try:
+        # Intenta obtener la tabla de negocio
+        business = Business.query.all()[0]
+        return jsonify(business.serialize()), 200
+
+    except IndexError as error:
+        # Si está vacía, devuelve error
+        raise APIException("Business doesn't exists", status_code=404).query.all()[0]
+
+
+# MODIFY THE BUSINESS
+@api.route('/business', methods=['PUT'])
+@jwt_required() # Cuando se recive una peticion, se valida que exista ese token y que sea valido
+def modify_business_info():
+    """
+    Business info
+    """
+    # Admin validation
+    current_user_id = get_jwt_identity() # obtiene el id del usuario asociado al token (id == sub en jwt decode)
+    user = User.query.get(current_user_id)
+    if user.serialize()["is_admin"] == False:
+        raise APIException('Error de identificación', status_code=401)
+
+    try:
+        # Intenta obtener la tabla de negocio
+        business = Business.query.all()[0]
+
+    except IndexError as error:
+        # Si está vacía, crea un negocio primero
+        new_business = Business()
+        db.session.add(new_business)
+        db.session.commit()
+
+        # Ahora sí puedes obtener el negocio
+        business = Business.query.all()[0]
+
+    request_body = request.json
+
+    # Check body's info
+    if "address" in request_body:
+        business.address = request_body["address"]
+    if "phone" in request_body:
+        business.phone = request_body["phone"]
+    if "weekdays" in request_body:
+        business.weekdays = request_body["weekdays"]
+    if "schedule" in request_body:
+        business.schedule = request_body["schedule"]
+    if "fb_url" in request_body:
+        business.fb_url = request_body["fb_url"]
+    if "ig_url" in request_body:
+        business.ig_url = request_body["ig_url"]
+    if "twitter_url" in request_body:
+        business.twitter_url = request_body["twitter_url"]
+
+    db.session.commit()
+    return jsonify(business.serialize()), 200

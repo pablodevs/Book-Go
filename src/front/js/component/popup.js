@@ -3,10 +3,10 @@ import { Context } from "../store/appContext.js";
 import { Login } from "./login/login.js";
 import { Signup } from "./login/signup.js";
 import { Guest } from "./login/guest.js";
-import { ProductsPopup } from "./booking/productsPopup.js";
+import { ServicesPopup } from "./booking/servicesPopup.js";
 import { Calendar } from "./booking/calendar/calendar.js";
 import { EditInput } from "./admin/popups/editInput.js";
-import { AddProduct } from "./admin/popups/addProduct.js";
+import { AddService } from "./admin/popups/addService.js";
 import { ConfirmPopup } from "./confirmPopup.js";
 import "../../styles/components/popup.scss";
 import { Booking_resume } from "./booking/booking_resume.jsx";
@@ -69,17 +69,17 @@ export const Popup = () => {
 				) : store.popup === "signup" ? (
 					<Signup />
 				) : store.popup === "booking" ? (
-					<ProductsPopup />
+					<ServicesPopup />
 				) : store.popup === "calendar" ? (
 					<Calendar />
 				) : store.popup === "resume" ? (
 					<Booking_resume />
 				) : store.popup === "guest" ? (
 					<Guest />
-				) : store.popup === "edit-product" ? (
+				) : store.popup === "edit-service" ? (
 					<EditInput input={store.popupTitle.split(" ")[store.popupTitle.split(" ").length - 1]} />
-				) : store.popup === "add-product" ? (
-					<AddProduct />
+				) : store.popup === "add-service" ? (
+					<AddService />
 				) : store.popup === "confirm" ? (
 					<ConfirmPopup />
 				) : null}

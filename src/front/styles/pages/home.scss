@@ -1,5 +1,5 @@
 
-.product-card.card-background::after {
+.service-card.card-background::after {
     content: '';
     position: absolute;
     background-image: linear-gradient(0deg, #000000bd, #00000057, #0000001f 54%, transparent 100%);
@@ -7,7 +7,7 @@
     height: 100%;
 }
 
-.product-card .card-body {
+.service-card .card-body {
     position: absolute;
     bottom: -31%;
     transition: all 0.3s ease-out;
@@ -37,7 +37,7 @@
     }
 }
 
-.product-card .card-text {
+.service-card .card-text {
     flex: 1;
     overflow-y: hidden;
     color: transparent;
@@ -51,7 +51,7 @@
     margin-bottom: 0.3rem;
 }
 
-.product-card:hover .card-body {
+.service-card:hover .card-body {
     bottom: 0;
     & .card-title::after {
         transform: scaleX(100%);

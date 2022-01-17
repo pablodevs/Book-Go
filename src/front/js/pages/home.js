@@ -1,5 +1,5 @@
 import React, { useEffect, useContext } from "react";
-import { Product_card } from "../component/home_components/product_card";
+import { ServiceCard } from "../component/home_components/service_card";
 import { Carrousel } from "../component/home_components/carrousel";
 import { Context } from "../store/appContext";
 import "../../styles/pages/home.scss";
@@ -8,7 +8,8 @@ export const Home = () => {
 	const { actions, store } = useContext(Context);
 
 	useEffect(() => {
-		actions.get_products();
+		actions.get_services();
+		actions.getBusinessInfo();
 	}, []);
 
 	return (
@@ -33,13 +34,16 @@ export const Home = () => {
 			</div>
 
 			<div className="container-fluid my-5 mx-auto">
-				{store.products.length > 0 ? (
+				{store.services.length > 0 ? (
 					<div className="row gap-5 justify-content-center">
-						{store.products.map((item, index) => (
-							<div className="col-auto" key={index}>
-								<Product_card product={item} />
-							</div>
-						))}
+						{store.services.map((item, index) => {
+							if (item.is_active)
+								return (
+									<div className="col-auto" key={index}>
+										<ServiceCard service={item} />
+									</div>
+								);
+						})}
 					</div>
 				) : (
 					""

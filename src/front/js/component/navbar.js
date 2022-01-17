@@ -78,7 +78,7 @@ export const Navbar = () => {
 						Reservar
 					</NavLink>
 					<NavLink className="_navbar-link" to="#" onClick={() => setNavMenu(false)}>
-						Productos
+						Servicios
 					</NavLink>
 					<NavLink className="_navbar-link" to="#" onClick={() => setNavMenu(false)}>
 						Contacto

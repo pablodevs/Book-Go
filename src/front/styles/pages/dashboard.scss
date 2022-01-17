@@ -223,11 +223,6 @@ button.clear-input, .edit-input {
     color: $--color-blue-dark
 }
 
-.input-button {
-    background-color: $--color-blue-light;
-    &:hover { background-color: $--color-blue-lighter }
-}
-
 .save-button, .book-again-btn {
     box-shadow: inset 0 0 0 2px $--color-blue-dark;
     border-radius: 20px;

@@ -28,9 +28,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 			popupFunct: () => undefined,
 			prevPopup: [],
 
-			new_product: {},
-			products: [],
-			// oneProduct: [],
+			new_service: {},
+			services: [],
+			// oneService: [],
 
 			token: null,
 			user: {
@@ -43,19 +43,19 @@ const getState = ({ getStore, getActions, setStore }) => {
 				is_admin: false
 			},
 
-			socialMedia: {
-				facebook: "https://facebook.com/spa-center",
-				instagram: "https://instagram.com/spa-center",
-				twitter: "https://twitter.com/spa-center"
+			business: {
+				id: "",
+				address: "",
+				phone: "",
+				schedule: "",
+				weekdays: [],
+				fb_url: "",
+				ig_url: "",
+				twitter_url: ""
 			}
 		},
 
 		actions: {
-			//BOOKING
-			booking: data => {
-				let store = getStore();
-				setStore({ booking: data });
-			},
 			// Force render without change data
 			forceRender: () => setStore({}),
 
@@ -83,11 +83,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
-			// Cambia el popups
-			setPopup: async (type, title, productName, funct = null) => {
-				if (productName) {
-					//si recibe productname entonces busca la disponibilidad de días y horas de ese producto
-					await fetch(process.env.BACKEND_URL + `/dispo/${productName}`)
+			// Cambia los popups
+			setPopup: async (type, title, serviceName, funct = null) => {
+				if (serviceName) {
+					//si recibe servicename entonces busca la disponibilidad de días y horas de ese servicio
+					await fetch(process.env.BACKEND_URL + `/dispo/${serviceName}`)
 						.then(response => {
 							// console.log(response.ok);
 							// console.log(response.status);
@@ -122,6 +122,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 				});
 			}, // Te lleva al popup anterior
 
+			//BOOKING
+			booking: data => {
+				setStore({ booking: data });
+			},
 			// Meto todas las acciones del componente calendario en calendarActions:
 			calendarActions: {
 				//cambia la variable del store booking_day
@@ -175,16 +179,16 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
-			//get all products
-			get_products: async () => {
-				await fetch(process.env.BACKEND_URL + "/products")
+			//get all services
+			get_services: async () => {
+				await fetch(process.env.BACKEND_URL + "/services")
 					.then(response => response.json())
-					.then(data => setStore({ products: data }))
+					.then(data => setStore({ services: data }))
 					.catch(error => console.error(error));
 			},
 
-			// create a product
-			addProduct: async data => {
+			// create a service
+			addService: async data => {
 				const store = getStore();
 				const actions = getActions();
 				const options = {
@@ -196,15 +200,15 @@ const getState = ({ getStore, getActions, setStore }) => {
 					body: JSON.stringify(data)
 				};
 				try {
-					const response = await fetch(process.env.BACKEND_URL + "/products", options);
+					const response = await fetch(process.env.BACKEND_URL + "/services", options);
 					const resp = await response.json();
 					if (!response.ok) {
 						setStore({ message: resp.message });
 						throw Error(response);
 					}
 					setStore({
-						products: [...store.products, resp],
-						new_product: resp
+						services: [...store.services, resp],
+						new_service: resp
 					});
 					actions.closePopup();
 					return resp;
@@ -213,14 +217,14 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
-			resetNewProduct: () => setStore({ new_product: {} }),
+			resetNewService: () => setStore({ new_service: {} }),
 
-			// eliminar producto
-			removeProduct: async id => {
+			// eliminar servicio
+			removeService: async id => {
 				const actions = getActions();
 				const store = getStore();
 				try {
-					const response = await fetch(process.env.BACKEND_URL + `/products/${id}`, {
+					const response = await fetch(process.env.BACKEND_URL + `/services/${id}`, {
 						method: "DELETE",
 						headers: {
 							Authorization: "Bearer " + store.token
@@ -231,11 +235,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 						setStore({ message: resp.message });
 						throw Error(response);
 					}
-					let remainProducts = store.products.filter(element => element.id !== id);
+					let remainServices = store.services.filter(element => element.id !== id);
 					setStore({
-						products: remainProducts
+						services: remainServices
 					});
-					actions.resetNewProduct();
+					actions.resetNewService();
 					actions.closePopup();
 					return resp;
 				} catch (err) {
@@ -243,8 +247,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
-			//Change ONE product
-			updateProduct: async data => {
+			// Change ONE service
+			updateService: async data => {
 				const store = getStore();
 				const options = {
 					method: "PUT",
@@ -255,22 +259,24 @@ const getState = ({ getStore, getActions, setStore }) => {
 					}
 				};
 				try {
-					const response = await fetch(process.env.BACKEND_URL + `/products/${data.id}`, options);
+					const response = await fetch(process.env.BACKEND_URL + `/services/${data.id}`, options);
 					const resp = await response.json();
 					if (!response.ok) {
 						setStore({ message: resp.message });
 						throw Error(response);
 					}
-					let storeAux = store.products.filter(element => element.id !== data.id);
+					let storeAux = store.services.filter(element => element.id !== data.id);
 					setStore({
-						products: [
+						services: [
 							...storeAux,
 							{
 								id: resp.id,
 								name: resp.name,
 								price: resp.price,
 								description: resp.description,
-								duration: resp.duration
+								duration: resp.duration,
+								is_active: resp.is_active,
+								sku: resp.sku
 							}
 						]
 					});
@@ -285,9 +291,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 				// });
 			},
 
-			// get ONE product
-			// getProduct: async id => {
-			// 	await fetch(process.env.BACKEND_URL + `/products/${id}`)
+			// get ONE service
+			// getService: async id => {
+			// 	await fetch(process.env.BACKEND_URL + `/services/${id}`)
 			// 		.then(response => {
 			// 			console.log(response.ok);
 			// 			console.log(response.status);
@@ -295,7 +301,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			// 		})
 			// 		.then(data => {
 			// 			console.log(data);
-			// 			setStore({ oneProduct: data });
+			// 			setStore({ oneService: data });
 			// 		})
 			// 		.catch(error => console.error(error));
 			// },
@@ -521,6 +527,111 @@ const getState = ({ getStore, getActions, setStore }) => {
 							displayError.textContent = result.error.message;
 						}
 					});
+			},
+
+			// Admin Schedule:
+			setActiveWeekDay: weekday => {
+				const business = getStore().business;
+				if (weekday === "all")
+					setStore({
+						business: {
+							...business,
+							weekdays: ["L", "M", "X", "J", "V", "S", "D"]
+						}
+					});
+				else if (weekday === "L-V")
+					setStore({
+						business: {
+							...business,
+							weekdays: ["L", "M", "X", "J", "V"]
+						}
+					});
+				else if (weekday === "0")
+					setStore({
+						business: {
+							...business,
+							weekdays: []
+						}
+					});
+				else if (business.weekdays.includes(weekday)) {
+					let remainWeekDays = business.weekdays.filter(element => element !== weekday);
+					setStore({
+						business: {
+							...business,
+							weekdays: remainWeekDays
+						}
+					});
+				} else
+					setStore({
+						business: {
+							...business,
+							weekdays: [...business.weekdays, weekday]
+						}
+					});
+			},
+
+			// Obtiene los horarios, redes sociales, teléfono, etc
+			getBusinessInfo: async () => {
+				try {
+					const response = await fetch(process.env.BACKEND_URL + "/business");
+					const resp = await response.json();
+					if (!response.ok) {
+						setStore({ message: resp.message });
+						throw Error(response);
+					}
+					setStore({
+						business: {
+							id: resp.id,
+							name: resp.name,
+							address: resp.address,
+							phone: resp.phone,
+							schedule: resp.schedule,
+							weekdays: resp.weekdays.split(","),
+							fb_url: resp.fb_url,
+							ig_url: resp.ig_url,
+							twitter_url: resp.twitter_url
+						}
+					});
+					return resp;
+				} catch (err) {
+					console.error(err);
+				}
+			},
+
+			// Cambia horarios, redes sociales, teléfono, etc
+			updateBusinessInfo: async data => {
+				const store = getStore();
+				try {
+					const response = await fetch(process.env.BACKEND_URL + "/business", {
+						method: "PUT",
+						body: JSON.stringify(data),
+						headers: {
+							"Content-Type": "application/json",
+							Authorization: "Bearer " + store.token
+						}
+					});
+					const resp = await response.json();
+					if (!response.ok) {
+						setStore({ message: resp.message });
+						throw Error(response);
+					}
+					setStore({
+						business: {
+							id: resp.id,
+							name: resp.name,
+							address: resp.address,
+							phone: resp.phone,
+							schedule: resp.schedule,
+							weekdays: resp.weekdays.split(","),
+							fb_url: resp.fb_url,
+							ig_url: resp.ig_url,
+							twitter_url: resp.twitter_url
+						}
+					});
+					return resp;
+				} catch (err) {
+					return err.json();
+				}
 			}
 		}
 	};

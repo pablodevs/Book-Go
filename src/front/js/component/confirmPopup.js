@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { Context } from "../store/appContext";
 
-export const ConfirmPopup = props => {
+export const ConfirmPopup = () => {
 	const { actions, store } = useContext(Context);
 
 	return (

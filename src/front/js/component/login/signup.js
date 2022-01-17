@@ -26,8 +26,8 @@ export const Signup = () => {
 	};
 
 	return (
-		<div className="container-fluid my-auto mb-md-auto mt-md-4">
-			<div className="row">
+		<div className="container-fluid popup-container">
+			<div className="row popup-row">
 				<form onSubmit={submitForm} className="col mx-4 mb-4" style={{ display: "grid", gap: "1rem" }}>
 					<input
 						autoFocus
@@ -85,14 +85,18 @@ export const Signup = () => {
 						name="password"
 						placeholder="password"
 					/>
-
-					<input
-						type="file"
-						// accept=".jpg/.png"
-						onChange={e => {
-							setFiles(e.target.files);
-						}}
-					/>
+					<label htmlFor="profileImg" className="input-button">
+						<input
+							type="file"
+							id="profileImg"
+							accept=".jpg, .jpeg, .png"
+							onChange={e => {
+								setFiles(e.target.files);
+							}}
+						/>
+						<i className="fas fa-camera" />
+						Añade una imagen de perfil
+					</label>
 					<button className="btn btn-warning w-100" type="submit">
 						Únete
 					</button>
