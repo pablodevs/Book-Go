@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "../../styles/components/footer.scss";
 
 export const Footer = () => (
@@ -50,8 +50,10 @@ export const Footer = () => (
 						</li>
 					</ul>
 				</div>
+			</div>
+			<div className="row justify-content-center">
 				{/* Form to subscribe to newsletter */}
-				<div className="col">
+				<div className="col-md-3 py-3">
 					<form>
 						<h5>Subscribe to our newsletter</h5>
 						<p>Monthly digest of whats new and exciting from us.</p>
@@ -67,14 +69,6 @@ export const Footer = () => (
 							</button>
 						</div>
 					</form>
-				</div>
-				{/* Other column */}
-				<div className="col">
-					<h5>Boring Stuff</h5>
-					<p className="text-start">
-						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam euismod volutpat eros, sed
-						varius sapien eleifend ac. Maecenas odio urna, lacinia in purus molestie
-					</p>
 				</div>
 			</div>
 		</div>

@@ -173,7 +173,7 @@ export const Calendar = () => {
 									className="btn btn-success p-2 m-2"
 									key={index}
 									onClick={() => {
-										store.user.id
+										store.user.id !== ""
 											? (actions.setPopup("resume", "Resumen de su reserva"),
 											  actions.booking(item))
 											: (actions.setPopup("login", "Iniciar Sesión"), actions.booking(item));

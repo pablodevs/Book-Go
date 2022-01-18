@@ -405,7 +405,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						return resp;
 					}
 				} catch (err) {
-					return err.json();
+					return console.log(err);
 				}
 			},
 

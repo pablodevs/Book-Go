@@ -77,12 +77,12 @@ export const Navbar = () => {
 						}}>
 						Reservar
 					</NavLink>
-					<NavLink className="_navbar-link" to="#" onClick={() => setNavMenu(false)}>
+					{/* <NavLink className="_navbar-link" to="#" onClick={() => setNavMenu(false)}>
 						Servicios
 					</NavLink>
 					<NavLink className="_navbar-link" to="#" onClick={() => setNavMenu(false)}>
 						Contacto
-					</NavLink>
+					</NavLink> */}
 				</ul>
 			</nav>
 		</header>
