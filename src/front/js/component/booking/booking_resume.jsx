@@ -28,7 +28,7 @@ export const Booking_resume = () => {
 								// store.products.map(item => {
 								// 	if (item.id == store.booking.product_id) {
 								store.services.map(item => {
-									if (item.id == store.booking.id) {
+									if (item.id == store.booking.service_id) {
 										let sku = item.sku;
 
 										actions.reservar(sku);

@@ -309,22 +309,22 @@ const getState = ({ getStore, getActions, setStore }) => {
 			// Create NEW USER
 			createUser: async (data, files) => {
 				const actions = getActions();
-				// // we are about to send this to the backend.
-				// let body = new FormData();
-				// body.append("name", data.name);
-				// body.append("lastname", data.lastname);
-				// body.append("email", data.email);
-				// body.append("phone", data.phone);
-				// body.append("password", data.password);
-				// if (files !== null) {
-				// 	body.append("profile_image", files[0]);
-				// }
+				// we are about to send this to the backend.
+				let body = new FormData();
+				body.append("name", data.name);
+				body.append("lastname", data.lastname);
+				body.append("email", data.email);
+				body.append("phone", data.phone);
+				body.append("password", data.password);
+				if (files !== null) {
+					body.append("profile_image", files[0]);
+				}
 				const options = {
 					method: "POST",
 					headers: {
 						"Content-type": "application/json"
 					},
-					body: JSON.stringify(data)
+					body: JSON.stringify(body)
 				};
 				const response = await fetch(process.env.BACKEND_URL + "/users", options);
 				const resp = await response.json();

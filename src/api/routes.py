@@ -200,18 +200,18 @@ def create_user():
     if 'password' not in body_user or body_user['password'] == "" or body_user['password'] == None:
         raise APIException('You need to specify the password', status_code=400)
         # validate that the front-end request was built correctly
-    # if 'profile_image' in request.files:
-    #     # upload file to uploadcare
-    #     cloudinary.config( 
-    #     cloud_name = os.getenv('CLOUD_NAME'), 
-    #     api_key = os.getenv('API_KEY'), 
-    #     api_secret = os.getenv('API_SECRET') 
-    #     )
-    # cloudinary_result = cloudinary.uploader.upload(request.files['profile_image'])
+    if 'profile_image' in request.files:
+        # upload file to uploadcare
+        cloudinary.config( 
+        cloud_name = os.getenv('CLOUD_NAME'), 
+        api_key = os.getenv('API_KEY'), 
+        api_secret = os.getenv('API_SECRET') 
+        )
+    cloudinary_result = cloudinary.uploader.upload(request.files['profile_image'])
 
     new_user = User(name = body_user["name"], lastname = body_user["lastname"], email = body_user["email"], phone = body_user["phone"], password = body_user["password"])
     # update the user with the given cloudinary image URL
-    # user.profile_image_url = cloudinary_result['secure_url']
+    user.profile_image_url = cloudinary_result['secure_url']
 
     db.session.add(new_user)
     db.session.commit()
@@ -318,7 +318,7 @@ def get_service_dispo(service_name):
     service_id = service[0]['id']
 
     #buscamos la disponibilidad del producto con id = product_id y available true
-    product_dispo = Dispo.query.filter(and_(Dispo.product_id == product_id , Dispo.available == True)).all()
+    product_dispo = Dispo.query.filter(and_(Dispo.service_id == service_id , Dispo.available == True)).all()
     all_days_dispo= list(map(lambda x: x.serialize(), product_dispo))
     return jsonify(all_days_dispo)
     # buscamos la disponibilidad del servicio con id = service_id y available true
@@ -338,15 +338,19 @@ def create_booking(dispo_id, user_id):
 
 
     # Create a new booking
-    new_booking = Book(user_id = user_id , date = dispo.date , time = dispo.time, product = dispo.product)
+    new_booking = Book(user_id = user_id , date = dispo.date , time = dispo.time, service = dispo.service)
     db.session.add(new_booking)
     db.session.commit()
 
+
+    #buscamos el email del cliente
+    customer = User.query.get(user_id)
+    customer_email = customer.email
     # AHORA ENVIAMOS EL EMAIL DE CONFIRMACIÓN DE RESERVA
     msg = Message("Confirmación de reserva",sender="spa@jmanvel.com",
-                recipients=["jmanteca@jmanvel.com"])
+                recipients=[customer_email])
     msg.body = "testing body"
-    msg.html = "<html lang='es'><head><meta charset='UTF-8'><meta http-equiv='X-UA-Compatible' content='IE=edge'><meta name='viewport' content='width=device-width, initial-scale=1.0'></head><body><h1>Confirmación de Reserva</h1><div><p>Estimado cliente:</p><p>Le confirmamos su reserva de nuestro servicio de " + str(dispo.product) + " para el día " + str(dispo.date.strftime("%-d/%-m/%Y"),) + " a las " + str(dispo.time.strftime("%-H:%M")) + "  </p><p>Muchas gracias por confiar en nosotros.</p></div></body></html>"
+    msg.html = "<html lang='es'><head><meta charset='UTF-8'><meta http-equiv='X-UA-Compatible' content='IE=edge'><meta name='viewport' content='width=device-width, initial-scale=1.0'></head><body><h1>Confirmación de Reserva</h1><div><p>Estimado cliente:</p><p>Le confirmamos su reserva de nuestro servicio de " + str(dispo.service) + " para el día " + str(dispo.date.strftime("%-d/%-m/%Y"),) + " a las " + str(dispo.time.strftime("%-H:%M")) + "  </p><p>Muchas gracias por confiar en nosotros.</p></div></body></html>"
     mail.send(msg)
 
     return jsonify({"message": "Su reserva ha sido Confirmada"}), 200
