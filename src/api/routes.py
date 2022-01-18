@@ -208,12 +208,11 @@ def create_new_user():
         result = cloudinary.uploader.upload(request.files['profile_image'])
         # update the user with the given cloudinary image URL
         user.profile_image_url = result['secure_url']
-        db.session.add(user)
-        db.session.commit()
 
-        return jsonify(user.serialize()), 200
-    else:
-        raise APIException('Missing profile_image on the FormData or something fail')
+    db.session.add(user)
+    db.session.commit()
+
+    return jsonify(user.serialize()), 200
 
 
 # GET ALL USERS

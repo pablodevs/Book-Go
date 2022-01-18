@@ -13,11 +13,6 @@ export const Signup = () => {
 		password: ""
 	});
 
-	// const submitForm = event => {
-	// 	event.preventDefault();
-	// 	actions.createUser(data, files);
-	// };
-
 	const submitForm = event => {
 		event.preventDefault();
 
@@ -29,7 +24,7 @@ export const Signup = () => {
 		body.append("name", data.name);
 		body.append("lastname", data.lastname);
 		body.append("phone", data.phone);
-		body.append("profile_image", files[0]);
+		if (files) body.append("profile_image", files[0]);
 		actions.createUser(body);
 	};
 
