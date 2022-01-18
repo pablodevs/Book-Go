@@ -179,27 +179,24 @@ def get_service(service_id):
         raise APIException('Service not found in data base', status_code=404)
 
     return jsonify(service.serialize()), 200
-        
+
+
 #CREATE NEW USER
-@api.route('/users', methods=['POST'])
-def create_user():
+@api.route('/user', methods=['POST'])
+def create_new_user():
 
-    body_user = request.json
+    # fetch for the user
 
-    # Data validation
-    if body_user is None:
-        raise APIException("You need to specify the request body as a json object", status_code=400)
-    if 'name' not in body_user or body_user['name'] == "" or body_user['name'] == None:
-        raise APIException('You need to specify the name', status_code=400)
-    if 'lastname' not in body_user or body_user['lastname'] == "" or body_user['lastname'] == None:
-        raise APIException('You need to specify the lastname', status_code=400)
-    if 'email' not in body_user or body_user['email'] == "" or body_user['email'] == None:
-        raise APIException('You need to create a email', status_code=400)
-    if 'phone' not in body_user or body_user['phone'] == "" or body_user['phone'] == None:
-        raise APIException('You need to specify the phone', status_code=400)
-    if 'password' not in body_user or body_user['password'] == "" or body_user['password'] == None:
-        raise APIException('You need to specify the password', status_code=400)
-        # validate that the front-end request was built correctly
+    name_recieved = request.form.get("name", None)
+    lastname_recieved = request.form.get("lastname", None)
+    email_recieved = request.form.get("email", None)
+    phone_recieved = request.form.get("phone", None)
+    password_recieved = request.form.get("password", None)
+    user = User(email= email_recieved, password = password_recieved, name= name_recieved , lastname = lastname_recieved , phone = phone_recieved)
+ 
+    
+
+    # validate that the front-end request was built correctly
     if 'profile_image' in request.files:
         # upload file to uploadcare
         cloudinary.config( 
@@ -207,15 +204,16 @@ def create_user():
         api_key = os.getenv('API_KEY'), 
         api_secret = os.getenv('API_SECRET') 
         )
-    cloudinary_result = cloudinary.uploader.upload(request.files['profile_image'])
+  
+        result = cloudinary.uploader.upload(request.files['profile_image'])
+        # update the user with the given cloudinary image URL
+        user.profile_image_url = result['secure_url']
+        db.session.add(user)
+        db.session.commit()
 
-    new_user = User(name = body_user["name"], lastname = body_user["lastname"], email = body_user["email"], phone = body_user["phone"], password = body_user["password"])
-    # update the user with the given cloudinary image URL
-    user.profile_image_url = cloudinary_result['secure_url']
-
-    db.session.add(new_user)
-    db.session.commit()
-    return jsonify(new_user.serialize()), 200
+        return jsonify(user.serialize()), 200
+    else:
+        raise APIException('Missing profile_image on the FormData or something fail')
 
 
 # GET ALL USERS

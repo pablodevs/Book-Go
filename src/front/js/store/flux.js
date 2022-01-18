@@ -307,30 +307,21 @@ const getState = ({ getStore, getActions, setStore }) => {
 			// },
 
 			// Create NEW USER
-			createUser: async (data, files) => {
-				const actions = getActions();
-				// we are about to send this to the backend.
-				let body = new FormData();
-				body.append("name", data.name);
-				body.append("lastname", data.lastname);
-				body.append("email", data.email);
-				body.append("phone", data.phone);
-				body.append("password", data.password);
-				if (files !== null) {
-					body.append("profile_image", files[0]);
-				}
-				const options = {
+			createUser: async data => {
+				await fetch(process.env.BACKEND_URL + `/user`, {
 					method: "POST",
-					headers: {
-						"Content-type": "application/json"
-					},
-					body: JSON.stringify(body)
-				};
-				const response = await fetch(process.env.BACKEND_URL + "/users", options);
-				const resp = await response.json();
-				if (response.status === 401) return false;
-				actions.generate_token(data.email, data.password);
-				return resp;
+					body: data
+				})
+					.then(response => {
+						console.log(response.ok);
+						console.log(response.status);
+						return response.json();
+					})
+					.then(data => {
+						console.log(data);
+						setStore({ message: "Usuario creado Correctamente. Ya puede ir al login y acceder!" });
+					})
+					.catch(error => console.error(error));
 			},
 
 			// Update current USER

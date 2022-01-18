@@ -195,9 +195,9 @@ input.input-error, input.input-error:focus-visible {
     box-shadow: inset 0 0 0 2px red;
     border-color: transparent;
 }
-// input[type="file"] {
-//     display: none;
-// }
+input[type="file"] {
+    display: none;
+}
 .input-button {
     display: flex;
     gap: 0.5rem;
