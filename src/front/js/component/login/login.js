@@ -12,8 +12,8 @@ export const Login = () => {
 
 	useEffect(
 		() => {
-			if (store.user.id) {
-				store.user.is_admin ? history.push("/admin/welcome") : null;
+			if (store.user.id && store.user.is_admin) {
+				history.push("/admin/welcome");
 				actions.closePopup();
 			}
 		},
@@ -48,18 +48,7 @@ export const Login = () => {
 						placeholder="password"
 					/>
 					<button
-						onClick={() => {
-							actions.setToast(
-								"promise",
-								{ loading: "login...", success: () => "Bienvenido" },
-								actions.generate_token(email, password),
-								"toast-info"
-							);
-							// store.booking.id
-							// 	? (actions.setPopup("resume", "Resumen de la reserva"),
-							// 	  actions.generate_token(email, password))
-							// 	: actions.generate_token(email, password);
-						}}
+						onClick={() => actions.generate_token(email, password)}
 						className="btn btn-warning w-100"
 						type="submit">
 						Acceder
@@ -76,19 +65,15 @@ export const Login = () => {
 						</button>
 					</div>
 				</div>
-				{/* {store.token ? (
-					actions.closePopup()
-				) : (
-					<div>
-						{store.message != "" ? (
-							<div className="alert alert-danger" role="alert">
-								{store.message}
-							</div>
-						) : (
-							""
-						)}
-					</div>
-				)} */}
+				<div>
+					{store.message != "" ? (
+						<div className="alert alert-danger" role="alert">
+							{store.message}
+						</div>
+					) : (
+						""
+					)}
+				</div>
 			</div>
 		</div>
 	);

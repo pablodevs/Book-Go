@@ -59,9 +59,10 @@
     padding: 0.2rem;
 }
 .day {
+    background-color: rgba(74, 240, 74, 0.726);
     width: 100%;
     font-size: clamp(0.8rem, 5vw, 1.2rem);
-    background-color: white;
+    // background-color: white;
     aspect-ratio: 1;
     @media screen and (max-width: 767.9px) {
         border-radius: 0.3rem;
