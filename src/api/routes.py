@@ -45,34 +45,11 @@ mail = Mail(app)
 
 
 
-# CREATE NEW BOOKING
-@api.route('/book/<int:dispo_id>/<int:user_id>', methods=['POST'])
-@jwt_required()
-def create_booking(dispo_id, user_id):
-    # change is_available to False in Dispo
-    dispo = Dispo.query.get(dispo_id)
-    dispo.available = False
-    db.session.commit()
-
-
-    # Create a new booking
-    new_booking = Book(user_id = user_id , date = dispo.date , time = dispo.time, product = dispo.product)
-    db.session.add(new_booking)
-    db.session.commit()
-
-    # AHORA ENVIAMOS EL EMAIL DE CONFIRMACIÓN DE RESERVA
-    msg = Message("Confirmación de reserva",sender="spa@jmanvel.com",
-                recipients=["jmanteca@jmanvel.com"])
-    msg.body = "testing body"
-    msg.html = "<html lang='es'><head><meta charset='UTF-8'><meta http-equiv='X-UA-Compatible' content='IE=edge'><meta name='viewport' content='width=device-width, initial-scale=1.0'></head><body><h1>Confirmación de Reserva</h1><div><p>Estimado cliente:</p><p>Le confirmamos su reserva de nuestro servicio de " + str(dispo.product) + " para el día " + str(dispo.date.strftime("%-d/%-m/%Y"),) + " a las " + str(dispo.time.strftime("%-H:%M")) + "  </p><p>Muchas gracias por confiar en nosotros.</p></div></body></html>"
-    mail.send(msg)
-
-    return jsonify({"message": "Su reserva ha sido Confirmada"}), 200
    
 
-# GET ALL PRODUCTS
-@api.route('/products', methods=['GET'])
-def get_products():
+# # GET ALL PRODUCTS
+# @api.route('/products', methods=['GET'])
+# def get_products():
 
    
 # GET ALL SERVICES
@@ -348,24 +325,30 @@ def get_service_dispo(service_name):
     service_dispo = Dispo.query.filter(and_(Dispo.service_id == service_id , Dispo.available == True)).all()
     all_days_dispo= list(map(lambda x: x.serialize(), service_dispo))
     return jsonify(all_days_dispo)
-    
 
 
 # CREATE NEW BOOKING
 @api.route('/book/<int:dispo_id>/<int:user_id>', methods=['POST'])
-@jwt_required() 
- # ⚠️ si ponemos @jwt_required()  no nos funciona y debe ser porque al pasar por stripe no coge el token
+@jwt_required()
 def create_booking(dispo_id, user_id):
     # change is_available to False in Dispo
     dispo = Dispo.query.get(dispo_id)
     dispo.available = False
     db.session.commit()
-  
+
 
     # Create a new booking
-    new_booking = Book(user_id = user_id , date = dispo.date , time = dispo.time, service = dispo.service)
+    new_booking = Book(user_id = user_id , date = dispo.date , time = dispo.time, product = dispo.product)
     db.session.add(new_booking)
     db.session.commit()
+
+    # AHORA ENVIAMOS EL EMAIL DE CONFIRMACIÓN DE RESERVA
+    msg = Message("Confirmación de reserva",sender="spa@jmanvel.com",
+                recipients=["jmanteca@jmanvel.com"])
+    msg.body = "testing body"
+    msg.html = "<html lang='es'><head><meta charset='UTF-8'><meta http-equiv='X-UA-Compatible' content='IE=edge'><meta name='viewport' content='width=device-width, initial-scale=1.0'></head><body><h1>Confirmación de Reserva</h1><div><p>Estimado cliente:</p><p>Le confirmamos su reserva de nuestro servicio de " + str(dispo.product) + " para el día " + str(dispo.date.strftime("%-d/%-m/%Y"),) + " a las " + str(dispo.time.strftime("%-H:%M")) + "  </p><p>Muchas gracias por confiar en nosotros.</p></div></body></html>"
+    mail.send(msg)
+
     return jsonify({"message": "Su reserva ha sido Confirmada"}), 200
    
 

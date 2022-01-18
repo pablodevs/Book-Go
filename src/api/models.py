@@ -131,7 +131,7 @@ class Dispo(db.Model):
         nullable=False)
 
     def __repr__(self):
-        return '%r' % self.product
+        return '%r' % self.service_id
 
     def serialize(self):
         return {
