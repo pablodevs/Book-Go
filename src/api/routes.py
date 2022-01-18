@@ -45,7 +45,7 @@ def getDispo(schedule, duration):
             - schedule (array of [open, close]): ["10:00", "20:00"]
             - duration (integer, in minutes): 45
 
-        output (array of strings) >>> ['10:00', '10:45', '11:30', '12:15', '13:00', '13:45', '14:30', '15:15', '16:00', '16:45', '17:30', '18:15', '19:00', '19:45']
+        output (array of strings) >>> ['10:00', '10:45', '11:30', '12:15', '13:00', '13:45', '14:30', '15:15', '16:00', '16:45', '17:30', '18:15', '19:00']
     '''
 
     timeFrom = int(schedule[0].split(':')[0]) * 60 + int(schedule[0].split(':')[1])
@@ -55,7 +55,8 @@ def getDispo(schedule, duration):
     output = []
 
     for i in range(timeFrom, timeTo, duration):
-        output.append(resetTimeFormat(math.floor(i / 60), i % 60))
+        if (i + duration < timeTo):
+            output.append(resetTimeFormat(math.floor(i / 60), i % 60))
 
     return output
 
@@ -356,7 +357,7 @@ def get_business_info():
 
     except IndexError as error:
         # Si está vacía, devuelve error
-        raise APIException("Business doesn't exists", status_code=404)
+        raise APIException("Business does not exists", status_code=404)
 
 
 # MODIFY THE BUSINESS
@@ -425,14 +426,10 @@ def get_dispo_hours(service_id):
         # Intenta obtener el horario y la duración
         schedule = Business.query.all()[0].serialize()["schedule"].split(',')
         duration = service.duration
-        # weekdays = business["weekdays"].split(',')
 
-        print(getDispo(schedule, duration))
-
-        # return jsonify({"response": "ok"}), 200
         return jsonify(getDispo(schedule, duration)), 200
 
     except IndexError as error:
         # Si está vacía, devuelve error
-        raise APIException("Business doesn't exists", status_code=404)
+        raise APIException("Business does not exist", status_code=404)
 

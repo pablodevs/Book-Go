@@ -73,7 +73,6 @@ export const Navbar = () => {
 						onClick={() => {
 							actions.setPopup("booking", "¿Qué estás buscando?");
 							setNavMenu(false);
-							actions.calendarActions.changeHoursView("01/01/2000");
 						}}>
 						Reservar
 					</NavLink>

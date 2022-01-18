@@ -34,16 +34,16 @@ export const Day = props => {
 				onClick={
 					props.isChangeMonthDay || props.isChangeMonthDay === 0
 						? () => actions.calendarActions.updateCalendar(props.isChangeMonthDay)
-						: //al hacer click en un día que tiene disponibilidad.... te aparecen las horas disponibles
-						  () => {
-								actions.calendarActions.changeHoursView(
+						: () =>
+								//al hacer click en un día te aparecen las horas disponibles
+								actions.updateBooking(
+									"date",
 									props.date.toLocaleDateString(undefined, {
 										year: "numeric",
 										month: "2-digit",
 										day: "2-digit"
 									})
-								);
-						  }
+								)
 				}>
 				{props.date.getDate()}
 			</button>
