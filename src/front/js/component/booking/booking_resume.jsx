@@ -20,14 +20,20 @@ export const Booking_resume = () => {
 						<p>{store.booking.time}</p>
 					</div>
 					<div className="modal-footer">
-						<button onClick={() => actions.goToPrevPopup()} type="button" className="btn btn-secondary">
+						<button
+							onClick={() => actions.setPopup("calendar", "¿Cuándo?")}
+							type="button"
+							className="btn btn-secondary">
 							Volver
 						</button>
 						<button
 							onClick={() => {
+								// store.products.map(item => {
+								// 	if (item.id == store.booking.product_id) {
 								store.services.map(item => {
-									if (item.id == store.booking.id) {
+									if (item.id == store.booking.service_id) {
 										let sku = item.sku;
+
 										actions.reservar(sku);
 									}
 								});

@@ -9,6 +9,10 @@ import cloudinary.uploader
 import os
 from sqlalchemy import and_
 
+from flask_mail import Mail, Message
+
+
+
 #para la autenticación y generar el token
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import get_jwt_identity
@@ -17,6 +21,37 @@ from flask_jwt_extended import jwt_required
 
 api = Blueprint('api', __name__)
 
+
+
+app = Flask(__name__)
+
+
+#CONFIGURACIÓN DE FLASK MAIL
+# app.config['DEBUG'] = True
+# app.config['TESTING'] = False
+# app.config['MAIL_DEBUG'] = True
+app.config['MAIL_SERVER'] = 'smtp.servidor-correo.net'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USE_SSL'] = False
+app.config['MAIL_USERNAME'] = 'spa@jmanvel.com'
+app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
+app.config['MAIL_DEFAULT_SENDER'] = 'spa@jmanvel.com'
+app.config['MAIL_MAX_EMAILS'] = None
+app.config['MAIL_SUPPRESS_SEND'] = False
+app.config['MAIL_ASCII_ATTACHMENTS'] = False
+
+mail = Mail(app)
+
+
+
+   
+
+# # GET ALL PRODUCTS
+# @api.route('/products', methods=['GET'])
+# def get_products():
+
+   
 # GET ALL SERVICES
 @api.route('/services', methods=['GET'])
 def get_services():
@@ -144,43 +179,40 @@ def get_service(service_id):
         raise APIException('Service not found in data base', status_code=404)
 
     return jsonify(service.serialize()), 200
-        
+
+
 #CREATE NEW USER
-@api.route('/users', methods=['POST'])
-def create_user():
+@api.route('/user', methods=['POST'])
+def create_new_user():
 
-    body_user = request.json
+    # fetch for the user
 
-    # Data validation
-    if body_user is None:
-        raise APIException("You need to specify the request body as a json object", status_code=400)
-    if 'name' not in body_user or body_user['name'] == "" or body_user['name'] == None:
-        raise APIException('You need to specify the name', status_code=400)
-    if 'lastname' not in body_user or body_user['lastname'] == "" or body_user['lastname'] == None:
-        raise APIException('You need to specify the lastname', status_code=400)
-    if 'email' not in body_user or body_user['email'] == "" or body_user['email'] == None:
-        raise APIException('You need to create a email', status_code=400)
-    if 'phone' not in body_user or body_user['phone'] == "" or body_user['phone'] == None:
-        raise APIException('You need to specify the phone', status_code=400)
-    if 'password' not in body_user or body_user['password'] == "" or body_user['password'] == None:
-        raise APIException('You need to specify the password', status_code=400)
-        # validate that the front-end request was built correctly
-    # if 'profile_image' in request.files:
-    #     # upload file to uploadcare
-    #     cloudinary.config( 
-    #     cloud_name = os.getenv('CLOUD_NAME'), 
-    #     api_key = os.getenv('API_KEY'), 
-    #     api_secret = os.getenv('API_SECRET') 
-    #     )
-    # cloudinary_result = cloudinary.uploader.upload(request.files['profile_image'])
+    name_recieved = request.form.get("name", None)
+    lastname_recieved = request.form.get("lastname", None)
+    email_recieved = request.form.get("email", None)
+    phone_recieved = request.form.get("phone", None)
+    password_recieved = request.form.get("password", None)
+    user = User(email= email_recieved, password = password_recieved, name= name_recieved , lastname = lastname_recieved , phone = phone_recieved)
+ 
+    
 
-    new_user = User(name = body_user["name"], lastname = body_user["lastname"], email = body_user["email"], phone = body_user["phone"], password = body_user["password"])
-    # update the user with the given cloudinary image URL
-    # user.profile_image_url = cloudinary_result['secure_url']
+    # validate that the front-end request was built correctly
+    if 'profile_image' in request.files:
+        # upload file to uploadcare
+        cloudinary.config( 
+        cloud_name = os.getenv('CLOUD_NAME'), 
+        api_key = os.getenv('API_KEY'), 
+        api_secret = os.getenv('API_SECRET') 
+        )
+  
+        result = cloudinary.uploader.upload(request.files['profile_image'])
+        # update the user with the given cloudinary image URL
+        user.profile_image_url = result['secure_url']
 
-    db.session.add(new_user)
+    db.session.add(user)
     db.session.commit()
-    return jsonify(new_user.serialize()), 200
+
+    return jsonify(user.serialize()), 200
 
 
 # GET ALL USERS
@@ -282,28 +314,42 @@ def get_service_dispo(service_name):
     service= list(map(lambda x: x.serialize(), service_query))
     service_id = service[0]['id']
 
+    #buscamos la disponibilidad del producto con id = product_id y available true
+    product_dispo = Dispo.query.filter(and_(Dispo.service_id == service_id , Dispo.available == True)).all()
+    all_days_dispo= list(map(lambda x: x.serialize(), product_dispo))
+    return jsonify(all_days_dispo)
     # buscamos la disponibilidad del servicio con id = service_id y available true
     service_dispo = Dispo.query.filter(and_(Dispo.service_id == service_id , Dispo.available == True)).all()
     all_days_dispo= list(map(lambda x: x.serialize(), service_dispo))
     return jsonify(all_days_dispo)
-    
 
 
 # CREATE NEW BOOKING
 @api.route('/book/<int:dispo_id>/<int:user_id>', methods=['POST'])
-@jwt_required() 
- # ⚠️ si ponemos @jwt_required()  no nos funciona y debe ser porque al pasar por stripe no coge el token
+@jwt_required()
 def create_booking(dispo_id, user_id):
     # change is_available to False in Dispo
     dispo = Dispo.query.get(dispo_id)
     dispo.available = False
     db.session.commit()
-  
+
 
     # Create a new booking
     new_booking = Book(user_id = user_id , date = dispo.date , time = dispo.time, service = dispo.service)
     db.session.add(new_booking)
     db.session.commit()
+
+
+    #buscamos el email del cliente
+    customer = User.query.get(user_id)
+    customer_email = customer.email
+    # AHORA ENVIAMOS EL EMAIL DE CONFIRMACIÓN DE RESERVA
+    msg = Message("Confirmación de reserva",sender="spa@jmanvel.com",
+                recipients=[customer_email])
+    msg.body = "testing body"
+    msg.html = "<html lang='es'><head><meta charset='UTF-8'><meta http-equiv='X-UA-Compatible' content='IE=edge'><meta name='viewport' content='width=device-width, initial-scale=1.0'></head><body><h1>Confirmación de Reserva</h1><div><p>Estimado cliente:</p><p>Le confirmamos su reserva de nuestro servicio de " + str(dispo.service) + " para el día " + str(dispo.date.strftime("%-d/%-m/%Y"),) + " a las " + str(dispo.time.strftime("%-H:%M")) + "  </p><p>Muchas gracias por confiar en nosotros.</p></div></body></html>"
+    mail.send(msg)
+
     return jsonify({"message": "Su reserva ha sido Confirmada"}), 200
    
 
