@@ -54,13 +54,7 @@ export const AdminPanel = () => {
 						</div>
 					);
 				else if (params.content === "services") setContent(<AdminServices />);
-				else if (params.content === "business")
-					setContent(
-						<div className="dashboard-content-wrapper admin-products">
-							<h1 className="dashboard-content-title">Configuración del negocio</h1>
-							<BusinessSettings />
-						</div>
-					);
+				else if (params.content === "business") setContent(<BusinessSettings />);
 				else if (params.content === "profile") setContent(<AccountSettings />);
 				setShowMenu(false);
 			}

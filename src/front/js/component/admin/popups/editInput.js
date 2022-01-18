@@ -7,7 +7,7 @@ export const EditInput = props => {
 	const [data, setData] = useState({ id: null, name: "" });
 
 	useEffect(() => {
-		let prod_id = store.products.find(element => element.name === props.input).id;
+		let prod_id = store.services.find(element => element.name === props.input).id;
 		setData({ id: prod_id, name: props.input });
 	}, []);
 
@@ -16,8 +16,11 @@ export const EditInput = props => {
 		if (data.name !== "") {
 			actions.setToast(
 				"promise",
-				{ loading: "Guardando...", success: `${data.product} guardado` },
-				actions.updateProduct(data),
+				{
+					loading: "Guardando...",
+					success: resp => `Nuevo nombre: ${resp.name}`
+				},
+				actions.updateService(data),
 				"toast-confirm"
 			);
 			actions.closePopup();
@@ -28,12 +31,14 @@ export const EditInput = props => {
 		<div className="popup-body">
 			<form className="dashboard-form" onSubmit={handleSubmit}>
 				<div className="admin-form-subgroup">
-					<label className="dashboard-label" htmlFor="popup-product-edit">
+					<label className="dashboard-label" htmlFor="popup-service-edit">
 						Nuevo nombre:
+						<span>{data.name.length}</span>
 					</label>
 					<input
-						id="popup-product-edit"
+						id="popup-service-edit"
 						type="text"
+						maxLength="120"
 						value={data.name}
 						onChange={e => setData({ ...data, name: e.target.value })}
 					/>

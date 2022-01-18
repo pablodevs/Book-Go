@@ -21,8 +21,8 @@ export const Login = () => {
 	);
 
 	return (
-		<div className="container-fluid my-auto mb-md-auto mt-md-4">
-			<div className="row">
+		<div className="container-fluid popup-container">
+			<div className="row popup-row">
 				<div className="col mx-4 mb-4" style={{ display: "grid", gap: "1rem" }}>
 					<input
 						autoFocus

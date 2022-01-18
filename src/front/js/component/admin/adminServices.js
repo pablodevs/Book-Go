@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { Context } from "../../store/appContext";
 
 export const AdminServices = () => {
@@ -8,14 +9,17 @@ export const AdminServices = () => {
 	const [hoursList, setHoursList] = useState([]);
 	const [minutes, setMinutes] = useState(0);
 	const [hours, setHours] = useState(0);
-	const [dispoChecked, setDispoChecked] = useState(true);
-	const [productList, setProductList] = useState([]);
+	const [schedule, setSchedule] = useState(false);
+	const [serviceList, setServiceList] = useState([]);
 	const [data, setData] = useState({
 		id: "",
-		product: "DEFAULT", // con 'name' no funciona bien
+		service: "DEFAULT", // con 'name' no funciona bien
 		price: "",
 		description: "",
-		duration: ""
+		duration: "",
+		is_active: false,
+		sku: ""
+		// service_img_url: "",
 	});
 
 	useEffect(() => {
@@ -31,34 +35,63 @@ export const AdminServices = () => {
 
 		setMinutesList(listOfMinutes);
 		setHoursList(listOfHours);
+
+		// Actualizamos la información de los servicios
+		actions.get_services();
+		actions.resetNewService();
+
+		// Actualizamos la información del negocio
+		actions.getBusinessInfo();
 	}, []);
 
 	useEffect(
 		() => {
-			setProductList(store.products.map(element => element.name));
-			if (Object.keys(store.new_product).length && store.new_product.id) {
-				setHours(Math.floor(store.new_product.duration / 60));
-				setMinutes(store.new_product.duration % 60);
+			// Comprobamos si existe un horario
+			if (
+				store.business.schedule &&
+				store.business.weekdays &&
+				store.business.schedule !== "00:00,00:00" &&
+				store.business.schedule.split(",")[0] !== store.business.schedule.split(",")[1] &&
+				store.business.weekdays[0] !== "" &&
+				data.sku &&
+				data.sku !== ""
+			)
+				setSchedule(true);
+			else setSchedule(false);
+		},
+		[data.sku, store.business]
+	);
+
+	useEffect(
+		() => {
+			setServiceList(store.services.map(element => element.name));
+			if (Object.keys(store.new_service).length && store.new_service.id) {
+				setHours(Math.floor(store.new_service.duration / 60));
+				setMinutes(store.new_service.duration % 60);
 				setData({
-					id: store.new_product.id,
-					product: store.new_product.name, // esto de que se llamen diferente no me convence
-					price: store.new_product.price,
-					description: store.new_product.description,
-					duration: store.new_product.duration
+					id: store.new_service.id,
+					service: store.new_service.name, // esto de que se llamen diferente no me convence
+					price: store.new_service.price,
+					description: store.new_service.description,
+					duration: store.new_service.duration,
+					is_active: store.new_service.is_active,
+					sku: store.new_service.sku
 				});
 			} else {
 				setHours(Math.floor(0));
 				setMinutes(0);
 				setData({
 					id: "",
-					product: "DEFAULT", // con 'name' no funciona bien
+					service: "DEFAULT", // con 'name: "DEFAULT"' no funciona bien
 					price: "",
 					description: "",
-					duration: ""
+					duration: "",
+					is_active: false,
+					sku: ""
 				});
 			}
 		},
-		[store.products, store.new_product]
+		[store.services, store.new_service]
 	);
 
 	useEffect(
@@ -71,16 +104,18 @@ export const AdminServices = () => {
 	);
 
 	const handleInputChange = e => {
-		if (e.target.name === "product" && productList.includes(e.target.value)) {
-			let prod = store.products.find(prod => prod.name === e.target.value); // ⚠️ Si 2 tienen el mismo nombre esto falla
-			setHours(Math.floor(prod.duration / 60));
-			setMinutes(prod.duration % 60);
+		if (e.target.name === "service" && serviceList.includes(e.target.value)) {
+			let service = store.services.find(service => service.name === e.target.value); // ⚠️ Si 2 tienen el mismo nombre esto falla
+			setHours(Math.floor(service.duration / 60));
+			setMinutes(service.duration % 60);
 			setData({
-				id: prod.id,
-				product: prod.name, // esto de que se llamen diferente no me convence
-				price: prod.price,
-				description: prod.description,
-				duration: prod.duration
+				id: service.id,
+				service: service.name, // esto de que se llamen diferente no me convence
+				price: service.price,
+				description: service.description,
+				duration: service.duration,
+				is_active: service.is_active,
+				sku: service.sku
 			});
 		} else
 			setData({
@@ -89,69 +124,70 @@ export const AdminServices = () => {
 			});
 	};
 
-	const submitFirstForm = event => {
+	const handleSubmitFirstForm = event => {
 		event.preventDefault();
-		if (data.id && productList.includes(data.product))
+		actions.resetNewService();
+		if (data.id && serviceList.includes(data.service))
 			actions.setToast(
 				"promise",
-				{ loading: "Guardando...", success: `${data.product} guardado` },
-				actions.updateProduct(data),
+				{ loading: "Guardando...", success: `${data.service} guardado` },
+				actions.updateService(data),
 				"toast-confirm"
 			);
 	};
-	const submitSecondForm = event => {
-		event.preventDefault();
-		// actions.updateDispo(data);
-	};
 
 	return (
-		<div className="dashboard-content-wrapper admin-products">
+		<div className="dashboard-content-wrapper admin-services">
 			<h1 className="dashboard-content-title">Servicios</h1>
 			<div className="admin-sections-wrapper">
-				<section className="dashboard-first-section">
-					<form onSubmit={submitFirstForm} className="dashboard-form">
+				<section className="admin-first-section">
+					<form onSubmit={handleSubmitFirstForm} className="dashboard-form">
 						<div className="admin-form-group services-subtitle">
 							<h2 className="dashboard-content-subtitle">Información del servicio</h2>
 							<div className="admin-icon-btn-group">
 								<button
 									type="button"
-									className="admin-icon-btn icon-btn"
-									data-tooltip="añadir producto"
-									onClick={() => actions.setPopup("add-product", "Añadir producto")}>
+									className="icon-btn"
+									data-tooltip="añadir servicio"
+									onClick={() => actions.setPopup("add-service", "Añadir servicio")}>
 									<i className="fas fa-plus" />
 								</button>
-								{/* ⚠️ OJITO: si añadimos o eliminamos un prod, se tiene que actualizar el hook productList */}
+								{/* ⚠️ OJITO: si añadimos o eliminamos un servicio, se tiene que actualizar el hook serviceList */}
 								<button
 									type="button"
-									className={"admin-icon-btn icon-btn danger" + (data.id ? "" : " inactive")}
-									data-tooltip="eliminar producto"
+									className={"icon-btn danger" + (data.id ? "" : " inactive")}
+									data-tooltip="eliminar servicio"
 									onClick={() => {
 										if (!data.id) return;
-										const deleteFunct = () => actions.removeProduct(data.id);
-										actions.setPopup("confirm", "Eliminar el producto", undefined, deleteFunct);
+										const deleteFunct = () => actions.removeService(data.id);
+										actions.setPopup("confirm", "Eliminar el servicio", undefined, deleteFunct);
 									}}>
 									<i className="fas fa-trash-alt" />
 								</button>
 							</div>
 						</div>
+						<small>
+							Modifica los servicios aquí. Recuerda crear un horario{" "}
+							<Link to="/admin/business">aquí</Link> para gestionar las horas disponibles.
+						</small>
 						<div className="admin-form-group">
 							<div className="admin-form-subgroup">
-								<label className="dashboard-label" htmlFor="product">
-									Producto
+								<label className="dashboard-label" htmlFor="service">
+									Servicio
 								</label>
-								<div className="dashboard-input product-input">
+								<div className="dashboard-input service-input">
 									<div className="select-wrapper">
 										<select
-											onChange={e => handleInputChange(e)}
-											id="product"
-											name="product"
-											value={data.product}>
+											onChange={handleInputChange}
+											id="service"
+											name="service"
+											value={data.service}>
 											<option value="DEFAULT" disabled hidden>
-												Elige un producto...
+												Elige un servicio...
 											</option>
-											{productList.map((prod, idx) => (
-												<option key={idx} value={prod}>
-													{prod}
+											{serviceList.map((service, idx) => (
+												<option key={idx} value={service}>
+													{service}
 												</option>
 											))}
 										</select>
@@ -160,10 +196,10 @@ export const AdminServices = () => {
 										type="button"
 										className={"icon-btn" + (data.id ? "" : " inactive")}
 										data-tooltip="cambiar nombre"
-										// On click: abrir un cuadro de dialogo pequeño para cambiar el nombre del producto
+										// On click: abrir un cuadro de dialogo pequeño para cambiar el nombre del servicio
 										onClick={() => {
 											return data.id
-												? actions.setPopup("edit-product", `Editar ${data.product}`)
+												? actions.setPopup("edit-service", `Editar ${data.service}`)
 												: "";
 										}}>
 										<i className="fas fa-pen" />
@@ -173,6 +209,28 @@ export const AdminServices = () => {
 						</div>
 						<div className="admin-form-group">
 							<div className="admin-form-subgroup price-subgroup">
+								<label
+									className="availability-checkbox dashboard-label"
+									htmlFor="is_active"
+									data-tooltip={
+										schedule
+											? "Permite que se pueda reservar este servicio"
+											: "Primero define un horario en el apartado de negocio"
+									}>
+									<input
+										type="checkbox"
+										id="is_active"
+										disabled={!schedule}
+										checked={data.is_active}
+										onChange={() =>
+											setData({
+												...data,
+												is_active: !data.is_active
+											})
+										}
+									/>
+									Activo
+								</label>
 								<label className="dashboard-label" htmlFor="price">
 									Precio
 								</label>
@@ -182,75 +240,49 @@ export const AdminServices = () => {
 										id="price"
 										name="price"
 										min="0"
-										onChange={e => handleInputChange(e)}
+										onChange={handleInputChange}
 										value={data.price}
 									/>
 									<span>€</span>
 								</div>
 							</div>
 							<div className="admin-form-subgroup duration-subgroup">
-								<span className="admin-form-subgroup-title">Duración</span>
-								<div>
-									<label htmlFor="hours" className="dashboard-label">
-										Hora(s)
-									</label>
-									<div className="select-wrapper">
-										<select
-											onChange={e => setHours(parseInt(e.target.value))}
-											id="hours"
-											value={hours}>
-											{hoursList.map((hour, idx) => (
-												<option key={idx} value={hour}>
-													{`${hour}h`}
-												</option>
-											))}
-										</select>
+								<span className="admin-form-subgroup-title">Duración del servicio</span>
+								<div className="dflex-row">
+									<div>
+										<label htmlFor="hours" className="dashboard-label">
+											Hora(s)
+										</label>
+										<div className="select-wrapper">
+											<select
+												onChange={e => setHours(parseInt(e.target.value))}
+												id="hours"
+												value={hours}>
+												{hoursList.map((hour, idx) => (
+													<option key={idx} value={hour}>
+														{`${hour}h`}
+													</option>
+												))}
+											</select>
+										</div>
 									</div>
-								</div>
-								<div>
-									<label htmlFor="minutes" className="dashboard-label">
-										Minutos
-									</label>
-									<div className="select-wrapper">
-										<select
-											onChange={e => setMinutes(parseInt(e.target.value))}
-											id="minutes"
-											value={minutes}>
-											{minutesList.map((min, idx) => (
-												<option key={idx} value={min}>
-													{`${min}min`}
-												</option>
-											))}
-										</select>
+									<div>
+										<label htmlFor="minutes" className="dashboard-label">
+											Minutos
+										</label>
+										<div className="select-wrapper">
+											<select
+												onChange={e => setMinutes(parseInt(e.target.value))}
+												id="minutes"
+												value={minutes}>
+												{minutesList.map((min, idx) => (
+													<option key={idx} value={min}>
+														{`${min}min`}
+													</option>
+												))}
+											</select>
+										</div>
 									</div>
-								</div>
-							</div>
-							<div className="admin-form-subgroup img-subgroup">
-								<div className="admin-product-img-wrapper">
-									<small className="img-placeholder">
-										<i className="fas fa-camera" />
-									</small>
-									{data.id ? (
-										<img
-											src={require(`../../../img/${data.product.toLowerCase()}.jpg`)}
-											onLoad={e => e.target.classList.add("border-none")}
-											className="admin-product-img"
-										/>
-									) : (
-										""
-									)}
-									<button
-										type="button"
-										className={"edit-img" + (data.id ? "" : " inactive")}
-										// On click: abrir un cuadro de dialogo pequeño para cambiar el nombre del producto
-										onClick={() => {
-											return;
-											// return data.id
-											// 	? actions.setPopup("edit-product", `Editar ${data.product}`)
-											// 	: "";
-										}}>
-										<i className="fas fa-camera" />
-									</button>
 								</div>
 							</div>
 						</div>
@@ -264,9 +296,67 @@ export const AdminServices = () => {
 									id="description"
 									name="description"
 									rows="3"
+									maxLength="1000"
 									value={data.description}
-									onChange={e => handleInputChange(e)}
+									onChange={handleInputChange}
 								/>
+							</div>
+							<div className="admin-form-subgroup img-subgroup">
+								<div className="admin-service-img-wrapper">
+									<small className="img-placeholder">
+										<i className="fas fa-camera" />
+									</small>
+									{data.id ? (
+										<img
+											src={require(`../../../img/${data.service.toLowerCase()}.jpg`)}
+											onLoad={e => e.target.classList.add("border-none")}
+											className="admin-service-img"
+										/>
+									) : (
+										""
+									)}
+									<button
+										type="button"
+										className={"edit-img" + (data.id ? "" : " inactive")}
+										// On click: abrir un cuadro de dialogo pequeño para cambiar el nombre del servicio
+										onClick={() => {
+											return;
+											// return data.id
+											// 	? actions.setPopup("edit-service", `Editar ${data.service}`)
+											// 	: "";
+										}}>
+										<i className="fas fa-camera" />
+									</button>
+								</div>
+							</div>
+						</div>
+						<div className="admin-form-group">
+							<div className="admin-form-subgroup">
+								<label className="dashboard-label" htmlFor="sku">
+									Sku (código de artículo)
+								</label>
+								<div className="dashboard-input">
+									<input
+										id="sku"
+										type="text"
+										name="sku"
+										maxLength="150"
+										value={data.sku}
+										autoComplete="off"
+										onChange={handleInputChange}
+									/>
+									<button
+										type="button"
+										className="clear-input"
+										onClick={() => {
+											setData({
+												...data,
+												sku: ""
+											});
+										}}>
+										<i className="fas fa-times" />
+									</button>
+								</div>
 							</div>
 						</div>
 						<div>
@@ -276,12 +366,12 @@ export const AdminServices = () => {
 						</div>
 					</form>
 				</section>
-				<section className="dashboard-second-section">
-					<form className="dashboard-form" onSubmit={submitSecondForm}>
+				{/* <section className="admin-second-section">
+					<form className="dashboard-form">
 						<div className="disponibility-title admin-form-group">
 							<h2 className="dashboard-content-subtitle">Disponibilidad:</h2>
-							<span className={productList.includes(data.product) ? "text-confirm" : "text-cancel"}>
-								{data.product === "DEFAULT" ? "Ningún producto seleccionado" : data.product}
+							<span className={serviceList.includes(data.service) ? "text-confirm" : "text-cancel"}>
+								{data.service === "DEFAULT" ? "Ningún servicio seleccionado" : data.service}
 							</span>
 						</div>
 						<div className="admin-form-group">
@@ -297,19 +387,6 @@ export const AdminServices = () => {
 								</label>
 								<input type="time" id="time" name="time" />
 							</div>
-							<div className="admin-form-subgroup availability-checkbox">
-								<input
-									type="checkbox"
-									id="available"
-									name="available"
-									value="available"
-									defaultChecked={dispoChecked}
-									onChange={() => setDispoChecked(!dispoChecked)}
-								/>
-								<label className="dashboard-label" htmlFor="available">
-									Disponible
-								</label>
-							</div>
 						</div>
 						<div>
 							<button type="submit" className="save-button">
@@ -317,7 +394,7 @@ export const AdminServices = () => {
 							</button>
 						</div>
 					</form>
-				</section>
+				</section> */}
 			</div>
 		</div>
 	);

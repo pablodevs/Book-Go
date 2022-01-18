@@ -3,14 +3,14 @@ import { Context } from "../../store/appContext";
 
 export const BookingCard = () => {
 	const { actions, store } = useContext(Context);
-	let product = "Depilación";
+	let service = "Depilación";
 
 	useEffect(() => {}, []);
 
 	return (
 		<div className="bookingcard-wrapper">
 			<div className="bookingcard-content">
-				<h1 className="bookingcard-title">{product}</h1>
+				<h1 className="bookingcard-title">{service}</h1>
 				<div>
 					Fecha:{" "}
 					<span className="bookingcard-date">
@@ -29,15 +29,15 @@ export const BookingCard = () => {
 				</div>
 				<button
 					className="book-again-btn"
-					onClick={() => actions.setPopup("calendar", "Selecciona un nuevo día", product)}>
+					onClick={() => actions.setPopup("calendar", "Selecciona un nuevo día", service)}>
 					Reservar de nuevo
 				</button>
 			</div>
 			<div className="bookingcard-img-wrapper">
 				<img
-					src={require(`../../../img/${product.toLowerCase()}.jpg`)}
+					src={require(`../../../img/${service.toLowerCase()}.jpg`)}
 					className="bookingcard-img"
-					alt="imagen del producto"
+					alt="imagen del servicio"
 				/>
 			</div>
 		</div>

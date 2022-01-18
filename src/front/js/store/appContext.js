@@ -24,7 +24,7 @@ const injectContext = PassedComponent => {
 			}
 			state.actions.closePopup();
 			state.actions.calendarActions.setInitialCalendar();
-			state.actions.resetNewProduct();
+			state.actions.resetNewService();
 		}, []);
 
 		useEffect(() => localStorage.setItem("store", JSON.stringify(state.store)));
