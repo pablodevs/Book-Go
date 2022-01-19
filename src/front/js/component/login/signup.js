@@ -75,6 +75,7 @@ export const Signup = () => {
 						className="form-control"
 						type="phone"
 						id="phone"
+						maxLength="9"
 						name="phone"
 						placeholder="Teléfono..."
 					/>

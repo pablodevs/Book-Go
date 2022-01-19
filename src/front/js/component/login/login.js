@@ -67,11 +67,11 @@ export const Login = () => {
 							Únete ahora
 						</button>
 					</div>
-					<div className="d-flex w-100 justify-content-center">
+					{/* <div className="d-flex w-100 justify-content-center">
 						<button className="text-primary" onClick={() => actions.setPopup("guest", "Invitado")}>
 							Seguir como invitado
 						</button>
-					</div>
+					</div> */}
 				</div>
 
 				<div>

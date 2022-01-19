@@ -7,22 +7,22 @@ export const Footer = () => (
 			<div className="row">
 				{/* Contact Data */}
 				<div className="col">
-					<h5>Contact Us</h5>
+					<h5>Contacto: </h5>
 					<ul className="nav flex-column">
 						<li className="nav-item mb-2">
-							<p>Cast: (+34) 123 456 789</p>
+							<p>Teléfono: (+34) 123 456 789</p>
 						</li>
 						<li className="nav-item mb-2">
-							<p>Email: email@email.com</p>
+							<p>Email: spa@jmanvel.com</p>
 						</li>
 						<li className="nav-item mb-2">
-							<p>Skype: @email</p>
+							<p>Skype: @spa</p>
 						</li>
 					</ul>
 				</div>
 				{/* Social Media buttons */}
 				<div className="col">
-					<h5>Follow Us</h5>
+					<h5>Siguenos: </h5>
 					<ul className="nav justify-content-center p-3">
 						<li className="nav-item mb-2">
 							<a
@@ -55,17 +55,12 @@ export const Footer = () => (
 				{/* Form to subscribe to newsletter */}
 				<div className="col-md-3 py-3">
 					<form>
-						<h5>Subscribe to our newsletter</h5>
-						<p>Monthly digest of whats new and exciting from us.</p>
+						<h5>Subscríbete : </h5>
+
 						<div className="row gap-2">
-							<input
-								id="newsletter1"
-								type="text"
-								className="col-md-12 col-sm-12"
-								placeholder="Email address"
-							/>
+							<input id="newsletter1" type="text" className="col-md-12 col-sm-12" placeholder="Email " />
 							<button className="btn btn-primary col-md-5 col-sm-12" type="button">
-								Subscribe
+								Subcríbete
 							</button>
 						</div>
 					</form>
@@ -74,7 +69,7 @@ export const Footer = () => (
 		</div>
 		{/* Copyrights */}
 		<div>
-			<p>&#169; Pablo, Chavi & Clara. 2021 All rights reserved</p>
+			<p>&#169; Pablo, Chavi & Clara. 20220 Todos los derechos reservados</p>
 		</div>
 	</footer>
 );
