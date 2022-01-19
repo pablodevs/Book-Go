@@ -1,6 +1,4 @@
 import toast from "react-hot-toast";
-import React from "react";
-import { Redirect } from "react-router-dom";
 
 const getNumOfDaysInMonth = (year, month) => new Date(year, month + 1, 0).getDate();
 
@@ -11,8 +9,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 			//resume_view muestra el resumen de la reserva
 			resume_view: false,
 			// creamos booking_day para pasar el día seleccionado para reservar
-			booking_day: null,
-			booking: {},
+			// booking_day: null,
+			booking: {
+				foo: "caca"
+			},
 
 			calendar: {
 				todayDate: new Date(),
@@ -84,20 +84,21 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			// Cambia los popups
-			setPopup: async (type, title, serviceName, funct = null) => {
-				if (serviceName) {
-					//si recibe servicename entonces busca la disponibilidad de días y horas de ese servicio
-					await fetch(process.env.BACKEND_URL + `/dispo/${serviceName}`)
-						.then(response => {
-							// console.log(response.ok);
-							// console.log(response.status);
-							return response.json();
-						})
-						.then(data => {
-							setStore({ dispo: data });
-						})
-						.catch(error => console.error(error));
-				}
+			setPopup: async (type, title, funct = null) => {
+				// if (serviceName) {
+				// 	//si recibe servicename entonces busca la disponibilidad de días y horas de ese servicio
+				// 	await fetch(process.env.BACKEND_URL + `/dispo/${serviceName}`)
+				// 		.then(response => {
+				// 			// console.log(response.ok);
+				// 			// console.log(response.status);
+				// 			return response.json();
+				// 		})
+				// 		.then(data => {
+				// 			setStore({ dispo: data });
+				// 		})
+				// 		.catch(error => console.error(error));
+				// }
+
 				// Para abrir el popup del login, register o reservas
 				let store = getStore();
 				setStore({
@@ -107,12 +108,16 @@ const getState = ({ getStore, getActions, setStore }) => {
 				});
 				if (funct) setStore({ popupFunct: funct });
 			},
+
+			// cierra el popup de login, register y calendario
 			closePopup: () =>
 				setStore({
 					popup: null,
 					popupTitle: "",
 					prevPopup: []
-				}), // cierra el popup de login, register y calendario
+				}),
+
+			// Te lleva al popup anterior
 			goToPrevPopup: () => {
 				let store = getStore();
 				setStore({
@@ -120,19 +125,77 @@ const getState = ({ getStore, getActions, setStore }) => {
 					popupTitle: store.prevPopup[store.prevPopup.length - 1].popupTitle,
 					prevPopup: [...store.prevPopup.slice(0, store.prevPopup.length - 1)]
 				});
-			}, // Te lleva al popup anterior
-
-			//BOOKING
-			booking: data => {
-				setStore({ booking: data });
 			},
+
+			// Reset booking in store
+			resetBooking: () => setStore({ booking: {} }),
+
+			// Update booking in store
+			updateBooking: (key, value) => {
+				const store = getStore();
+				let storeAux = store.booking;
+				storeAux[key] = value;
+				setStore({
+					booking: {
+						...storeAux
+					}
+				});
+			},
+
+			// PASARELA DE PAGO DE PAGO DE STRIPE
+			book: sku => {
+				console.log("este es el sku" + sku);
+				const store = getStore();
+				const stripe = Stripe("pk_test_yHT02IrsuQ0eWhAT2BBbfxmR");
+				stripe
+					.redirectToCheckout({
+						lineItems: [{ price: sku, quantity: 1 }],
+						mode: "payment",
+						/*
+				 * Do not rely on the redirect to the successUrl for fulfilling
+				 * purchases, customers may not always reach the success_url after
+				 * a successful payment.
+				 * Instead use one of the strategies described in
+				 * https://stripe.com/docs/payments/checkout/fulfill-orders
+				 */
+						successUrl:
+							"https://3000-peibol888-inalroject-na8e6zgw6da.ws-eu27.gitpod.io/pago/" +
+							`${store.user.id}`,
+						cancelUrl: "https://3000-peibol888-inalroject-na8e6zgw6da.ws-eu27.gitpod.io/error/"
+					})
+					.then(function(result) {
+						if (result.error) {
+							/*
+				   * If `redirectToCheckout` fails due to a browser or network
+				   * error, display the localized error message to your customer.
+				   */
+							var displayError = document.getElementById("error-message");
+							displayError.textContent = result.error.message;
+						}
+					});
+			},
+
 			// Meto todas las acciones del componente calendario en calendarActions:
 			calendarActions: {
-				//cambia la variable del store booking_day
-				changeHoursView: day => {
+				// pide al back las horas disponibles para el servicio que se está reservando
+				renderHoursDispo: async () => {
 					const store = getStore();
-					//cambiamos la variable booking_day con el día seleccionado para reservar
-					setStore({ booking_day: day });
+					try {
+						const response = await fetch(
+							process.env.BACKEND_URL + `/services/${store.booking.service.id}/hours`
+						);
+						const resp = await response.json();
+						if (!response.ok) {
+							setStore({ message: resp.message });
+							throw Error(response);
+						}
+						setStore({
+							hoursDispo: resp
+						});
+						return resp;
+					} catch (err) {
+						console.error(err);
+					}
 				},
 				//inicia el calendario
 				setInitialCalendar: () => {
@@ -284,11 +347,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 				} catch (err) {
 					return err.json();
 				}
-				// toast.promise(fetchFunction(data), {
-				// 	loading: "Guardando...",
-				// 	success: "Guardado correctamente",
-				// 	error: () => `Error: ${store.message !== "" ? store.message : "desconocido"}`
-				// });
 			},
 
 			// get ONE service
@@ -405,7 +463,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						return resp;
 					}
 				} catch (err) {
-					return console.log(err);
+					return console.error(err);
 				}
 			},
 
@@ -486,39 +544,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 						twitter: data.twitter
 					}
 				}),
-
-			// PASARELA DE PAGO DE PAGO DE STRIPE
-			reservar: sku => {
-				console.log("este es el sku" + sku);
-				const store = getStore();
-				const stripe = Stripe("pk_test_yHT02IrsuQ0eWhAT2BBbfxmR");
-				stripe
-					.redirectToCheckout({
-						lineItems: [{ price: sku, quantity: 1 }],
-						mode: "payment",
-						/*
-				 * Do not rely on the redirect to the successUrl for fulfilling
-				 * purchases, customers may not always reach the success_url after
-				 * a successful payment.
-				 * Instead use one of the strategies described in
-				 * https://stripe.com/docs/payments/checkout/fulfill-orders
-				 */
-						successUrl:
-							"https://3000-gold-felidae-8otxygdm.ws-eu27.gitpod.io/pago/" +
-							`${store.booking.id}/${store.user.id}`,
-						cancelUrl: "https://3000-gold-felidae-8otxygdm.ws-eu27.gitpod.io/error/"
-					})
-					.then(function(result) {
-						if (result.error) {
-							/*
-				   * If `redirectToCheckout` fails due to a browser or network
-				   * error, display the localized error message to your customer.
-				   */
-							var displayError = document.getElementById("error-message");
-							displayError.textContent = result.error.message;
-						}
-					});
-			},
 
 			// Admin Schedule:
 			setActiveWeekDay: weekday => {

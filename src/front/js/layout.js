@@ -55,7 +55,7 @@ const Layout = () => {
 						<AdminPanel />
 					</Route>
 
-					<Route exact path="/pago/:booking_id/:user_id">
+					<Route exact path="/pago/:user_id">
 						<Pago />
 					</Route>
 

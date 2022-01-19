@@ -9,11 +9,7 @@ export const Booking_resume = () => {
 			<div className="modal-dialog">
 				<div className="modal-content">
 					<div className="modal-header">
-						<h5 className="modal-title">
-							{store.services.map(item => {
-								if (store.booking.service_id == item.id) return item.name;
-							})}
-						</h5>
+						<h5 className="modal-title">{store.booking.service.name}</h5>
 					</div>
 					<div className="modal-body">
 						<p>{store.booking.date}</p>
@@ -27,17 +23,7 @@ export const Booking_resume = () => {
 							Volver
 						</button>
 						<button
-							onClick={() => {
-								// store.products.map(item => {
-								// 	if (item.id == store.booking.product_id) {
-								store.services.map(item => {
-									if (item.id == store.booking.service_id) {
-										let sku = item.sku;
-
-										actions.reservar(sku);
-									}
-								});
-							}}
+							onClick={() => actions.book(store.booking.service.sku)}
 							type="button"
 							className="btn btn-success"
 							id="checkout-button-sku_KvCUm3AeHMjmrk"

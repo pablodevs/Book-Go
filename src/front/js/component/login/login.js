@@ -49,14 +49,7 @@ export const Login = () => {
 						placeholder="password"
 					/>
 					<button
-						onClick={() => {
-							actions.setToast(
-								"promise",
-								{ loading: "login...", success: () => "Bienvenido" },
-								actions.generate_token(email, password),
-								"toast-info"
-							);
-						}}
+						onClick={() => actions.generate_token(email, password)}
 						className="btn btn-warning w-100"
 						type="submit">
 						Acceder
@@ -67,13 +60,12 @@ export const Login = () => {
 							Únete ahora
 						</button>
 					</div>
-					<div className="d-flex w-100 justify-content-center">
+					{/* <div className="d-flex w-100 justify-content-center">
 						<button className="text-primary" onClick={() => actions.setPopup("guest", "Invitado")}>
 							Seguir como invitado
 						</button>
-					</div>
+					</div> */}
 				</div>
-
 				<div>
 					{store.message != "" ? (
 						<div className="alert alert-danger" role="alert">

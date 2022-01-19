@@ -11,20 +11,18 @@ from sqlalchemy import and_
 
 from flask_mail import Mail, Message
 
-
+import math
 
 #para la autenticación y generar el token
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import get_jwt_identity
 from flask_jwt_extended import jwt_required
 
-
 api = Blueprint('api', __name__)
 
 
 
 app = Flask(__name__)
-
 
 #CONFIGURACIÓN DE FLASK MAIL
 # app.config['DEBUG'] = True
@@ -44,14 +42,50 @@ app.config['MAIL_ASCII_ATTACHMENTS'] = False
 mail = Mail(app)
 
 
+### FUNCTIONS ###
 
-   
+def resetTimeFormat(hours, minutes):
+    '''
+    Function to add 0 if < 10
+        example input: 
+            - hours (integer): 7
+            - minutes (integer): 5
+        output (string) >>> "07:05"
+    '''
+    hours = str(hours)
+    minutes = str(minutes)
+    outputList = []
+    for i in [hours, minutes]:
+        if len(i) == 1:
+            outputList.append('0' + i)
+        else: outputList.append(i)
 
-# # GET ALL PRODUCTS
-# @api.route('/products', methods=['GET'])
-# def get_products():
+    return f"{outputList[0]}:{outputList[1]}"
 
-   
+def getDispo(schedule, duration):
+    '''
+        Example input:
+            - schedule (array of [open, close]): ["10:00", "20:00"]
+            - duration (integer, in minutes): 45
+
+        output (array of strings) >>> ['10:00', '10:45', '11:30', '12:15', '13:00', '13:45', '14:30', '15:15', '16:00', '16:45', '17:30', '18:15', '19:00']
+    '''
+
+    timeFrom = int(schedule[0].split(':')[0]) * 60 + int(schedule[0].split(':')[1])
+    timeTo = int(schedule[1].split(':')[0]) * 60 + int(schedule[1].split(':')[1])
+    timeInterval = (timeTo - timeFrom)
+
+    output = []
+
+    for i in range(timeFrom, timeTo, duration):
+        if (i + duration < timeTo):
+            output.append(resetTimeFormat(math.floor(i / 60), i % 60))
+
+    return output
+
+
+### ENDPOINTS ###
+
 # GET ALL SERVICES
 @api.route('/services', methods=['GET'])
 def get_services():
@@ -64,7 +98,7 @@ def get_services():
 
     return jsonify(all_services), 200
 
-# CREATE A SERVICES
+# CREATE A SERVICE
 @api.route('/services', methods=['POST'])
 @jwt_required()
 def create_service():
@@ -105,15 +139,6 @@ def create_service():
             new_service = Service(name = body_service["name"], price = body_service["price"], description = body_service["description"], duration = body_service["duration"], is_active = body_service["is_active"])
         else:
             new_service = Service(name = body_service["name"], price = body_service["price"], description = body_service["description"], duration = body_service["duration"], is_active = body_service["is_active"], sku = body_service["sku"])
-            # Get the schedule and open days
-            business = Business.query.all()[0].serialize()
-            schedule = business["schedule"]
-            weekdays = business["weekdays"]
-
-            timeFrom = schedule.split(',')[0]
-            timeTo = schedule.split(',')[1]
-            weekdaysList = weekdays.split(',')
-            print(f"from {timeFrom} to {timeTo}, the days: {weekdaysList}")
 
     db.session.add(new_service)
     db.session.commit()
@@ -325,17 +350,19 @@ def get_service_dispo(service_name):
 
 
 # CREATE NEW BOOKING
-@api.route('/book/<int:dispo_id>/<int:user_id>', methods=['POST'])
+@api.route('/book/<int:user_id>', methods=['POST'])
 @jwt_required()
-def create_booking(dispo_id, user_id):
+def create_booking(user_id):
     # change is_available to False in Dispo
-    dispo = Dispo.query.get(dispo_id)
-    dispo.available = False
-    db.session.commit()
+    
+    # dispo = Dispo.query.get(dispo_id)
+    # dispo.available = False
+    # db.session.commit()
 
+    request_body = request.json
 
     # Create a new booking
-    new_booking = Book(user_id = user_id , date = dispo.date , time = dispo.time, service = dispo.service)
+    new_booking = Book(user_id = user_id , date = request_body["date"] , time = request_body["time"], service = request_body["service"])
     db.session.add(new_booking)
     db.session.commit()
 
@@ -352,6 +379,34 @@ def create_booking(dispo_id, user_id):
 
     return jsonify({"message": "Su reserva ha sido Confirmada"}), 200
    
+# CREATE NEW BOOKING
+# @api.route('/book/<int:dispo_id>/<int:user_id>', methods=['POST'])
+# @jwt_required()
+# def create_booking(dispo_id, user_id):
+#     # change is_available to False in Dispo
+    
+#     # dispo = Dispo.query.get(dispo_id)
+#     # dispo.available = False
+#     # db.session.commit()
+
+
+#     # Create a new booking
+#     new_booking = Book(user_id = user_id , date = dispo.date , time = dispo.time, service = dispo.service)
+#     db.session.add(new_booking)
+#     db.session.commit()
+
+
+#     #buscamos el email del cliente
+#     customer = User.query.get(user_id)
+#     customer_email = customer.email
+#     # AHORA ENVIAMOS EL EMAIL DE CONFIRMACIÓN DE RESERVA
+#     msg = Message("Confirmación de reserva",sender="spa@jmanvel.com",
+#                 recipients=[customer_email])
+#     msg.body = "testing body"
+#     msg.html = "<html lang='es'><head><meta charset='UTF-8'><meta http-equiv='X-UA-Compatible' content='IE=edge'><meta name='viewport' content='width=device-width, initial-scale=1.0'></head><body><h1>Confirmación de Reserva</h1><div><p>Estimado cliente:</p><p>Le confirmamos su reserva de nuestro servicio de " + str(dispo.service) + " para el día " + str(dispo.date.strftime("%-d/%-m/%Y"),) + " a las " + str(dispo.time.strftime("%-H:%M")) + "  </p><p>Muchas gracias por confiar en nosotros.</p></div></body></html>"
+#     mail.send(msg)
+
+#     return jsonify({"message": "Su reserva ha sido Confirmada"}), 200
 
 # GET BUSINESS INFO
 @api.route('/business', methods=['GET'])
@@ -366,7 +421,7 @@ def get_business_info():
 
     except IndexError as error:
         # Si está vacía, devuelve error
-        raise APIException("Business doesn't exists", status_code=404).query.all()[0]
+        raise APIException("Business does not exists", status_code=404)
 
 
 # MODIFY THE BUSINESS
@@ -415,3 +470,30 @@ def modify_business_info():
 
     db.session.commit()
     return jsonify(business.serialize()), 200
+
+# GET DISPO HOURS OF SERVICE WITH sevice_id
+@api.route('/services/<int:service_id>/hours', methods=['GET'])
+def get_dispo_hours(service_id):
+    """
+    Service hours dispo
+    """
+
+    # Query:
+    service = Service.query.get(service_id)
+
+    # Data validation
+    if service is None:
+        raise APIException('Service not found in data base', status_code=404)
+
+    # Get the schedule and open days (weekdays)
+    try:
+        # Intenta obtener el horario y la duración
+        schedule = Business.query.all()[0].serialize()["schedule"].split(',')
+        duration = service.duration
+
+        return jsonify(getDispo(schedule, duration)), 200
+
+    except IndexError as error:
+        # Si está vacía, devuelve error
+        raise APIException("Business does not exist", status_code=404)
+
