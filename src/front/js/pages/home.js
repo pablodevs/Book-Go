@@ -11,12 +11,13 @@ export const Home = () => {
 	useEffect(() => {
 		actions.get_services();
 		actions.getBusinessInfo();
+		actions.reset();
 	}, []);
 
 	return (
 		<div className="container-fluid view">
 			<div className="row">
-				<div className="mx-auto col-md-12 col-xl-5 py-4">
+				<div className="mx-auto col-md-12 col-xl-5">
 					<Panel />
 				</div>
 				<div className="mx-auto col-md-12 col-xl-5">

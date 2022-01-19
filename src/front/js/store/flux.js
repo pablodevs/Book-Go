@@ -10,9 +10,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			resume_view: false,
 			// creamos booking_day para pasar el día seleccionado para reservar
 			// booking_day: null,
-			booking: {
-				foo: "caca"
-			},
+			booking: {},
 
 			calendar: {
 				todayDate: new Date(),
@@ -56,8 +54,23 @@ const getState = ({ getStore, getActions, setStore }) => {
 		},
 
 		actions: {
+			// STORE RESET
+			reset: () => {
+				const actions = getActions();
+
+				actions.calendarActions.setInitialCalendar();
+				actions.closePopup();
+				actions.resetNewService();
+				actions.resetBooking();
+				actions.resetImageURL();
+				setStore({ message: "", clients: [], widget: false });
+			},
+
 			// Force render without change data
 			forceRender: () => setStore({}),
+
+			// Muestra o cierra el Widget de Cloudinary
+			setWidget: bool => setStore({ widget: bool }),
 
 			// Genera un toast
 			setToast: (type, message, funct = null, classname = "") => {
@@ -110,12 +123,16 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			// cierra el popup de login, register y calendario
-			closePopup: () =>
+			closePopup: () => {
+				const actions = getActions();
+
 				setStore({
 					popup: null,
 					popupTitle: "",
 					prevPopup: []
-				}),
+				});
+				actions.resetImageURL();
+			},
 
 			// Te lleva al popup anterior
 			goToPrevPopup: () => {
@@ -519,6 +536,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
+			// Cloudinary widget
+			setImageURL: url => setStore({ image_url: url }),
+
+			// Reset image_url
+			resetImageURL: () => setStore({ image_url: null }),
+
 			// Obtener la lista de clientes
 			getClients: async () => {
 				const store = getStore();
@@ -598,7 +621,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 					setStore({
 						business: {
 							id: resp.id,
-							name: resp.name,
 							address: resp.address,
 							phone: resp.phone,
 							schedule: resp.schedule,
@@ -634,7 +656,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 					setStore({
 						business: {
 							id: resp.id,
-							name: resp.name,
 							address: resp.address,
 							phone: resp.phone,
 							schedule: resp.schedule,

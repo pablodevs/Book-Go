@@ -40,7 +40,6 @@ export const Guest = () => {
 						onChange={e => {
 							handleInputChange(e);
 						}}
-						className="form-control"
 						type="text"
 						id="name"
 						name="name"
@@ -52,7 +51,6 @@ export const Guest = () => {
 						onChange={e => {
 							handleInputChange(e);
 						}}
-						className="form-control"
 						type="text"
 						id="lastname"
 						name="lastname"
@@ -63,7 +61,6 @@ export const Guest = () => {
 						onChange={e => {
 							handleInputChange(e);
 						}}
-						className="form-control"
 						type="mail"
 						id="email"
 						name="email"
@@ -74,7 +71,6 @@ export const Guest = () => {
 						onChange={e => {
 							handleInputChange(e);
 						}}
-						className="form-control"
 						type="phone"
 						id="phone"
 						name="phone"

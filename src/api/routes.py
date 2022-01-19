@@ -217,27 +217,29 @@ def create_new_user():
     email_recieved = request.form.get("email", None)
     phone_recieved = request.form.get("phone", None)
     password_recieved = request.form.get("password", None)
-    user = User(email= email_recieved, password = password_recieved, name= name_recieved , lastname = lastname_recieved , phone = phone_recieved)
- 
-    
+    if "profile_image_url" in request.form:
+        profile_image_recived = request.form.get("profile_image_url", None)
+
+    new_user = User(email= email_recieved, password = password_recieved, name= name_recieved, lastname = lastname_recieved, phone = phone_recieved, profile_image_url = profile_image_recived)
+
 
     # validate that the front-end request was built correctly
-    if 'profile_image' in request.files:
-        # upload file to uploadcare
-        cloudinary.config( 
-        cloud_name = os.getenv('CLOUD_NAME'), 
-        api_key = os.getenv('API_KEY'), 
-        api_secret = os.getenv('API_SECRET') 
-        )
+    # if "profile_image" in request.files:
+    #     # upload file to uploadcare
+    #     cloudinary.config( 
+    #     cloud_name = os.getenv('CLOUD_NAME'), 
+    #     api_key = os.getenv('API_KEY'), 
+    #     api_secret = os.getenv('API_SECRET') 
+    #     )
   
-        result = cloudinary.uploader.upload(request.files['profile_image'])
-        # update the user with the given cloudinary image URL
-        user.profile_image_url = result['secure_url']
+    #     result = cloudinary.uploader.upload(request.files['profile_image'], public_id = email_recieved)
+    #     # update the user with the given cloudinary image URL
+    #     user.profile_image_url = result['secure_url']
 
-    db.session.add(user)
+    db.session.add(new_user)
     db.session.commit()
 
-    return jsonify(user.serialize()), 200
+    return jsonify(new_user.serialize()), 200
 
 
 # GET ALL USERS
@@ -276,7 +278,7 @@ def generate_token():
     return jsonify({"message": "Acceso correcto", "token": access_token, "id": user.id, "profile_image_url" : user.profile_image_url, "name": user.name, "lastname": user.lastname, "email": user.email, "phone": str(user.phone), "is_admin": user.is_admin })
 
 
-# GET, MODIFY OF DELETE A USER
+# GET, MODIFY OR DELETE A USER
 # Protect a route with jwt_required, which will kick out requests without a valid JWT present.
 @api.route('/user', methods=['PUT', 'GET', 'DELETE'])
 @jwt_required() # Cuando se recive una peticion, se valida que exista ese token y que sea valido
@@ -294,23 +296,26 @@ def handle_single_user():
     # Modify (PUT) a user
     if request.method == 'PUT':
         # Query body
-        request_body = request.json
+        request_body = request.form
+
 
         # Check body's info
         if "name" in request_body:
-            user.name = request_body["name"]
-        elif len(request_body['name']) > 120:
+            user.name = request_body.get("name", None)
+        elif len(request_body.get("name", None)) > 120:
             raise APIException('Nombre demasiado largo', status_code=400)
         if "lastname" in request_body:
-            user.lastname = request_body["lastname"]
-        elif len(request_body['lastname']) > 120:
+            user.lastname = request_body.get("lastname", None)
+        elif len(request_body.get("lastname", None)) > 120:
             raise APIException('Apellido demasiado largo', status_code=400)
         if "email" in request_body:
-            user.email = request_body["email"]
-        elif len(request_body['email']) > 120:
-            raise APIException('Introduce una dirección de email válida', status_code=400)
+            user.email = request_body.get("email", None)
+        elif len(request_body.get("email", None)) > 120:
+            raise APIException('Introduce una dirección de correo electrónico válida', status_code=400)
         if "phone" in request_body:
-            user.phone = request_body["phone"]
+            user.phone = request_body.get("phone", None)
+        if "profile_image" in request_body:
+            user.profile_image_recived = request.form.get("profile_image_url", None)
         # if "password" in request_body:
         #     user.password = request_body["password"]
 

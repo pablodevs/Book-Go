@@ -1,5 +1,6 @@
 import React, { useContext, useState } from "react";
 import { Context } from "../../store/appContext";
+import { CloudinaryUploadWidget } from "../cloudinary/cloudinaryUploadWidget";
 
 export const Signup = () => {
 	const { actions, store } = useContext(Context);
@@ -13,7 +14,7 @@ export const Signup = () => {
 		password: ""
 	});
 
-	const submitForm = event => {
+	const handleSubmit = event => {
 		event.preventDefault();
 
 		// we are about to send this to the backend.
@@ -24,7 +25,8 @@ export const Signup = () => {
 		body.append("name", data.name);
 		body.append("lastname", data.lastname);
 		body.append("phone", data.phone);
-		if (files) body.append("profile_image", files[0]);
+		if (store.image_url) body.append("profile_image_url", store.image_url);
+		// if (files) body.append("profile_image_url", files[0]);
 		actions.createUser(body);
 	};
 
@@ -38,14 +40,13 @@ export const Signup = () => {
 	return (
 		<div className="container-fluid popup-container">
 			<div className="row popup-row">
-				<form onSubmit={submitForm} className="col mx-4 mb-4" style={{ display: "grid", gap: "1rem" }}>
+				<form onSubmit={handleSubmit} className="col mx-4 mb-4" style={{ display: "grid", gap: "1rem" }}>
 					<input
 						autoFocus
 						required
 						onChange={e => {
 							handleInputChange(e);
 						}}
-						className="form-control"
 						type="text"
 						id="name"
 						name="name"
@@ -56,7 +57,6 @@ export const Signup = () => {
 						onChange={e => {
 							handleInputChange(e);
 						}}
-						className="form-control"
 						type="text"
 						id="lastname"
 						name="lastname"
@@ -67,7 +67,6 @@ export const Signup = () => {
 						onChange={e => {
 							handleInputChange(e);
 						}}
-						className="form-control"
 						type="phone"
 						id="phone"
 						name="phone"
@@ -78,7 +77,6 @@ export const Signup = () => {
 						onChange={e => {
 							handleInputChange(e);
 						}}
-						className="form-control"
 						type="mail"
 						id="email"
 						name="email"
@@ -89,13 +87,14 @@ export const Signup = () => {
 						onChange={e => {
 							handleInputChange(e);
 						}}
-						className="form-control"
 						type="password"
 						id="password"
 						name="password"
 						placeholder="password"
 					/>
-					<label htmlFor="profileImg" className="input-button">
+					<span className="text-center">También puedes añadir una foto de perfil</span>
+					<CloudinaryUploadWidget title="Subir imagen" preset="client_images" />
+					{/* <label htmlFor="profileImg" className="input-button">
 						<input
 							type="file"
 							id="profileImg"
@@ -106,8 +105,8 @@ export const Signup = () => {
 						/>
 						<i className="fas fa-camera" />
 						Añade una imagen de perfil
-					</label>
-					<button className="btn btn-warning w-100" type="submit">
+					</label> */}
+					<button className="save-button" type="submit">
 						Únete
 					</button>
 					<div className="d-flex w-100 justify-content-center">
@@ -116,14 +115,14 @@ export const Signup = () => {
 							Iniciar Sesión
 						</button>
 					</div>
+					{store.message ? (
+						<div className={`alert alert-${store.message != "" ? "success" : "danger"}`} role="alert">
+							{store.message != "" ? store.message : ""}
+						</div>
+					) : (
+						""
+					)}
 				</form>
-				{store.message ? (
-					<div className={`alert alert-${store.message != "" ? "success" : "danger"}`} role="alert">
-						{store.message != "" ? store.message : ""}
-					</div>
-				) : (
-					""
-				)}
 			</div>
 		</div>
 	);

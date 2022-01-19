@@ -100,7 +100,7 @@ export const BusinessSettings = () => {
 		event.preventDefault();
 		actions.setToast(
 			"promise",
-			{ loading: "Guardando...", success: `Guardado` },
+			{ loading: "Guardando...", success: `Cambios guardados` },
 			actions.updateBusinessInfo(secondData),
 			"toast-confirm"
 		);

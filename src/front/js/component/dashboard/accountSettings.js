@@ -163,12 +163,15 @@ export const AccountSettings = () => {
 					</div>
 				</div>
 				<div>
-					<label htmlFor="password" className="dashboard-label">
-						Contraseña
-					</label>
-					<button type="button" id="password" className="input-button">
-						Cambiar contraseña
-					</button>
+					<span className="admin-form-subgroup-title">¿Has olvidado la contraseña?</span>
+					<div>
+						<label htmlFor="password" className="dashboard-label">
+							Contraseña
+						</label>
+						<button type="button" id="password" className="input-button">
+							Cambiar contraseña
+						</button>
+					</div>
 				</div>
 				<div>
 					<button type="submit" className="save-button">
@@ -180,7 +183,7 @@ export const AccountSettings = () => {
 				className="delete-account"
 				onClick={() => {
 					const deleteFunct = () => actions.deleteUser();
-					actions.setPopup("confirm", "Eliminar cuenta", undefined, deleteFunct);
+					actions.setPopup("confirm", "Eliminar cuenta", deleteFunct);
 				}}>
 				<i className="fas fa-ban" />
 				<span>Eliminar cuenta</span>

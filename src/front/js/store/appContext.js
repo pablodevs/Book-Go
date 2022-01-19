@@ -22,10 +22,8 @@ const injectContext = PassedComponent => {
 				state.store = JSON.parse(localStorage.getItem("store"));
 				state.actions.forceRender();
 			}
-			state.actions.closePopup();
-			state.actions.calendarActions.setInitialCalendar();
-			state.actions.resetNewService();
-			// state.actions.resetBooking();
+			// Reset store private info
+			state.actions.reset();
 		}, []);
 
 		useEffect(() => localStorage.setItem("store", JSON.stringify(state.store)));

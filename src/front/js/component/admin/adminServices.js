@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Context } from "../../store/appContext";
+import { CloudinaryUploadWidget } from "../cloudinary/cloudinaryUploadWidget";
 
 export const AdminServices = () => {
 	const { actions, store } = useContext(Context);
@@ -291,6 +292,7 @@ export const AdminServices = () => {
 									) : (
 										""
 									)}
+									{/* <CloudinaryUploadWidget title="" preset="services_images" /> */}
 									<button
 										type="button"
 										className={"edit-img" + (data.id ? "" : " inactive")}
