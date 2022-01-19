@@ -12,8 +12,9 @@ export const Login = () => {
 
 	useEffect(
 		() => {
-			if (store.user.id) {
-				store.user.is_admin ? history.push("/admin/welcome") : null;
+			if (store.booking.id && store.user.id) actions.setPopup("resume", "Resumen de la reserva");
+			if (store.user.id && store.user.is_admin) {
+				history.push("/admin/welcome");
 				actions.closePopup();
 			}
 		},
@@ -55,10 +56,6 @@ export const Login = () => {
 								actions.generate_token(email, password),
 								"toast-info"
 							);
-							// store.booking.id
-							// 	? (actions.setPopup("resume", "Resumen de la reserva"),
-							// 	  actions.generate_token(email, password))
-							// 	: actions.generate_token(email, password);
 						}}
 						className="btn btn-warning w-100"
 						type="submit">
@@ -70,25 +67,22 @@ export const Login = () => {
 							Únete ahora
 						</button>
 					</div>
-					<div className="d-flex w-100 justify-content-center">
+					{/* <div className="d-flex w-100 justify-content-center">
 						<button className="text-primary" onClick={() => actions.setPopup("guest", "Invitado")}>
 							Seguir como invitado
 						</button>
-					</div>
+					</div> */}
 				</div>
-				{/* {store.token ? (
-					actions.closePopup()
-				) : (
-					<div>
-						{store.message != "" ? (
-							<div className="alert alert-danger" role="alert">
-								{store.message}
-							</div>
-						) : (
-							""
-						)}
-					</div>
-				)} */}
+
+				<div>
+					{store.message != "" ? (
+						<div className="alert alert-danger" role="alert">
+							{store.message}
+						</div>
+					) : (
+						""
+					)}
+				</div>
 			</div>
 		</div>
 	);

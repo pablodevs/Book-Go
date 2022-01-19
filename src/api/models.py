@@ -80,7 +80,7 @@ class Service(db.Model):
     reserva = db.relationship('Book', backref ='service', lazy=True)
 
     def __repr__(self):
-        return '<Service %r>' % self.name
+        return '%r' % self.name
 
     def serialize(self):
         return {
@@ -131,7 +131,7 @@ class Dispo(db.Model):
         nullable=False)
 
     def __repr__(self):
-        return '<Dispo %r>' % self.service
+        return '%r' % self.service_id
 
     def serialize(self):
         return {

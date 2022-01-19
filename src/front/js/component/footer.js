@@ -7,7 +7,7 @@ export const Footer = () => (
 			<div className="row">
 				{/* Contact Data */}
 				<div className="col">
-					<h5>Contacto:</h5>
+					<h5>Contacto: </h5>
 					<ul className="nav flex-column">
 						<li className="nav-item mb-2">
 							<p>Teléfono: (+34) 123 456 789</p>
@@ -22,7 +22,7 @@ export const Footer = () => (
 				</div>
 				{/* Social Media buttons */}
 				<div className="col">
-					<h5>Siguenos en las Redes Sociales</h5>
+					<h5>Siguenos: </h5>
 					<ul className="nav justify-content-center p-3">
 						<li className="nav-item mb-2">
 							<a
@@ -55,12 +55,12 @@ export const Footer = () => (
 				{/* Form to subscribe to newsletter */}
 				<div className="col-md-3 py-3">
 					<form>
-						<h5>Suscríbete a nuestra NewsLetter:</h5>
-						<p>Te podrás dar de baja cuando quieras.</p>
+						<h5>Subscríbete : </h5>
+
 						<div className="row gap-2">
-							<input id="newsletter1" type="text" className="col-md-12 col-sm-12" placeholder="Email." />
+							<input id="newsletter1" type="text" className="col-md-12 col-sm-12" placeholder="Email " />
 							<button className="btn btn-primary col-md-5 col-sm-12" type="button">
-								Subscribir
+								Subcríbete
 							</button>
 						</div>
 					</form>
@@ -69,7 +69,7 @@ export const Footer = () => (
 		</div>
 		{/* Copyrights */}
 		<div>
-			<p>&#169; Pablo, Chavi & Clara. 2022 Todos los derechos reservados</p>
+			<p>&#169; Pablo, Chavi & Clara. 20220 Todos los derechos reservados</p>
 		</div>
 	</footer>
 );

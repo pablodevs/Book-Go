@@ -13,9 +13,24 @@ export const Signup = () => {
 		password: ""
 	});
 
+	// const submitForm = event => {
+	// 	event.preventDefault();
+	// 	actions.createUser(data, files);
+	// };
+
 	const submitForm = event => {
 		event.preventDefault();
-		actions.createUser(data, files);
+
+		// we are about to send this to the backend.
+		console.log("This are the files", files);
+		let body = new FormData();
+		body.append("email", data.email);
+		body.append("password", data.password);
+		body.append("name", data.name);
+		body.append("lastname", data.lastname);
+		body.append("phone", data.phone);
+		body.append("profile_image", files[0]);
+		actions.createUser(body);
 	};
 
 	const handleInputChange = e => {
@@ -60,6 +75,7 @@ export const Signup = () => {
 						className="form-control"
 						type="phone"
 						id="phone"
+						maxLength="9"
 						name="phone"
 						placeholder="Teléfono..."
 					/>
