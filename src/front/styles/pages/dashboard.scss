@@ -131,6 +131,17 @@ button.dashboard-edit-img {
     &:hover, &:hover > i {
         color: #739ad2;
     }
+    &:hover::before {
+        content: '';
+        position: absolute;
+        top: -1px;
+        left: -4px;
+        height: calc(100% + 2px);
+        width: 4px;
+        border-bottom-left-radius: 10px;
+        border-top-left-radius: 10px;
+        background-color: rgba(75, 109, 157, 0.541);
+    }
     &.tab-active {
         // border-left: 4px solid #4b6d9d;
         font-weight: 600;
