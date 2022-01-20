@@ -133,7 +133,7 @@ export const AdminServices = () => {
 				"promise",
 				{ loading: "Guardando...", success: `${data.service} guardado` },
 				actions.updateService(data),
-				"toast-confirm"
+				"toast-success"
 			);
 	};
 

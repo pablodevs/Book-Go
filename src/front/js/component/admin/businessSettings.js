@@ -91,7 +91,7 @@ export const BusinessSettings = () => {
 				"promise",
 				{ loading: "Guardando...", success: `Cambios guardados` },
 				actions.updateBusinessInfo(firstData),
-				"toast-confirm"
+				"toast-success"
 			);
 		}
 	};
@@ -102,12 +102,11 @@ export const BusinessSettings = () => {
 			"promise",
 			{ loading: "Guardando...", success: `Cambios guardados` },
 			actions.updateBusinessInfo(secondData),
-			"toast-confirm"
+			"toast-success"
 		);
 	};
 
 	return (
-		// PODER CAMBIAR LA FOTO DE PORTADA (NO HABRÁ CAROUSEL)
 		<div className="dashboard-content-wrapper">
 			<h1 className="dashboard-content-title">Configuración del negocio</h1>
 			<div className="admin-sections-wrapper">

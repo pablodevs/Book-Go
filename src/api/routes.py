@@ -110,25 +110,25 @@ def create_service():
     current_user_id = get_jwt_identity() # obtiene el id del usuario asociado al token (id == sub en jwt decode)
     user = User.query.get(current_user_id)
     if user.serialize()["is_admin"] == False:
-        raise APIException('Error de identificación', status_code=401)
+        raise APIException('Error de identificación.', status_code=401)
     
     body_service = request.json
 
     # Data validation
     if body_service is None:
-        raise APIException("You need to specify the request body as a json object", status_code=400)
+        raise APIException("You need to specify the request body as a json object.", status_code=400)
     if 'name' not in body_service or body_service['name'] == "" or body_service['name'] == None:
-        raise APIException('You need to specify the name', status_code=400)
+        raise APIException('You need to specify the name.', status_code=400)
     elif len(body_service['name']) > 120:
-        return jsonify({"message": "El nombre no puede superar los 120 caracteres"}), 400
+        return jsonify({"message": "El nombre no puede superar los 120 caracteres."}), 400
     if 'price' not in body_service or body_service['price'] == "" or body_service['price'] == None:
-        raise APIException('You need to specify the price', status_code=400)
+        raise APIException('You need to specify the price.', status_code=400)
     if 'description' not in body_service or body_service['description'] == "" or body_service['description'] == None:
-        raise APIException('You need to create a description', status_code=400)
+        raise APIException('You need to create a description.', status_code=400)
     elif len(body_service['description']) > 1000:
         return jsonify({"message": "La descripción no puede superar los 1000 caracteres"}), 400
     if 'duration' not in body_service or body_service['duration'] == "" or body_service['duration'] == None:
-        raise APIException('You need to specify the duration', status_code=400)
+        raise APIException('You need to specify the duration.', status_code=400)
     if 'is_active' not in body_service or body_service['is_active'] == "" or body_service['is_active'] == None:
         if 'sku' not in body_service or body_service['sku'] == "" or body_service['sku'] == None:
             new_service = Service(name = body_service["name"], price = body_service["price"], description = body_service["description"], duration = body_service["duration"])
@@ -156,13 +156,13 @@ def handle_single_service(service_id):
     current_user_id = get_jwt_identity() # obtiene el id del usuario asociado al token (id == sub en jwt decode)
     user = User.query.get(current_user_id)
     if user.serialize()["is_admin"] == False:
-        raise APIException('Error de identificación', status_code=401)
+        raise APIException('Error de identificación.', status_code=401)
 
     service = Service.query.get(service_id)
 
     # Data validation
     if service is None:
-        raise APIException('Service not found in data base', status_code=404)
+        raise APIException('Service not found in data base.', status_code=404)
         
     # Modify (PUT) a service
     if request.method == 'PUT':
@@ -189,7 +189,7 @@ def handle_single_service(service_id):
     elif request.method == 'DELETE':
         db.session.delete(service)
         db.session.commit()
-        return jsonify({"message": "The service has been deleted"}), 200
+        return jsonify({"message": "The service has been deleted."}), 200
 
 # GET A SERVICE
 @api.route('/services/<int:service_id>', methods=['GET'])
@@ -201,7 +201,7 @@ def get_service(service_id):
 
     # Data validation
     if service is None:
-        raise APIException('Service not found in data base', status_code=404)
+        raise APIException('Service not found in data base.', status_code=404)
 
     return jsonify(service.serialize()), 200
 
@@ -212,15 +212,20 @@ def create_new_user():
 
     # fetch for the user
 
-    name_recieved = request.form.get("name", None)
-    lastname_recieved = request.form.get("lastname", None)
-    email_recieved = request.form.get("email", None)
-    phone_recieved = request.form.get("phone", None)
-    password_recieved = request.form.get("password", None)
-    if "profile_image_url" in request.form:
+    email_received = request.form.get("email", None)
+
+    # Verifica que el email no exista en otro usuario
+    findUser = User.query.filter_by(email = email_received).first()
+    if findUser:
+        raise APIException('Ya existe una cuenta asociada a ese correo.', status_code=404)
+    else:
+        name_received = request.form.get("name", None)
+        lastname_received = request.form.get("lastname", None)
+        phone_received = request.form.get("phone", None)
+        password_received = request.form.get("password", None)
         profile_image_recived = request.form.get("profile_image_url", None)
 
-    new_user = User(email= email_recieved, password = password_recieved, name= name_recieved, lastname = lastname_recieved, phone = phone_recieved, profile_image_url = profile_image_recived)
+        new_user = User(email = email_received, password = password_received, name = name_received, lastname = lastname_received, phone = phone_received, profile_image_url = profile_image_recived)
 
 
     # validate that the front-end request was built correctly
@@ -232,7 +237,7 @@ def create_new_user():
     #     api_secret = os.getenv('API_SECRET') 
     #     )
   
-    #     result = cloudinary.uploader.upload(request.files['profile_image'], public_id = email_recieved)
+    #     result = cloudinary.uploader.upload(request.files['profile_image'], public_id = email_received)
     #     # update the user with the given cloudinary image URL
     #     user.profile_image_url = result['secure_url']
 
@@ -241,6 +246,70 @@ def create_new_user():
 
     return jsonify(new_user.serialize()), 200
 
+# GET, MODIFY OR DELETE A USER
+# Protect a route with jwt_required, which will kick out requests without a valid JWT present.
+@api.route('/user', methods=['PUT', 'GET', 'DELETE'])
+@jwt_required() # Cuando se recive una peticion, se valida que exista ese token y que sea valido
+def handle_single_user():
+    """
+    Single user
+    """
+
+    current_user_id = get_jwt_identity() # obtiene el id del usuario asociado al token (id == sub en jwt decode)
+    user = User.query.get(current_user_id)
+
+    # Data validation
+    if user is None:
+        raise APIException('User not found in data base.', status_code=404)
+
+    # Modify (PUT) a user
+    if request.method == 'PUT':
+        # Query body
+        request_body = request.form
+
+        # Check body's info
+        if "name" in request_body:
+            user.name = request_body.get("name", None)
+        elif len(request_body.get("name", None)) > 120:
+            raise APIException('Nombre demasiado largo.', status_code=400)
+        if "lastname" in request_body:
+            user.lastname = request_body.get("lastname", None)
+        elif len(request_body.get("lastname", None)) > 120:
+            raise APIException('Apellido demasiado largo.', status_code=400)
+
+        # Verifica que el email no exista en otro usuario
+        if "email" in request_body:
+            email_received = request_body.get("email", None)
+            findUser = User.query.filter_by(email = email_received).first()
+            if findUser and findUser != user:
+                raise APIException('Ya existe una cuenta asociada a ese correo.', status_code=404)
+            else:
+                user.email = email_received
+        elif len(request_body.get("email", None)) > 120:
+            raise APIException('Introduce una dirección de correo electrónico válida.', status_code=400)
+
+        if "phone" in request_body:
+            user.phone = request_body.get("phone", None)
+        if "profile_image_url" in request_body:
+            user.profile_image_url = request_body.get("profile_image_url", None)
+
+        db.session.commit()
+        return jsonify(user.serialize()), 200
+        
+    # GET a user
+    elif request.method == 'GET':
+        return jsonify(user.serialize()), 200
+    
+    # DELETE a user
+    elif request.method == 'DELETE':
+        deleted_id = user.serialize()["id"]
+        deleted_email = user.serialize()["email"]
+
+        db.session.delete(user)
+        db.session.commit()
+        return jsonify({"message": f"The user with id {deleted_id} and email {deleted_email} has been deleted."}), 200
+
+    return jsonify({"message": "Invalid Method."}), 404
 
 # GET ALL USERS
 @api.route('/users', methods=['GET'])
@@ -253,14 +322,14 @@ def get_all_users():
     current_user_id = get_jwt_identity() # obtiene el id del usuario asociado al token (id == sub en jwt decode)
     user = User.query.get(current_user_id)
     if user.serialize()["is_admin"] == False:
-        raise APIException('Error de identificación', status_code=401)
+        raise APIException('Error de identificación.', status_code=401)
     
     all_users = sorted(User.query.all(), key = lambda user: user.serialize()["name"].lower())
     all_clients = [user.serialize() for user in all_users if not user.serialize()["is_admin"]]
     return jsonify(all_clients), 200
 
 
-#GENERATE TOKEN
+# GENERATE TOKEN
 @api.route('/token', methods=['POST'])
 def generate_token():
 
@@ -271,68 +340,13 @@ def generate_token():
     user = User.query.filter_by(email=email_received, password=password_received).first()
     if user is None:
         # the user was not found on the database
-        return jsonify({"message": "Usuario o contraseña incorrectos"}), 401
+        return jsonify({"message": "Usuario o contraseña incorrectos."}), 401
     
     # create a new token with the user id inside
     access_token = create_access_token(identity=user.id)
-    return jsonify({"message": "Acceso correcto", "token": access_token, "id": user.id, "profile_image_url" : user.profile_image_url, "name": user.name, "lastname": user.lastname, "email": user.email, "phone": str(user.phone), "is_admin": user.is_admin })
+    return jsonify({"message": "Acceso correcto.", "status": "success", "token": access_token, "id": user.id, "profile_image_url" : user.profile_image_url, "name": user.name, "lastname": user.lastname, "email": user.email, "phone": str(user.phone), "is_admin": user.is_admin })
 
 
-# GET, MODIFY OR DELETE A USER
-# Protect a route with jwt_required, which will kick out requests without a valid JWT present.
-@api.route('/user', methods=['PUT', 'GET', 'DELETE'])
-@jwt_required() # Cuando se recive una peticion, se valida que exista ese token y que sea valido
-def handle_single_user():
-    """
-    Single user
-    """
-    current_user_id = get_jwt_identity() # obtiene el id del usuario asociado al token (id == sub en jwt decode)
-    user = User.query.get(current_user_id)
-
-    # Data validation
-    if user is None:
-        raise APIException('User not found in data base', status_code=404)
-
-    # Modify (PUT) a user
-    if request.method == 'PUT':
-        # Query body
-        request_body = request.form
-
-
-        # Check body's info
-        if "name" in request_body:
-            user.name = request_body.get("name", None)
-        elif len(request_body.get("name", None)) > 120:
-            raise APIException('Nombre demasiado largo', status_code=400)
-        if "lastname" in request_body:
-            user.lastname = request_body.get("lastname", None)
-        elif len(request_body.get("lastname", None)) > 120:
-            raise APIException('Apellido demasiado largo', status_code=400)
-        if "email" in request_body:
-            user.email = request_body.get("email", None)
-        elif len(request_body.get("email", None)) > 120:
-            raise APIException('Introduce una dirección de correo electrónico válida', status_code=400)
-        if "phone" in request_body:
-            user.phone = request_body.get("phone", None)
-        if "profile_image" in request_body:
-            user.profile_image_recived = request.form.get("profile_image_url", None)
-        # if "password" in request_body:
-        #     user.password = request_body["password"]
-
-        db.session.commit()
-        return jsonify(user.serialize()), 200
-        
-    # GET a user
-    elif request.method == 'GET':
-        return jsonify(user.serialize()), 200
-    
-    # DELETE a user
-    elif request.method == 'DELETE':
-        db.session.delete(user)
-        db.session.commit()
-        return jsonify({"message": "The user has been deleted"}), 200
-
-    return jsonify({"message": "Invalid Method"}), 404
 
 
 # GET AVAILABILITY OF A SERVICE
@@ -382,7 +396,7 @@ def create_booking(user_id):
     msg.html = "<html lang='es'><head><meta charset='UTF-8'><meta http-equiv='X-UA-Compatible' content='IE=edge'><meta name='viewport' content='width=device-width, initial-scale=1.0'></head><body><h1>Confirmación de Reserva</h1><div><p>Estimado cliente:</p><p>Le confirmamos su reserva de nuestro servicio de " + str(dispo.service) + " para el día " + str(dispo.date.strftime("%-d/%-m/%Y"),) + " a las " + str(dispo.time.strftime("%-H:%M")) + "  </p><p>Muchas gracias por confiar en nosotros.</p></div></body></html>"
     mail.send(msg)
 
-    return jsonify({"message": "Su reserva ha sido Confirmada"}), 200
+    return jsonify({"message": "Su reserva ha sido Confirmada."}), 200
    
 # CREATE NEW BOOKING
 # @api.route('/book/<int:dispo_id>/<int:user_id>', methods=['POST'])
@@ -426,7 +440,7 @@ def get_business_info():
 
     except IndexError as error:
         # Si está vacía, devuelve error
-        raise APIException("Business does not exists", status_code=404)
+        raise APIException("Business does not exists.", status_code=404)
 
 
 # MODIFY THE BUSINESS
@@ -440,7 +454,7 @@ def modify_business_info():
     current_user_id = get_jwt_identity() # obtiene el id del usuario asociado al token (id == sub en jwt decode)
     user = User.query.get(current_user_id)
     if user.serialize()["is_admin"] == False:
-        raise APIException('Error de identificación', status_code=401)
+        raise APIException('Error de identificación.', status_code=401)
 
     try:
         # Intenta obtener la tabla de negocio
@@ -488,7 +502,7 @@ def get_dispo_hours(service_id):
 
     # Data validation
     if service is None:
-        raise APIException('Service not found in data base', status_code=404)
+        raise APIException('Service not found in data base.', status_code=404)
 
     # Get the schedule and open days (weekdays)
     try:
@@ -500,5 +514,5 @@ def get_dispo_hours(service_id):
 
     except IndexError as error:
         # Si está vacía, devuelve error
-        raise APIException("Business does not exist", status_code=404)
+        raise APIException("Business does not exist.", status_code=404)
 

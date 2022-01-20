@@ -79,6 +79,7 @@ $--padding-top: 2rem;
 .dashboard-avatar {
     height: 70px;
     width: 70px;
+    box-shadow: 0 4px 10px 0 rgba(0,0,0,0.14);
     &.avatar { padding: 8px }
 }
 .avatar__img {
@@ -140,7 +141,7 @@ button.dashboard-edit-img {
         width: 4px;
         border-bottom-left-radius: 10px;
         border-top-left-radius: 10px;
-        background-color: rgba(75, 109, 157, 0.541);
+        background-color: rgba(75, 109, 157, 0.55);
     }
     &.tab-active {
         font-weight: 600;
@@ -163,8 +164,14 @@ button.dashboard-edit-img {
     }
 }
 
-.logout, .logout:hover {
+.dashboard-tab.logout, .dashboard-tab.logout:hover {
     color: $--color-pink-dark;
+}
+.dashboard-tab.logout:hover {
+    font-weight: bold;
+    &::before {
+        background: none
+    }
 }
 
 // Titles

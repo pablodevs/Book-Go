@@ -22,11 +22,11 @@ export const Pago = () => {
 						service: store.booking.service.name
 					})
 				})
-					.then(res => res.json())
+					.then(response => res.json())
 					.then(
-						response => (
-							console.log("Success:", JSON.stringify(response.message)),
-							actions.setToast("success", response.message)
+						resp => (
+							console.log("Success:", JSON.stringify(resp.message)),
+							actions.setToast("success", resp.message)
 						)
 					)
 					.catch(error => console.error("Error:", error));

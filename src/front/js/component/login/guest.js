@@ -37,56 +37,46 @@ export const Guest = () => {
 				<form onSubmit={submitForm} className="col mx-4 mb-4" style={{ display: "grid", gap: "1rem" }}>
 					<input
 						required
-						onChange={e => {
-							handleInputChange(e);
-						}}
+						onChange={handleInputChange}
 						type="text"
-						id="name"
+						id="guests-name"
 						name="name"
 						placeholder="Nombre..."
 					/>
 
 					<input
 						required
-						onChange={e => {
-							handleInputChange(e);
-						}}
+						onChange={handleInputChange}
 						type="text"
-						id="lastname"
+						id="guests-lastname"
 						name="lastname"
 						placeholder="Apellidos..."
 					/>
 					<input
 						required
-						onChange={e => {
-							handleInputChange(e);
-						}}
+						onChange={handleInputChange}
 						type="mail"
-						id="email"
+						id="guests-email"
 						name="email"
 						placeholder="Correo electrónico..."
 					/>
 					<input
 						required
-						onChange={e => {
-							handleInputChange(e);
-						}}
+						onChange={handleInputChange}
 						type="phone"
-						id="phone"
+						id="guests-phone"
 						name="phone"
 						placeholder="Teléfono..."
 					/>
 					<button className="btn btn-warning w-100" type="submit">
 						Confirmar
 					</button>
+					{store.message.message ? (
+						<div className={`alert alert-${store.message.status}`} role="alert">
+							{store.message.message}
+						</div>
+					) : null}
 				</form>
-				{store.message ? (
-					<div className={`alert alert-${store.message != "" ? "success" : "danger"}`} role="alert">
-						{store.message != "" ? store.message : ""}
-					</div>
-				) : (
-					""
-				)}
 			</div>
 		</div>
 	);

@@ -41,6 +41,9 @@
     & h1 { font-size: 1.4rem; font-weight: 600; }
     & i { font-size: 1rem; color: $--color-grey-dark }
 }
+.popup-subtitle {
+    font-size: 1.3rem;
+}
 .popup-body {
     display: flex;
     flex-direction: column;
@@ -63,7 +66,11 @@
     transition: all 0.3s ease-out;
 }
 
-.popup-container, .popup-row { margin: auto }
+.popup-container, .popup-row {
+    width: calc(min(100%, 500px));
+    margin: auto;
+    overflow-y: auto;
+}
 .popup-row {
     justify-content: center;
     width: calc(min(500px, 100%));
@@ -83,9 +90,6 @@
         transition: all 0.3s ease-out;
     }
     .popup-show { transform: translateY(0) }
-    .popup-header {
-        margin-bottom: 0;
-    }
     .popup-body {
         height: auto;
         padding: 1rem;

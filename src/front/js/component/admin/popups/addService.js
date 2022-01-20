@@ -71,7 +71,7 @@ export const AddService = () => {
 				"promise",
 				{ loading: "Añadiendo...", success: resp => `Servicio agregado: ${resp.name}` },
 				actions.addService(data),
-				"toast-confirm"
+				"toast-success"
 			);
 		}
 	};

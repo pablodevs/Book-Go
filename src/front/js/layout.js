@@ -21,7 +21,22 @@ const Layout = () => {
 
 	return (
 		<BrowserRouter basename={basename}>
-			<Toaster>
+			<Toaster
+				toastOptions={{
+					success: {
+						icon: null,
+						duration: 3000,
+						className: "toast-success"
+					},
+					error: {
+						icon: null,
+						className: "toast-danger"
+					},
+					blank: {
+						icon: null,
+						className: "toast-info"
+					}
+				}}>
 				{t => (
 					<ToastBar toast={t}>
 						{({ icon, message }) => (

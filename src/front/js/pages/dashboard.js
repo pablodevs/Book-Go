@@ -3,6 +3,7 @@ import { Context } from "../store/appContext";
 import { useHistory, useParams } from "react-router-dom";
 import { AccountSettings } from "../component/dashboard/accountSettings";
 import { ReservationsHistory } from "../component/dashboard/reservationsHistory";
+import { CloudinaryUploadWidget } from "../component/cloudinary/cloudinaryUploadWidget";
 import house from "../../img/dashboard/home_transparent.png";
 import "../../styles/pages/dashboard.scss";
 
@@ -17,6 +18,23 @@ export const Dashboard = () => {
 
 	const params = useParams();
 	let history = useHistory();
+
+	useEffect(
+		() => {
+			if (store.image_url) {
+				let body = new FormData();
+				body.append("profile_image_url", store.image_url);
+
+				actions.setToast(
+					"promise",
+					{ loading: "Guardando...", success: "Imagen modificada" },
+					actions.updateUser(body),
+					"toast-success"
+				);
+			}
+		},
+		[store.image_url]
+	);
 
 	const showWelcome = () => {
 		setContent(
@@ -69,9 +87,25 @@ export const Dashboard = () => {
 									</svg>
 								</div>
 							)}
-							<button type="button" className="edit-img dashboard-edit-img" onClick={() => undefined}>
-								<i className="fas fa-camera" />
-							</button>
+							<CloudinaryUploadWidget
+								preset="client_images"
+								defaultComp={
+									<button
+										type="button"
+										className="edit-img dashboard-edit-img"
+										onClick={() => actions.setWidget(true)}>
+										<i className="fas fa-camera" />
+									</button>
+								}
+								successComp={
+									<button
+										type="button"
+										className="edit-img dashboard-edit-img"
+										onClick={() => actions.setWidget(true)}>
+										<i className="fas fa-camera" />
+									</button>
+								}
+							/>
 						</div>
 						<div className="dashboard-info">
 							<h1 className="dashboard-username">

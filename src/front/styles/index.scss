@@ -75,6 +75,13 @@ small {
 .form-check-input:focus {
     box-shadow: none;
 }
+
+.alert {
+    border-radius: 0;
+    margin-bottom: 0;
+    text-align: center;
+}
+
 /*===== Utility styles =====*/
 /* 
     Los dos styles siguientes hacen que las Pages cojan el 100% del alto de cualquier pantalla
@@ -337,11 +344,11 @@ input.search-input[type="search"]::-webkit-search-results-decoration {
 }
 
 /*===== Toasts =====*/
-div.toast-confirm, div.toast-danger, div.toast-info, button.toast-close {
+div.toast-success, div.toast-danger, div.toast-info, button.toast-close {
     color: white;
     font-weight: bold;
 }
-div.toast-confirm {
+div.toast-success {
     background: $--color-green-confirm;
     padding-inline: 1.4rem;
 }
@@ -352,6 +359,7 @@ div.toast-danger {
 div.toast-info {
     background: $--color-blue-regular;
     padding-inline: 1.4rem;
+    color: $--color-grey-dark;
 }
 button.toast-close {
     position: absolute;

@@ -20,7 +20,6 @@ export const AccountSettings = () => {
 				lastname: store.user.lastname.charAt(0).toUpperCase() + store.user.lastname.slice(1),
 				email: store.user.email,
 				phone: store.user.phone
-				// img_url: store.user.img_url
 			});
 		},
 		[store.user]
@@ -28,11 +27,19 @@ export const AccountSettings = () => {
 
 	const submitForm = event => {
 		event.preventDefault();
+
+		let body = new FormData();
+		body.append("id", data.id);
+		body.append("name", data.name);
+		body.append("lastname", data.lastname);
+		body.append("email", data.email);
+		body.append("phone", data.phone);
+
 		actions.setToast(
 			"promise",
 			{ loading: "Guardando...", success: "Cambios guardados" },
-			actions.updateUser(data),
-			"toast-confirm"
+			actions.updateUser(body),
+			"toast-success"
 		);
 	};
 
@@ -49,7 +56,7 @@ export const AccountSettings = () => {
 			<form onSubmit={submitForm} className="dashboard-form">
 				<h2 className="dashboard-content-subtitle">Detalles de la cuenta</h2>
 				<div>
-					<label className="dashboard-label" htmlFor="name">
+					<label className="dashboard-label" htmlFor="update-name">
 						Nombre
 					</label>
 					<div className="dashboard-input">
@@ -58,7 +65,7 @@ export const AccountSettings = () => {
 								handleInputChange(e);
 							}}
 							type="text"
-							id="name"
+							id="update-name"
 							name="name"
 							value={data.name || ""}
 							placeholder="Nombre"
@@ -77,7 +84,7 @@ export const AccountSettings = () => {
 					</div>
 				</div>
 				<div>
-					<label className="dashboard-label" htmlFor="lastname">
+					<label className="dashboard-label" htmlFor="update-lastname">
 						Apellido
 					</label>
 					<div className="dashboard-input">
@@ -86,7 +93,7 @@ export const AccountSettings = () => {
 								handleInputChange(e);
 							}}
 							type="text"
-							id="lastname"
+							id="update-lastname"
 							name="lastname"
 							value={data.lastname || ""}
 							placeholder="Apellidos"
@@ -105,7 +112,7 @@ export const AccountSettings = () => {
 					</div>
 				</div>
 				<div>
-					<label className="dashboard-label" htmlFor="email">
+					<label className="dashboard-label" htmlFor="update-email">
 						Email
 					</label>
 					<div className="dashboard-input">
@@ -114,7 +121,7 @@ export const AccountSettings = () => {
 								handleInputChange(e);
 							}}
 							type="mail"
-							id="email"
+							id="update-email"
 							name="email"
 							value={data.email || ""}
 							placeholder="Email"
@@ -133,20 +140,18 @@ export const AccountSettings = () => {
 					</div>
 				</div>
 				<div>
-					<label className="dashboard-label" htmlFor="phone">
+					<label className="dashboard-label" htmlFor="update-phone">
 						Número de teléfono
 					</label>
 					<div className="dashboard-input">
 						<input
-							onChange={e => {
-								if (e.target.value.length > 9) e.target.classList.add("input-error");
-								else e.target.classList.remove("input-error");
-								handleInputChange(e);
-							}}
+							onChange={handleInputChange}
 							type="tel"
-							id="phone"
+							id="update-phone"
 							name="phone"
 							value={data.phone || ""}
+							minLength="9"
+							maxLength="9"
 							placeholder="Número de teléfono"
 						/>
 						<button
@@ -165,10 +170,10 @@ export const AccountSettings = () => {
 				<div>
 					<span className="admin-form-subgroup-title">¿Has olvidado la contraseña?</span>
 					<div>
-						<label htmlFor="password" className="dashboard-label">
+						<label htmlFor="update-password" className="dashboard-label">
 							Contraseña
 						</label>
-						<button type="button" id="password" className="input-button">
+						<button type="button" id="update-password" className="input-button">
 							Cambiar contraseña
 						</button>
 					</div>

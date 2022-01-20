@@ -5,7 +5,10 @@ const getNumOfDaysInMonth = (year, month) => new Date(year, month + 1, 0).getDat
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
-			message: "",
+			message: {
+				message: "",
+				status: ""
+			},
 			//resume_view muestra el resumen de la reserva
 			resume_view: false,
 			// creamos booking_day para pasar el día seleccionado para reservar
@@ -37,7 +40,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				lastname: "",
 				phone: "",
 				email: "",
-				img_url: "",
+				profile_image_url: "",
 				is_admin: false
 			},
 
@@ -63,7 +66,14 @@ const getState = ({ getStore, getActions, setStore }) => {
 				actions.resetNewService();
 				actions.resetBooking();
 				actions.resetImageURL();
-				setStore({ message: "", clients: [], widget: false });
+				setStore({
+					message: {
+						message: "",
+						status: ""
+					},
+					clients: [],
+					widget: false
+				});
 			},
 
 			// Force render without change data
@@ -73,18 +83,19 @@ const getState = ({ getStore, getActions, setStore }) => {
 			setWidget: bool => setStore({ widget: bool }),
 
 			// Genera un toast
-			setToast: (type, message, funct = null, classname = "") => {
-				if (type === "error") toast.error(message);
-				else if (type === "success") toast.success(message);
-				else if (type === "blank") toast(message);
+			setToast: (type, body, funct = null, classname = "") => {
+				if (type === "danger") toast.error(body);
+				else if (type === "success") toast.success(body);
+				else if (type === "blank") toast(body);
 				else if (type === "promise") {
 					const store = getStore();
 					toast.promise(
 						funct,
 						{
-							loading: message.loading,
-							success: message.success,
-							error: () => `Error: ${store.message !== "" ? store.message : "desconocido"}`
+							loading: body.loading,
+							success: body.success,
+							error: () =>
+								`Error: ${store.message.message !== "" ? store.message.message : "desconocido"}`
 						},
 						{
 							duration: 4000,
@@ -92,7 +103,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 							icon: null
 						}
 					);
-					setStore({ message: "" });
+					setStore({
+						message: {
+							message: "",
+							status: ""
+						}
+					});
 				}
 			},
 
@@ -115,6 +131,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 				// Para abrir el popup del login, register o reservas
 				let store = getStore();
 				setStore({
+					message: {
+						message: "",
+						status: ""
+					},
 					prevPopup: [...store.prevPopup, { popup: store.popup, popupTitle: store.popupTitle }],
 					popup: type,
 					popupTitle: title
@@ -129,7 +149,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 				setStore({
 					popup: null,
 					popupTitle: "",
-					prevPopup: []
+					prevPopup: [],
+					booking: {}
 				});
 				actions.resetImageURL();
 			},
@@ -203,7 +224,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 						);
 						const resp = await response.json();
 						if (!response.ok) {
-							setStore({ message: resp.message });
+							setStore({
+								message: {
+									message: resp.message,
+									status: ""
+								}
+							});
 							throw Error(response);
 						}
 						setStore({
@@ -283,7 +309,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 					const response = await fetch(process.env.BACKEND_URL + "/services", options);
 					const resp = await response.json();
 					if (!response.ok) {
-						setStore({ message: resp.message });
+						setStore({
+							message: {
+								message: resp.message,
+								status: ""
+							}
+						});
 						throw Error(response);
 					}
 					setStore({
@@ -312,7 +343,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 					});
 					const resp = await response.json();
 					if (!response.ok) {
-						setStore({ message: resp.message });
+						setStore({
+							message: {
+								message: resp.message,
+								status: ""
+							}
+						});
 						throw Error(response);
 					}
 					let remainServices = store.services.filter(element => element.id !== id);
@@ -342,7 +378,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 					const response = await fetch(process.env.BACKEND_URL + `/services/${data.id}`, options);
 					const resp = await response.json();
 					if (!response.ok) {
-						setStore({ message: resp.message });
+						setStore({
+							message: {
+								message: resp.message,
+								status: ""
+							}
+						});
 						throw Error(response);
 					}
 					let storeAux = store.services.filter(element => element.id !== data.id);
@@ -382,38 +423,55 @@ const getState = ({ getStore, getActions, setStore }) => {
 			// },
 
 			// Create NEW USER
-			createUser: async data => {
-				await fetch(process.env.BACKEND_URL + `/user`, {
-					method: "POST",
-					body: data
-				})
-					.then(response => {
-						console.log(response.ok);
-						console.log(response.status);
-						return response.json();
-					})
-					.then(data => {
-						console.log(data);
-						setStore({ message: "Usuario creado Correctamente. Ya puede ir al login y acceder!" });
-					})
-					.catch(error => console.error(error));
+			createUser: async formData => {
+				const actions = getActions();
+				try {
+					const response = await fetch(process.env.BACKEND_URL + `/user`, {
+						method: "POST",
+						body: formData
+					});
+					const resp = await response.json();
+					if (!response.ok) {
+						setStore({
+							message: {
+								message: resp.message,
+								status: "danger"
+							}
+						});
+						throw Error(response);
+					}
+					actions.setPopup("login", "Iniciar Sesión");
+					setStore({
+						message: {
+							message: "Usuario creado Correctamente. Ya puede acceder!",
+							status: "success"
+						}
+					});
+					return resp;
+				} catch (err) {
+					console.error(err);
+				}
 			},
 
 			// Update current USER
-			updateUser: async data => {
+			updateUser: async formData => {
 				const store = getStore();
 				try {
 					const response = await fetch(process.env.BACKEND_URL + "/user", {
 						method: "PUT",
-						body: JSON.stringify(data),
+						body: formData,
 						headers: {
-							"Content-Type": "application/json",
 							Authorization: "Bearer " + store.token
 						}
 					});
 					const resp = await response.json();
 					if (!response.ok) {
-						setStore({ message: resp.message });
+						setStore({
+							message: {
+								message: resp.message,
+								status: "danger"
+							}
+						});
 						throw Error(response);
 					}
 					setStore({
@@ -445,7 +503,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 					});
 					const resp = await response.json();
 					if (!response.ok) {
-						setStore({ message: resp.message });
+						setStore({
+							message: {
+								message: resp.message,
+								status: "danger"
+							}
+						});
 						throw Error(response);
 					}
 					actions.logout();
@@ -468,15 +531,18 @@ const getState = ({ getStore, getActions, setStore }) => {
 					});
 					const resp = await response.json();
 					if (!response.ok) {
-						setStore({ message: resp.message });
+						setStore({
+							message: {
+								message: resp.message,
+								status: "danger"
+							}
+						});
 						throw Error(response);
 					} else {
-						setStore({
-							token: resp.token,
-							message: resp.message
-						});
-						actions.getProfileData(resp.token);
+						setStore({ token: resp.token });
 						localStorage.setItem("token", resp.token);
+						actions.getProfileData(resp.token);
+						actions.setToast("blank", `Bienvenido ${resp.name}`);
 						return resp;
 					}
 				} catch (err) {
@@ -498,13 +564,17 @@ const getState = ({ getStore, getActions, setStore }) => {
 						img_url: "",
 						is_admin: false
 					},
-					message: ""
+					message: {
+						message: "",
+						status: ""
+					}
 				});
 			},
 
 			// Obtener la información del usuario en Dashboard (por ejemplo)
 			getProfileData: async token => {
 				const actions = getActions();
+				const store = getStore();
 				const options = {
 					method: "GET",
 					headers: {
@@ -516,7 +586,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 					const resp = await response.json();
 					if (response.status === 401) actions.logout();
 					if (!response.ok) {
-						setStore({ message: resp.message });
+						setStore({
+							message: {
+								message: resp.message,
+								status: "danger"
+							}
+						});
 						throw Error(response);
 					}
 					setStore({
@@ -530,6 +605,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 							is_admin: resp.is_admin
 						}
 					});
+					if (!store.booking.date) actions.closePopup();
+					else actions.setPopup("resume", "Resumen de su reserva"); // Incluir en el resumen la hora a la que finaliza y datos del usuario!
 					return resp;
 				} catch (error) {
 					return error.json();
@@ -615,7 +692,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 					const response = await fetch(process.env.BACKEND_URL + "/business");
 					const resp = await response.json();
 					if (!response.ok) {
-						setStore({ message: resp.message });
+						setStore({
+							message: {
+								message: resp.message,
+								status: "danger"
+							}
+						});
 						throw Error(response);
 					}
 					setStore({
@@ -650,7 +732,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 					});
 					const resp = await response.json();
 					if (!response.ok) {
-						setStore({ message: resp.message });
+						setStore({
+							message: {
+								message: resp.message,
+								status: "danger"
+							}
+						});
 						throw Error(response);
 					}
 					setStore({

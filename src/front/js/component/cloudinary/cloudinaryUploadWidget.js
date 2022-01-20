@@ -1,22 +1,14 @@
 import React, { useContext, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { Context } from "../../store/appContext";
-import { WidgetButton } from "./widgetButton";
 
 export const CloudinaryUploadWidget = props => {
-	const [openFunct, setOpenFunct] = useState(() => undefined);
 	const [content, setContent] = useState(null);
 	const { actions, store } = useContext(Context);
 
 	useEffect(
 		() => {
-			if (store.image_url)
-				setContent(
-					<div className="input-button">
-						<i className="fas fa-camera" />
-						<i className="far fa-check-circle" style={{ color: "rgb(21, 215, 21)" }} />
-					</div>
-				);
+			if (store.image_url) setContent(props.successComp);
 		},
 		[store.image_url]
 	);
@@ -104,26 +96,20 @@ export const CloudinaryUploadWidget = props => {
 				}
 			};
 
-			const contentToRender = <WidgetButton title={props.title} funct={() => actions.setWidget(true)} />;
+			// const contentToRender = <WidgetButton title={props.title} funct={() => actions.setWidget(true)} />;
 
 			var myWidget = window.cloudinary.createUploadWidget(options, (error, result) => {
 				if (!error && result && result.event === "success") {
 					actions.setImageURL(result.info.url);
 				} else if (result && (result.event === "close" || result.event === "abort") && !store.image_url) {
 					actions.setWidget(false);
-					setContent(contentToRender);
+					setContent(props.defaultComp);
 				}
 			});
 			if (store.widget) {
 				myWidget.open();
-				setContent(
-					<div className="input-button">
-						<div className="spinner-border spinner-border-sm" role="status">
-							<span className="visually-hidden">Loading...</span>
-						</div>
-					</div>
-				);
-			} else setContent(contentToRender);
+				if (props.loadingComp) setContent(props.loadingComp);
+			} else setContent(props.defaultComp);
 		},
 		[store.widget]
 	);
@@ -132,6 +118,8 @@ export const CloudinaryUploadWidget = props => {
 };
 
 CloudinaryUploadWidget.propTypes = {
-	title: PropTypes.string,
-	preset: PropTypes.string
+	preset: PropTypes.string,
+	defaultComp: PropTypes.element,
+	loadingComp: PropTypes.element,
+	successComp: PropTypes.element
 };

@@ -7,9 +7,9 @@ export const ServicesPopup = () => {
 	useEffect(() => actions.updateBooking("date", ""), []);
 
 	return (
-		<div className="container popup-container popup-body">
-			Nuestros servicios:
-			<div className="row popup-row">
+		<div className="container-fluid px-4 pb-4">
+			<h2 className="popup-subtitle mb-3">Nuestros servicios:</h2>
+			<div className="row" style={{ gap: "1rem" }}>
 				{store.services.map((item, index) => (
 					<div className="col-auto" key={index}>
 						<button

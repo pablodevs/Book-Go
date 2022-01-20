@@ -32,7 +32,7 @@ export const Login = () => {
 				<form onSubmit={handleSubmit}>
 					<div className="col mx-4 mb-4" style={{ display: "grid", gap: "1rem" }}>
 						<div>
-							<label htmlFor="loginemail">E-mail:</label>
+							<label htmlFor="loginemail">E-mail</label>
 							<input
 								autoFocus
 								required
@@ -46,7 +46,7 @@ export const Login = () => {
 							/>
 						</div>
 						<div>
-							<label htmlFor="loginpassword">Contraseña:</label>
+							<label htmlFor="loginpassword">Contraseña</label>
 							<input
 								required
 								onChange={e => {
@@ -75,12 +75,12 @@ export const Login = () => {
 						</button>
 					</div> */}
 					</div>
+					{store.message.message ? (
+						<div className={`alert alert-${store.message.status}`} role="alert">
+							{store.message.message}
+						</div>
+					) : null}
 				</form>
-				{store.message != "" ? (
-					<div className="alert alert-danger" role="alert">
-						{store.message}
-					</div>
-				) : null}
 			</div>
 		</div>
 	);
