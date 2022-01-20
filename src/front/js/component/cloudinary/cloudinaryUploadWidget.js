@@ -107,7 +107,6 @@ export const CloudinaryUploadWidget = props => {
 			const contentToRender = <WidgetButton title={props.title} funct={() => actions.setWidget(true)} />;
 
 			var myWidget = window.cloudinary.createUploadWidget(options, (error, result) => {
-				console.log(result);
 				if (!error && result && result.event === "success") {
 					actions.setImageURL(result.info.url);
 				} else if (result && (result.event === "close" || result.event === "abort") && !store.image_url) {
