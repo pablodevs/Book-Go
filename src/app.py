@@ -45,7 +45,7 @@ db.init_app(app)
 CORS(app)
 
 # add the admin
-if os.getenv("DATABASE_URL") != "production"
+if os.getenv("DATABASE_URL") != "production":
     setup_admin(app)
 
 # Add all endpoints form the API with a "api" prefix
