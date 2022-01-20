@@ -83,6 +83,7 @@ button.btn-cool.logout {
     align-items: center;
     gap: 1.5rem;
     box-shadow: inset 0 0 0 2px $--color-pink-dark;
+    color: $--color-pink-dark;
     padding-inline: 1rem;
     &:hover {
         color: white;
@@ -271,9 +272,6 @@ div.disponibility-title.admin-form-group {
     align-items: baseline;
 }
 
-.admin-form-subgroup-title {
-    margin-bottom: 0.5rem;
-}
 .text-confirm {
     color: $--color-green-confirm;
     font-weight: bold;

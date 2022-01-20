@@ -101,10 +101,10 @@ export const Signup = () => {
 								</div>
 							}
 						/>
-						<button className="save-button" type="submit">
+						<button className="btn-cool" type="submit">
 							Únete
 						</button>
-						<div className="d-flex w-100 justify-content-center">
+						<div className="d-flex flex-wrap w-100 justify-content-center">
 							¿Ya eres miembro?&nbsp;
 							<button className="text-primary" onClick={() => actions.goToPrevPopup()}>
 								Iniciar Sesión

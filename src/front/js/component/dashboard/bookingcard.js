@@ -32,7 +32,7 @@ export const BookingCard = () => {
 					</span> */}
 				</div>
 				<button
-					className="book-again-btn"
+					className="btn-cool book-again-btn"
 					onClick={() => actions.setPopup("calendar", "Selecciona un nuevo día", service)}>
 					Reservar de nuevo
 				</button>

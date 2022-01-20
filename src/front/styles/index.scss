@@ -134,7 +134,8 @@ button.disabled, a.disabled {
     width: fit-content;
     height: auto;
     font-weight: bold;
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 1.5rem;
+    margin-inline: auto;
 
     transition: all 0.3s ease-out;
     -o-transition: all 0.3s ease-out;
@@ -180,8 +181,8 @@ button.icon-btn.danger, button.icon-btn.danger:hover {
     &:hover { background-color: $--color-blue-lighter }
 }
 
-.service-btn {
-    font-size: 1.2rem;
+.shadow-btn {
+    font-size: 1.1rem;
     padding: 0.2rem 1rem;
     border-radius: 100px;
     box-shadow: 2px 4px 11px 0px rgba(0, 0, 0, 0.3);
@@ -367,4 +368,25 @@ button.toast-close {
     top: 0.5rem;
     line-height: 9px;
     font-size: 18px;
+}
+
+
+/*===== Collapse =====*/
+
+.collapse-wrapper {
+    width: 100%;
+    border:  1px solid $--color-grey-lighter;
+}
+
+.collapse-toggle {
+    cursor: pointer;
+    padding: 1rem;
+}
+
+.collapse-content {
+    padding-inline: 1rem;
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.3s ease-out;
+    & > * { margin-block: 1rem }
 }

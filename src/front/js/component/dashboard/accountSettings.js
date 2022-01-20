@@ -179,7 +179,7 @@ export const AccountSettings = () => {
 					</div>
 				</div>
 				<div>
-					<button type="submit" className="save-button">
+					<button type="submit" className="btn-cool">
 						Guardar cambios
 					</button>
 				</div>

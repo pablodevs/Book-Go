@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { Context } from "../../store/appContext";
 import { CloudinaryUploadWidget } from "../cloudinary/cloudinaryUploadWidget";
@@ -6,6 +6,8 @@ import { CloudinaryUploadWidget } from "../cloudinary/cloudinaryUploadWidget";
 export const AdminServices = () => {
 	const { actions, store } = useContext(Context);
 
+	const divRef = useRef(null);
+	const [collapse, setCollapse] = useState(false);
 	const [minutesList, setMinutesList] = useState([]);
 	const [hoursList, setHoursList] = useState([]);
 	const [minutes, setMinutes] = useState(0);
@@ -22,7 +24,6 @@ export const AdminServices = () => {
 		sku: ""
 		// service_img_url: "",
 	});
-
 	useEffect(() => {
 		let listOfMinutes = [];
 		let listOfHours = [];
@@ -137,6 +138,12 @@ export const AdminServices = () => {
 			);
 	};
 
+	const handleCollapse = e => {
+		setCollapse(!collapse);
+		if (!collapse) divRef.current.style.maxHeight = divRef.current.scrollHeight + "px";
+		else divRef.current.style.maxHeight = "0";
+	};
+
 	return (
 		<div className="dashboard-content-wrapper admin-services">
 			<h1 className="dashboard-content-title">Servicios</h1>
@@ -209,60 +216,65 @@ export const AdminServices = () => {
 							</div>
 						</div>
 						<div className="admin-form-group">
-							<div className="admin-form-subgroup duration-subgroup">
-								<span className="admin-form-subgroup-title">Precio y duración del servicio</span>
-								<div className="dflex-row">
-									<div>
-										<label className="dashboard-label" htmlFor="price">
-											Precio
-										</label>
-										<div className="price-input">
-											<input
-												type="number"
-												id="price"
-												name="price"
-												min="0"
-												onChange={handleInputChange}
-												value={data.price}
-											/>
-											<span>€</span>
+							<div className="collapse-wrapper">
+								<h3 className="collapse-toggle" onClick={handleCollapse}>
+									Precio y duración del servicio
+								</h3>
+								<div className="admin-form-subgroup duration-subgroup collapse-content" ref={divRef}>
+									<div className="dflex-row">
+										<div>
+											<label className="dashboard-label" htmlFor="price">
+												Precio
+											</label>
+											<div className="price-input">
+												<input
+													type="number"
+													id="price"
+													name="price"
+													min="0"
+													onChange={handleInputChange}
+													value={data.price}
+												/>
+												<span>€</span>
+											</div>
 										</div>
-									</div>
-									<div>
-										<label htmlFor="hours" className="dashboard-label">
-											Hora(s)
-										</label>
-										<div className="select-wrapper">
-											<select
-												onChange={e => setHours(parseInt(e.target.value))}
-												id="hours"
-												value={hours}>
-												{hoursList.map((hour, idx) => (
-													<option key={idx} value={hour}>
-														{`${hour}h`}
-													</option>
-												))}
-											</select>
-										</div>
-										<label htmlFor="minutes" className="dashboard-label">
-											Minutos
-										</label>
-										<div className="select-wrapper">
-											<select
-												onChange={e => setMinutes(parseInt(e.target.value))}
-												id="minutes"
-												value={minutes}>
-												{minutesList.map((min, idx) => (
-													<option key={idx} value={min}>
-														{`${min}min`}
-													</option>
-												))}
-											</select>
+										<div>
+											<label htmlFor="hours" className="dashboard-label">
+												Hora(s)
+											</label>
+											<div className="select-wrapper">
+												<select
+													onChange={e => setHours(parseInt(e.target.value))}
+													id="hours"
+													value={hours}>
+													{hoursList.map((hour, idx) => (
+														<option key={idx} value={hour}>
+															{`${hour}h`}
+														</option>
+													))}
+												</select>
+											</div>
+											<label htmlFor="minutes" className="dashboard-label">
+												Minutos
+											</label>
+											<div className="select-wrapper">
+												<select
+													onChange={e => setMinutes(parseInt(e.target.value))}
+													id="minutes"
+													value={minutes}>
+													{minutesList.map((min, idx) => (
+														<option key={idx} value={min}>
+															{`${min}min`}
+														</option>
+													))}
+												</select>
+											</div>
 										</div>
 									</div>
 								</div>
 							</div>
 						</div>
+						<h3 className="dashboard-content-h3">Descripción e imagen del servicio</h3>
 						<div className="admin-form-group">
 							<div className="admin-form-subgroup">
 								<label htmlFor="description" className="dashboard-label">
@@ -308,12 +320,21 @@ export const AdminServices = () => {
 								</div>
 							</div>
 						</div>
+						<div>
+							<button type="submit" className="btn-cool">
+								Guardar cambios
+							</button>
+						</div>
+					</form>
+				</section>
+				<section className="admin-second-section">
+					<form className="dashboard-form">
+						<h2 className="dashboard-content-subtitle">Activar servicio</h2>
+						<span>
+							Es necesario agregar un <i>código de artículo</i> que permitirá a tus clientes pagar online.
+						</span>
 						<div className="admin-form-group">
 							<div className="admin-form-subgroup">
-								<span className="admin-form-subgroup-title">
-									Es necesario agregar un <i>código de artículo</i> que permitirá a tus clientes pagar
-									online.
-								</span>
 								<label className="dashboard-label" htmlFor="sku">
 									Sku (código de artículo)
 								</label>
@@ -341,11 +362,9 @@ export const AdminServices = () => {
 								</div>
 							</div>
 						</div>
+						<span>Activar esta opción permitirá a tus clientes reservar el servicio.</span>
 						<div className="admin-form-group">
 							<div className="admin-form-subgroup">
-								<span className="admin-form-subgroup-title">
-									Activar esta opción permitirá a tus clientes reservar el servicio.
-								</span>
 								<div className="form-check form-switch">
 									<label
 										className="form-check-label"
@@ -375,41 +394,12 @@ export const AdminServices = () => {
 							</div>
 						</div>
 						<div>
-							<button type="submit" className="save-button">
+							<button type="submit" className="btn-cool">
 								Guardar cambios
 							</button>
 						</div>
 					</form>
 				</section>
-				{/* <section className="admin-second-section">
-					<form className="dashboard-form">
-						<div className="disponibility-title admin-form-group">
-							<h2 className="dashboard-content-subtitle">Disponibilidad:</h2>
-							<span className={serviceList.includes(data.service) ? "text-confirm" : "text-cancel"}>
-								{data.service === "DEFAULT" ? "Ningún servicio seleccionado" : data.service}
-							</span>
-						</div>
-						<div className="admin-form-group">
-							<div className="admin-form-subgroup">
-								<label className="dashboard-label" htmlFor="date">
-									Fecha
-								</label>
-								<input type="date" id="date" name="date" />
-							</div>
-							<div className="admin-form-subgroup">
-								<label className="dashboard-label" htmlFor="time">
-									Hora
-								</label>
-								<input type="time" id="time" name="time" />
-							</div>
-						</div>
-						<div>
-							<button type="submit" className="save-button">
-								Guardar cambios
-							</button>
-						</div>
-					</form>
-				</section> */}
 			</div>
 		</div>
 	);

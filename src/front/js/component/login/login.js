@@ -57,10 +57,10 @@ export const Login = () => {
 								name="password"
 							/>
 						</div>
-						<button className="save-button" type="submit">
+						<button className="btn-cool" type="submit">
 							Acceder
 						</button>
-						<div className="d-flex w-100 justify-content-center">
+						<div className="d-flex flex-wrap w-100 justify-content-center">
 							¿Aún no eres miembro?&nbsp;
 							<button
 								className="text-primary"

@@ -167,7 +167,7 @@ export const BusinessSettings = () => {
 							</div>
 						</div>
 						<div>
-							<button type="submit" className="save-button">
+							<button type="submit" className="btn-cool">
 								Guardar cambios
 							</button>
 						</div>
@@ -231,7 +231,7 @@ export const BusinessSettings = () => {
 								</button>
 							</div>
 						</div>
-						<h2 className="dashboard-content-subtitle">Redes sociales</h2>
+						<h3 className="dashboard-content-h3">Redes sociales</h3>
 						<div className="socialMedia-input">
 							<label className="dashboard-label" htmlFor="facebook">
 								<i className="fab fa-facebook-square" />
@@ -311,7 +311,7 @@ export const BusinessSettings = () => {
 							</div>
 						</div>
 						<div>
-							<button type="submit" className="save-button">
+							<button type="submit" className="btn-cool">
 								Guardar cambios
 							</button>
 						</div>

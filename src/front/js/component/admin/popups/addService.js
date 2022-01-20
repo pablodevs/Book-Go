@@ -265,7 +265,7 @@ export const AddService = () => {
 					</div>
 				</div>
 				<div>
-					<button type="submit" className="save-button">
+					<button type="submit" className="btn-cool">
 						Añadir
 					</button>
 				</div>
