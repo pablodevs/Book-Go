@@ -55,10 +55,10 @@
 		"remote-origin-url": "^1.0.0",
 		"sass-loader": "^6.0.6",
 		"style-loader": "^0.19.0",
-		"webpack": "^4.42.0",
-		"webpack-cli": "^3.3.12",
-		"webpack-dev-server": "^3.11.0",
-		"webpack-merge": "^4.2.1"
+		"webpack": "^5.65.0",
+		"webpack-cli": "^4.9.1",
+		"webpack-dev-server": "^4.6.0",
+		"webpack-merge": "^5.8.0"
 	},
 	"babel": {
 		"presets": [
