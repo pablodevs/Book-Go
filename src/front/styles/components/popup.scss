@@ -1,4 +1,5 @@
 /*===== General styles import =====*/
+@import "../index"; // custom properties
 @import "../colors"; // paleta de colores
 @import "../fonts";  // estilo de las fuentes
 
@@ -22,7 +23,7 @@
     // overflow: hidden;
     width: fit-content;
     min-width: calc(min(100%, 400px));
-    border-radius: 7px;
+    border-radius: $--br;
     background-color: white;
     box-shadow: -1px 1px 3px 0 rgba(0,0,0,0.2);
     

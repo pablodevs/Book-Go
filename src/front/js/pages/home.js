@@ -1,7 +1,7 @@
 import React, { useEffect, useContext } from "react";
 import { ServiceCard } from "../component/home_components/service_card";
 import { Panel } from "../component/home_components/panel";
-import { Carrousel } from "../component/home_components/carrousel";
+import { ScrollTop } from "../component/scrollTopButton";
 import { Context } from "../store/appContext";
 import "../../styles/pages/home.scss";
 
@@ -53,6 +53,7 @@ export const Home = () => {
 					""
 				)}
 			</div>
+			<ScrollTop />
 		</div>
 	);
 };

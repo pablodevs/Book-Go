@@ -1,4 +1,5 @@
 /*===== General styles import =====*/
+@import "../index";  // propiedades custom
 @import "../colors"; // paleta de colores
 @import "../fonts";  // estilo de las fuentes
 @import "./dashboard";  // estilo de las fuentes
@@ -181,6 +182,7 @@ button.btn-cool.logout {
     height: fit-content;
     box-shadow: inset $--color-grey-dashboard-light 0px 0px 0px 1px;
     padding: 1.5rem;
+    border-radius: $--br;
 }
 
 .admin-form div.services-subtitle {

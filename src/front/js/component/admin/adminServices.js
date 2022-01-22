@@ -6,8 +6,11 @@ import { CloudinaryUploadWidget } from "../cloudinary/cloudinaryUploadWidget";
 export const AdminServices = () => {
 	const { actions, store } = useContext(Context);
 
-	const divRef = useRef(null);
-	const [collapse, setCollapse] = useState(false);
+	const [collapse, setCollapse] = useState({
+		first_collapse: false,
+		second_collapse: false
+	});
+
 	const [minutesList, setMinutesList] = useState([]);
 	const [hoursList, setHoursList] = useState([]);
 	const [minutes, setMinutes] = useState(0);
@@ -139,9 +142,14 @@ export const AdminServices = () => {
 	};
 
 	const handleCollapse = e => {
-		setCollapse(!collapse);
-		if (!collapse) divRef.current.style.maxHeight = divRef.current.scrollHeight + "px";
-		else divRef.current.style.maxHeight = "0";
+		setCollapse({
+			...collapse,
+			[e.target.getAttribute("data-name")]: !collapse[e.target.getAttribute("data-name")]
+		});
+
+		if (!collapse[e.target.getAttribute("data-name")])
+			e.target.nextElementSibling.style.maxHeight = e.target.nextElementSibling.scrollHeight + "px";
+		else e.target.nextElementSibling.style.maxHeight = "0";
 	};
 
 	return (
@@ -217,10 +225,14 @@ export const AdminServices = () => {
 						</div>
 						<div className="admin-form-group">
 							<div className="collapse-wrapper">
-								<h3 className="collapse-toggle" onClick={handleCollapse}>
+								<h3
+									className="collapse-toggle"
+									onClick={handleCollapse}
+									data-name="first_collapse"
+									aria-expanded={collapse.first_collapse}>
 									Precio y duración del servicio
 								</h3>
-								<div className="admin-form-subgroup duration-subgroup collapse-content" ref={divRef}>
+								<div className="admin-form-subgroup duration-subgroup collapse-content">
 									<div className="dflex-row">
 										<div>
 											<label className="dashboard-label" htmlFor="price">
@@ -274,49 +286,59 @@ export const AdminServices = () => {
 								</div>
 							</div>
 						</div>
-						<h3 className="dashboard-content-h3">Descripción e imagen del servicio</h3>
 						<div className="admin-form-group">
-							<div className="admin-form-subgroup">
-								<label htmlFor="description" className="dashboard-label">
-									Descripción
-									<span>{data.description.length}</span>
-								</label>
-								<textarea
-									id="description"
-									name="description"
-									rows="3"
-									maxLength="1000"
-									value={data.description}
-									onChange={handleInputChange}
-								/>
-							</div>
-							<div className="admin-form-subgroup img-subgroup">
-								<div className="admin-service-img-wrapper">
-									<small className="img-placeholder">
-										<i className="fas fa-camera" />
-									</small>
-									{data.id ? (
-										<img
-											src={require(`../../../img/${data.service.toLowerCase()}.jpg`)}
-											onLoad={e => e.target.classList.add("border-none")}
-											className="admin-service-img"
+							<div className="collapse-wrapper">
+								<h3
+									className="collapse-toggle"
+									onClick={handleCollapse}
+									data-name="second_collapse"
+									aria-expanded={collapse.second_collapse}>
+									Descripción e imagen del servicio
+								</h3>
+								<div className="collapse-content">
+									<div className="admin-form-subgroup">
+										<label htmlFor="description" className="dashboard-label">
+											Descripción
+											<span>{data.description.length}</span>
+										</label>
+										<textarea
+											id="description"
+											name="description"
+											rows="3"
+											maxLength="1000"
+											value={data.description}
+											onChange={handleInputChange}
 										/>
-									) : (
-										""
-									)}
-									{/* <CloudinaryUploadWidget title="" preset="services_images" /> */}
-									<button
-										type="button"
-										className={"edit-img" + (data.id ? "" : " inactive")}
-										// On click: abrir un cuadro de dialogo pequeño para cambiar el nombre del servicio
-										onClick={() => {
-											return;
-											// return data.id
-											// 	? actions.setPopup("edit-service", `Editar ${data.service}`)
-											// 	: "";
-										}}>
-										<i className="fas fa-camera" />
-									</button>
+									</div>
+									<div className="admin-form-subgroup img-subgroup">
+										<div className="admin-service-img-wrapper">
+											<small className="img-placeholder">
+												<i className="fas fa-camera" />
+											</small>
+											{data.id ? (
+												<img
+													src={require(`../../../img/${data.service.toLowerCase()}.jpg`)}
+													onLoad={e => e.target.classList.add("border-none")}
+													className="admin-service-img"
+												/>
+											) : (
+												""
+											)}
+											{/* <CloudinaryUploadWidget title="" preset="services_images" /> */}
+											<button
+												type="button"
+												className={"edit-img" + (data.id ? "" : " inactive")}
+												// On click: abrir un cuadro de dialogo pequeño para cambiar el nombre del servicio
+												onClick={() => {
+													return;
+													// return data.id
+													// 	? actions.setPopup("edit-service", `Editar ${data.service}`)
+													// 	: "";
+												}}>
+												<i className="fas fa-camera" />
+											</button>
+										</div>
+									</div>
 								</div>
 							</div>
 						</div>

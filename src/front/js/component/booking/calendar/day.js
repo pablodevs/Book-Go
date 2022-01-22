@@ -18,7 +18,7 @@ export const Day = props => {
 					(props.isToday ? " today" : "") +
 					(props.isChangeMonthDay || props.isChangeMonthDay === 0
 						? " light-fc-day"
-						: store.booking_day ===
+						: store.booking.date ===
 						  props.date.toLocaleDateString(undefined, {
 								year: "numeric",
 								month: "2-digit",

@@ -2,6 +2,9 @@
 @import "./colors"; // paleta de colores
 @import "./fonts";  // estilo de las fuentes
 
+/*===== Custom styles =====*/
+$--br: 5px;
+
 /*===== Reseting styles =====*/
 
 *, *:before, *:after {
@@ -174,7 +177,7 @@ button.icon-btn.danger, button.icon-btn.danger:hover {
 .icon-btn {
     width: 40px;
     aspect-ratio: 1;
-    border-radius: 5px;
+    border-radius: $--br;
     border: 1px solid $--color-grey-light;
     background-color: $--color-blue-light;
     color: $--color-grey-regular;
@@ -193,7 +196,7 @@ button.icon-btn.danger, button.icon-btn.danger:hover {
 input, textarea, select, .input-button, .search-input {
     width: 100%;
     min-width: 100px;
-    border-radius: 5px;
+    border-radius: $--br;
     border: 1px solid $--color-grey-light;
     padding: 0.3rem 0.6rem;
 }
@@ -304,7 +307,7 @@ input.search-input[type="search"]::-webkit-search-results-decoration {
     padding: 0.25rem 0.5rem;
     
     background-color: $--color-grey-dark;
-    border-radius: 8px;
+    border-radius: $--br;
     
     font-size: 0.85rem;
     color: white;
@@ -376,17 +379,45 @@ button.toast-close {
 .collapse-wrapper {
     width: 100%;
     border:  1px solid $--color-grey-lighter;
+    border-radius: $--br;
+    overflow: hidden;
 }
 
 .collapse-toggle {
+    position: relative;
+    display: flex;
+    align-items: center;
     cursor: pointer;
-    padding: 1rem;
+    padding: 1rem 2.5rem 1rem 1rem;
+    box-shadow: 0 0 0 1px $--color-grey-lighter;
+    background-color: $--color-blue-light;
+    &:hover { background-color: $--color-blue-lighter }
+}
+.collapse-toggle::after {
+    position: absolute;
+    content: '';
+    right: 1.25rem;
+    width: 12px;
+    height: 12px;
+    border-right: 3px solid $--color-blue-dark;
+    border-bottom: 3px solid $--color-blue-dark;
+    transform: rotateZ(-45deg);
+    transition: all 0.2s ease-out;
+}
+
+.collapse-toggle[aria-expanded="true"]::after {
+    transform: rotateZ(45deg);
+    transition: all 0.28s ease-out;
 }
 
 .collapse-content {
     padding-inline: 1rem;
     overflow: hidden;
     max-height: 0;
-    transition: max-height 0.3s ease-out;
+    transition: max-height 0.2s ease-out;
     & > * { margin-block: 1rem }
+}
+
+.collapse-toggle[aria-expanded="true"] ~ .collapse-content {
+    transition: max-height 0.28s ease-out;
 }
