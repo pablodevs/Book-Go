@@ -9,10 +9,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				message: "",
 				status: ""
 			},
-			//resume_view muestra el resumen de la reserva
 			resume_view: false,
-			// creamos booking_day para pasar el día seleccionado para reservar
-			// booking_day: null,
 			booking: {},
 
 			calendar: {
@@ -31,7 +28,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			new_service: {},
 			services: [],
-			// oneService: [],
 
 			token: null,
 			user: {
@@ -72,7 +68,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 						status: ""
 					},
 					clients: [],
-					widget: false
+					widget: false,
+					serviceInProgress: {},
+					popupFunct: null,
+					popupObj: {}
 				});
 			},
 
@@ -113,22 +112,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			// Cambia los popups
-			setPopup: async (type, title, funct = null) => {
-				// if (serviceName) {
-				// 	//si recibe servicename entonces busca la disponibilidad de días y horas de ese servicio
-				// 	await fetch(process.env.BACKEND_URL + `/dispo/${serviceName}`)
-				// 		.then(response => {
-				// 			// console.log(response.ok);
-				// 			// console.log(response.status);
-				// 			return response.json();
-				// 		})
-				// 		.then(data => {
-				// 			setStore({ dispo: data });
-				// 		})
-				// 		.catch(error => console.error(error));
-				// }
-
-				// Para abrir el popup del login, register o reservas
+			setPopup: async (type, title, obj = {}, funct = null) => {
+				// Para abrir el popup del login, register, reservas...
 				let store = getStore();
 				setStore({
 					message: {
@@ -140,6 +125,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					popupTitle: title
 				});
 				if (funct) setStore({ popupFunct: funct });
+				if (Object.entries(obj).length !== 0) setStore({ popupObj: obj });
 			},
 
 			// cierra el popup de login, register y calendario
@@ -150,7 +136,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 					popup: null,
 					popupTitle: "",
 					prevPopup: [],
-					booking: {}
+					booking: {},
+					serviceInProgress: {}
 				});
 				actions.resetImageURL();
 			},
@@ -293,7 +280,18 @@ const getState = ({ getStore, getActions, setStore }) => {
 					.catch(error => console.error(error));
 			},
 
-			// create a service
+			// start creating a service
+			updateServiceInProgress: data => {
+				const store = getStore();
+				setStore({
+					serviceInProgress: {
+						...store.serviceInProgress,
+						...data
+					}
+				});
+			},
+
+			// send new service to back
 			addService: async data => {
 				const store = getStore();
 				const actions = getActions();
@@ -321,7 +319,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						services: [...store.services, resp],
 						new_service: resp
 					});
-					actions.closePopup();
+					actions.closePopup;
 					return resp;
 				} catch (err) {
 					return err.json();
@@ -366,6 +364,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			// Change ONE service
 			updateService: async data => {
 				const store = getStore();
+				const actions = getActions();
 				const options = {
 					method: "PUT",
 					body: JSON.stringify(data),
@@ -397,10 +396,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 								description: resp.description,
 								duration: resp.duration,
 								is_active: resp.is_active,
-								sku: resp.sku
+								sku: resp.sku,
+								service_img_url: resp.service_img_url
 							}
 						]
 					});
+					if (store.popup) actions.closePopup();
 					return resp;
 				} catch (err) {
 					return err.json();

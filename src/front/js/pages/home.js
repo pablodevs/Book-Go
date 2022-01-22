@@ -22,18 +22,18 @@ export const Home = () => {
 				</div>
 				<div className="mx-auto col-md-12 col-xl-5">
 					<h1 className="text-center pt-5">Health inside!</h1>
-					<h5 className="p-4">
+					<p className="p-4 fs-5">
 						Nuestro enfoque es traer conciencia al cuerpo, la mente y el espíritu al abrir el camino hacia
 						la curación y el descanso. Nos esforzamos por llevar a los clientes por un camino de bienestar y
 						paz para facilitar mejor su capacidad de curación innata. Creemos que cada persona es única y
 						tiene un don único y estamos comprometidos a facilitar su viaje de curación. Brindamos sesiones
 						personalizadas que lo guían hacia la plenitud. También ofrecemos una variedad de servicios que
 						incluyen masajes, sanación energética y servicios de spa.
-					</h5>
-					<h5 className="p-4">
+					</p>
+					<p className="p-4 fs-5">
 						Te invitamos a descubrir tu verdadero yo y a conectarte con tu sabiduría interior y tu fuerza
 						interior.
-					</h5>
+					</p>
 				</div>
 			</div>
 

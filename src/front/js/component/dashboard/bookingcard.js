@@ -39,7 +39,7 @@ export const BookingCard = () => {
 			</div>
 			<div className="bookingcard-img-wrapper">
 				<img
-					src={require(`../../../img/${service.toLowerCase()}.jpg`)}
+					src="https://res.cloudinary.com/peibol888/image/upload/v1642880624/default_stc4oy.png"
 					className="bookingcard-img"
 					alt="imagen del servicio"
 				/>

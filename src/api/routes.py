@@ -117,28 +117,36 @@ def create_service():
     # Data validation
     if body_service is None:
         raise APIException("You need to specify the request body as a json object.", status_code=400)
+
     if 'name' not in body_service or body_service['name'] == "" or body_service['name'] == None:
         raise APIException('You need to specify the name.', status_code=400)
     elif len(body_service['name']) > 120:
         return jsonify({"message": "El nombre no puede superar los 120 caracteres."}), 400
+
     if 'price' not in body_service or body_service['price'] == "" or body_service['price'] == None:
         raise APIException('You need to specify the price.', status_code=400)
+
     if 'description' not in body_service or body_service['description'] == "" or body_service['description'] == None:
         raise APIException('You need to create a description.', status_code=400)
     elif len(body_service['description']) > 1000:
         return jsonify({"message": "La descripción no puede superar los 1000 caracteres"}), 400
+
     if 'duration' not in body_service or body_service['duration'] == "" or body_service['duration'] == None:
         raise APIException('You need to specify the duration.', status_code=400)
+    
+    if 'service_img_url' not in body_service or body_service['service_img_url'] == "" or body_service['service_img_url'] == None:
+        image_url = None
+    
     if 'is_active' not in body_service or body_service['is_active'] == "" or body_service['is_active'] == None:
         if 'sku' not in body_service or body_service['sku'] == "" or body_service['sku'] == None:
-            new_service = Service(name = body_service["name"], price = body_service["price"], description = body_service["description"], duration = body_service["duration"])
+            new_service = Service(name = body_service["name"], price = body_service["price"], description = body_service["description"], duration = body_service["duration"], service_img_url = image_url)
         else:
-            new_service = Service(name = body_service["name"], price = body_service["price"], description = body_service["description"], duration = body_service["duration"], sku = body_service["sku"])
+            new_service = Service(name = body_service["name"], price = body_service["price"], description = body_service["description"], duration = body_service["duration"], service_img_url = image_url, sku = body_service["sku"])
     else:
         if 'sku' not in body_service or body_service['sku'] == "" or body_service['sku'] == None:
-            new_service = Service(name = body_service["name"], price = body_service["price"], description = body_service["description"], duration = body_service["duration"], is_active = body_service["is_active"])
+            new_service = Service(name = body_service["name"], price = body_service["price"], description = body_service["description"], duration = body_service["duration"], service_img_url = image_url, is_active = body_service["is_active"])
         else:
-            new_service = Service(name = body_service["name"], price = body_service["price"], description = body_service["description"], duration = body_service["duration"], is_active = body_service["is_active"], sku = body_service["sku"])
+            new_service = Service(name = body_service["name"], price = body_service["price"], description = body_service["description"], duration = body_service["duration"], service_img_url = image_url, is_active = body_service["is_active"], sku = body_service["sku"])
 
     db.session.add(new_service)
     db.session.commit()
@@ -181,6 +189,8 @@ def handle_single_service(service_id):
             service.is_active = request_body["is_active"]
         if "sku" in request_body:
             service.sku = request_body["sku"]
+        if "service_img_url" in request_body:
+            service.service_img_url = request_body["service_img_url"]
 
         db.session.commit()
         return jsonify(service.serialize()), 200

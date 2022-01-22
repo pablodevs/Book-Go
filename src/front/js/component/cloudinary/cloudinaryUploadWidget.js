@@ -8,7 +8,7 @@ export const CloudinaryUploadWidget = props => {
 
 	useEffect(
 		() => {
-			if (store.image_url) setContent(props.successComp);
+			if (store.image_url && props.successComp) setContent(props.successComp);
 		},
 		[store.image_url]
 	);

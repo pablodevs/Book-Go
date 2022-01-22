@@ -327,13 +327,13 @@ div.disponibility-title.admin-form-group {
     padding: 0.6rem;
     box-shadow: 0 4px 10px 0 rgba(0,0,0,0.14);
     transition: all 0.1s ease-out;
-    &:hover {
+    &:hover, &.edit-img-active {
         opacity: 1;
         background-color: unset;
         background-image: linear-gradient(0deg, #000000b8, transparent);
         border-radius: 10px;
     }
-    & > i {
+    & > i, & .spinner-border-wrapper {
         padding: 0.6rem;
         background: white;
         box-shadow: 0 4px 10px 0 rgba(0,0,0,0.14);
@@ -554,6 +554,9 @@ $--br-client-tab-x2: 10px;
 .admin-weekdays .icon-btn {
     border: none;
     background-color: $--color-grey-dashboard-light;
+    &:hover {
+        background-color: $--color-blue-lighter;
+    }
     &.active {
         color: white;
         font-weight: bold;

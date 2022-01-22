@@ -24,8 +24,8 @@ export const AdminServices = () => {
 		description: "",
 		duration: "",
 		is_active: false,
-		sku: ""
-		// service_img_url: "",
+		sku: "",
+		service_img_url: ""
 	});
 	useEffect(() => {
 		let listOfMinutes = [];
@@ -51,6 +51,40 @@ export const AdminServices = () => {
 
 	useEffect(
 		() => {
+			setServiceList(store.services.map(element => element.name));
+			if (Object.keys(store.new_service).length && store.new_service.id) {
+				setHours(Math.floor(store.new_service.duration / 60));
+				setMinutes(store.new_service.duration % 60);
+				setData({
+					id: store.new_service.id,
+					service: store.new_service.name, // esto de que se llamen diferente no me convence
+					price: store.new_service.price,
+					description: store.new_service.description,
+					duration: store.new_service.duration,
+					is_active: store.new_service.is_active,
+					sku: store.new_service.sku,
+					service_img_url: store.new_service.service_img_url
+				});
+			} else {
+				setHours(Math.floor(0));
+				setMinutes(0);
+				setData({
+					id: "",
+					service: "DEFAULT", // con 'name: "DEFAULT"' no funciona bien
+					price: "",
+					description: "",
+					duration: "",
+					is_active: false,
+					sku: "",
+					service_img_url: ""
+				});
+			}
+		},
+		[store.services, store.new_service]
+	);
+
+	useEffect(
+		() => {
 			// Comprobamos si existe un horario
 			if (
 				store.business.schedule &&
@@ -65,38 +99,6 @@ export const AdminServices = () => {
 			else setSchedule(false);
 		},
 		[data.sku, store.business]
-	);
-
-	useEffect(
-		() => {
-			setServiceList(store.services.map(element => element.name));
-			if (Object.keys(store.new_service).length && store.new_service.id) {
-				setHours(Math.floor(store.new_service.duration / 60));
-				setMinutes(store.new_service.duration % 60);
-				setData({
-					id: store.new_service.id,
-					service: store.new_service.name, // esto de que se llamen diferente no me convence
-					price: store.new_service.price,
-					description: store.new_service.description,
-					duration: store.new_service.duration,
-					is_active: store.new_service.is_active,
-					sku: store.new_service.sku
-				});
-			} else {
-				setHours(Math.floor(0));
-				setMinutes(0);
-				setData({
-					id: "",
-					service: "DEFAULT", // con 'name: "DEFAULT"' no funciona bien
-					price: "",
-					description: "",
-					duration: "",
-					is_active: false,
-					sku: ""
-				});
-			}
-		},
-		[store.services, store.new_service]
 	);
 
 	useEffect(
@@ -120,7 +122,8 @@ export const AdminServices = () => {
 				description: service.description,
 				duration: service.duration,
 				is_active: service.is_active,
-				sku: service.sku
+				sku: service.sku,
+				service_img_url: service.service_img_url
 			});
 		} else
 			setData({
@@ -129,7 +132,7 @@ export const AdminServices = () => {
 			});
 	};
 
-	const handleSubmitFirstForm = event => {
+	const handleSubmitForm = event => {
 		event.preventDefault();
 		actions.resetNewService();
 		if (data.id && serviceList.includes(data.service))
@@ -157,7 +160,7 @@ export const AdminServices = () => {
 			<h1 className="dashboard-content-title">Servicios</h1>
 			<div className="admin-sections-wrapper">
 				<section className="admin-first-section">
-					<form onSubmit={handleSubmitFirstForm} className="dashboard-form">
+					<form onSubmit={handleSubmitForm} className="dashboard-form">
 						<div className="admin-form-group services-subtitle">
 							<h2 className="dashboard-content-subtitle">Información del servicio</h2>
 							<div className="admin-icon-btn-group">
@@ -165,7 +168,7 @@ export const AdminServices = () => {
 									type="button"
 									className="icon-btn"
 									data-tooltip="añadir servicio"
-									onClick={() => actions.setPopup("add-service", "Añadir servicio")}>
+									onClick={() => actions.setPopup("add-service", "Información del servicio")}>
 									<i className="fas fa-plus" />
 								</button>
 								{/* ⚠️ OJITO: si añadimos o eliminamos un servicio, se tiene que actualizar el hook serviceList */}
@@ -315,28 +318,28 @@ export const AdminServices = () => {
 											<small className="img-placeholder">
 												<i className="fas fa-camera" />
 											</small>
-											{data.id ? (
+											{data.service_img_url ? (
 												<img
-													src={require(`../../../img/${data.service.toLowerCase()}.jpg`)}
+													src={data.service_img_url}
 													onLoad={e => e.target.classList.add("border-none")}
 													className="admin-service-img"
 												/>
 											) : (
 												""
 											)}
-											{/* <CloudinaryUploadWidget title="" preset="services_images" /> */}
-											<button
-												type="button"
-												className={"edit-img" + (data.id ? "" : " inactive")}
-												// On click: abrir un cuadro de dialogo pequeño para cambiar el nombre del servicio
-												onClick={() => {
-													return;
-													// return data.id
-													// 	? actions.setPopup("edit-service", `Editar ${data.service}`)
-													// 	: "";
-												}}>
-												<i className="fas fa-camera" />
-											</button>
+											{data.id ? (
+												<button
+													type="button"
+													className="edit-img"
+													// On click: abrir un cuadro de dialogo pequeño para cambiar el nombre del servicio
+													onClick={() =>
+														actions.setPopup("edit-service-img", "Cambiar foto", data)
+													}>
+													<i className="fas fa-camera" />
+												</button>
+											) : (
+												""
+											)}
 										</div>
 									</div>
 								</div>
@@ -350,7 +353,7 @@ export const AdminServices = () => {
 					</form>
 				</section>
 				<section className="admin-second-section">
-					<form className="dashboard-form">
+					<form onSubmit={handleSubmitForm} className="dashboard-form">
 						<h2 className="dashboard-content-subtitle">Activar servicio</h2>
 						<span>
 							Es necesario agregar un <i>código de artículo</i> que permitirá a tus clientes pagar online.
@@ -394,7 +397,7 @@ export const AdminServices = () => {
 										data-tooltip={
 											schedule
 												? "Permite que se pueda reservar este servicio"
-												: "Primero define un horario en el apartado de negocio"
+												: "Primero define un horario y un sku"
 										}>
 										<input
 											className="form-check-input"

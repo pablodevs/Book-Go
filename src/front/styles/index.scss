@@ -30,9 +30,18 @@ body {
     width: 100%;
 }
 
+p {
+    text-align: justify;
+    text-justify: inter-word;
+}
+
 a {
     text-decoration: none;
     font-weight: bold;
+}
+
+strong {
+    color: $--color-blue-dark;
 }
 
 button {
@@ -150,12 +159,12 @@ button.disabled, a.disabled {
         box-shadow: none;
     }
 }
-.btn-cool.btn-confirm {
+button.btn-cool.btn-confirm {
     box-shadow: inset 0 0 0 2px $--color-green-confirm;
     color: $--color-green-confirm;
     &:hover {
-        background: none;
-        color: $--color-green-confirm;
+        background-color: $--color-green-confirm;
+        color: white;
     }
 }
 button.btn-cool.danger {
@@ -165,8 +174,8 @@ button.btn-cool.danger {
     box-shadow: inset 0 0 0 2px red;
     color: red;
     &:hover {
-        background: none;
-        color: red;
+        background: red;
+        color: white;
     }
 }
 button.icon-btn.danger, button.icon-btn.danger:hover {
@@ -190,6 +199,26 @@ button.icon-btn.danger, button.icon-btn.danger:hover {
     border-radius: 100px;
     box-shadow: 2px 4px 11px 0px rgba(0, 0, 0, 0.3);
     &:hover { box-shadow: 2px 4px 11px 2px rgba(0, 0, 0, 0.37) }
+}
+
+.btn-skip {
+    justify-self: flex-end;
+    display: flex;
+    align-items: center;
+    width: 75px;
+    gap: 0.5rem;
+    color: $--color-grey-regular;
+    & > i {
+        color: $--color-grey-light;
+        transition: all 0.2s ease-out;
+    }
+    &:hover {
+        font-weight: bold;
+        & > i {
+            color: $--color-grey-regular;
+            margin-left: 0.3rem
+        }
+    }
 }
 
 /*===== Inputs =====*/

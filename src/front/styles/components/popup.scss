@@ -52,7 +52,7 @@
     gap: 1.5rem;
     width: 100%;
     height: 100%;
-    padding: 2rem;
+    padding: 0 2rem 2rem;
     margin-block: auto;
     // overflow-y: auto;
     & .btn-confirm { margin-inline: auto }
@@ -78,6 +78,41 @@
     gap: 1rem;
 }
 
+.popup .alert {
+    border-bottom-left-radius: $--br;
+    border-bottom-right-radius: $--br;
+}
+
+.popup-form {
+    min-width: 400px;
+    & > p { max-width: fit-content }
+}
+
+button.popup-edit-img {
+    position: relative;
+    opacity: 1;
+    width: 300px;
+    height: 300px;
+    border-radius: $--br;
+    border: 1px dashed $--color-grey-light;
+    &, & > i {
+        box-shadow: none;
+        transition: all 0.2s ease-out;
+    }
+    &:hover {
+        background: none;
+        border-radius: 20px;
+        & > i {
+            box-shadow: 0 4px 10px 2px rgba(0,0,0,0.2);
+        }
+    }
+}
+
+img.popup-service-img {
+    max-width: 300px;
+    border-radius: $--br;
+}
+
 @media screen and (max-width: 767.9px) {
     .popup {
         justify-content: flex-start;
@@ -92,8 +127,11 @@
     }
     .popup-show { transform: translateY(0) }
     .popup-body {
-        height: auto;
-        padding: 1rem;
+        padding: 0 1rem 1rem 1rem;
         overflow-y: auto;
+    }
+    .popup .alert {
+        margin-inline: 1.5rem;
+        border-radius: $--br;
     }
 }

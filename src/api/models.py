@@ -68,13 +68,12 @@ class Business(db.Model):
 class Service(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120), unique=True, nullable=False) # ⚠️ Unique True porque si no da problemas con las imágenes por como lo ha hecho Chavi, en AdminiServices
-    is_active = db.Column(db.Boolean(), nullable=False, default=False) # Si el servicio no está activo, puedes modificarlo pero no se podrán realizar reservas hasta que lo actives
     price = db.Column(db.Integer, nullable=False)  
     duration = db.Column(db.Integer, nullable=False)
     description = db.Column(db.String(1000), nullable=False)
+    is_active = db.Column(db.Boolean(), nullable=False, default=False) # Si el servicio no está activo, puedes modificarlo pero no se podrán realizar reservas hasta que lo actives
     sku = db.Column(db.String(150), nullable=True)
-    
-    # Habrá que meter sí o sí las imágenes en una url (service_img_url) unidas al id del servicio
+    service_img_url = db.Column(db.String(255), unique=False, nullable=True)
     
     disponibilidad = db.relationship('Dispo', backref ='service', lazy=True)
     reserva = db.relationship('Book', backref ='service', lazy=True)
@@ -90,9 +89,8 @@ class Service(db.Model):
             "price" : self.price,
             "duration" : self.duration,
             "description" : self.description,
-            "sku" : self.sku
-
-            # "service_img_url": self.service_img_url
+            "sku" : self.sku,
+            "service_img_url": self.service_img_url
         }
 
 
