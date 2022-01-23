@@ -21,9 +21,10 @@ export const Dashboard = () => {
 
 	useEffect(
 		() => {
-			if (store.image_url) {
+			if (store.cloudinaryInfo.image_url && store.cloudinaryInfo.public_id) {
 				let body = new FormData();
-				body.append("profile_image_url", store.image_url);
+				body.append("profile_image_url", store.cloudinaryInfo.image_url);
+				body.append("public_id", store.cloudinaryInfo.public_id);
 
 				actions.setToast(
 					"promise",
@@ -33,7 +34,7 @@ export const Dashboard = () => {
 				);
 			}
 		},
-		[store.image_url]
+		[store.cloudinaryInfo]
 	);
 
 	const showWelcome = () => {

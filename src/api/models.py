@@ -74,6 +74,7 @@ class Service(db.Model):
     is_active = db.Column(db.Boolean(), nullable=False, default=False) # Si el servicio no está activo, puedes modificarlo pero no se podrán realizar reservas hasta que lo actives
     sku = db.Column(db.String(150), nullable=True)
     service_img_url = db.Column(db.String(255), unique=False, nullable=True)
+    public_id = db.Column(db.String(150), unique=True, nullable=True)
     
     disponibilidad = db.relationship('Dispo', backref ='service', lazy=True)
     reserva = db.relationship('Book', backref ='service', lazy=True)
@@ -90,7 +91,8 @@ class Service(db.Model):
             "duration" : self.duration,
             "description" : self.description,
             "sku" : self.sku,
-            "service_img_url": self.service_img_url
+            "service_img_url": self.service_img_url,
+            "public_id": self.public_id
         }
 
 

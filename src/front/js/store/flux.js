@@ -61,7 +61,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				actions.closePopup();
 				actions.resetNewService();
 				actions.resetBooking();
-				actions.resetImageURL();
+				actions.resetCloudinaryInfo();
 				setStore({
 					message: {
 						message: "",
@@ -137,9 +137,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 					popupTitle: "",
 					prevPopup: [],
 					booking: {},
-					serviceInProgress: {}
+					serviceInProgress: {},
+					popupObj: {}
 				});
-				actions.resetImageURL();
+				actions.resetCloudinaryInfo();
+				actions.setWidget(false);
 			},
 
 			// Te lleva al popup anterior
@@ -319,7 +321,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						services: [...store.services, resp],
 						new_service: resp
 					});
-					actions.closePopup;
+					actions.closePopup();
 					return resp;
 				} catch (err) {
 					return err.json();
@@ -397,9 +399,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 								duration: resp.duration,
 								is_active: resp.is_active,
 								sku: resp.sku,
-								service_img_url: resp.service_img_url
+								service_img_url: resp.service_img_url,
+								public_id: resp.public_id
 							}
-						]
+						],
+						new_service: resp
 					});
 					if (store.popup) actions.closePopup();
 					return resp;
@@ -615,10 +619,22 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			// Cloudinary widget
-			setImageURL: url => setStore({ image_url: url }),
+			saveCloudinaryInfo: (url, public_id) =>
+				setStore({
+					cloudinaryInfo: {
+						image_url: url,
+						public_id: public_id
+					}
+				}),
 
 			// Reset image_url
-			resetImageURL: () => setStore({ image_url: null }),
+			resetCloudinaryInfo: () =>
+				setStore({
+					cloudinaryInfo: {
+						image_url: null,
+						public_id: null
+					}
+				}),
 
 			// Obtener la lista de clientes
 			getClients: async () => {

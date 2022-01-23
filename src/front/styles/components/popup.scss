@@ -88,13 +88,16 @@
     & > p { max-width: fit-content }
 }
 
-button.popup-edit-img {
+button.popup-edit-img, div.popup-edit-img {
     position: relative;
     opacity: 1;
-    width: 300px;
-    height: 300px;
-    border-radius: $--br;
+    width: 15rem;
+    height: 380px;
+    border: $--br;
     border: 1px dashed $--color-grey-light;
+    overflow: hidden;
+    transition: all 0.2s ease-out;
+    & > i, & > .spinner-border-wrapper { z-index: 2 }
     &, & > i {
         box-shadow: none;
         transition: all 0.2s ease-out;
@@ -102,15 +105,18 @@ button.popup-edit-img {
     &:hover {
         background: none;
         border-radius: 20px;
-        & > i {
-            box-shadow: 0 4px 10px 2px rgba(0,0,0,0.2);
-        }
+        & > i, & > .spinner-border-wrapper { box-shadow: 0 4px 10px 3px rgba(0,0,0,0.4) }
     }
 }
-
-img.popup-service-img {
-    max-width: 300px;
+div.popup-edit-img, div.popup-edit-img:hover {
     border-radius: $--br;
+    border: none;
+}
+img.popup-service-img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    position: absolute;
 }
 
 @media screen and (max-width: 767.9px) {

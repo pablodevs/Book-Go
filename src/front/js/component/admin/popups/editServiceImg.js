@@ -7,6 +7,7 @@ export const EditserviceImg = () => {
 
 	return (
 		<div className="popup-body">
+			Pulsa en la imagen para modificarla.
 			<CloudinaryUploadWidget
 				preset="services_images"
 				defaultComp={
@@ -16,53 +17,82 @@ export const EditserviceImg = () => {
 						// On click: abrir un cuadro de dialogo pequeño para cambiar el nombre del servicio
 						onClick={() => actions.setWidget(true)}>
 						<i className="fas fa-camera" />
+						{store.popupObj.service_img_url ? (
+							<img className="popup-service-img" src={store.popupObj.service_img_url} />
+						) : (
+							""
+						)}
 					</button>
 				}
 				loadingComp={
-					<button type="button" className="edit-img edit-img-active popup-edit-img">
+					<button type="button" className="edit-img popup-edit-img">
 						<div className="spinner-border-wrapper d-flex">
 							<div className="spinner-border spinner-border-sm" role="status">
 								<span className="visually-hidden">Loading...</span>
 							</div>
 						</div>
+						{store.popupObj.service_img_url ? (
+							<img className="popup-service-img" src={store.popupObj.service_img_url} />
+						) : (
+							""
+						)}
 					</button>
 				}
-				successComp={<img className="popup-service-img" src={store.image_url} />}
+				successComp={
+					<div className="popup-edit-img">
+						<img className="popup-service-img" src={store.cloudinaryInfo.image_url} />
+					</div>
+				}
 			/>
 			<div className="d-flex flex-row w-100">
-				{store.popupObj.service_img_url ? (
+				{store.popupObj.service_img_url || store.cloudinaryInfo.image_url ? (
 					<button
-						className="btn-cool danger"
-						onClick={() =>
-							actions.setToast(
-								"promise",
-								{ loading: "Eliminando...", success: "Imagen eliminada" },
-								actions.updateService({
-									id: store.popupObj.id,
-									service_img_url: ""
-								}),
-								"toast-success"
-							)
-						}>
-						Eliminar
-						<i className="fas fa-trash-alt" />
+						className={"mx-auto" + (store.cloudinaryInfo.image_url ? " btn-skip" : " btn-cool danger")}
+						onClick={() => {
+							if (store.cloudinaryInfo.image_url) actions.closePopup();
+							// TENEMOS QUE CREAR OTRO ENDPOINT
+							else {
+								actions.setToast(
+									"promise",
+									{ loading: "Eliminando...", success: "Imagen eliminada" },
+									actions.updateService({
+										id: store.popupObj.id,
+										public_id: store.popupObj.public_id,
+										method: "delete"
+									}),
+									"toast-success"
+								);
+							}
+						}}>
+						{store.cloudinaryInfo.image_url && store.cloudinaryInfo.public_id ? "Cancelar" : "Eliminar"}
+						{store.cloudinaryInfo.image_url && store.cloudinaryInfo.public_id ? (
+							""
+						) : (
+							<i className="fas fa-trash-alt" />
+						)}
 					</button>
 				) : (
 					""
 				)}
 				<button
 					className="btn-cool btn-confirm"
-					onClick={() =>
-						actions.setToast(
-							"promise",
-							{ loading: "Guardando...", success: resp => `${resp.name} guardado` },
-							actions.updateService({
-								id: store.popupObj.id,
-								service_img_url: store.image_url
-							}),
-							"toast-success"
-						)
-					}>
+					onClick={() => {
+						if (!store.cloudinaryInfo.image_url) actions.closePopup();
+						else {
+							const method = store.popupObj.service_img_url ? "modify" : "add";
+							actions.setToast(
+								"promise",
+								{ loading: "Guardando...", success: resp => `${resp.name} guardado` },
+								actions.updateService({
+									id: store.popupObj.id,
+									service_img_url: store.cloudinaryInfo.image_url,
+									public_id: store.cloudinaryInfo.public_id,
+									method: method
+								}),
+								"toast-success"
+							);
+						}
+					}}>
 					Confirmar
 				</button>
 			</div>

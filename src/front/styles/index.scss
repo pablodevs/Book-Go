@@ -158,6 +158,7 @@ button.disabled, a.disabled {
         color: white;
         box-shadow: none;
     }
+    & > i { margin-left: 1rem }
 }
 button.btn-cool.btn-confirm {
     box-shadow: inset 0 0 0 2px $--color-green-confirm;

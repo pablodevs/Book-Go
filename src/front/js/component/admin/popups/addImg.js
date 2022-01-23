@@ -7,6 +7,7 @@ export const AddImg = () => {
 
 	return (
 		<div className="popup-body">
+			Pulsa para añadir una imagen.
 			<CloudinaryUploadWidget
 				preset="services_images"
 				defaultComp={
@@ -19,7 +20,7 @@ export const AddImg = () => {
 					</button>
 				}
 				loadingComp={
-					<button type="button" className="edit-img edit-img-active popup-edit-img">
+					<button type="button" className="edit-img popup-edit-img">
 						<div className="spinner-border-wrapper d-flex">
 							<div className="spinner-border spinner-border-sm" role="status">
 								<span className="visually-hidden">Loading...</span>
@@ -27,43 +28,37 @@ export const AddImg = () => {
 						</div>
 					</button>
 				}
-				successComp={<img className="popup-service-img" src={store.image_url} />}
+				successComp={
+					<div className="popup-edit-img">
+						<img className="popup-service-img" src={store.cloudinaryInfo.image_url} />
+					</div>
+				}
 			/>
-			<div className="d-flex flex-row">
-				{store.image_url ? (
-					<button
-						className="btn-cool btn-confirm"
-						onClick={() =>
-							actions.setToast(
-								"promise",
-								{ loading: "Añadiendo...", success: resp => `Servicio agregado: ${resp.name}` },
-								actions.addService({
-									...store.serviceInProgress,
-									service_img_url: store.image_url
-								}),
-								"toast-success"
-							)
-						}>
-						Confirmar
-					</button>
-				) : (
+			<button
+				className="btn-cool btn-confirm"
+				onClick={() => {
+					let imgToSend = store.cloudinaryInfo.image_url || "";
+					let publicIdToSend = store.cloudinaryInfo.public_id || "";
+					actions.setToast(
+						"promise",
+						{ loading: "Guardando...", success: resp => `${resp.name} guardado` },
+						actions.addService({
+							...store.serviceInProgress,
+							service_img_url: imgToSend,
+							public_id: publicIdToSend
+						}),
+						"toast-success"
+					);
+				}}>
+				{store.cloudinaryInfo.image_url && store.cloudinaryInfo.public_id
+					? "Crear Servicio"
+					: "Crear sin imagen"}
+				{store.cloudinaryInfo.image_url && store.cloudinaryInfo.public_id ? (
 					""
-				)}
-				<button
-					type="button"
-					className="btn-cool"
-					onClick={() =>
-						actions.setToast(
-							"promise",
-							{ loading: "Añadiendo...", success: resp => `Servicio agregado: ${resp.name}` },
-							actions.addService(store.serviceInProgress),
-							"toast-success"
-						)
-					}>
-					Crear sin imagen
+				) : (
 					<i className="fas fa-arrow-right" />
-				</button>
-			</div>
+				)}
+			</button>
 		</div>
 	);
 };

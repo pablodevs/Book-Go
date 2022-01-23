@@ -8,9 +8,10 @@ export const CloudinaryUploadWidget = props => {
 
 	useEffect(
 		() => {
-			if (store.image_url && props.successComp) setContent(props.successComp);
+			if (store.cloudinaryInfo.image_url && store.cloudinaryInfo.public_id && props.successComp)
+				setContent(props.successComp);
 		},
-		[store.image_url]
+		[store.cloudinaryInfo]
 	);
 
 	useEffect(
@@ -96,15 +97,17 @@ export const CloudinaryUploadWidget = props => {
 				}
 			};
 
-			// const contentToRender = <WidgetButton title={props.title} funct={() => actions.setWidget(true)} />;
-
 			var myWidget = window.cloudinary.createUploadWidget(options, (error, result) => {
 				if (!error && result && result.event === "success") {
-					actions.setImageURL(result.info.url);
-				} else if (result && (result.event === "close" || result.event === "abort") && !store.image_url) {
+					actions.saveCloudinaryInfo(result.info.url, result.info.public_id);
+				} else if (
+					result &&
+					(result.event === "close" || result.event === "abort") &&
+					!store.cloudinaryInfo.image_url
+				) {
 					actions.setWidget(false);
 					setContent(props.defaultComp);
-				}
+				} else if (error) console.error(error);
 			});
 			if (store.widget) {
 				myWidget.open();

@@ -25,7 +25,10 @@ export const Signup = () => {
 		body.append("name", data.name);
 		body.append("lastname", data.lastname);
 		body.append("phone", data.phone);
-		if (store.image_url) body.append("profile_image_url", store.image_url);
+		if (store.cloudinaryInfo.image_url && store.cloudinaryInfo.public_id) {
+			body.append("profile_image_url", store.cloudinaryInfo.image_url);
+			body.append("public_id", store.cloudinaryInfo.public_id);
+		}
 		// if (files) body.append("profile_image_url", files[0]);
 		actions.createUser(body);
 	};

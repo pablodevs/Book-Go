@@ -25,7 +25,8 @@ export const AdminServices = () => {
 		duration: "",
 		is_active: false,
 		sku: "",
-		service_img_url: ""
+		service_img_url: "",
+		public_id: ""
 	});
 	useEffect(() => {
 		let listOfMinutes = [];
@@ -63,7 +64,8 @@ export const AdminServices = () => {
 					duration: store.new_service.duration,
 					is_active: store.new_service.is_active,
 					sku: store.new_service.sku,
-					service_img_url: store.new_service.service_img_url
+					service_img_url: store.new_service.service_img_url,
+					public_id: store.new_service.public_id
 				});
 			} else {
 				setHours(Math.floor(0));
@@ -76,7 +78,8 @@ export const AdminServices = () => {
 					duration: "",
 					is_active: false,
 					sku: "",
-					service_img_url: ""
+					service_img_url: "",
+					public_id: ""
 				});
 			}
 		},
@@ -123,7 +126,8 @@ export const AdminServices = () => {
 				duration: service.duration,
 				is_active: service.is_active,
 				sku: service.sku,
-				service_img_url: service.service_img_url
+				service_img_url: service.service_img_url,
+				public_id: service.public_id
 			});
 		} else
 			setData({
@@ -134,7 +138,6 @@ export const AdminServices = () => {
 
 	const handleSubmitForm = event => {
 		event.preventDefault();
-		actions.resetNewService();
 		if (data.id && serviceList.includes(data.service))
 			actions.setToast(
 				"promise",

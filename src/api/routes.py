@@ -86,6 +86,12 @@ def getDispo(schedule, duration):
 
 ### ENDPOINTS ###
 
+cloudinary.config( 
+    cloud_name = os.getenv('CLOUD_NAME'), 
+    api_key = os.getenv('API_KEY'), 
+    api_secret = os.getenv('API_SECRET') 
+)
+
 # GET ALL SERVICES
 @api.route('/services', methods=['GET'])
 def get_services():
@@ -134,19 +140,23 @@ def create_service():
     if 'duration' not in body_service or body_service['duration'] == "" or body_service['duration'] == None:
         raise APIException('You need to specify the duration.', status_code=400)
     
-    if 'service_img_url' not in body_service or body_service['service_img_url'] == "" or body_service['service_img_url'] == None:
-        image_url = None
+    body_image_url = ""
+    body_public_id = ""
+    if 'service_img_url' in body_service and 'public_id' in body_service and (body_service['service_img_url'] != "" and body_service['service_img_url'] != None) and (body_service['public_id'] != "" and body_service['public_id'] != None):
+        body_image_url = body_service['service_img_url']
+        body_public_id = body_service['public_id']
+            
     
     if 'is_active' not in body_service or body_service['is_active'] == "" or body_service['is_active'] == None:
         if 'sku' not in body_service or body_service['sku'] == "" or body_service['sku'] == None:
-            new_service = Service(name = body_service["name"], price = body_service["price"], description = body_service["description"], duration = body_service["duration"], service_img_url = image_url)
+            new_service = Service(name = body_service["name"], price = body_service["price"], description = body_service["description"], duration = body_service["duration"], service_img_url = body_image_url, public_id = body_public_id)
         else:
-            new_service = Service(name = body_service["name"], price = body_service["price"], description = body_service["description"], duration = body_service["duration"], service_img_url = image_url, sku = body_service["sku"])
+            new_service = Service(name = body_service["name"], price = body_service["price"], description = body_service["description"], duration = body_service["duration"], service_img_url = body_image_url, public_id = body_public_id, sku = body_service["sku"])
     else:
         if 'sku' not in body_service or body_service['sku'] == "" or body_service['sku'] == None:
-            new_service = Service(name = body_service["name"], price = body_service["price"], description = body_service["description"], duration = body_service["duration"], service_img_url = image_url, is_active = body_service["is_active"])
+            new_service = Service(name = body_service["name"], price = body_service["price"], description = body_service["description"], duration = body_service["duration"], service_img_url = body_image_url, public_id = body_public_id, is_active = body_service["is_active"])
         else:
-            new_service = Service(name = body_service["name"], price = body_service["price"], description = body_service["description"], duration = body_service["duration"], service_img_url = image_url, is_active = body_service["is_active"], sku = body_service["sku"])
+            new_service = Service(name = body_service["name"], price = body_service["price"], description = body_service["description"], duration = body_service["duration"], service_img_url = body_image_url, public_id = body_public_id, is_active = body_service["is_active"], sku = body_service["sku"])
 
     db.session.add(new_service)
     db.session.commit()
@@ -189,14 +199,35 @@ def handle_single_service(service_id):
             service.is_active = request_body["is_active"]
         if "sku" in request_body:
             service.sku = request_body["sku"]
-        if "service_img_url" in request_body:
-            service.service_img_url = request_body["service_img_url"]
+
+        if "method" in request_body:
+            if request_body["method"] == "delete" or request_body["method"] == "modify":
+                # Delete current image in cloudinary
+                cloudinaryResponse = cloudinary.uploader.destroy(request_body["public_id"])
+                if cloudinaryResponse["result"] != "ok":
+                    raise APIException('La imagen no existe o el public id es erróneo.', status_code=404)
+
+                if request_body["method"] == "delete":
+                    service.public_id = ""
+                    service.service_img_url = ""
+                elif request_body["method"] == "modify":
+                    service.service_img_url = request_body["service_img_url"]
+                    service.public_id = request_body["public_id"]
+
+            elif request_body["method"] == "add":
+                    service.service_img_url = request_body["service_img_url"]
+                    service.public_id = request_body["public_id"]
 
         db.session.commit()
         return jsonify(service.serialize()), 200
     
     # DELETE a service
     elif request.method == 'DELETE':
+        # Delete current image in cloudinary
+        cloudinaryResponse = cloudinary.uploader.destroy(service.public_id)
+        if cloudinaryResponse["result"] != "ok":
+            raise APIException('La imagen no existe o el public id es erróneo.', status_code=404)
+
         db.session.delete(service)
         db.session.commit()
         return jsonify({"message": "The service has been deleted."}), 200
