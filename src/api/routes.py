@@ -339,25 +339,22 @@ def handle_single_user():
             user.phone = request_body.get("phone", None)
 
         if "method" in request_body:
-            if request_body["method"] == "delete" or request_body["method"] == "modify":
+            if request_body.get("method", None) == "delete" or request_body.get("method", None) == "modify":
                 # Delete current image in cloudinary
                 cloudinaryResponse = cloudinary.uploader.destroy(user.serialize()["public_id"])
                 if cloudinaryResponse["result"] != "ok":
                     raise APIException('No se puede modificar la imagen', status_code=404)
 
-                if request_body["method"] == "delete":
+                if request_body.get("method", None) == "delete":
                     user.public_id = None
                     user.profile_image_url = ""
-                elif request_body["method"] == "modify":
-                    user.profile_image_url = request_body["profile_image_url"]
-                    user.public_id = request_body["public_id"]
+                elif request_body.get("method", None) == "modify":
+                    user.profile_image_url = request_body.get("profile_image_url", None)
+                    user.public_id = request_body.get("public_id", None)
 
-            elif request_body["method"] == "add":
-                    user.profile_image_url = request_body["profile_image_url"]
-                    user.public_id = request_body["public_id"]
-
-        if "profile_image_url" in request_body:
-            user.profile_image_url = request_body.get("profile_image_url", None)
+            elif request_body.get("method", None) == "add":
+                    user.profile_image_url = request_body.get("profile_image_url", None)
+                    user.public_id = request_body.get("public_id", None)
 
         db.session.commit()
         return jsonify(user.serialize()), 200

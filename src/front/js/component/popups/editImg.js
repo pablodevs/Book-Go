@@ -8,14 +8,14 @@ export const EditImg = () => {
 	return (
 		<div className="popup-body">
 			<span className={store.cloudinaryInfo.image_url ? "text-confirm" : ""}>
-				{(store.popupObj.servce_img_url || store.popupObj.img_url) && !store.cloudinaryInfo.image_url
+				{(store.popupObj.service_img_url || store.popupObj.img_url) && !store.cloudinaryInfo.image_url
 					? "Pulsa en la imagen para modificarla."
 					: store.cloudinaryInfo.image_url
 						? "Imagen subida corréctamente"
 						: "Pulsa para añadir una imagen."}
 			</span>
 			<CloudinaryUploadWidget
-				preset="services_images"
+				preset={store.popupObj.preset}
 				defaultComp={
 					<button
 						type="button"
@@ -23,10 +23,10 @@ export const EditImg = () => {
 						// On click: abrir un cuadro de dialogo pequeño para cambiar el nombre del servicio
 						onClick={() => actions.setWidget(true)}>
 						<i className="fas fa-camera" />
-						{store.popupObj.servce_img_url || store.popupObj.img_url ? (
+						{store.popupObj.service_img_url || store.popupObj.img_url ? (
 							<img
 								className="popup-service-img"
-								src={store.popupObj.servce_img_url || store.popupObj.img_url}
+								src={store.popupObj.service_img_url || store.popupObj.img_url}
 							/>
 						) : (
 							""
@@ -40,10 +40,10 @@ export const EditImg = () => {
 								<span className="visually-hidden">Loading...</span>
 							</div>
 						</div>
-						{store.popupObj.servce_img_url || store.popupObj.img_url ? (
+						{store.popupObj.service_img_url || store.popupObj.img_url ? (
 							<img
 								className="popup-service-img"
-								src={store.popupObj.servce_img_url || store.popupObj.img_url}
+								src={store.popupObj.service_img_url || store.popupObj.img_url}
 							/>
 						) : (
 							""
@@ -57,20 +57,20 @@ export const EditImg = () => {
 				}
 			/>
 			<div className="d-flex flex-row w-100">
-				{store.popupObj.servce_img_url || store.popupObj.img_url || store.cloudinaryInfo.image_url ? (
+				{store.popupObj.service_img_url || store.popupObj.img_url || store.cloudinaryInfo.image_url ? (
 					<button
 						className={"mx-auto" + (store.cloudinaryInfo.image_url ? " btn-skip" : " btn-cool danger")}
 						onClick={() => {
 							if (store.cloudinaryInfo.image_url) actions.closePopup(true);
 							else {
 								let toastFunction = null;
-								if (store.popupObj.servce_img_url)
+								if (store.popupObj.preset === "services_images")
 									toastFunction = actions.updateService({
 										id: store.popupObj.id,
 										public_id: store.popupObj.public_id,
 										method: "delete"
 									});
-								else if (store.popupObj.img_url) {
+								else if (store.popupObj.preset === "client_images") {
 									let body = new FormData();
 									body.append("profile_image_url", store.popupObj.img_url);
 									body.append("public_id", store.popupObj.public_id);
@@ -100,22 +100,23 @@ export const EditImg = () => {
 					onClick={() => {
 						if (!store.cloudinaryInfo.image_url) actions.closePopup();
 						else {
-							const method = store.popupObj.servce_img_url || store.popupObj.img_url ? "modify" : "add";
+							const method = store.popupObj.service_img_url || store.popupObj.img_url ? "modify" : "add";
 
 							let toastFunction = null;
-							if (store.popupObj.servce_img_url)
+							if (store.popupObj.preset === "services_images")
 								toastFunction = actions.updateService({
 									id: store.popupObj.id,
 									service_img_url: store.cloudinaryInfo.image_url,
 									public_id: store.cloudinaryInfo.public_id,
 									method: method
 								});
-							else if (store.popupObj.img_url) {
+							else if (store.popupObj.preset === "client_images") {
 								let body = new FormData();
-								body.append("profile_image_url", store.popupObj.img_url);
-								body.append("public_id", store.popupObj.public_id);
+								body.append("profile_image_url", store.cloudinaryInfo.image_url);
+								body.append("public_id", store.cloudinaryInfo.public_id);
 								body.append("method", method);
 								toastFunction = actions.updateUser(body);
+								console.log(body);
 							}
 
 							actions.setToast(

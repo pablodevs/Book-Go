@@ -480,6 +480,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			// Update current USER
 			updateUser: async formData => {
 				const store = getStore();
+				const actions = getActions();
 				try {
 					const response = await fetch(process.env.BACKEND_URL + "/user", {
 						method: "PUT",
@@ -509,6 +510,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 							public_id: resp.public_id
 						}
 					});
+					if (store.popup) actions.closePopup();
 					return resp;
 				} catch (err) {
 					return err.json();

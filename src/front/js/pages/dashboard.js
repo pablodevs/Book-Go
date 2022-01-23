@@ -49,7 +49,6 @@ export const Dashboard = () => {
 	const showWelcome = () => {
 		setContent(
 			<div className="center dashboard-welcome">
-				{/* <h2>¡Hola {store.user.name.charAt(0).toUpperCase() + store.user.name.slice(1)}!</h2> */}
 				<span>¡Hola de nuevo!</span>
 				<img src={house} width="100" height="100" />
 			</div>
@@ -91,7 +90,12 @@ export const Dashboard = () => {
 							<button
 								type="button"
 								className="edit-img dashboard-edit-img"
-								onClick={() => actions.setPopup("edit-img", "Cambiar foto", store.user)}>
+								onClick={() =>
+									actions.setPopup("edit-img", "Cambiar foto", {
+										...store.user,
+										preset: "client_images"
+									})
+								}>
 								<i className="fas fa-camera" />
 							</button>
 						</div>

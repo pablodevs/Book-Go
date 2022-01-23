@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { Context } from "../../store/appContext";
-import { CloudinaryUploadWidget } from "../cloudinary/cloudinaryUploadWidget";
 
 export const AdminServices = () => {
 	const { actions, store } = useContext(Context);
@@ -221,7 +220,7 @@ export const AdminServices = () => {
 										// On click: abrir un cuadro de dialogo pequeño para cambiar el nombre del servicio
 										onClick={() => {
 											return data.id
-												? actions.setPopup("edit-service", `Editar ${data.service}`)
+												? actions.setPopup("edit-service-name", `Editar ${data.service}`)
 												: "";
 										}}>
 										<i className="fas fa-pen" />
@@ -336,7 +335,10 @@ export const AdminServices = () => {
 													className="edit-img"
 													// On click: abrir un cuadro de dialogo pequeño para cambiar el nombre del servicio
 													onClick={() =>
-														actions.setPopup("edit-service-img", "Cambiar foto", data)
+														actions.setPopup("edit-img", "Cambiar foto", {
+															...data,
+															preset: "services_images"
+														})
 													}>
 													<i className="fas fa-camera" />
 												</button>
