@@ -21,21 +21,30 @@ export const Dashboard = () => {
 
 	useEffect(
 		() => {
-			if (store.cloudinaryInfo.image_url && store.cloudinaryInfo.public_id) {
-				let body = new FormData();
-				body.append("profile_image_url", store.cloudinaryInfo.image_url);
-				body.append("public_id", store.cloudinaryInfo.public_id);
-
-				actions.setToast(
-					"promise",
-					{ loading: "Guardando...", success: "Imagen modificada" },
-					actions.updateUser(body),
-					"toast-success"
-				);
-			}
+			let userToken = store.token || localStorage.getItem("token");
+			if (userToken) actions.getProfileData(userToken);
+			else history.push("/");
 		},
-		[store.cloudinaryInfo]
+		[store.token]
 	);
+
+	// useEffect(
+	// 	() => {
+	// 		if (store.cloudinaryInfo && store.cloudinaryInfo.image_url && store.cloudinaryInfo.public_id) {
+	// 			let body = new FormData();
+	// 			body.append("profile_image_url", store.cloudinaryInfo.image_url);
+	// 			body.append("public_id", store.cloudinaryInfo.public_id);
+
+	// 			actions.setToast(
+	// 				"promise",
+	// 				{ loading: "Guardando...", success: "Imagen modificada" },
+	// 				actions.updateUser(body),
+	// 				"toast-success"
+	// 			);
+	// 		}
+	// 	},
+	// 	[store.cloudinaryInfo]
+	// );
 
 	const showWelcome = () => {
 		setContent(
@@ -46,15 +55,6 @@ export const Dashboard = () => {
 			</div>
 		);
 	};
-
-	useEffect(
-		() => {
-			let userToken = store.token || localStorage.getItem("token");
-			if (userToken) actions.getProfileData(userToken);
-			else history.push("/");
-		},
-		[store.token]
-	);
 
 	const url = window.location.pathname.split("/").pop();
 	useEffect(
@@ -88,25 +88,12 @@ export const Dashboard = () => {
 									</svg>
 								</div>
 							)}
-							<CloudinaryUploadWidget
-								preset="client_images"
-								defaultComp={
-									<button
-										type="button"
-										className="edit-img dashboard-edit-img"
-										onClick={() => actions.setWidget(true)}>
-										<i className="fas fa-camera" />
-									</button>
-								}
-								successComp={
-									<button
-										type="button"
-										className="edit-img dashboard-edit-img"
-										onClick={() => actions.setWidget(true)}>
-										<i className="fas fa-camera" />
-									</button>
-								}
-							/>
+							<button
+								type="button"
+								className="edit-img dashboard-edit-img"
+								onClick={() => actions.setPopup("edit-img", "Cambiar foto", store.user)}>
+								<i className="fas fa-camera" />
+							</button>
 						</div>
 						<div className="dashboard-info">
 							<h1 className="dashboard-username">

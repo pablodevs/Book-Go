@@ -37,6 +37,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				phone: "",
 				email: "",
 				profile_image_url: "",
+				public_id: "",
 				is_admin: false
 			},
 
@@ -504,7 +505,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 							lastname: resp.lastname,
 							phone: resp.phone,
 							email: resp.email,
-							img_url: resp.profile_image_url
+							img_url: resp.profile_image_url,
+							public_id: resp.public_id
 						}
 					});
 					return resp;
@@ -625,6 +627,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 							phone: resp.phone,
 							email: resp.email,
 							img_url: resp.profile_image_url,
+							public_id: resp.public_id,
 							is_admin: resp.is_admin
 						}
 					});

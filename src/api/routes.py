@@ -262,7 +262,7 @@ def get_service(service_id):
     return jsonify(service.serialize()), 200
 
 
-#CREATE NEW USER
+# CREATE NEW USER
 @api.route('/user', methods=['POST'])
 def create_new_user():
 
@@ -279,23 +279,14 @@ def create_new_user():
         lastname_received = request.form.get("lastname", None)
         phone_received = request.form.get("phone", None)
         password_received = request.form.get("password", None)
-        profile_image_recived = request.form.get("profile_image_url", None)
 
-        new_user = User(email = email_received, password = password_received, name = name_received, lastname = lastname_received, phone = phone_received, profile_image_url = profile_image_recived)
+        body_image_url = ""
+        body_public_id = None
+        if 'profile_image_url' in request.form and 'public_id' in request.form and (request.form.get('profile_image_url', None) != "" and request.form.get('profile_image_url', None) != None) and (request.form.get('public_id', None) != "" and request.form.get('public_id', None) != None):
+            body_image_url = request.form.get('profile_image_url', None)
+            body_public_id = request.form.get('public_id', None)
 
-
-    # validate that the front-end request was built correctly
-    # if "profile_image" in request.files:
-    #     # upload file to uploadcare
-    #     cloudinary.config( 
-    #     cloud_name = os.getenv('CLOUD_NAME'), 
-    #     api_key = os.getenv('API_KEY'), 
-    #     api_secret = os.getenv('API_SECRET') 
-    #     )
-  
-    #     result = cloudinary.uploader.upload(request.files['profile_image'], public_id = email_received)
-    #     # update the user with the given cloudinary image URL
-    #     user.profile_image_url = result['secure_url']
+        new_user = User(email = email_received, password = password_received, name = name_received, lastname = lastname_received, phone = phone_received, profile_image_url = body_image_url, public_id = body_public_id)
 
     db.session.add(new_user)
     db.session.commit()
@@ -325,27 +316,46 @@ def handle_single_user():
 
         # Check body's info
         if "name" in request_body:
+            if len(request_body.get("name", None)) > 120:
+                raise APIException('Nombre demasiado largo.', status_code=400)
             user.name = request_body.get("name", None)
-        elif len(request_body.get("name", None)) > 120:
-            raise APIException('Nombre demasiado largo.', status_code=400)
         if "lastname" in request_body:
+            if len(request_body.get("lastname", None)) > 120:
+                raise APIException('Apellido demasiado largo.', status_code=400)
             user.lastname = request_body.get("lastname", None)
-        elif len(request_body.get("lastname", None)) > 120:
-            raise APIException('Apellido demasiado largo.', status_code=400)
 
         # Verifica que el email no exista en otro usuario
         if "email" in request_body:
+            if len(request_body.get("email", None)) > 120:
+                raise APIException('Introduce una dirección de correo electrónico válida.', status_code=400)
             email_received = request_body.get("email", None)
             findUser = User.query.filter_by(email = email_received).first()
             if findUser and findUser != user:
                 raise APIException('Ya existe una cuenta asociada a ese correo.', status_code=404)
             else:
                 user.email = email_received
-        elif len(request_body.get("email", None)) > 120:
-            raise APIException('Introduce una dirección de correo electrónico válida.', status_code=400)
 
         if "phone" in request_body:
             user.phone = request_body.get("phone", None)
+
+        if "method" in request_body:
+            if request_body["method"] == "delete" or request_body["method"] == "modify":
+                # Delete current image in cloudinary
+                cloudinaryResponse = cloudinary.uploader.destroy(user.serialize()["public_id"])
+                if cloudinaryResponse["result"] != "ok":
+                    raise APIException('No se puede modificar la imagen', status_code=404)
+
+                if request_body["method"] == "delete":
+                    user.public_id = None
+                    user.profile_image_url = ""
+                elif request_body["method"] == "modify":
+                    user.profile_image_url = request_body["profile_image_url"]
+                    user.public_id = request_body["public_id"]
+
+            elif request_body["method"] == "add":
+                    user.profile_image_url = request_body["profile_image_url"]
+                    user.public_id = request_body["public_id"]
+
         if "profile_image_url" in request_body:
             user.profile_image_url = request_body.get("profile_image_url", None)
 
@@ -358,6 +368,12 @@ def handle_single_user():
     
     # DELETE a user
     elif request.method == 'DELETE':
+        if user.serialize()["public_id"]:
+            # Delete current image in cloudinary
+            cloudinaryResponse = cloudinary.uploader.destroy(user.serialize()["public_id"])
+            if cloudinaryResponse["result"] != "ok":
+                raise APIException('La imagen no existe o el public id es erróneo.', status_code=404)
+
         deleted_id = user.serialize()["id"]
         deleted_email = user.serialize()["email"]
 

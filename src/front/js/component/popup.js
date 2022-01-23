@@ -13,9 +13,10 @@ import { EditInput } from "./admin/popups/editInput.js";
 import { AddService } from "./admin/popups/addService.js";
 import { AddService2 } from "./admin/popups/addService2.js";
 import { AddImg } from "./admin/popups/addImg.js";
-import { EditserviceImg } from "./admin/popups/editServiceImg.js";
 // General Popups
-import { ConfirmPopup } from "./confirmPopup.js";
+import { ConfirmPopup } from "./popups/confirmPopup.js";
+import { EditImg } from "./popups/editImg.js";
+
 import "../../styles/components/popup.scss";
 
 export const Popup = () => {
@@ -85,8 +86,8 @@ export const Popup = () => {
 					<Guest />
 				) : store.popup === "edit-service-name" ? (
 					<EditInput input={store.popupTitle.split(" ")[store.popupTitle.split(" ").length - 1]} />
-				) : store.popup === "edit-service-img" ? (
-					<EditserviceImg />
+				) : store.popup === "edit-img" ? (
+					<EditImg />
 				) : store.popup === "add-img" ? (
 					<AddImg />
 				) : store.popup === "add-service" ? (

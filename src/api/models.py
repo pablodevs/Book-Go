@@ -14,7 +14,8 @@ class User(db.Model):
     password = db.Column(db.String(80), unique=False, nullable=False)
     is_admin= db.Column(db.Boolean(), nullable=False, default=False) # Una duda, no habría que hacer que is_admin sea Unique=True ??? de otra forma podría haber 2 o más admins
     profile_image_url = db.Column(db.String(255), unique=False, nullable=True)
-
+    public_id = db.Column(db.String(150), unique=True, nullable=True)
+    
     reserva = db.relationship('Book', backref='user', lazy=True)
 
     def __repr__(self):
@@ -30,6 +31,7 @@ class User(db.Model):
             "phone": str(self.phone),
             "is_admin" : self.is_admin,
             "profile_image_url": self.profile_image_url,
+            "public_id": self.public_id
             # do not serialize the password, its a security breach
         }
 
