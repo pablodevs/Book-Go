@@ -7,7 +7,9 @@ export const AddImg = () => {
 
 	return (
 		<div className="popup-body">
-			Pulsa para añadir una imagen.
+			<span className={store.cloudinaryInfo.image_url ? "text-confirm" : ""}>
+				{store.cloudinaryInfo.image_url ? "Imagen subida corréctamente" : "Pulsa para añadir una imagen."}
+			</span>
 			<CloudinaryUploadWidget
 				preset="services_images"
 				defaultComp={

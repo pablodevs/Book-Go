@@ -357,7 +357,14 @@ export const AdminServices = () => {
 				</section>
 				<section className="admin-second-section">
 					<form onSubmit={handleSubmitForm} className="dashboard-form">
-						<h2 className="dashboard-content-subtitle">Activar servicio</h2>
+						<div
+							className="center flex-row flex-wrap justify-content-between align-items-baseline"
+							style={{ gap: "1rem" }}>
+							<h2 className="dashboard-content-subtitle me-auto">Activar servicio</h2>
+							<span className={data.id ? "text-confirm" : "text-cancel"}>
+								{data.id ? data.service : "Ningún servicio seleccionado"}
+							</span>
+						</div>
 						<span>
 							Es necesario agregar un <i>código de artículo</i> que permitirá a tus clientes pagar online.
 						</span>

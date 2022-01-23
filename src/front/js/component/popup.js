@@ -23,7 +23,7 @@ export const Popup = () => {
 
 	const handleKeyDown = event => {
 		if (event.key === "Escape") {
-			actions.closePopup();
+			actions.closePopup(true);
 			document.removeEventListener("keydown", handleKeyDown);
 			document.removeEventListener("mousedown", handleMouseDown);
 		}
@@ -33,7 +33,7 @@ export const Popup = () => {
 	};
 	const handleMouseUp = e => {
 		if (e.target === document.querySelector(".popup-bg")) {
-			actions.closePopup();
+			actions.closePopup(true);
 			document.removeEventListener("mouseup", handleMouseUp);
 			document.removeEventListener("mousedown", handleMouseDown);
 			document.removeEventListener("keydown", handleKeyDown);
@@ -66,7 +66,7 @@ export const Popup = () => {
 						onClick={() => {
 							document.removeEventListener("keydown", handleKeyDown);
 							document.removeEventListener("mousedown", handleMouseDown);
-							actions.closePopup();
+							actions.closePopup(true);
 						}}>
 						<i className="fas fa-times" />
 					</button>

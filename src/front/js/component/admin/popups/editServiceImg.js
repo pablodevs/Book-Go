@@ -7,7 +7,13 @@ export const EditserviceImg = () => {
 
 	return (
 		<div className="popup-body">
-			Pulsa en la imagen para modificarla.
+			<span className={store.cloudinaryInfo.image_url ? "text-confirm" : ""}>
+				{store.popupObj.service_img_url && !store.cloudinaryInfo.image_url
+					? "Pulsa en la imagen para modificarla."
+					: store.cloudinaryInfo.image_url
+						? "Imagen subida corréctamente"
+						: "Pulsa para añadir una imagen."}
+			</span>
 			<CloudinaryUploadWidget
 				preset="services_images"
 				defaultComp={
@@ -49,8 +55,7 @@ export const EditserviceImg = () => {
 					<button
 						className={"mx-auto" + (store.cloudinaryInfo.image_url ? " btn-skip" : " btn-cool danger")}
 						onClick={() => {
-							if (store.cloudinaryInfo.image_url) actions.closePopup();
-							// TENEMOS QUE CREAR OTRO ENDPOINT
+							if (store.cloudinaryInfo.image_url) actions.closePopup(true);
 							else {
 								actions.setToast(
 									"promise",
@@ -60,7 +65,7 @@ export const EditserviceImg = () => {
 										public_id: store.popupObj.public_id,
 										method: "delete"
 									}),
-									"toast-success"
+									"toast-danger"
 								);
 							}
 						}}>
@@ -91,6 +96,7 @@ export const EditserviceImg = () => {
 								}),
 								"toast-success"
 							);
+							actions.resetCloudinaryInfo();
 						}
 					}}>
 					Confirmar

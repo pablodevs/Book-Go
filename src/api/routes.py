@@ -141,7 +141,7 @@ def create_service():
         raise APIException('You need to specify the duration.', status_code=400)
     
     body_image_url = ""
-    body_public_id = ""
+    body_public_id = None
     if 'service_img_url' in body_service and 'public_id' in body_service and (body_service['service_img_url'] != "" and body_service['service_img_url'] != None) and (body_service['public_id'] != "" and body_service['public_id'] != None):
         body_image_url = body_service['service_img_url']
         body_public_id = body_service['public_id']
@@ -203,12 +203,12 @@ def handle_single_service(service_id):
         if "method" in request_body:
             if request_body["method"] == "delete" or request_body["method"] == "modify":
                 # Delete current image in cloudinary
-                cloudinaryResponse = cloudinary.uploader.destroy(request_body["public_id"])
+                cloudinaryResponse = cloudinary.uploader.destroy(service.serialize()["public_id"])
                 if cloudinaryResponse["result"] != "ok":
                     raise APIException('La imagen no existe o el public id es erróneo.', status_code=404)
 
                 if request_body["method"] == "delete":
-                    service.public_id = ""
+                    service.public_id = None
                     service.service_img_url = ""
                 elif request_body["method"] == "modify":
                     service.service_img_url = request_body["service_img_url"]
@@ -223,14 +223,29 @@ def handle_single_service(service_id):
     
     # DELETE a service
     elif request.method == 'DELETE':
-        # Delete current image in cloudinary
-        cloudinaryResponse = cloudinary.uploader.destroy(service.public_id)
-        if cloudinaryResponse["result"] != "ok":
-            raise APIException('La imagen no existe o el public id es erróneo.', status_code=404)
+        if service.serialize()["public_id"]:
+            # Delete current image in cloudinary
+            cloudinaryResponse = cloudinary.uploader.destroy(service.serialize()["public_id"])
+            if cloudinaryResponse["result"] != "ok":
+                raise APIException('La imagen no existe o el public id es erróneo.', status_code=404)
 
         db.session.delete(service)
         db.session.commit()
-        return jsonify({"message": "The service has been deleted."}), 200
+        return jsonify({"message": "El servicio se ha eliminado correctamente."}), 200
+
+# CANCEL (DELETE) CLOUDINARY IMAGE UPLOAD
+@api.route('/cancel', methods=['PUT'])
+def cancel_cloudinary_upload():
+    """
+    Cancel upload to Cloudinary
+    """
+    request_body = request.json
+
+    cloudinaryResponse = cloudinary.uploader.destroy(request_body["public_id"])
+    if cloudinaryResponse["result"] != "ok":
+        raise APIException('La imagen no existe o el public id es erróneo.', status_code=404)
+
+    return jsonify({ "message": cloudinaryResponse["result"] }), 200
 
 # GET A SERVICE
 @api.route('/services/<int:service_id>', methods=['GET'])

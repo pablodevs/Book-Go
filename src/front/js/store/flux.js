@@ -56,12 +56,16 @@ const getState = ({ getStore, getActions, setStore }) => {
 			// STORE RESET
 			reset: () => {
 				const actions = getActions();
+				const store = getStore();
 
 				actions.calendarActions.setInitialCalendar();
-				actions.closePopup();
 				actions.resetNewService();
 				actions.resetBooking();
 				actions.resetCloudinaryInfo();
+
+				const cancel = store.cloudinaryInfo.image_url ? true : false;
+				actions.closePopup(cancel);
+
 				setStore({
 					message: {
 						message: "",
@@ -129,8 +133,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			// cierra el popup de login, register y calendario
-			closePopup: () => {
+			closePopup: (cancel = false) => {
 				const actions = getActions();
+				const store = getStore();
 
 				setStore({
 					popup: null,
@@ -140,18 +145,31 @@ const getState = ({ getStore, getActions, setStore }) => {
 					serviceInProgress: {},
 					popupObj: {}
 				});
-				actions.resetCloudinaryInfo();
 				actions.setWidget(false);
+
+				if (cancel && store.cloudinaryInfo.image_url)
+					actions.cancelCloudinaryUpload(store.cloudinaryInfo.public_id);
+
+				actions.resetCloudinaryInfo();
 			},
 
 			// Te lleva al popup anterior
 			goToPrevPopup: () => {
 				let store = getStore();
-				setStore({
-					popup: store.prevPopup[store.prevPopup.length - 1].popup,
-					popupTitle: store.prevPopup[store.prevPopup.length - 1].popupTitle,
-					prevPopup: [...store.prevPopup.slice(0, store.prevPopup.length - 1)]
-				});
+				let actions = getActions();
+				if (!store.prevPopup.popup) {
+					setStore({
+						popupTitle: "",
+						prevPopup: []
+					});
+					actions.closePopup(true);
+					return;
+				} else
+					setStore({
+						popup: store.prevPopup[store.prevPopup.length - 1].popup,
+						popupTitle: store.prevPopup[store.prevPopup.length - 1].popupTitle,
+						prevPopup: [...store.prevPopup.slice(0, store.prevPopup.length - 1)]
+					});
 			},
 
 			// Reset booking in store
@@ -635,6 +653,33 @@ const getState = ({ getStore, getActions, setStore }) => {
 						public_id: null
 					}
 				}),
+
+			// Cancel image Cloudinary upload
+			cancelCloudinaryUpload: async public_id => {
+				const actions = getActions();
+				try {
+					const response = await fetch(process.env.BACKEND_URL + "/cancel", {
+						method: "PUT",
+						body: JSON.stringify({ public_id: public_id }),
+						headers: {
+							"Content-Type": "application/json"
+						}
+					});
+					const resp = await response.json();
+					if (!response.ok) {
+						setStore({
+							message: {
+								message: resp.message,
+								status: ""
+							}
+						});
+						throw Error(response);
+					} else actions.setToast("blank", "Cancelado");
+					return resp;
+				} catch (err) {
+					console.error(err);
+				}
+			},
 
 			// Obtener la lista de clientes
 			getClients: async () => {
