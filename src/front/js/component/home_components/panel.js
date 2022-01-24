@@ -1,22 +1,10 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useContext } from "react";
 import { Context } from "../../store/appContext.js";
 import { Link } from "react-router-dom";
 
 export const Panel = () => {
-	let [navMenu, setNavMenu] = useState(false);
 	const { store, actions } = useContext(Context);
 
-	useEffect(
-		() => {
-			if (navMenu || store.popup) {
-				document.querySelector("html").style.position = "fixed";
-				document.querySelector("html").style.overflowY = "scroll";
-			} else {
-				document.querySelector("html").style.position = "initial";
-			}
-		},
-		[navMenu, store.popup]
-	);
 	return (
 		<div
 			className="service-card card shadow rounded-3 card-background d-block"
@@ -33,11 +21,7 @@ export const Panel = () => {
 					type="button"
 					className="btn btn-info mt-auto"
 					to="#"
-					onClick={() => {
-						actions.setPopup("booking", "¿Qué estás buscando?");
-						setNavMenu(false);
-						actions.calendarActions.changeHoursView("01/01/2000");
-					}}>
+					onClick={() => actions.setPopup("booking", "¿Qué estás buscando?")}>
 					¡Reserva aquí!
 				</Link>
 			</div>

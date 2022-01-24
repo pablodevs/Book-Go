@@ -35,7 +35,7 @@ export const ClientsList = () => {
 				clientsList = store.clients.filter(
 					client =>
 						(client.name + " " + client.lastname).toLowerCase().includes(srchInput.toLowerCase()) ||
-						client.id == srchInput
+						client.id === srchInput
 				);
 				clientsList = clientsList.map((client, idx) => (
 					<ClientTab client={client} key={idx + 1} sendClientInfo={getClientInfo} />

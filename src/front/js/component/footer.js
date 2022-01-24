@@ -9,15 +9,9 @@ export const Footer = () => (
 				<div className="col">
 					<h5>Contacto: </h5>
 					<ul className="nav flex-column">
-						<li className="nav-item mb-2">
-							<p>Teléfono: (+34) 123 456 789</p>
-						</li>
-						<li className="nav-item mb-2">
-							<p>Email: spa@jmanvel.com</p>
-						</li>
-						<li className="nav-item mb-2">
-							<p>Skype: @spa</p>
-						</li>
+						<li className="nav-item mb-2">Cast: (+34) 123 456 789</li>
+						<li className="nav-item mb-2">Email: email@email.com</li>
+						<li className="nav-item mb-2">Skype: @email</li>
 					</ul>
 				</div>
 				{/* Social Media buttons */}
@@ -55,8 +49,8 @@ export const Footer = () => (
 				{/* Form to subscribe to newsletter */}
 				<div className="col-md-3 py-3">
 					<form>
-						<h5>Subscríbete : </h5>
-
+						<h5>Subscribe to our newsletter</h5>
+						<div>Monthly digest of whats new and exciting from us.</div>
 						<div className="row gap-2">
 							<input id="newsletter1" type="text" className="col-md-12 col-sm-12" placeholder="Email " />
 							<button className="btn btn-primary col-md-5 col-sm-12" type="button">
@@ -68,8 +62,6 @@ export const Footer = () => (
 			</div>
 		</div>
 		{/* Copyrights */}
-		<div>
-			<p>&#169; Pablo, Chavi & Clara. 20220 Todos los derechos reservados</p>
-		</div>
+		<div>&#169; Pablo, Chavi & Clara. 2021 All rights reserved</div>
 	</footer>
 );

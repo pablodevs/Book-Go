@@ -6,11 +6,12 @@ import "../../../../styles/components/calendar.scss";
 
 export const Calendar = () => {
 	const { store, actions } = useContext(Context);
-	let [weeks, setWeeks] = useState(null); // sirve para renderizar las 6 semanas con sus días
-	let [mouseEffect, setMouseEffect] = useState({
+	const [weeks, setWeeks] = useState(null); // sirve para renderizar las 6 semanas con sus días
+	const [mouseEffect, setMouseEffect] = useState({
 		X: -900,
 		Y: -900
 	});
+	const [hours, setHours] = useState([]);
 
 	let calendar = store.calendar,
 		todayDate = calendar.todayDate,
@@ -64,10 +65,19 @@ export const Calendar = () => {
 									: false
 							}
 							isDisabled={
-								!store.dispo.map(element => element.date).includes(date.toLocaleDateString())
-									? true
-									: false
+								!store.business.weekdays.includes(dates["day_text"][date.getDay()]) ? true : false
 							}
+							// isDisabled={
+							// 	!store.hoursDispo.map(element => element.date).includes(
+							// 		date.toLocaleDateString(undefined, {
+							// 			year: "numeric",
+							// 			month: "2-digit",
+							// 			day: "2-digit"
+							// 		})
+							// 	)
+							// 		? true
+							// 		: false
+							// }
 						/>
 					);
 				}
@@ -123,6 +133,28 @@ export const Calendar = () => {
 		};
 	}, []);
 
+	useEffect(
+		() => {
+			if (store.booking.date)
+				setHours(
+					store.hoursDispo.map((item, index) => (
+						<button
+							className="btn btn-info p-2"
+							key={index}
+							onClick={() => {
+								actions.updateBooking("time", item);
+								store.user.id
+									? actions.setPopup("resume", "Resumen de su reserva")
+									: actions.setPopup("login", "Iniciar Sesión");
+							}}>
+							{item}
+						</button>
+					))
+				);
+		},
+		[store.booking.date]
+	);
+
 	return (
 		<div className="calendar-wrapper">
 			<div className="calendar-header">
@@ -164,26 +196,7 @@ export const Calendar = () => {
 						style={{ left: `${mouseEffect.X}px`, top: `${mouseEffect.Y}px` }}
 					/>
 				</div>
-
-				<div className="hours-avaliable">
-					{store.dispo.map((item, index) => {
-						if (item.date == store.booking_day) {
-							return (
-								<button
-									className="btn btn-success p-2 m-2"
-									key={index}
-									onClick={() => {
-										store.user.id !== ""
-											? (actions.setPopup("resume", "Resumen de su reserva"),
-											  actions.booking(item))
-											: (actions.setPopup("login", "Iniciar Sesión"), actions.booking(item));
-									}}>
-									{item.time}
-								</button>
-							);
-						}
-					})}
-				</div>
+				<div className="hours-avaliable">{hours}</div>
 			</div>
 		</div>
 	);

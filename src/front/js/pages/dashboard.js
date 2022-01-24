@@ -3,6 +3,7 @@ import { Context } from "../store/appContext";
 import { useHistory, useParams } from "react-router-dom";
 import { AccountSettings } from "../component/dashboard/accountSettings";
 import { ReservationsHistory } from "../component/dashboard/reservationsHistory";
+import { CloudinaryUploadWidget } from "../component/cloudinary/cloudinaryUploadWidget";
 import house from "../../img/dashboard/home_transparent.png";
 import "../../styles/pages/dashboard.scss";
 
@@ -18,16 +19,6 @@ export const Dashboard = () => {
 	const params = useParams();
 	let history = useHistory();
 
-	const showWelcome = () => {
-		setContent(
-			<div className="center dashboard-welcome">
-				{/* <h2>¡Hola {store.user.name.charAt(0).toUpperCase() + store.user.name.slice(1)}!</h2> */}
-				<span>¡Hola de nuevo!</span>
-				<img src={house} width="100" height="100" />
-			</div>
-		);
-	};
-
 	useEffect(
 		() => {
 			let userToken = store.token || localStorage.getItem("token");
@@ -36,6 +27,15 @@ export const Dashboard = () => {
 		},
 		[store.token]
 	);
+
+	const showWelcome = () => {
+		setContent(
+			<div className="center dashboard-welcome">
+				<span>¡Hola de nuevo!</span>
+				<img src={house} width="100" height="100" />
+			</div>
+		);
+	};
 
 	const url = window.location.pathname.split("/").pop();
 	useEffect(
@@ -69,7 +69,15 @@ export const Dashboard = () => {
 									</svg>
 								</div>
 							)}
-							<button type="button" className="edit-img dashboard-edit-img" onClick={() => undefined}>
+							<button
+								type="button"
+								className="edit-img dashboard-edit-img"
+								onClick={() =>
+									actions.setPopup("edit-img", "Cambiar foto", {
+										...store.user,
+										preset: "client_images"
+									})
+								}>
 								<i className="fas fa-camera" />
 							</button>
 						</div>

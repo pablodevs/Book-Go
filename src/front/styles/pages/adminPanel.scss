@@ -1,4 +1,5 @@
 /*===== General styles import =====*/
+@import "../index";  // propiedades custom
 @import "../colors"; // paleta de colores
 @import "../fonts";  // estilo de las fuentes
 @import "./dashboard";  // estilo de las fuentes
@@ -81,8 +82,8 @@
 button.btn-cool.logout {
     display: flex;
     align-items: center;
-    gap: 1.5rem;
     box-shadow: inset 0 0 0 2px $--color-pink-dark;
+    color: $--color-pink-dark;
     padding-inline: 1rem;
     &:hover {
         color: white;
@@ -180,6 +181,7 @@ button.btn-cool.logout {
     height: fit-content;
     box-shadow: inset $--color-grey-dashboard-light 0px 0px 0px 1px;
     padding: 1.5rem;
+    border-radius: $--br;
 }
 
 .admin-form div.services-subtitle {
@@ -217,8 +219,6 @@ button.inactive {
     color: $--color-grey-dark !important;
     pointer-events: none;
 }
-
-.price-subgroup { align-self: stretch }
 
 .price-input {
     position: relative;
@@ -263,13 +263,8 @@ div.admin-form-group {
     display: flex;
     flex-direction: column;
 }
-.admin-form-subgroup-title {
-    display: block;
-    text-align: center;
-}
+
 .duration-subgroup {
-    flex-grow: 2;
-    gap: 0.5rem;
     align-items: flex-start;
 }
 
@@ -284,19 +279,6 @@ div.disponibility-title.admin-form-group {
 }
 .text-cancel {
     color: $--color-pink-dark;
-}
-
-.availability-checkbox {
-    font-weight: bold;
-    color: #0075ff;
-    font-size: 1.1rem;
-    margin-inline: auto;
-    margin-bottom: auto;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 0.4rem;
-    & input { width: auto }
 }
 
 .img-subgroup {
@@ -344,13 +326,13 @@ div.disponibility-title.admin-form-group {
     padding: 0.6rem;
     box-shadow: 0 4px 10px 0 rgba(0,0,0,0.14);
     transition: all 0.1s ease-out;
-    &:hover {
+    &:hover, &.edit-img-active {
         opacity: 1;
         background-color: unset;
         background-image: linear-gradient(0deg, #000000b8, transparent);
         border-radius: 10px;
     }
-    & > i {
+    & > i, & .spinner-border-wrapper {
         padding: 0.6rem;
         background: white;
         box-shadow: 0 4px 10px 0 rgba(0,0,0,0.14);
@@ -571,6 +553,9 @@ $--br-client-tab-x2: 10px;
 .admin-weekdays .icon-btn {
     border: none;
     background-color: $--color-grey-dashboard-light;
+    &:hover {
+        background-color: $--color-blue-lighter;
+    }
     &.active {
         color: white;
         font-weight: bold;

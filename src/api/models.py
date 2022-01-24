@@ -14,7 +14,8 @@ class User(db.Model):
     password = db.Column(db.String(80), unique=False, nullable=False)
     is_admin= db.Column(db.Boolean(), nullable=False, default=False) # Una duda, no habría que hacer que is_admin sea Unique=True ??? de otra forma podría haber 2 o más admins
     profile_image_url = db.Column(db.String(255), unique=False, nullable=True)
-
+    public_id = db.Column(db.String(150), unique=True, nullable=True)
+    
     reserva = db.relationship('Book', backref='user', lazy=True)
 
     def __repr__(self):
@@ -30,6 +31,7 @@ class User(db.Model):
             "phone": str(self.phone),
             "is_admin" : self.is_admin,
             "profile_image_url": self.profile_image_url,
+            "public_id": self.public_id
             # do not serialize the password, its a security breach
         }
 
@@ -68,13 +70,13 @@ class Business(db.Model):
 class Service(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120), unique=True, nullable=False) # ⚠️ Unique True porque si no da problemas con las imágenes por como lo ha hecho Chavi, en AdminiServices
-    is_active = db.Column(db.Boolean(), nullable=False, default=False) # Si el servicio no está activo, puedes modificarlo pero no se podrán realizar reservas hasta que lo actives
     price = db.Column(db.Integer, nullable=False)  
     duration = db.Column(db.Integer, nullable=False)
     description = db.Column(db.String(1000), nullable=False)
+    is_active = db.Column(db.Boolean(), nullable=False, default=False) # Si el servicio no está activo, puedes modificarlo pero no se podrán realizar reservas hasta que lo actives
     sku = db.Column(db.String(150), nullable=True)
-    
-    # Habrá que meter sí o sí las imágenes en una url (service_img_url) unidas al id del servicio
+    service_img_url = db.Column(db.String(255), unique=False, nullable=True)
+    public_id = db.Column(db.String(150), unique=True, nullable=True)
     
     disponibilidad = db.relationship('Dispo', backref ='service', lazy=True)
     reserva = db.relationship('Book', backref ='service', lazy=True)
@@ -90,9 +92,9 @@ class Service(db.Model):
             "price" : self.price,
             "duration" : self.duration,
             "description" : self.description,
-            "sku" : self.sku
-
-            # "service_img_url": self.service_img_url
+            "sku" : self.sku,
+            "service_img_url": self.service_img_url,
+            "public_id": self.public_id
         }
 
 
@@ -101,11 +103,11 @@ class Book(db.Model):
     id = db.Column(db.Integer, primary_key=True)
    
     date = db.Column(db.DateTime, nullable=False)
-    time = db.Column(db.Time,nullable=False)
-    created = db.Column(db.DateTime,onupdate=datetime.now)
+    time = db.Column(db.Time, nullable=False)
+    created = db.Column(db.DateTime, onupdate=datetime.now)
 
-    service_id = db.Column(db.Integer,db.ForeignKey('service.id') ,nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'),nullable=False)
+    service_id = db.Column(db.Integer,db.ForeignKey('service.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
 
     def __repr__(self):
@@ -115,8 +117,8 @@ class Book(db.Model):
         return {
             "id": self.id,
             "service_id": self.service_id,
-            "date" : self.date.strftime("%-d/%-m/%Y"),
-            "time" : self.time.strftime("%-H:%M")
+            "date" : self.date.strftime("%d/%m/%Y"),
+            "time" : self.time.strftime("%H:%M")
         }
 
 
@@ -138,9 +140,9 @@ class Dispo(db.Model):
             "id": self.id,
             "service_id": self.service_id,
             #esto te devuelve la fecha en el formato español
-            "date" : self.date.strftime("%-d/%-m/%Y"),
+            "date" : self.date.strftime("%d/%m/%Y"),
             #este otro en milisegundos
             #"date" : self.date.strptime(self.date.strftime("%d/%m/%Y"),"%d/%m/%Y").timestamp()*1000,
-            "time" : self.time.strftime("%-H:%M"),
+            "time" : self.time.strftime("%H:%M"),
             "available" : self.available
         }

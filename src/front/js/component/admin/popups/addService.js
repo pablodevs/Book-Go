@@ -8,15 +8,11 @@ export const AddService = () => {
 	const [hoursList, setHoursList] = useState([]);
 	const [minutes, setMinutes] = useState(0);
 	const [hours, setHours] = useState(0);
-	const [schedule, setSchedule] = useState(false);
 	const [data, setData] = useState({
-		name: "",
-		price: "",
-		description: "",
-		duration: "",
-		is_active: false,
-		sku: ""
-		// service_img_url: "",
+		name: store.serviceInProgress.name || "",
+		price: store.serviceInProgress.price || "",
+		description: store.serviceInProgress.description || "",
+		duration: store.serviceInProgress.duration || ""
 	});
 
 	useEffect(() => {
@@ -32,26 +28,7 @@ export const AddService = () => {
 
 		setMinutesList(listOfMinutes);
 		setHoursList(listOfHours);
-
-		// Actualizamos la información del negocio
-		actions.getBusinessInfo();
 	}, []);
-
-	useEffect(
-		() => {
-			// Comprobamos si existe un horario
-			if (
-				store.business.schedule &&
-				store.business.weekdays &&
-				store.business.schedule !== "00:00,00:00" &&
-				store.business.schedule.split(",")[0] !== store.business.schedule.split(",")[1] &&
-				store.business.weekdays[0] !== "" &&
-				data.sku
-			)
-				setSchedule(true);
-		},
-		[data, store.business]
-	);
 
 	useEffect(
 		() =>
@@ -66,24 +43,22 @@ export const AddService = () => {
 
 	const handleSubmit = event => {
 		event.preventDefault();
-		if (data.name !== "" && data.price !== "" && data.description !== "") {
-			actions.setToast(
-				"promise",
-				{ loading: "Añadiendo...", success: resp => `Servicio agregado: ${resp.name}` },
-				actions.addService(data),
-				"toast-confirm"
-			);
-		}
+		actions.updateServiceInProgress(data);
+		actions.setPopup("add-service2", "Cambiar foto de servicio");
 	};
 
 	return (
 		<div className="popup-body">
-			<form onSubmit={handleSubmit} className="dashboard-form">
-				<p>Puedes modificar la información del servicio más adelante</p>
+			<form onSubmit={handleSubmit} className="dashboard-form popup-form">
+				<p>
+					Podrás modificar la información del servicio más adelante.
+					<br />
+					Primero introduce un <strong>Nombre</strong> para el servicio.
+				</p>
 				<div className="admin-form-group">
 					<div className="admin-form-subgroup">
 						<label className="dashboard-label" htmlFor="new-service">
-							Nuevo servicio:
+							Nombre:
 							<span>{data.name.length}</span>
 						</label>
 						<div className="dashboard-input">
@@ -112,49 +87,29 @@ export const AddService = () => {
 						</div>
 					</div>
 				</div>
+				<p>
+					Añade el <strong>Precio</strong> y la <strong>Duración</strong> del servicio
+				</p>
 				<div className="admin-form-group">
-					<div className="admin-form-subgroup price-subgroup">
-						<label
-							className="availability-checkbox dashboard-label"
-							htmlFor="new_is_active"
-							data-tooltip={
-								schedule
-									? "Permite que se pueda reservar este servicio"
-									: "Primero define un horario en el apartado de negocio"
-							}>
-							<input
-								type="checkbox"
-								id="new_is_active"
-								disabled={!schedule}
-								checked={data.is_active}
-								onChange={() =>
-									setData({
-										...data,
-										is_active: !data.is_active
-									})
-								}
-							/>
-							Activo
-						</label>
-						<label className="dashboard-label" htmlFor="new-price">
-							Precio
-						</label>
-						<div className="price-input">
-							<input
-								type="number"
-								id="new-price"
-								name="price"
-								min="0"
-								onChange={handleInputChange}
-								value={data.price}
-								required
-							/>
-							<span>€</span>
-						</div>
-					</div>
 					<div className="admin-form-subgroup duration-subgroup">
-						<span className="admin-form-subgroup-title">Duración del servicio</span>
 						<div className="dflex-row">
+							<div>
+								<label className="dashboard-label" htmlFor="new-price">
+									Precio
+								</label>
+								<div className="price-input">
+									<input
+										type="number"
+										id="new-price"
+										name="price"
+										min="0"
+										onChange={handleInputChange}
+										value={data.price}
+										required
+									/>
+									<span>€</span>
+								</div>
+							</div>
 							<div>
 								<label htmlFor="new-hours" className="dashboard-label">
 									Hora(s)
@@ -171,8 +126,6 @@ export const AddService = () => {
 										))}
 									</select>
 								</div>
-							</div>
-							<div>
 								<label htmlFor="new-minutes" className="dashboard-label">
 									Minutos
 								</label>
@@ -192,6 +145,9 @@ export const AddService = () => {
 						</div>
 					</div>
 				</div>
+				<p>
+					Por último agrega una descripción <strong>descripción</strong>
+				</p>
 				<div className="admin-form-group">
 					<div className="admin-form-subgroup">
 						<label htmlFor="new-description" className="dashboard-label">
@@ -207,54 +163,10 @@ export const AddService = () => {
 							required
 						/>
 					</div>
-					<div className="admin-form-subgroup img-subgroup">
-						<div className="admin-service-img-wrapper">
-							<small className="img-placeholder">
-								<i className="fas fa-camera" />
-							</small>
-							<button
-								type="button"
-								className="edit-img"
-								onClick={() => {
-									return;
-								}}>
-								<i className="fas fa-camera" />
-							</button>
-						</div>
-					</div>
-				</div>
-				<div className="admin-form-group">
-					<div className="admin-form-subgroup">
-						<label className="dashboard-label" htmlFor="new-sku">
-							Sku (código de artículo)
-						</label>
-						<div className="dashboard-input">
-							<input
-								id="new-sku"
-								type="text"
-								name="sku"
-								maxLength="150"
-								value={data.sku}
-								autoComplete="off"
-								onChange={handleInputChange}
-							/>
-							<button
-								type="button"
-								className="clear-input"
-								onClick={() => {
-									setData({
-										...data,
-										sku: ""
-									});
-								}}>
-								<i className="fas fa-times" />
-							</button>
-						</div>
-					</div>
 				</div>
 				<div>
-					<button type="submit" className="save-button">
-						Añadir
+					<button type="submit" className="btn-cool">
+						Continuar
 					</button>
 				</div>
 			</form>

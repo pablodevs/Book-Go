@@ -1,5 +1,7 @@
 import React, { useContext, useState } from "react";
 import { Context } from "../../store/appContext";
+import { CloudinaryUploadWidget } from "../cloudinary/cloudinaryUploadWidget";
+import { WidgetButton } from "../cloudinary/widgetButton";
 
 export const Signup = () => {
 	const { actions, store } = useContext(Context);
@@ -13,23 +15,21 @@ export const Signup = () => {
 		password: ""
 	});
 
-	// const submitForm = event => {
-	// 	event.preventDefault();
-	// 	actions.createUser(data, files);
-	// };
-
-	const submitForm = event => {
+	const handleSubmit = event => {
 		event.preventDefault();
 
 		// we are about to send this to the backend.
-		console.log("This are the files", files);
 		let body = new FormData();
 		body.append("email", data.email);
 		body.append("password", data.password);
 		body.append("name", data.name);
 		body.append("lastname", data.lastname);
 		body.append("phone", data.phone);
-		body.append("profile_image", files[0]);
+		if (store.cloudinaryInfo.image_url && store.cloudinaryInfo.public_id) {
+			body.append("profile_image_url", store.cloudinaryInfo.image_url);
+			body.append("public_id", store.cloudinaryInfo.public_id);
+		}
+		// if (files) body.append("profile_image_url", files[0]);
 		actions.createUser(body);
 	};
 
@@ -43,93 +43,83 @@ export const Signup = () => {
 	return (
 		<div className="container-fluid popup-container">
 			<div className="row popup-row">
-				<form onSubmit={submitForm} className="col mx-4 mb-4" style={{ display: "grid", gap: "1rem" }}>
-					<input
-						autoFocus
-						required
-						onChange={e => {
-							handleInputChange(e);
-						}}
-						className="form-control"
-						type="text"
-						id="name"
-						name="name"
-						placeholder="Nombre..."
-					/>
-					<input
-						required
-						onChange={e => {
-							handleInputChange(e);
-						}}
-						className="form-control"
-						type="text"
-						id="lastname"
-						name="lastname"
-						placeholder="Apellidos..."
-					/>
-					<input
-						required
-						onChange={e => {
-							handleInputChange(e);
-						}}
-						className="form-control"
-						type="phone"
-						id="phone"
-						maxLength="9"
-						name="phone"
-						placeholder="Teléfono..."
-					/>
-					<input
-						required
-						onChange={e => {
-							handleInputChange(e);
-						}}
-						className="form-control"
-						type="mail"
-						id="email"
-						name="email"
-						placeholder="Correo electrónico"
-					/>
-					<input
-						required
-						onChange={e => {
-							handleInputChange(e);
-						}}
-						className="form-control"
-						type="password"
-						id="password"
-						name="password"
-						placeholder="password"
-					/>
-					<label htmlFor="profileImg" className="input-button">
-						<input
-							type="file"
-							id="profileImg"
-							accept=".jpg, .jpeg, .png"
-							onChange={e => {
-								setFiles(e.target.files);
-							}}
+				<form onSubmit={handleSubmit}>
+					<div className="col mx-4 mb-4" style={{ display: "grid", gap: "1rem" }}>
+						<div>
+							<label htmlFor="name">Nombre</label>
+							<input autoFocus required onChange={handleInputChange} type="text" id="name" name="name" />
+						</div>
+						<div>
+							<label htmlFor="lastname">Apellidos</label>
+							<input required onChange={handleInputChange} type="text" id="lastname" name="lastname" />
+						</div>
+						<div>
+							<label htmlFor="phone">Teléfono</label>
+							<input
+								required
+								onChange={handleInputChange}
+								type="tel"
+								id="phone"
+								name="phone"
+								minLength="9"
+								maxLength="9"
+							/>
+						</div>
+						<div>
+							<label htmlFor="email">E-mail</label>
+							<input
+								required
+								onChange={handleInputChange}
+								type="email"
+								id="email"
+								name="email"
+								placeholder="name@example.com"
+							/>
+						</div>
+						<div>
+							<label htmlFor="password">Contraseña</label>
+							<input
+								required
+								onChange={handleInputChange}
+								type="password"
+								id="password"
+								name="password"
+							/>
+						</div>
+						<span className="text-center">También puedes añadir una foto de perfil</span>
+						<CloudinaryUploadWidget
+							preset="client_images"
+							defaultComp={<WidgetButton title="Subir imagen" funct={() => actions.setWidget(true)} />}
+							loadingComp={
+								<div className="input-button">
+									<div className="spinner-border spinner-border-sm" role="status">
+										<span className="visually-hidden">Loading...</span>
+									</div>
+								</div>
+							}
+							successComp={
+								<div className="input-button">
+									<i className="fas fa-camera" />
+									<i className="far fa-check-circle" style={{ color: "rgb(21, 215, 21)" }} />
+								</div>
+							}
 						/>
-						<i className="fas fa-camera" />
-						Añade una imagen de perfil
-					</label>
-					<button className="btn btn-warning w-100" type="submit">
-						Únete
-					</button>
-					<div className="d-flex w-100 justify-content-center">
-						¿Ya eres miembro?&nbsp;
-						<button className="text-primary" onClick={() => actions.goToPrevPopup()}>
-							Iniciar Sesión
+						<button className="btn-cool" type="submit">
+							Únete
 						</button>
+						<div className="d-flex flex-wrap w-100 justify-content-center">
+							¿Ya eres miembro?&nbsp;
+							<button className="text-primary" onClick={() => actions.goToPrevPopup()}>
+								Iniciar Sesión
+							</button>
+						</div>
 					</div>
+					{store.message.message ? (
+						<div className={`alert alert-${store.message.status}`} role="alert">
+							{store.message.message}
+						</div>
+					) : null}
 				</form>
-				{store.message ? (
-					<div className={`alert alert-${store.message != "" ? "success" : "danger"}`} role="alert">
-						{store.message != "" ? store.message : ""}
-					</div>
-				) : (
-					""
-				)}
 			</div>
 		</div>
 	);

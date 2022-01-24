@@ -1,11 +1,13 @@
+@import "../index.scss";
 @import "../colors.scss";
+@import "../fonts.scss";
 
 #scroll-top {
     display: flex;
     position: fixed; bottom: 1.2rem; right: 1.2rem;
     width: fit-content; height: fit-content;
     padding: 0.5rem;
-    border-radius: 5px;
+    border-radius: $--br;
     box-shadow: $--color-grey-dark 0px 3px 10px 0;
     background-color: $--color-grey-dark;
     color: $--color-grey-lighter;

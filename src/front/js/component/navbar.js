@@ -22,7 +22,7 @@ export const Navbar = () => {
 	return (
 		<header>
 			<nav className="_navbar">
-				<span className="_navbar-logo-wrapper center">
+				<span className="_navbar-logo-wrapper text-start">
 					<NavLink className="_navbar-logo _navbar-link" to="/" onClick={() => setNavMenu(false)}>
 						Inicio
 					</NavLink>
@@ -73,7 +73,6 @@ export const Navbar = () => {
 						onClick={() => {
 							actions.setPopup("booking", "¿Qué estás buscando?");
 							setNavMenu(false);
-							actions.calendarActions.changeHoursView("01/01/2000");
 						}}>
 						Reservar
 					</NavLink>

@@ -1,4 +1,5 @@
 /*===== General styles import =====*/
+@import "../index"; // custom properties
 @import "../colors"; // paleta de colores
 @import "../fonts";  // estilo de las fuentes
 
@@ -6,6 +7,8 @@
     width: 100%;
     display: flex;
     flex-direction: column;
+    margin-top: -1.2rem;
+    overflow-y: auto;
 }
 .calendar {
     border-radius: 0;
@@ -38,7 +41,7 @@
     padding: 5px 1rem;
     border-bottom: 1px solid $--color-grey-lighter;
     font-size: clamp(0.6rem, 5vw, 1rem);
-    font-weight: 100;
+    font-weight: bold;
 }
 .month {
     position: relative;
@@ -59,12 +62,13 @@
     padding: 0.2rem;
 }
 .day {
+    // background-color: rgba(74, 240, 74, 0.726);
     width: 100%;
     font-size: clamp(0.8rem, 5vw, 1.2rem);
     background-color: white;
     aspect-ratio: 1;
     @media screen and (max-width: 767.9px) {
-        border-radius: 0.3rem;
+        border-radius: $--br;
     }
 }
 .day.hover {
@@ -90,8 +94,8 @@ button.day.disabled {
 }
 
 @media screen and (min-width: 768px) {
-    .month {
-        width: 65vh;
+    .hours-avaliable {
+        width: 60vh;
     }
     .calendar-wrapper, .calendar, .month, .week {
         flex: 1
@@ -109,7 +113,7 @@ button.day.disabled {
     .week-days {
         padding-inline: 0.2rem;
     }
-    .month {
+    .month, .hours-avaliable {
         padding: 0.2rem;
     }
 }
@@ -125,4 +129,11 @@ button.day.disabled {
                 0 0 0 150px #bdf9ff8a;
     filter: blur(30px);
     z-index: -1
+}
+
+.hours-avaliable {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0 1rem 1rem 1rem;
+    gap: 0.5rem;
 }

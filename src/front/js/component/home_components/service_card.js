@@ -8,7 +8,10 @@ export const ServiceCard = props => {
 			className="service-card card shadow rounded-3 card-background"
 			style={{ border: "none", width: "15rem", height: "380px", overflow: "hidden" }}>
 			<img
-				src={require(`./../../../img/${props.service.name.toLowerCase()}.jpg`)}
+				src={
+					props.service.service_img_url ||
+					"https://res.cloudinary.com/peibol888/image/upload/v1642880624/default_stc4oy.png"
+				}
 				className="card-img-top"
 				alt="..."
 				style={{ width: "100%", height: "100%", objectFit: "cover", position: "absolute" }}
