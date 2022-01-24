@@ -14,8 +14,12 @@ export const BookingCard = () => {
 				<div>
 					Fecha:{" "}
 					<span className="bookingcard-date">
-						{new Date(2022, 0, 3, 9, 5).toLocaleDateString()}{" "}
-						{new Date(2022, 0, 3, 9, 5).toLocaleTimeString().slice(0, -3)}
+						{new Date(2022, 0, 3, 9, 5).toLocaleDateString(undefined, {
+							year: "numeric",
+							month: "2-digit",
+							day: "2-digit"
+						})}{" "}
+						{new Date(2022, 0, 3, 9, 5).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
 					</span>
 				</div>
 				<div>
@@ -28,14 +32,14 @@ export const BookingCard = () => {
 					</span> */}
 				</div>
 				<button
-					className="book-again-btn"
+					className="btn-cool book-again-btn"
 					onClick={() => actions.setPopup("calendar", "Selecciona un nuevo día", service)}>
 					Reservar de nuevo
 				</button>
 			</div>
 			<div className="bookingcard-img-wrapper">
 				<img
-					src={require(`../../../img/${service.toLowerCase()}.jpg`)}
+					src="https://res.cloudinary.com/peibol888/image/upload/v1642880624/default_stc4oy.png"
 					className="bookingcard-img"
 					alt="imagen del servicio"
 				/>

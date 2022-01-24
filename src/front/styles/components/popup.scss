@@ -1,4 +1,5 @@
 /*===== General styles import =====*/
+@import "../index"; // custom properties
 @import "../colors"; // paleta de colores
 @import "../fonts";  // estilo de las fuentes
 
@@ -22,7 +23,7 @@
     // overflow: hidden;
     width: fit-content;
     min-width: calc(min(100%, 400px));
-    border-radius: 7px;
+    border-radius: $--br;
     background-color: white;
     box-shadow: -1px 1px 3px 0 rgba(0,0,0,0.2);
     
@@ -41,6 +42,9 @@
     & h1 { font-size: 1.4rem; font-weight: 600; }
     & i { font-size: 1rem; color: $--color-grey-dark }
 }
+.popup-subtitle {
+    font-size: 1.25rem;
+}
 .popup-body {
     display: flex;
     flex-direction: column;
@@ -48,7 +52,7 @@
     gap: 1.5rem;
     width: 100%;
     height: 100%;
-    padding: 2rem;
+    padding: 0 2rem 2rem;
     margin-block: auto;
     // overflow-y: auto;
     & .btn-confirm { margin-inline: auto }
@@ -63,11 +67,56 @@
     transition: all 0.3s ease-out;
 }
 
-.popup-container, .popup-row { margin: auto }
+.popup-container, .popup-row {
+    width: calc(min(100%, 500px));
+    margin: auto;
+    overflow-y: auto;
+}
 .popup-row {
     justify-content: center;
     width: calc(min(500px, 100%));
     gap: 1rem;
+}
+
+.popup .alert {
+    border-bottom-left-radius: $--br;
+    border-bottom-right-radius: $--br;
+}
+
+.popup-form {
+    min-width: 400px;
+    & > p { max-width: fit-content }
+}
+
+button.popup-edit-img, div.popup-edit-img {
+    position: relative;
+    opacity: 1;
+    width: 15rem;
+    height: 380px;
+    border: $--br;
+    border: 1px dashed $--color-grey-light;
+    overflow: hidden;
+    transition: all 0.2s ease-out;
+    & > i, & > .spinner-border-wrapper { z-index: 2 }
+    &, & > i {
+        box-shadow: none;
+        transition: all 0.2s ease-out;
+    }
+    &:hover {
+        background: none;
+        border-radius: 20px;
+        & > i, & > .spinner-border-wrapper { box-shadow: 0 4px 10px 3px rgba(0,0,0,0.4) }
+    }
+}
+div.popup-edit-img, div.popup-edit-img:hover {
+    border-radius: $--br;
+    border: none;
+}
+img.popup-service-img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    position: absolute;
 }
 
 @media screen and (max-width: 767.9px) {
@@ -83,13 +132,12 @@
         transition: all 0.3s ease-out;
     }
     .popup-show { transform: translateY(0) }
-    .popup-header {
-        margin-bottom: 0;
-    }
     .popup-body {
-        height: auto;
-        padding: 1rem;
+        padding: 0 1rem 1rem 1rem;
         overflow-y: auto;
     }
-    .popup-body > .dashboard-form { gap: 0.5rem }
+    .popup .alert {
+        margin-inline: 1.5rem;
+        border-radius: $--br;
+    }
 }

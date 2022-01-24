@@ -91,7 +91,7 @@ export const BusinessSettings = () => {
 				"promise",
 				{ loading: "Guardando...", success: `Cambios guardados` },
 				actions.updateBusinessInfo(firstData),
-				"toast-confirm"
+				"toast-success"
 			);
 		}
 	};
@@ -100,14 +100,13 @@ export const BusinessSettings = () => {
 		event.preventDefault();
 		actions.setToast(
 			"promise",
-			{ loading: "Guardando...", success: `Guardado` },
+			{ loading: "Guardando...", success: `Cambios guardados` },
 			actions.updateBusinessInfo(secondData),
-			"toast-confirm"
+			"toast-success"
 		);
 	};
 
 	return (
-		// PODER CAMBIAR LA FOTO DE PORTADA (NO HABRÁ CAROUSEL)
 		<div className="dashboard-content-wrapper">
 			<h1 className="dashboard-content-title">Configuración del negocio</h1>
 			<div className="admin-sections-wrapper">
@@ -168,7 +167,7 @@ export const BusinessSettings = () => {
 							</div>
 						</div>
 						<div>
-							<button type="submit" className="save-button">
+							<button type="submit" className="btn-cool">
 								Guardar cambios
 							</button>
 						</div>
@@ -232,7 +231,7 @@ export const BusinessSettings = () => {
 								</button>
 							</div>
 						</div>
-						<h2 className="dashboard-content-subtitle">Redes sociales</h2>
+						<h3 className="dashboard-content-h3">Redes sociales</h3>
 						<div className="socialMedia-input">
 							<label className="dashboard-label" htmlFor="facebook">
 								<i className="fab fa-facebook-square" />
@@ -312,7 +311,7 @@ export const BusinessSettings = () => {
 							</div>
 						</div>
 						<div>
-							<button type="submit" className="save-button">
+							<button type="submit" className="btn-cool">
 								Guardar cambios
 							</button>
 						</div>

@@ -21,7 +21,7 @@ export const EditInput = props => {
 					success: resp => `Nuevo nombre: ${resp.name}`
 				},
 				actions.updateService(data),
-				"toast-confirm"
+				"toast-success"
 			);
 			actions.closePopup();
 		}

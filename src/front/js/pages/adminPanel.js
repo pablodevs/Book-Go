@@ -87,7 +87,7 @@ export const AdminPanel = () => {
 							</div>
 							<nav className={showMenu ? "show-menu" : ""}>
 								<ul>
-									<li>
+									{/* <li>
 										<button
 											className={"admin-tab" + (activeTab === "bookings" ? " tab-active" : "")}
 											onClick={() => {
@@ -98,7 +98,7 @@ export const AdminPanel = () => {
 											<i className="far fa-calendar-alt" />
 											<span>Reservas</span>
 										</button>
-									</li>
+									</li> */}
 									<li>
 										<button
 											className={"admin-tab" + (activeTab === "clients" ? " tab-active" : "")}

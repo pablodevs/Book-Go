@@ -21,7 +21,22 @@ const Layout = () => {
 
 	return (
 		<BrowserRouter basename={basename}>
-			<Toaster>
+			<Toaster
+				toastOptions={{
+					success: {
+						icon: null,
+						duration: 3000,
+						className: "toast-success"
+					},
+					error: {
+						icon: null,
+						className: "toast-danger"
+					},
+					blank: {
+						icon: null,
+						className: "toast-info"
+					}
+				}}>
 				{t => (
 					<ToastBar toast={t}>
 						{({ icon, message }) => (
@@ -55,7 +70,7 @@ const Layout = () => {
 						<AdminPanel />
 					</Route>
 
-					<Route exact path="/pago/:booking_id/:user_id">
+					<Route exact path="/pago/:user_id">
 						<Pago />
 					</Route>
 

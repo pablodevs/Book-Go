@@ -11,20 +11,18 @@ from sqlalchemy import and_
 
 from flask_mail import Mail, Message
 
-
+import math
 
 #para la autenticación y generar el token
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import get_jwt_identity
 from flask_jwt_extended import jwt_required
 
-
 api = Blueprint('api', __name__)
 
 
 
 app = Flask(__name__)
-
 
 #CONFIGURACIÓN DE FLASK MAIL
 # app.config['DEBUG'] = True
@@ -44,14 +42,56 @@ app.config['MAIL_ASCII_ATTACHMENTS'] = False
 mail = Mail(app)
 
 
+### FUNCTIONS ###
 
-   
+def resetTimeFormat(hours, minutes):
+    '''
+    Function to add 0 if < 10
+        example input: 
+            - hours (integer): 7
+            - minutes (integer): 5
+        output (string) >>> "07:05"
+    '''
+    hours = str(hours)
+    minutes = str(minutes)
+    outputList = []
+    for i in [hours, minutes]:
+        if len(i) == 1:
+            outputList.append('0' + i)
+        else: outputList.append(i)
 
-# # GET ALL PRODUCTS
-# @api.route('/products', methods=['GET'])
-# def get_products():
+    return f"{outputList[0]}:{outputList[1]}"
 
-   
+def getDispo(schedule, duration):
+    '''
+        Example input:
+            - schedule (array of [open, close]): ["10:00", "20:00"]
+            - duration (integer, in minutes): 45
+
+        output (array of strings) >>> ['10:00', '10:45', '11:30', '12:15', '13:00', '13:45', '14:30', '15:15', '16:00', '16:45', '17:30', '18:15', '19:00']
+    '''
+
+    timeFrom = int(schedule[0].split(':')[0]) * 60 + int(schedule[0].split(':')[1])
+    timeTo = int(schedule[1].split(':')[0]) * 60 + int(schedule[1].split(':')[1])
+    timeInterval = (timeTo - timeFrom)
+
+    output = []
+
+    for i in range(timeFrom, timeTo, duration):
+        if (i + duration < timeTo):
+            output.append(resetTimeFormat(math.floor(i / 60), i % 60))
+
+    return output
+
+
+### ENDPOINTS ###
+
+cloudinary.config( 
+    cloud_name = os.getenv('CLOUD_NAME'), 
+    api_key = os.getenv('API_KEY'), 
+    api_secret = os.getenv('API_SECRET') 
+)
+
 # GET ALL SERVICES
 @api.route('/services', methods=['GET'])
 def get_services():
@@ -64,7 +104,7 @@ def get_services():
 
     return jsonify(all_services), 200
 
-# CREATE A SERVICES
+# CREATE A SERVICE
 @api.route('/services', methods=['POST'])
 @jwt_required()
 def create_service():
@@ -76,44 +116,47 @@ def create_service():
     current_user_id = get_jwt_identity() # obtiene el id del usuario asociado al token (id == sub en jwt decode)
     user = User.query.get(current_user_id)
     if user.serialize()["is_admin"] == False:
-        raise APIException('Error de identificación', status_code=401)
+        raise APIException('Error de identificación.', status_code=401)
     
     body_service = request.json
 
     # Data validation
     if body_service is None:
-        raise APIException("You need to specify the request body as a json object", status_code=400)
+        raise APIException("You need to specify the request body as a json object.", status_code=400)
+
     if 'name' not in body_service or body_service['name'] == "" or body_service['name'] == None:
-        raise APIException('You need to specify the name', status_code=400)
+        raise APIException('You need to specify the name.', status_code=400)
     elif len(body_service['name']) > 120:
-        return jsonify({"message": "El nombre no puede superar los 120 caracteres"}), 400
+        return jsonify({"message": "El nombre no puede superar los 120 caracteres."}), 400
+
     if 'price' not in body_service or body_service['price'] == "" or body_service['price'] == None:
-        raise APIException('You need to specify the price', status_code=400)
+        raise APIException('You need to specify the price.', status_code=400)
+
     if 'description' not in body_service or body_service['description'] == "" or body_service['description'] == None:
-        raise APIException('You need to create a description', status_code=400)
+        raise APIException('You need to create a description.', status_code=400)
     elif len(body_service['description']) > 1000:
         return jsonify({"message": "La descripción no puede superar los 1000 caracteres"}), 400
+
     if 'duration' not in body_service or body_service['duration'] == "" or body_service['duration'] == None:
-        raise APIException('You need to specify the duration', status_code=400)
+        raise APIException('You need to specify the duration.', status_code=400)
+    
+    body_image_url = ""
+    body_public_id = None
+    if 'service_img_url' in body_service and 'public_id' in body_service and (body_service['service_img_url'] != "" and body_service['service_img_url'] != None) and (body_service['public_id'] != "" and body_service['public_id'] != None):
+        body_image_url = body_service['service_img_url']
+        body_public_id = body_service['public_id']
+            
+    
     if 'is_active' not in body_service or body_service['is_active'] == "" or body_service['is_active'] == None:
         if 'sku' not in body_service or body_service['sku'] == "" or body_service['sku'] == None:
-            new_service = Service(name = body_service["name"], price = body_service["price"], description = body_service["description"], duration = body_service["duration"])
+            new_service = Service(name = body_service["name"], price = body_service["price"], description = body_service["description"], duration = body_service["duration"], service_img_url = body_image_url, public_id = body_public_id)
         else:
-            new_service = Service(name = body_service["name"], price = body_service["price"], description = body_service["description"], duration = body_service["duration"], sku = body_service["sku"])
+            new_service = Service(name = body_service["name"], price = body_service["price"], description = body_service["description"], duration = body_service["duration"], service_img_url = body_image_url, public_id = body_public_id, sku = body_service["sku"])
     else:
         if 'sku' not in body_service or body_service['sku'] == "" or body_service['sku'] == None:
-            new_service = Service(name = body_service["name"], price = body_service["price"], description = body_service["description"], duration = body_service["duration"], is_active = body_service["is_active"])
+            new_service = Service(name = body_service["name"], price = body_service["price"], description = body_service["description"], duration = body_service["duration"], service_img_url = body_image_url, public_id = body_public_id, is_active = body_service["is_active"])
         else:
-            new_service = Service(name = body_service["name"], price = body_service["price"], description = body_service["description"], duration = body_service["duration"], is_active = body_service["is_active"], sku = body_service["sku"])
-            # Get the schedule and open days
-            business = Business.query.all()[0].serialize()
-            schedule = business["schedule"]
-            weekdays = business["weekdays"]
-
-            timeFrom = schedule.split(',')[0]
-            timeTo = schedule.split(',')[1]
-            weekdaysList = weekdays.split(',')
-            print(f"from {timeFrom} to {timeTo}, the days: {weekdaysList}")
+            new_service = Service(name = body_service["name"], price = body_service["price"], description = body_service["description"], duration = body_service["duration"], service_img_url = body_image_url, public_id = body_public_id, is_active = body_service["is_active"], sku = body_service["sku"])
 
     db.session.add(new_service)
     db.session.commit()
@@ -131,13 +174,13 @@ def handle_single_service(service_id):
     current_user_id = get_jwt_identity() # obtiene el id del usuario asociado al token (id == sub en jwt decode)
     user = User.query.get(current_user_id)
     if user.serialize()["is_admin"] == False:
-        raise APIException('Error de identificación', status_code=401)
+        raise APIException('Error de identificación.', status_code=401)
 
     service = Service.query.get(service_id)
 
     # Data validation
     if service is None:
-        raise APIException('Service not found in data base', status_code=404)
+        raise APIException('Service not found in data base.', status_code=404)
         
     # Modify (PUT) a service
     if request.method == 'PUT':
@@ -157,14 +200,52 @@ def handle_single_service(service_id):
         if "sku" in request_body:
             service.sku = request_body["sku"]
 
+        if "method" in request_body:
+            if request_body["method"] == "delete" or request_body["method"] == "modify":
+                # Delete current image in cloudinary
+                cloudinaryResponse = cloudinary.uploader.destroy(service.serialize()["public_id"])
+                if cloudinaryResponse["result"] != "ok":
+                    raise APIException('La imagen no existe o el public id es erróneo.', status_code=404)
+
+                if request_body["method"] == "delete":
+                    service.public_id = None
+                    service.service_img_url = ""
+                elif request_body["method"] == "modify":
+                    service.service_img_url = request_body["service_img_url"]
+                    service.public_id = request_body["public_id"]
+
+            elif request_body["method"] == "add":
+                    service.service_img_url = request_body["service_img_url"]
+                    service.public_id = request_body["public_id"]
+
         db.session.commit()
         return jsonify(service.serialize()), 200
     
     # DELETE a service
     elif request.method == 'DELETE':
+        if service.serialize()["public_id"]:
+            # Delete current image in cloudinary
+            cloudinaryResponse = cloudinary.uploader.destroy(service.serialize()["public_id"])
+            if cloudinaryResponse["result"] != "ok":
+                raise APIException('La imagen no existe o el public id es erróneo.', status_code=404)
+
         db.session.delete(service)
         db.session.commit()
-        return jsonify({"message": "The service has been deleted"}), 200
+        return jsonify({"message": "El servicio se ha eliminado correctamente."}), 200
+
+# CANCEL (DELETE) CLOUDINARY IMAGE UPLOAD
+@api.route('/cancel', methods=['PUT'])
+def cancel_cloudinary_upload():
+    """
+    Cancel upload to Cloudinary
+    """
+    request_body = request.json
+
+    cloudinaryResponse = cloudinary.uploader.destroy(request_body["public_id"])
+    if cloudinaryResponse["result"] != "ok":
+        raise APIException('La imagen no existe o el public id es erróneo.', status_code=404)
+
+    return jsonify({ "message": cloudinaryResponse["result"] }), 200
 
 # GET A SERVICE
 @api.route('/services/<int:service_id>', methods=['GET'])
@@ -176,44 +257,128 @@ def get_service(service_id):
 
     # Data validation
     if service is None:
-        raise APIException('Service not found in data base', status_code=404)
+        raise APIException('Service not found in data base.', status_code=404)
 
     return jsonify(service.serialize()), 200
 
 
-#CREATE NEW USER
+# CREATE NEW USER
 @api.route('/user', methods=['POST'])
 def create_new_user():
 
     # fetch for the user
 
-    name_recieved = request.form.get("name", None)
-    lastname_recieved = request.form.get("lastname", None)
-    email_recieved = request.form.get("email", None)
-    phone_recieved = request.form.get("phone", None)
-    password_recieved = request.form.get("password", None)
-    user = User(email= email_recieved, password = password_recieved, name= name_recieved , lastname = lastname_recieved , phone = phone_recieved)
- 
-    
+    email_received = request.form.get("email", None)
 
-    # validate that the front-end request was built correctly
-    if 'profile_image' in request.files:
-        # upload file to uploadcare
-        cloudinary.config( 
-        cloud_name = os.getenv('CLOUD_NAME'), 
-        api_key = os.getenv('API_KEY'), 
-        api_secret = os.getenv('API_SECRET') 
-        )
-  
-        result = cloudinary.uploader.upload(request.files['profile_image'])
-        # update the user with the given cloudinary image URL
-        user.profile_image_url = result['secure_url']
+    # Verifica que el email no exista en otro usuario
+    findUser = User.query.filter_by(email = email_received).first()
+    if findUser:
+        raise APIException('Ya existe una cuenta asociada a ese correo.', status_code=404)
+    else:
+        name_received = request.form.get("name", None)
+        lastname_received = request.form.get("lastname", None)
+        phone_received = request.form.get("phone", None)
+        password_received = request.form.get("password", None)
 
-    db.session.add(user)
+        body_image_url = ""
+        body_public_id = None
+        if 'profile_image_url' in request.form and 'public_id' in request.form and (request.form.get('profile_image_url', None) != "" and request.form.get('profile_image_url', None) != None) and (request.form.get('public_id', None) != "" and request.form.get('public_id', None) != None):
+            body_image_url = request.form.get('profile_image_url', None)
+            body_public_id = request.form.get('public_id', None)
+
+        new_user = User(email = email_received, password = password_received, name = name_received, lastname = lastname_received, phone = phone_received, profile_image_url = body_image_url, public_id = body_public_id)
+
+    db.session.add(new_user)
     db.session.commit()
 
-    return jsonify(user.serialize()), 200
+    return jsonify(new_user.serialize()), 200
 
+# GET, MODIFY OR DELETE A USER
+# Protect a route with jwt_required, which will kick out requests without a valid JWT present.
+@api.route('/user', methods=['PUT', 'GET', 'DELETE'])
+@jwt_required() # Cuando se recive una peticion, se valida que exista ese token y que sea valido
+def handle_single_user():
+    """
+    Single user
+    """
+
+    current_user_id = get_jwt_identity() # obtiene el id del usuario asociado al token (id == sub en jwt decode)
+    user = User.query.get(current_user_id)
+
+    # Data validation
+    if user is None:
+        raise APIException('User not found in data base.', status_code=404)
+
+    # Modify (PUT) a user
+    if request.method == 'PUT':
+        # Query body
+        request_body = request.form
+
+        # Check body's info
+        if "name" in request_body:
+            if len(request_body.get("name", None)) > 120:
+                raise APIException('Nombre demasiado largo.', status_code=400)
+            user.name = request_body.get("name", None)
+        if "lastname" in request_body:
+            if len(request_body.get("lastname", None)) > 120:
+                raise APIException('Apellido demasiado largo.', status_code=400)
+            user.lastname = request_body.get("lastname", None)
+
+        # Verifica que el email no exista en otro usuario
+        if "email" in request_body:
+            if len(request_body.get("email", None)) > 120:
+                raise APIException('Introduce una dirección de correo electrónico válida.', status_code=400)
+            email_received = request_body.get("email", None)
+            findUser = User.query.filter_by(email = email_received).first()
+            if findUser and findUser != user:
+                raise APIException('Ya existe una cuenta asociada a ese correo.', status_code=404)
+            else:
+                user.email = email_received
+
+        if "phone" in request_body:
+            user.phone = request_body.get("phone", None)
+
+        if "method" in request_body:
+            if request_body.get("method", None) == "delete" or request_body.get("method", None) == "modify":
+                # Delete current image in cloudinary
+                cloudinaryResponse = cloudinary.uploader.destroy(user.serialize()["public_id"])
+                if cloudinaryResponse["result"] != "ok":
+                    raise APIException('No se puede modificar la imagen', status_code=404)
+
+                if request_body.get("method", None) == "delete":
+                    user.public_id = None
+                    user.profile_image_url = ""
+                elif request_body.get("method", None) == "modify":
+                    user.profile_image_url = request_body.get("profile_image_url", None)
+                    user.public_id = request_body.get("public_id", None)
+
+            elif request_body.get("method", None) == "add":
+                    user.profile_image_url = request_body.get("profile_image_url", None)
+                    user.public_id = request_body.get("public_id", None)
+
+        db.session.commit()
+        return jsonify(user.serialize()), 200
+        
+    # GET a user
+    elif request.method == 'GET':
+        return jsonify(user.serialize()), 200
+    
+    # DELETE a user
+    elif request.method == 'DELETE':
+        if user.serialize()["public_id"]:
+            # Delete current image in cloudinary
+            cloudinaryResponse = cloudinary.uploader.destroy(user.serialize()["public_id"])
+            if cloudinaryResponse["result"] != "ok":
+                raise APIException('La imagen no existe o el public id es erróneo.', status_code=404)
+
+        deleted_id = user.serialize()["id"]
+        deleted_email = user.serialize()["email"]
+
+        db.session.delete(user)
+        db.session.commit()
+        return jsonify({"message": f"The user with id {deleted_id} and email {deleted_email} has been deleted."}), 200
+
+    return jsonify({"message": "Invalid Method."}), 404
 
 # GET ALL USERS
 @api.route('/users', methods=['GET'])
@@ -226,14 +391,14 @@ def get_all_users():
     current_user_id = get_jwt_identity() # obtiene el id del usuario asociado al token (id == sub en jwt decode)
     user = User.query.get(current_user_id)
     if user.serialize()["is_admin"] == False:
-        raise APIException('Error de identificación', status_code=401)
+        raise APIException('Error de identificación.', status_code=401)
     
     all_users = sorted(User.query.all(), key = lambda user: user.serialize()["name"].lower())
     all_clients = [user.serialize() for user in all_users if not user.serialize()["is_admin"]]
     return jsonify(all_clients), 200
 
 
-#GENERATE TOKEN
+# GENERATE TOKEN
 @api.route('/token', methods=['POST'])
 def generate_token():
 
@@ -244,65 +409,13 @@ def generate_token():
     user = User.query.filter_by(email=email_received, password=password_received).first()
     if user is None:
         # the user was not found on the database
-        return jsonify({"message": "Usuario o contraseña incorrectos"}), 401
+        return jsonify({"message": "Usuario o contraseña incorrectos."}), 401
     
     # create a new token with the user id inside
     access_token = create_access_token(identity=user.id)
-    return jsonify({"message": "Acceso correcto", "token": access_token, "id": user.id, "profile_image_url" : user.profile_image_url, "name": user.name, "lastname": user.lastname, "email": user.email, "phone": str(user.phone), "is_admin": user.is_admin })
+    return jsonify({"message": "Acceso correcto.", "status": "success", "token": access_token, "id": user.id, "profile_image_url" : user.profile_image_url, "name": user.name, "lastname": user.lastname, "email": user.email, "phone": str(user.phone), "is_admin": user.is_admin })
 
 
-# GET, MODIFY OF DELETE A USER
-# Protect a route with jwt_required, which will kick out requests without a valid JWT present.
-@api.route('/user', methods=['PUT', 'GET', 'DELETE'])
-@jwt_required() # Cuando se recive una peticion, se valida que exista ese token y que sea valido
-def handle_single_user():
-    """
-    Single user
-    """
-    current_user_id = get_jwt_identity() # obtiene el id del usuario asociado al token (id == sub en jwt decode)
-    user = User.query.get(current_user_id)
-
-    # Data validation
-    if user is None:
-        raise APIException('User not found in data base', status_code=404)
-
-    # Modify (PUT) a user
-    if request.method == 'PUT':
-        # Query body
-        request_body = request.json
-
-        # Check body's info
-        if "name" in request_body:
-            user.name = request_body["name"]
-        elif len(request_body['name']) > 120:
-            raise APIException('Nombre demasiado largo', status_code=400)
-        if "lastname" in request_body:
-            user.lastname = request_body["lastname"]
-        elif len(request_body['lastname']) > 120:
-            raise APIException('Apellido demasiado largo', status_code=400)
-        if "email" in request_body:
-            user.email = request_body["email"]
-        elif len(request_body['email']) > 120:
-            raise APIException('Introduce una dirección de email válida', status_code=400)
-        if "phone" in request_body:
-            user.phone = request_body["phone"]
-        # if "password" in request_body:
-        #     user.password = request_body["password"]
-
-        db.session.commit()
-        return jsonify(user.serialize()), 200
-        
-    # GET a user
-    elif request.method == 'GET':
-        return jsonify(user.serialize()), 200
-    
-    # DELETE a user
-    elif request.method == 'DELETE':
-        db.session.delete(user)
-        db.session.commit()
-        return jsonify({"message": "The user has been deleted"}), 200
-
-    return jsonify({"message": "Invalid Method"}), 404
 
 
 # GET AVAILABILITY OF A SERVICE
@@ -325,17 +438,19 @@ def get_service_dispo(service_name):
 
 
 # CREATE NEW BOOKING
-@api.route('/book/<int:dispo_id>/<int:user_id>', methods=['POST'])
+@api.route('/book/<int:user_id>', methods=['POST'])
 @jwt_required()
-def create_booking(dispo_id, user_id):
+def create_booking(user_id):
     # change is_available to False in Dispo
-    dispo = Dispo.query.get(dispo_id)
-    dispo.available = False
-    db.session.commit()
+    
+    # dispo = Dispo.query.get(dispo_id)
+    # dispo.available = False
+    # db.session.commit()
 
+    request_body = request.json
 
     # Create a new booking
-    new_booking = Book(user_id = user_id , date = dispo.date , time = dispo.time, service = dispo.service)
+    new_booking = Book(user_id = user_id , date = request_body["date"] , time = request_body["time"], service = request_body["service"])
     db.session.add(new_booking)
     db.session.commit()
 
@@ -350,8 +465,36 @@ def create_booking(dispo_id, user_id):
     msg.html = "<html lang='es'><head><meta charset='UTF-8'><meta http-equiv='X-UA-Compatible' content='IE=edge'><meta name='viewport' content='width=device-width, initial-scale=1.0'></head><body><h1>Confirmación de Reserva</h1><div><p>Estimado cliente:</p><p>Le confirmamos su reserva de nuestro servicio de " + str(dispo.service) + " para el día " + str(dispo.date.strftime("%-d/%-m/%Y"),) + " a las " + str(dispo.time.strftime("%-H:%M")) + "  </p><p>Muchas gracias por confiar en nosotros.</p></div></body></html>"
     mail.send(msg)
 
-    return jsonify({"message": "Su reserva ha sido Confirmada"}), 200
+    return jsonify({"message": "Su reserva ha sido Confirmada."}), 200
    
+# CREATE NEW BOOKING
+# @api.route('/book/<int:dispo_id>/<int:user_id>', methods=['POST'])
+# @jwt_required()
+# def create_booking(dispo_id, user_id):
+#     # change is_available to False in Dispo
+    
+#     # dispo = Dispo.query.get(dispo_id)
+#     # dispo.available = False
+#     # db.session.commit()
+
+
+#     # Create a new booking
+#     new_booking = Book(user_id = user_id , date = dispo.date , time = dispo.time, service = dispo.service)
+#     db.session.add(new_booking)
+#     db.session.commit()
+
+
+#     #buscamos el email del cliente
+#     customer = User.query.get(user_id)
+#     customer_email = customer.email
+#     # AHORA ENVIAMOS EL EMAIL DE CONFIRMACIÓN DE RESERVA
+#     msg = Message("Confirmación de reserva",sender="spa@jmanvel.com",
+#                 recipients=[customer_email])
+#     msg.body = "testing body"
+#     msg.html = "<html lang='es'><head><meta charset='UTF-8'><meta http-equiv='X-UA-Compatible' content='IE=edge'><meta name='viewport' content='width=device-width, initial-scale=1.0'></head><body><h1>Confirmación de Reserva</h1><div><p>Estimado cliente:</p><p>Le confirmamos su reserva de nuestro servicio de " + str(dispo.service) + " para el día " + str(dispo.date.strftime("%-d/%-m/%Y"),) + " a las " + str(dispo.time.strftime("%-H:%M")) + "  </p><p>Muchas gracias por confiar en nosotros.</p></div></body></html>"
+#     mail.send(msg)
+
+#     return jsonify({"message": "Su reserva ha sido Confirmada"}), 200
 
 # GET BUSINESS INFO
 @api.route('/business', methods=['GET'])
@@ -366,7 +509,7 @@ def get_business_info():
 
     except IndexError as error:
         # Si está vacía, devuelve error
-        raise APIException("Business doesn't exists", status_code=404).query.all()[0]
+        raise APIException("Business does not exists.", status_code=404)
 
 
 # MODIFY THE BUSINESS
@@ -380,7 +523,7 @@ def modify_business_info():
     current_user_id = get_jwt_identity() # obtiene el id del usuario asociado al token (id == sub en jwt decode)
     user = User.query.get(current_user_id)
     if user.serialize()["is_admin"] == False:
-        raise APIException('Error de identificación', status_code=401)
+        raise APIException('Error de identificación.', status_code=401)
 
     try:
         # Intenta obtener la tabla de negocio
@@ -415,3 +558,30 @@ def modify_business_info():
 
     db.session.commit()
     return jsonify(business.serialize()), 200
+
+# GET DISPO HOURS OF SERVICE WITH sevice_id
+@api.route('/services/<int:service_id>/hours', methods=['GET'])
+def get_dispo_hours(service_id):
+    """
+    Service hours dispo
+    """
+
+    # Query:
+    service = Service.query.get(service_id)
+
+    # Data validation
+    if service is None:
+        raise APIException('Service not found in data base.', status_code=404)
+
+    # Get the schedule and open days (weekdays)
+    try:
+        # Intenta obtener el horario y la duración
+        schedule = Business.query.all()[0].serialize()["schedule"].split(',')
+        duration = service.duration
+
+        return jsonify(getDispo(schedule, duration)), 200
+
+    except IndexError as error:
+        # Si está vacía, devuelve error
+        raise APIException("Business does not exist.", status_code=404)
+

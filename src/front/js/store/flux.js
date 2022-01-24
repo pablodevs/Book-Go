@@ -1,17 +1,15 @@
 import toast from "react-hot-toast";
-import React from "react";
-import { Redirect } from "react-router-dom";
 
 const getNumOfDaysInMonth = (year, month) => new Date(year, month + 1, 0).getDate();
 
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
-			message: "",
-			//resume_view muestra el resumen de la reserva
+			message: {
+				message: "",
+				status: ""
+			},
 			resume_view: false,
-			// creamos booking_day para pasar el día seleccionado para reservar
-			booking_day: null,
 			booking: {},
 
 			calendar: {
@@ -30,7 +28,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			new_service: {},
 			services: [],
-			// oneService: [],
 
 			token: null,
 			user: {
@@ -39,7 +36,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 				lastname: "",
 				phone: "",
 				email: "",
-				img_url: "",
+				profile_image_url: "",
+				public_id: "",
 				is_admin: false
 			},
 
@@ -56,22 +54,52 @@ const getState = ({ getStore, getActions, setStore }) => {
 		},
 
 		actions: {
+			// STORE RESET
+			reset: () => {
+				const actions = getActions();
+				const store = getStore();
+
+				actions.calendarActions.setInitialCalendar();
+				actions.resetNewService();
+				actions.resetBooking();
+				actions.resetCloudinaryInfo();
+
+				const cancel = store.cloudinaryInfo.image_url ? true : false;
+				actions.closePopup(cancel);
+
+				setStore({
+					message: {
+						message: "",
+						status: ""
+					},
+					clients: [],
+					widget: false,
+					serviceInProgress: {},
+					popupFunct: null,
+					popupObj: {}
+				});
+			},
+
 			// Force render without change data
 			forceRender: () => setStore({}),
 
+			// Muestra o cierra el Widget de Cloudinary
+			setWidget: bool => setStore({ widget: bool }),
+
 			// Genera un toast
-			setToast: (type, message, funct = null, classname = "") => {
-				if (type === "error") toast.error(message);
-				else if (type === "success") toast.success(message);
-				else if (type === "blank") toast(message);
+			setToast: (type, body, funct = null, classname = "") => {
+				if (type === "danger") toast.error(body);
+				else if (type === "success") toast.success(body);
+				else if (type === "blank") toast(body);
 				else if (type === "promise") {
 					const store = getStore();
 					toast.promise(
 						funct,
 						{
-							loading: message.loading,
-							success: message.success,
-							error: () => `Error: ${store.message !== "" ? store.message : "desconocido"}`
+							loading: body.loading,
+							success: body.success,
+							error: () =>
+								`Error: ${store.message.message !== "" ? store.message.message : "desconocido"}`
 						},
 						{
 							duration: 4000,
@@ -79,60 +107,146 @@ const getState = ({ getStore, getActions, setStore }) => {
 							icon: null
 						}
 					);
-					setStore({ message: "" });
+					setStore({
+						message: {
+							message: "",
+							status: ""
+						}
+					});
 				}
 			},
 
 			// Cambia los popups
-			setPopup: async (type, title, serviceName, funct = null) => {
-				if (serviceName) {
-					//si recibe servicename entonces busca la disponibilidad de días y horas de ese servicio
-					await fetch(process.env.BACKEND_URL + `/dispo/${serviceName}`)
-						.then(response => {
-							// console.log(response.ok);
-							// console.log(response.status);
-							return response.json();
-						})
-						.then(data => {
-							setStore({ dispo: data });
-						})
-						.catch(error => console.error(error));
-				}
-				// Para abrir el popup del login, register o reservas
+			setPopup: async (type, title, obj = {}, funct = null) => {
+				// Para abrir el popup del login, register, reservas...
 				let store = getStore();
 				setStore({
+					message: {
+						message: "",
+						status: ""
+					},
 					prevPopup: [...store.prevPopup, { popup: store.popup, popupTitle: store.popupTitle }],
 					popup: type,
 					popupTitle: title
 				});
 				if (funct) setStore({ popupFunct: funct });
+				if (Object.entries(obj).length !== 0) setStore({ popupObj: obj });
 			},
-			closePopup: () =>
+
+			// cierra el popup de login, register y calendario
+			closePopup: (cancel = false) => {
+				const actions = getActions();
+				const store = getStore();
+
 				setStore({
 					popup: null,
 					popupTitle: "",
-					prevPopup: []
-				}), // cierra el popup de login, register y calendario
+					prevPopup: [],
+					booking: {},
+					serviceInProgress: {},
+					popupObj: {}
+				});
+				actions.setWidget(false);
+
+				if (cancel && store.cloudinaryInfo.image_url)
+					actions.cancelCloudinaryUpload(store.cloudinaryInfo.public_id);
+
+				actions.resetCloudinaryInfo();
+			},
+
+			// Te lleva al popup anterior
 			goToPrevPopup: () => {
 				let store = getStore();
-				setStore({
-					popup: store.prevPopup[store.prevPopup.length - 1].popup,
-					popupTitle: store.prevPopup[store.prevPopup.length - 1].popupTitle,
-					prevPopup: [...store.prevPopup.slice(0, store.prevPopup.length - 1)]
-				});
-			}, // Te lleva al popup anterior
-
-			//BOOKING
-			booking: data => {
-				setStore({ booking: data });
+				let actions = getActions();
+				if (!store.prevPopup.popup) {
+					setStore({
+						popupTitle: "",
+						prevPopup: []
+					});
+					actions.closePopup(true);
+					return;
+				} else
+					setStore({
+						popup: store.prevPopup[store.prevPopup.length - 1].popup,
+						popupTitle: store.prevPopup[store.prevPopup.length - 1].popupTitle,
+						prevPopup: [...store.prevPopup.slice(0, store.prevPopup.length - 1)]
+					});
 			},
+
+			// Reset booking in store
+			resetBooking: () => setStore({ booking: {} }),
+
+			// Update booking in store
+			updateBooking: (key, value) => {
+				const store = getStore();
+				let storeAux = store.booking;
+				storeAux[key] = value;
+				setStore({
+					booking: {
+						...storeAux
+					}
+				});
+			},
+
+			// PASARELA DE PAGO DE PAGO DE STRIPE
+			book: sku => {
+				console.log("este es el sku" + sku);
+				const store = getStore();
+				const stripe = Stripe("pk_test_yHT02IrsuQ0eWhAT2BBbfxmR");
+				stripe
+					.redirectToCheckout({
+						lineItems: [{ price: sku, quantity: 1 }],
+						mode: "payment",
+						/*
+				 * Do not rely on the redirect to the successUrl for fulfilling
+				 * purchases, customers may not always reach the success_url after
+				 * a successful payment.
+				 * Instead use one of the strategies described in
+				 * https://stripe.com/docs/payments/checkout/fulfill-orders
+				 */
+						successUrl:
+							"https://3000-peibol888-inalroject-na8e6zgw6da.ws-eu27.gitpod.io/pago/" +
+							`${store.user.id}`,
+						cancelUrl: "https://3000-peibol888-inalroject-na8e6zgw6da.ws-eu27.gitpod.io/error/"
+					})
+					.then(function(result) {
+						if (result.error) {
+							/*
+				   * If `redirectToCheckout` fails due to a browser or network
+				   * error, display the localized error message to your customer.
+				   */
+							var displayError = document.getElementById("error-message");
+							displayError.textContent = result.error.message;
+						}
+					});
+			},
+
 			// Meto todas las acciones del componente calendario en calendarActions:
 			calendarActions: {
-				//cambia la variable del store booking_day
-				changeHoursView: day => {
+				// pide al back las horas disponibles para el servicio que se está reservando
+				renderHoursDispo: async () => {
 					const store = getStore();
-					//cambiamos la variable booking_day con el día seleccionado para reservar
-					setStore({ booking_day: day });
+					try {
+						const response = await fetch(
+							process.env.BACKEND_URL + `/services/${store.booking.service.id}/hours`
+						);
+						const resp = await response.json();
+						if (!response.ok) {
+							setStore({
+								message: {
+									message: resp.message,
+									status: ""
+								}
+							});
+							throw Error(response);
+						}
+						setStore({
+							hoursDispo: resp
+						});
+						return resp;
+					} catch (err) {
+						console.error(err);
+					}
 				},
 				//inicia el calendario
 				setInitialCalendar: () => {
@@ -187,7 +301,18 @@ const getState = ({ getStore, getActions, setStore }) => {
 					.catch(error => console.error(error));
 			},
 
-			// create a service
+			// start creating a service
+			updateServiceInProgress: data => {
+				const store = getStore();
+				setStore({
+					serviceInProgress: {
+						...store.serviceInProgress,
+						...data
+					}
+				});
+			},
+
+			// send new service to back
 			addService: async data => {
 				const store = getStore();
 				const actions = getActions();
@@ -203,7 +328,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 					const response = await fetch(process.env.BACKEND_URL + "/services", options);
 					const resp = await response.json();
 					if (!response.ok) {
-						setStore({ message: resp.message });
+						setStore({
+							message: {
+								message: resp.message,
+								status: ""
+							}
+						});
 						throw Error(response);
 					}
 					setStore({
@@ -232,7 +362,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 					});
 					const resp = await response.json();
 					if (!response.ok) {
-						setStore({ message: resp.message });
+						setStore({
+							message: {
+								message: resp.message,
+								status: ""
+							}
+						});
 						throw Error(response);
 					}
 					let remainServices = store.services.filter(element => element.id !== id);
@@ -250,6 +385,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			// Change ONE service
 			updateService: async data => {
 				const store = getStore();
+				const actions = getActions();
 				const options = {
 					method: "PUT",
 					body: JSON.stringify(data),
@@ -262,7 +398,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 					const response = await fetch(process.env.BACKEND_URL + `/services/${data.id}`, options);
 					const resp = await response.json();
 					if (!response.ok) {
-						setStore({ message: resp.message });
+						setStore({
+							message: {
+								message: resp.message,
+								status: ""
+							}
+						});
 						throw Error(response);
 					}
 					let storeAux = store.services.filter(element => element.id !== data.id);
@@ -276,19 +417,18 @@ const getState = ({ getStore, getActions, setStore }) => {
 								description: resp.description,
 								duration: resp.duration,
 								is_active: resp.is_active,
-								sku: resp.sku
+								sku: resp.sku,
+								service_img_url: resp.service_img_url,
+								public_id: resp.public_id
 							}
-						]
+						],
+						new_service: resp
 					});
+					if (store.popup) actions.closePopup();
 					return resp;
 				} catch (err) {
 					return err.json();
 				}
-				// toast.promise(fetchFunction(data), {
-				// 	loading: "Guardando...",
-				// 	success: "Guardado correctamente",
-				// 	error: () => `Error: ${store.message !== "" ? store.message : "desconocido"}`
-				// });
 			},
 
 			// get ONE service
@@ -307,38 +447,56 @@ const getState = ({ getStore, getActions, setStore }) => {
 			// },
 
 			// Create NEW USER
-			createUser: async data => {
-				await fetch(process.env.BACKEND_URL + `/user`, {
-					method: "POST",
-					body: data
-				})
-					.then(response => {
-						console.log(response.ok);
-						console.log(response.status);
-						return response.json();
-					})
-					.then(data => {
-						console.log(data);
-						setStore({ message: "Usuario creado Correctamente. Ya puede ir al login y acceder!" });
-					})
-					.catch(error => console.error(error));
+			createUser: async formData => {
+				const actions = getActions();
+				try {
+					const response = await fetch(process.env.BACKEND_URL + `/user`, {
+						method: "POST",
+						body: formData
+					});
+					const resp = await response.json();
+					if (!response.ok) {
+						setStore({
+							message: {
+								message: resp.message,
+								status: "danger"
+							}
+						});
+						throw Error(response);
+					}
+					actions.setPopup("login", "Iniciar Sesión");
+					setStore({
+						message: {
+							message: "Usuario creado Correctamente. Ya puede acceder!",
+							status: "success"
+						}
+					});
+					return resp;
+				} catch (err) {
+					console.error(err);
+				}
 			},
 
 			// Update current USER
-			updateUser: async data => {
+			updateUser: async formData => {
 				const store = getStore();
+				const actions = getActions();
 				try {
 					const response = await fetch(process.env.BACKEND_URL + "/user", {
 						method: "PUT",
-						body: JSON.stringify(data),
+						body: formData,
 						headers: {
-							"Content-Type": "application/json",
 							Authorization: "Bearer " + store.token
 						}
 					});
 					const resp = await response.json();
 					if (!response.ok) {
-						setStore({ message: resp.message });
+						setStore({
+							message: {
+								message: resp.message,
+								status: "danger"
+							}
+						});
 						throw Error(response);
 					}
 					setStore({
@@ -348,9 +506,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 							lastname: resp.lastname,
 							phone: resp.phone,
 							email: resp.email,
-							img_url: resp.profile_image_url
+							img_url: resp.profile_image_url,
+							public_id: resp.public_id
 						}
 					});
+					if (store.popup) actions.closePopup();
 					return resp;
 				} catch (err) {
 					return err.json();
@@ -370,7 +530,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 					});
 					const resp = await response.json();
 					if (!response.ok) {
-						setStore({ message: resp.message });
+						setStore({
+							message: {
+								message: resp.message,
+								status: "danger"
+							}
+						});
 						throw Error(response);
 					}
 					actions.logout();
@@ -393,19 +558,22 @@ const getState = ({ getStore, getActions, setStore }) => {
 					});
 					const resp = await response.json();
 					if (!response.ok) {
-						setStore({ message: resp.message });
+						setStore({
+							message: {
+								message: resp.message,
+								status: "danger"
+							}
+						});
 						throw Error(response);
 					} else {
-						setStore({
-							token: resp.token,
-							message: resp.message
-						});
-						actions.getProfileData(resp.token);
+						setStore({ token: resp.token });
 						localStorage.setItem("token", resp.token);
+						actions.getProfileData(resp.token);
+						actions.setToast("blank", `Bienvenido ${resp.name}`);
 						return resp;
 					}
 				} catch (err) {
-					return console.log(err);
+					return console.error(err);
 				}
 			},
 
@@ -423,13 +591,17 @@ const getState = ({ getStore, getActions, setStore }) => {
 						img_url: "",
 						is_admin: false
 					},
-					message: ""
+					message: {
+						message: "",
+						status: ""
+					}
 				});
 			},
 
 			// Obtener la información del usuario en Dashboard (por ejemplo)
 			getProfileData: async token => {
 				const actions = getActions();
+				const store = getStore();
 				const options = {
 					method: "GET",
 					headers: {
@@ -441,7 +613,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 					const resp = await response.json();
 					if (response.status === 401) actions.logout();
 					if (!response.ok) {
-						setStore({ message: resp.message });
+						setStore({
+							message: {
+								message: resp.message,
+								status: "danger"
+							}
+						});
 						throw Error(response);
 					}
 					setStore({
@@ -452,12 +629,60 @@ const getState = ({ getStore, getActions, setStore }) => {
 							phone: resp.phone,
 							email: resp.email,
 							img_url: resp.profile_image_url,
+							public_id: resp.public_id,
 							is_admin: resp.is_admin
 						}
 					});
+					if (!store.booking.date) actions.closePopup();
+					else actions.setPopup("resume", "Resumen de su reserva"); // Incluir en el resumen la hora a la que finaliza y datos del usuario!
 					return resp;
 				} catch (error) {
 					return error.json();
+				}
+			},
+
+			// Cloudinary widget
+			saveCloudinaryInfo: (url, public_id) =>
+				setStore({
+					cloudinaryInfo: {
+						image_url: url,
+						public_id: public_id
+					}
+				}),
+
+			// Reset image_url
+			resetCloudinaryInfo: () =>
+				setStore({
+					cloudinaryInfo: {
+						image_url: null,
+						public_id: null
+					}
+				}),
+
+			// Cancel image Cloudinary upload
+			cancelCloudinaryUpload: async public_id => {
+				const actions = getActions();
+				try {
+					const response = await fetch(process.env.BACKEND_URL + "/cancel", {
+						method: "PUT",
+						body: JSON.stringify({ public_id: public_id }),
+						headers: {
+							"Content-Type": "application/json"
+						}
+					});
+					const resp = await response.json();
+					if (!response.ok) {
+						setStore({
+							message: {
+								message: resp.message,
+								status: ""
+							}
+						});
+						throw Error(response);
+					} else actions.setToast("blank", "Cancelado");
+					return resp;
+				} catch (err) {
+					console.error(err);
 				}
 			},
 
@@ -486,39 +711,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 						twitter: data.twitter
 					}
 				}),
-
-			// PASARELA DE PAGO DE PAGO DE STRIPE
-			reservar: sku => {
-				console.log("este es el sku" + sku);
-				const store = getStore();
-				const stripe = Stripe("pk_test_yHT02IrsuQ0eWhAT2BBbfxmR");
-				stripe
-					.redirectToCheckout({
-						lineItems: [{ price: sku, quantity: 1 }],
-						mode: "payment",
-						/*
-				 * Do not rely on the redirect to the successUrl for fulfilling
-				 * purchases, customers may not always reach the success_url after
-				 * a successful payment.
-				 * Instead use one of the strategies described in
-				 * https://stripe.com/docs/payments/checkout/fulfill-orders
-				 */
-						successUrl:
-							"https://3000-gold-felidae-8otxygdm.ws-eu27.gitpod.io/pago/" +
-							`${store.booking.id}/${store.user.id}`,
-						cancelUrl: "https://3000-gold-felidae-8otxygdm.ws-eu27.gitpod.io/error/"
-					})
-					.then(function(result) {
-						if (result.error) {
-							/*
-				   * If `redirectToCheckout` fails due to a browser or network
-				   * error, display the localized error message to your customer.
-				   */
-							var displayError = document.getElementById("error-message");
-							displayError.textContent = result.error.message;
-						}
-					});
-			},
 
 			// Admin Schedule:
 			setActiveWeekDay: weekday => {
@@ -567,13 +759,17 @@ const getState = ({ getStore, getActions, setStore }) => {
 					const response = await fetch(process.env.BACKEND_URL + "/business");
 					const resp = await response.json();
 					if (!response.ok) {
-						setStore({ message: resp.message });
+						setStore({
+							message: {
+								message: resp.message,
+								status: "danger"
+							}
+						});
 						throw Error(response);
 					}
 					setStore({
 						business: {
 							id: resp.id,
-							name: resp.name,
 							address: resp.address,
 							phone: resp.phone,
 							schedule: resp.schedule,
@@ -603,13 +799,17 @@ const getState = ({ getStore, getActions, setStore }) => {
 					});
 					const resp = await response.json();
 					if (!response.ok) {
-						setStore({ message: resp.message });
+						setStore({
+							message: {
+								message: resp.message,
+								status: "danger"
+							}
+						});
 						throw Error(response);
 					}
 					setStore({
 						business: {
 							id: resp.id,
-							name: resp.name,
 							address: resp.address,
 							phone: resp.phone,
 							schedule: resp.schedule,

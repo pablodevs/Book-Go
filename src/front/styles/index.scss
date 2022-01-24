@@ -2,6 +2,9 @@
 @import "./colors"; // paleta de colores
 @import "./fonts";  // estilo de las fuentes
 
+/*===== Custom styles =====*/
+$--br: 5px;
+
 /*===== Reseting styles =====*/
 
 *, *:before, *:after {
@@ -27,9 +30,18 @@ body {
     width: 100%;
 }
 
+p {
+    text-align: justify;
+    text-justify: inter-word;
+}
+
 a {
     text-decoration: none;
     font-weight: bold;
+}
+
+strong {
+    color: $--color-blue-dark;
 }
 
 button {
@@ -72,6 +84,16 @@ small {
     padding: 0;
 }
 
+.form-check-input:focus {
+    box-shadow: none;
+}
+
+.alert {
+    border-radius: 0;
+    margin-bottom: 0;
+    text-align: center;
+}
+
 /*===== Utility styles =====*/
 /* 
     Los dos styles siguientes hacen que las Pages cojan el 100% del alto de cualquier pantalla
@@ -101,6 +123,7 @@ small {
 
 .dflex-row {
     display: flex;
+    flex-wrap: wrap;
     gap: 1rem;
     width: 100%;
     & > * { flex: 1 }
@@ -123,7 +146,8 @@ button.disabled, a.disabled {
     width: fit-content;
     height: auto;
     font-weight: bold;
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 1.5rem;
+    margin-inline: auto;
 
     transition: all 0.3s ease-out;
     -o-transition: all 0.3s ease-out;
@@ -134,13 +158,14 @@ button.disabled, a.disabled {
         color: white;
         box-shadow: none;
     }
+    & > i { margin-left: 1rem }
 }
-.btn-cool.btn-confirm {
+button.btn-cool.btn-confirm {
     box-shadow: inset 0 0 0 2px $--color-green-confirm;
     color: $--color-green-confirm;
     &:hover {
-        background: none;
-        color: $--color-green-confirm;
+        background-color: $--color-green-confirm;
+        color: white;
     }
 }
 button.btn-cool.danger {
@@ -150,8 +175,8 @@ button.btn-cool.danger {
     box-shadow: inset 0 0 0 2px red;
     color: red;
     &:hover {
-        background: none;
-        color: red;
+        background: red;
+        color: white;
     }
 }
 button.icon-btn.danger, button.icon-btn.danger:hover {
@@ -162,26 +187,46 @@ button.icon-btn.danger, button.icon-btn.danger:hover {
 .icon-btn {
     width: 40px;
     aspect-ratio: 1;
-    border-radius: 5px;
+    border-radius: $--br;
     border: 1px solid $--color-grey-light;
     background-color: $--color-blue-light;
     color: $--color-grey-regular;
     &:hover { background-color: $--color-blue-lighter }
 }
 
-.service-btn {
-    font-size: 1.2rem;
+.shadow-btn {
+    font-size: 1.1rem;
     padding: 0.2rem 1rem;
     border-radius: 100px;
     box-shadow: 2px 4px 11px 0px rgba(0, 0, 0, 0.3);
     &:hover { box-shadow: 2px 4px 11px 2px rgba(0, 0, 0, 0.37) }
 }
 
+.btn-skip {
+    justify-self: flex-end;
+    display: flex;
+    align-items: center;
+    width: 75px;
+    gap: 0.5rem;
+    color: $--color-grey-regular;
+    & > i {
+        color: $--color-grey-light;
+        transition: all 0.2s ease-out;
+    }
+    &:hover {
+        font-weight: bold;
+        & > i {
+            color: $--color-grey-regular;
+            margin-left: 0.3rem
+        }
+    }
+}
+
 /*===== Inputs =====*/
 input, textarea, select, .input-button, .search-input {
     width: 100%;
     min-width: 100px;
-    border-radius: 5px;
+    border-radius: $--br;
     border: 1px solid $--color-grey-light;
     padding: 0.3rem 0.6rem;
 }
@@ -292,7 +337,7 @@ input.search-input[type="search"]::-webkit-search-results-decoration {
     padding: 0.25rem 0.5rem;
     
     background-color: $--color-grey-dark;
-    border-radius: 8px;
+    border-radius: $--br;
     
     font-size: 0.85rem;
     color: white;
@@ -333,11 +378,11 @@ input.search-input[type="search"]::-webkit-search-results-decoration {
 }
 
 /*===== Toasts =====*/
-div.toast-confirm, div.toast-danger, div.toast-info, button.toast-close {
+div.toast-success, div.toast-danger, div.toast-info, button.toast-close {
     color: white;
     font-weight: bold;
 }
-div.toast-confirm {
+div.toast-success {
     background: $--color-green-confirm;
     padding-inline: 1.4rem;
 }
@@ -348,6 +393,7 @@ div.toast-danger {
 div.toast-info {
     background: $--color-blue-regular;
     padding-inline: 1.4rem;
+    color: $--color-grey-dark;
 }
 button.toast-close {
     position: absolute;
@@ -355,4 +401,53 @@ button.toast-close {
     top: 0.5rem;
     line-height: 9px;
     font-size: 18px;
+}
+
+
+/*===== Collapse =====*/
+
+.collapse-wrapper {
+    width: 100%;
+    border:  1px solid $--color-grey-lighter;
+    border-radius: $--br;
+    overflow: hidden;
+}
+
+.collapse-toggle {
+    position: relative;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 1rem 2.5rem 1rem 1rem;
+    box-shadow: 0 0 0 1px $--color-grey-lighter;
+    background-color: $--color-blue-light;
+    &:hover { background-color: $--color-blue-lighter }
+}
+.collapse-toggle::after {
+    position: absolute;
+    content: '';
+    right: 1.25rem;
+    width: 12px;
+    height: 12px;
+    border-right: 3px solid $--color-blue-dark;
+    border-bottom: 3px solid $--color-blue-dark;
+    transform: rotateZ(-45deg);
+    transition: all 0.2s ease-out;
+}
+
+.collapse-toggle[aria-expanded="true"]::after {
+    transform: rotateZ(45deg);
+    transition: all 0.28s ease-out;
+}
+
+.collapse-content {
+    padding-inline: 1rem;
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.2s ease-out;
+    & > * { margin-block: 1rem }
+}
+
+.collapse-toggle[aria-expanded="true"] ~ .collapse-content {
+    transition: max-height 0.28s ease-out;
 }
