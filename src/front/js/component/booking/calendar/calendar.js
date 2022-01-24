@@ -67,17 +67,6 @@ export const Calendar = () => {
 							isDisabled={
 								!store.business.weekdays.includes(dates["day_text"][date.getDay()]) ? true : false
 							}
-							// isDisabled={
-							// 	!store.hoursDispo.map(element => element.date).includes(
-							// 		date.toLocaleDateString(undefined, {
-							// 			year: "numeric",
-							// 			month: "2-digit",
-							// 			day: "2-digit"
-							// 		})
-							// 	)
-							// 		? true
-							// 		: false
-							// }
 						/>
 					);
 				}
@@ -135,24 +124,27 @@ export const Calendar = () => {
 
 	useEffect(
 		() => {
-			if (store.booking.date)
-				setHours(
-					store.hoursDispo.map((item, index) => (
-						<button
-							className="btn btn-info p-2"
-							key={index}
-							onClick={() => {
-								actions.updateBooking("time", item);
-								store.user.id
-									? actions.setPopup("resume", "Resumen de su reserva")
-									: actions.setPopup("login", "Iniciar Sesión");
-							}}>
-							{item}
-						</button>
-					))
-				);
+			if (store.booking.date) {
+				if (store.hoursDispo.length === 0) setHours("No quedan horas disponibles para la fecha seleccionada");
+				else
+					setHours(
+						store.hoursDispo.map((item, index) => (
+							<button
+								className="btn btn-info p-2"
+								key={index}
+								onClick={() => {
+									actions.updateBooking("time", item);
+									store.user.id
+										? actions.setPopup("resume", "Resumen de su reserva")
+										: actions.setPopup("login", "Iniciar Sesión");
+								}}>
+								{item}
+							</button>
+						))
+					);
+			}
 		},
-		[store.booking.date]
+		[store.hoursDispo]
 	);
 
 	return (

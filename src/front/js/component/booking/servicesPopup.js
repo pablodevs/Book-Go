@@ -7,7 +7,7 @@ export const ServicesPopup = () => {
 	useEffect(() => actions.updateBooking("date", ""), []);
 
 	return (
-		<div className="container-fluid px-4 pb-5">
+		<div className="container-fluid px-4 pb-5" style={{ maxWidth: "600px" }}>
 			<h2 className="popup-subtitle mb-4">Nuestros servicios:</h2>
 			<div className="row" style={{ gap: "1rem" }}>
 				{store.services.map((item, index) => (
@@ -16,7 +16,6 @@ export const ServicesPopup = () => {
 							className="shadow-btn"
 							onClick={() => {
 								actions.updateBooking("service", item);
-								actions.calendarActions.renderHoursDispo();
 								actions.setPopup("calendar", `${item.name}: ¿Cuándo?`);
 							}}>
 							{item.name}

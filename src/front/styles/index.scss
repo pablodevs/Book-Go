@@ -420,6 +420,7 @@ button.toast-close {
     padding: 1rem 2.5rem 1rem 1rem;
     box-shadow: 0 0 0 1px $--color-grey-lighter;
     background-color: $--color-blue-light;
+    &.dashboard-content-subtitle { border-radius: $--br }
     &:hover { background-color: $--color-blue-lighter }
 }
 .collapse-toggle::after {

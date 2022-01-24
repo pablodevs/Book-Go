@@ -157,7 +157,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			goToPrevPopup: () => {
 				let store = getStore();
 				let actions = getActions();
-				if (!store.prevPopup.popup) {
+				if (!store.prevPopup[store.prevPopup.length - 1].popup) {
 					setStore({
 						popupTitle: "",
 						prevPopup: []
@@ -208,11 +208,20 @@ const getState = ({ getStore, getActions, setStore }) => {
 			// Meto todas las acciones del componente calendario en calendarActions:
 			calendarActions: {
 				// pide al back las horas disponibles para el servicio que se está reservando
-				renderHoursDispo: async () => {
+				renderHoursDispo: async date => {
 					const store = getStore();
 					try {
 						const response = await fetch(
-							process.env.BACKEND_URL + `/services/${store.booking.service.id}/hours`
+							process.env.BACKEND_URL + `/services/${store.booking.service.id}/hours`,
+							{
+								method: "POST",
+								headers: {
+									"Content-type": "application/json"
+								},
+								body: JSON.stringify({
+									date: date
+								})
+							}
 						);
 						const resp = await response.json();
 						if (!response.ok) {
@@ -232,7 +241,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 						console.error(err);
 					}
 				},
-				//inicia el calendario
+				// inicia el calendario
 				setInitialCalendar: () => {
 					// Inicializa el calendario con la fecha actual al cargar la página
 					let today = new Date();
@@ -277,7 +286,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
-			//get all services
+			// get all services
 			get_services: async () => {
 				await fetch(process.env.BACKEND_URL + "/services")
 					.then(response => response.json())
@@ -530,6 +539,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
+			// LOGIN
 			generate_token: async (email, password) => {
 				const actions = getActions();
 				try {
@@ -561,6 +571,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 
+			// LOGOUT y elimina el localestore
 			logout: () => {
 				// al pulsar el botón de salir cambia el token a null
 				localStorage.removeItem("token");
@@ -804,6 +815,35 @@ const getState = ({ getStore, getActions, setStore }) => {
 						}
 					});
 					return resp;
+				} catch (err) {
+					return err.json();
+				}
+			},
+
+			// Desde el dashboard puedes cancelar una cita
+			cancelBooking: async id => {
+				const actions = getActions();
+				const store = getStore();
+				try {
+					const response = await fetch(process.env.BACKEND_URL + `/book/${id}`, {
+						method: "PUT",
+						headers: {
+							Authorization: "Bearer " + store.token
+						}
+					});
+					const resp = await response.json();
+					if (!response.ok) {
+						setStore({
+							message: {
+								message: resp.message,
+								status: ""
+							}
+						});
+						throw Error(response);
+					} else {
+						actions.closePopup();
+						return resp;
+					}
 				} catch (err) {
 					return err.json();
 				}

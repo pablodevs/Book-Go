@@ -188,7 +188,19 @@ export const AccountSettings = () => {
 				className="delete-account"
 				onClick={() => {
 					const deleteFunct = () => actions.deleteUser();
-					actions.setPopup("confirm", "Eliminar cuenta", undefined, deleteFunct);
+					actions.setPopup(
+						"confirm",
+						"Eliminar cuenta",
+						{
+							button: "Eliminar",
+							toast: {
+								success: "Cuenta eliminada",
+								loading: "Eliminando..."
+							},
+							message: "Esta acción no podrá deshacerse. Si aceptas perderás todas tus reservas y datos."
+						},
+						deleteFunct
+					);
 				}}>
 				<i className="fas fa-ban" />
 				<span>Eliminar cuenta</span>

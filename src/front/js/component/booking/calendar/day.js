@@ -34,8 +34,16 @@ export const Day = props => {
 				onClick={
 					props.isChangeMonthDay || props.isChangeMonthDay === 0
 						? () => actions.calendarActions.updateCalendar(props.isChangeMonthDay)
-						: () =>
-								//al hacer click en un día te aparecen las horas disponibles
+						: () => {
+								// al hacer click en un día te aparecen las horas disponibles
+								actions.calendarActions.renderHoursDispo(
+									props.date.toLocaleDateString(undefined, {
+										year: "numeric",
+										month: "2-digit",
+										day: "2-digit"
+									})
+								);
+								// actualizamos la reserva en proceso
 								actions.updateBooking(
 									"date",
 									props.date.toLocaleDateString(undefined, {
@@ -43,7 +51,8 @@ export const Day = props => {
 										month: "2-digit",
 										day: "2-digit"
 									})
-								)
+								);
+						  }
 				}>
 				{props.date.getDate()}
 			</button>

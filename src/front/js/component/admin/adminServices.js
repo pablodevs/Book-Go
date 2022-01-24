@@ -182,7 +182,20 @@ export const AdminServices = () => {
 									onClick={() => {
 										if (!data.id) return;
 										const deleteFunct = () => actions.removeService(data.id);
-										actions.setPopup("confirm", "Eliminar el servicio", undefined, deleteFunct);
+										actions.setPopup(
+											"confirm",
+											`Eliminar ${data.service}`,
+											{
+												button: "Eliminar",
+												toast: {
+													success: "Eliminado",
+													loading: "Eliminando..."
+												},
+												message:
+													"Esta acción no podrá deshacerse y se eliminarán las reservas actuales del servicio."
+											},
+											deleteFunct
+										);
 									}}>
 									<i className="fas fa-trash-alt" />
 								</button>

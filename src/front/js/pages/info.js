@@ -30,6 +30,7 @@ export const Info = () => {
 									href="#"
 									role="button"
 									onClick={() => {
+										actions.updateBooking("service", service);
 										actions.setPopup("calendar", "Selecciona el día", service.name);
 									}}>
 									Reservar

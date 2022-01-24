@@ -7,7 +7,7 @@ from api.utils import generate_sitemap, APIException
 import cloudinary
 import cloudinary.uploader
 import os
-from datetime import datetime, time
+from datetime import datetime, time, timedelta
 from sqlalchemy import and_
 
 from flask_mail import Mail, Message
@@ -63,7 +63,7 @@ def resetTimeFormat(hours, minutes):
 
     return f"{outputList[0]}:{outputList[1]}"
 
-def getDispo(schedule, duration):
+def getDispo(schedule, duration, service_id, date):
     '''
         Example input:
             - schedule (array of [open, close]): ["10:00", "20:00"]
@@ -76,11 +76,29 @@ def getDispo(schedule, duration):
     timeTo = int(schedule[1].split(':')[0]) * 60 + int(schedule[1].split(':')[1])
     timeInterval = (timeTo - timeFrom)
 
+    # Formatea el style de la fecha
+    date = datetime.strptime(date, "%d/%m/%Y").strftime("%d/%m/%Y")
+    today = datetime.now() + timedelta(hours = 1)
+    
+    # Revisa las reservas para esa fecha
+    hoursNotDispo = []
+    all_bookings = Book.query.filter_by(service_id = service_id).all()
+    all_bookings = [book.serialize() for book in all_bookings]
+    for book in all_bookings:
+        if datetime.strptime(book["date"], "%d/%m/%Y").strftime("%d/%m/%Y") == date and book["status"] == "Confirmed":
+            hoursNotDispo.append(book["time"])
+    
+    # Modifica el timeFrom si se trata de Hoy
+    if (date == today.strftime("%d/%m/%Y")):
+        timeFrom = int(today.strftime("%H")) * 60 + int(today.strftime("%M"))
+
     output = []
 
     for i in range(timeFrom, timeTo, duration):
         if (i + duration < timeTo):
-            output.append(resetTimeFormat(math.floor(i / 60), i % 60))
+            resetedHour = resetTimeFormat(math.floor(i / 60), i % 60)
+            if resetedHour not in hoursNotDispo:
+                output.append(resetedHour)
 
     return output
 
@@ -230,6 +248,11 @@ def handle_single_service(service_id):
             if cloudinaryResponse["result"] != "ok":
                 raise APIException('La imagen no existe o el public id es erróneo.', status_code=404)
 
+        # Delete all bookings of service
+        all_bookings = Book.query.filter_by(service_id = service.id).all()
+        for book in all_bookings:
+            db.session.delete(book)
+
         db.session.delete(service)
         db.session.commit()
         return jsonify({"message": "El servicio se ha eliminado correctamente."}), 200
@@ -375,6 +398,11 @@ def handle_single_user():
         deleted_id = user.serialize()["id"]
         deleted_email = user.serialize()["email"]
 
+        # Delete all bookings of user
+        all_bookings = Book.query.filter_by(user_id = current_user_id).all()
+        for book in all_bookings:
+            db.session.delete(book)
+
         db.session.delete(user)
         db.session.commit()
         return jsonify({"message": f"The user with id {deleted_id} and email {deleted_email} has been deleted."}), 200
@@ -460,20 +488,60 @@ def create_booking(user_id):
     bookTime = time.fromisoformat(request_body["time"])
 
     # Create a new booking
-    new_booking = Book(user_id = user_id , date = bookDate , time = bookTime, service_id = request_body["service_id"])
+    new_booking = Book(user_id = user_id , date = bookDate , time = bookTime, service_id = request_body["service_id"], created = datetime.now() + timedelta(hours = 1), status = "Confirmed")
     db.session.add(new_booking)
     db.session.commit()
 
     service = Service.query.get(request_body["service_id"])
 
     # AHORA ENVIAMOS EL EMAIL DE CONFIRMACIÓN DE RESERVA
-    msg = Message("Confirmación de reserva",sender="spa@jmanvel.com", recipients=[customer_email])
-    msg.body = "testing body"
-    msg.html = "<html lang='es'><head><meta charset='UTF-8'><meta http-equiv='X-UA-Compatible' content='IE=edge'><meta name='viewport' content='width=device-width, initial-scale=1.0'></head><body><h1>Confirmación de Reserva</h1><div><p>Estimado cliente:</p><p>Le confirmamos su reserva de nuestro servicio de " + str(service.serialize()["name"]) + " para el día " + str(request_body["date"]) + " a las " + str(request_body["time"]) + "  </p><p>Muchas gracias por confiar en nosotros.</p></div></body></html>"
-    mail.send(msg)
+    # msg = Message("Confirmación de reserva",sender="spa@jmanvel.com", recipients=[customer_email])
+    # msg.body = "testing body"
+    # msg.html = "<html lang='es'><head><meta charset='UTF-8'><meta http-equiv='X-UA-Compatible' content='IE=edge'><meta name='viewport' content='width=device-width, initial-scale=1.0'></head><body><h1>Confirmación de Reserva</h1><div><p>Estimado cliente:</p><p>Le confirmamos su reserva de nuestro servicio de " + str(service.serialize()["name"]) + " para el día " + str(request_body["date"]) + " a las " + str(request_body["time"]) + "  </p><p>Muchas gracias por confiar en nosotros.</p></div></body></html>"
+    # mail.send(msg)
 
     return jsonify({"message": "Su reserva ha sido Confirmada."}), 200
-   
+
+# GET BOOKINGS OF USER
+@api.route('/user/bookings', methods=['GET'])
+@jwt_required()
+def get_bookings():
+    """
+    Create booking after payment
+    """
+    current_user_id = get_jwt_identity() # obtiene el id del usuario asociado al token (id == sub en jwt decode)
+    user = User.query.get(current_user_id)
+    # Admin validation
+    # if user.serialize()["is_admin"] == False:
+    #     raise APIException('Error de identificación.', status_code=401)
+
+    all_bookings = Book.query.filter_by(user_id = current_user_id).all()
+    all_bookings = [book.serialize() for book in all_bookings]
+
+    return jsonify(all_bookings), 200
+
+# Cancel (DELETE) a booking
+@api.route('/book/<int:book_id>', methods=['PUT'])
+@jwt_required()
+def cancel_booking(book_id):
+    """
+    Cancel a booking
+    """
+    book_to_cancel = Book.query.get(book_id)
+
+    if book_to_cancel is None:
+        raise APIException('La cita que estás buscando no existe', status_code=404)
+
+    # Admin or user validation
+    current_user_id = get_jwt_identity() # obtiene el id del usuario asociado al token (id == sub en jwt decode)
+    user = User.query.get(current_user_id)
+    if not user.serialize()["is_admin"] and book_to_cancel.serialize()["user_id"] != current_user_id:
+        raise APIException('No tienes permisos suficientes.', status_code=401)
+
+    book_to_cancel.status = "Canceled"
+    db.session.commit()
+    return jsonify({"message": "Cita cancelada"}), 200
+
 # GET BUSINESS INFO
 @api.route('/business', methods=['GET'])
 def get_business_info():
@@ -538,7 +606,7 @@ def modify_business_info():
     return jsonify(business.serialize()), 200
 
 # GET DISPO HOURS OF SERVICE WITH sevice_id
-@api.route('/services/<int:service_id>/hours', methods=['GET'])
+@api.route('/services/<int:service_id>/hours', methods=['POST'])
 def get_dispo_hours(service_id):
     """
     Service hours dispo
@@ -557,11 +625,13 @@ def get_dispo_hours(service_id):
         schedule = Business.query.all()[0].serialize()["schedule"].split(',')
         duration = service.duration
 
+        request_body = request.json
+
         # Duración por defecto de 60mins (1h)
         if duration == 0:
             duration = 60
 
-        return jsonify(getDispo(schedule, duration)), 200
+        return jsonify(getDispo(schedule, duration, service.id, request_body["date"])), 200
 
     except IndexError as error:
         # Si está vacía, devuelve error

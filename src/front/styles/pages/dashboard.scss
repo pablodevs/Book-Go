@@ -270,7 +270,8 @@ button.clear-input, .edit-input {
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    padding: 1rem 2rem 1rem 1rem
+    padding: 1rem 2rem 1rem 1rem;
+    height: 100%;
 }
 .bookingcard-title {
     font-size: 1.3rem;
@@ -299,9 +300,17 @@ button.clear-input, .edit-input {
 }
 .bookingcard-img {
     width: 100%;
-    max-height: 210px;
+    max-height: 250px;
     object-fit: cover;
-    object-position: top;
+    // object-position: top;
+}
+
+.bookingcard-buttons {
+    margin-top: auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: space-evenly;
 }
 
 @media screen and (max-width: 470px) {

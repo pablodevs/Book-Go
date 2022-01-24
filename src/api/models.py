@@ -101,10 +101,11 @@ class Service(db.Model):
 #TABLA DE RESERVAS
 class Book(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-   
+    
     date = db.Column(db.DateTime, nullable=False)
     time = db.Column(db.Time, nullable=False)
     created = db.Column(db.DateTime, onupdate=datetime.now)
+    status = db.Column(db.String(100), unique=False, nullable=True) # Confirmed // Canceled
 
     service_id = db.Column(db.Integer,db.ForeignKey('service.id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
@@ -116,9 +117,11 @@ class Book(db.Model):
     def serialize(self):
         return {
             "id": self.id,
+            "user_id": self.user_id,
             "service_id": self.service_id,
             "date" : self.date.strftime("%d/%m/%Y"),
-            "time" : self.time.strftime("%H:%M")
+            "time" : self.time.strftime("%H:%M"),
+            "status" : self.status
         }
 
 
