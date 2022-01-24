@@ -29,12 +29,10 @@ app = Flask(__name__)
 # app.config['DEBUG'] = True
 # app.config['TESTING'] = False
 # app.config['MAIL_DEBUG'] = True
-# app.config['MAIL_SERVER'] = 'smtp.servidor-correo.net'
-# app.config['MAIL_PORT'] = 587
-app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-app.config['MAIL_PORT'] = 465
-app.config['MAIL_USE_TLS'] = False
-app.config['MAIL_USE_SSL'] = True
+app.config['MAIL_SERVER'] = 'smtp.servidor-correo.net'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USE_SSL'] = False
 app.config['MAIL_USERNAME'] = 'spa@jmanvel.com'
 app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
 app.config['MAIL_DEFAULT_SENDER'] = 'spa@jmanvel.com'
@@ -444,9 +442,9 @@ def generate_token():
 @api.route('/book/<int:user_id>', methods=['POST'])
 @jwt_required()
 def create_booking(user_id):
-    '''
+    """
     Create booking after payment
-    '''
+    """
     # Primero buscamos cliente
     customer = User.query.get(user_id)
     # Check if customer exists

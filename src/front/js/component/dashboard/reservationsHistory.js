@@ -10,7 +10,9 @@ export const ReservationsHistory = () => {
 		second_collapse: false
 	});
 
-	useEffect(() => {}, []);
+	useEffect(() => {
+		// Fetch de las reservas
+	}, []);
 
 	const handleCollapse = e => {
 		setCollapse({

@@ -28,24 +28,6 @@ export const Dashboard = () => {
 		[store.token]
 	);
 
-	// useEffect(
-	// 	() => {
-	// 		if (store.cloudinaryInfo && store.cloudinaryInfo.image_url && store.cloudinaryInfo.public_id) {
-	// 			let body = new FormData();
-	// 			body.append("profile_image_url", store.cloudinaryInfo.image_url);
-	// 			body.append("public_id", store.cloudinaryInfo.public_id);
-
-	// 			actions.setToast(
-	// 				"promise",
-	// 				{ loading: "Guardando...", success: "Imagen modificada" },
-	// 				actions.updateUser(body),
-	// 				"toast-success"
-	// 			);
-	// 		}
-	// 	},
-	// 	[store.cloudinaryInfo]
-	// );
-
 	const showWelcome = () => {
 		setContent(
 			<div className="center dashboard-welcome">
