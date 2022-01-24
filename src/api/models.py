@@ -103,11 +103,11 @@ class Book(db.Model):
     id = db.Column(db.Integer, primary_key=True)
    
     date = db.Column(db.DateTime, nullable=False)
-    time = db.Column(db.Time,nullable=False)
-    created = db.Column(db.DateTime,onupdate=datetime.now)
+    time = db.Column(db.Time, nullable=False)
+    created = db.Column(db.DateTime, onupdate=datetime.now)
 
-    service_id = db.Column(db.Integer,db.ForeignKey('service.id') ,nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'),nullable=False)
+    service_id = db.Column(db.Integer,db.ForeignKey('service.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
 
     def __repr__(self):

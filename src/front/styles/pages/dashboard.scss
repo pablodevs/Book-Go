@@ -209,6 +209,7 @@ button.dashboard-edit-img {
     .dashboard-form {
         margin-inline: auto;
         justify-content: center;
+        flex-flow: wrap;
         & > div { width: 100% }
     }
     .dashboard-content-title { text-align: center }

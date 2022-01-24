@@ -116,7 +116,6 @@ export const EditImg = () => {
 								body.append("public_id", store.cloudinaryInfo.public_id);
 								body.append("method", method);
 								toastFunction = actions.updateUser(body);
-								console.log(body);
 							}
 
 							actions.setToast(

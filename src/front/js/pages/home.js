@@ -11,7 +11,7 @@ export const Home = () => {
 	useEffect(() => {
 		actions.get_services();
 		actions.getBusinessInfo();
-		actions.reset();
+		actions.resetBooking();
 	}, []);
 
 	return (

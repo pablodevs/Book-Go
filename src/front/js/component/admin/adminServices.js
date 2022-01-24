@@ -95,12 +95,13 @@ export const AdminServices = () => {
 				store.business.schedule.split(",")[0] !== store.business.schedule.split(",")[1] &&
 				store.business.weekdays[0] !== "" &&
 				data.sku &&
-				data.sku !== ""
+				data.sku !== "" &&
+				data.duration !== 0
 			)
 				setSchedule(true);
 			else setSchedule(false);
 		},
-		[data.sku, store.business]
+		[data.sku, store.business, data]
 	);
 
 	useEffect(

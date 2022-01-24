@@ -61,7 +61,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 				actions.calendarActions.setInitialCalendar();
 				actions.resetNewService();
-				actions.resetBooking();
 				actions.resetCloudinaryInfo();
 
 				const cancel = store.cloudinaryInfo.image_url ? true : false;
@@ -141,8 +140,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 				setStore({
 					popup: null,
 					popupTitle: "",
-					prevPopup: [],
 					booking: {},
+					prevPopup: [],
 					serviceInProgress: {},
 					popupObj: {}
 				});
@@ -190,34 +189,19 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			// PASARELA DE PAGO DE PAGO DE STRIPE
 			book: sku => {
-				console.log("este es el sku" + sku);
 				const store = getStore();
+				const actions = getActions();
+
 				const stripe = Stripe("pk_test_yHT02IrsuQ0eWhAT2BBbfxmR");
 				stripe
 					.redirectToCheckout({
 						lineItems: [{ price: sku, quantity: 1 }],
 						mode: "payment",
-						/*
-				 * Do not rely on the redirect to the successUrl for fulfilling
-				 * purchases, customers may not always reach the success_url after
-				 * a successful payment.
-				 * Instead use one of the strategies described in
-				 * https://stripe.com/docs/payments/checkout/fulfill-orders
-				 */
-						successUrl:
-							"https://3000-peibol888-inalroject-na8e6zgw6da.ws-eu27.gitpod.io/pago/" +
-							`${store.user.id}`,
-						cancelUrl: "https://3000-peibol888-inalroject-na8e6zgw6da.ws-eu27.gitpod.io/error/"
+						successUrl: `${process.env.FRONTEND_URL}/pago/${store.user.id}`,
+						cancelUrl: process.env.FRONTEND_URL
 					})
 					.then(function(result) {
-						if (result.error) {
-							/*
-				   * If `redirectToCheckout` fails due to a browser or network
-				   * error, display the localized error message to your customer.
-				   */
-							var displayError = document.getElementById("error-message");
-							displayError.textContent = result.error.message;
-						}
+						if (result.error) actions.setToast("danger", result.error.message);
 					});
 			},
 

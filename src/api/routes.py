@@ -7,6 +7,7 @@ from api.utils import generate_sitemap, APIException
 import cloudinary
 import cloudinary.uploader
 import os
+from datetime import datetime, time
 from sqlalchemy import and_
 
 from flask_mail import Mail, Message
@@ -28,10 +29,12 @@ app = Flask(__name__)
 # app.config['DEBUG'] = True
 # app.config['TESTING'] = False
 # app.config['MAIL_DEBUG'] = True
-app.config['MAIL_SERVER'] = 'smtp.servidor-correo.net'
-app.config['MAIL_PORT'] = 587
-app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USE_SSL'] = False
+# app.config['MAIL_SERVER'] = 'smtp.servidor-correo.net'
+# app.config['MAIL_PORT'] = 587
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
 app.config['MAIL_USERNAME'] = 'spa@jmanvel.com'
 app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
 app.config['MAIL_DEFAULT_SENDER'] = 'spa@jmanvel.com'
@@ -418,84 +421,61 @@ def generate_token():
 
 
 
-# GET AVAILABILITY OF A SERVICE
-@api.route('/dispo/<service_name>', methods=['GET'])
-def get_service_dispo(service_name):
+# # GET AVAILABILITY OF A SERVICE
+# @api.route('/dispo/<service_name>', methods=['GET'])
+# def get_service_dispo(service_name):
 
-    # buscamos el servicio en la tabla de servicios
-    service_query = Service.query.filter_by(name = service_name).all()
-    service= list(map(lambda x: x.serialize(), service_query))
-    service_id = service[0]['id']
+#     # buscamos el servicio en la tabla de servicios
+#     service_query = Service.query.filter_by(name = service_name).all()
+#     service= list(map(lambda x: x.serialize(), service_query))
+#     service_id = service[0]['id']
 
-    #buscamos la disponibilidad del producto con id = product_id y available true
-    product_dispo = Dispo.query.filter(and_(Dispo.service_id == service_id , Dispo.available == True)).all()
-    all_days_dispo= list(map(lambda x: x.serialize(), product_dispo))
-    return jsonify(all_days_dispo)
-    # buscamos la disponibilidad del servicio con id = service_id y available true
-    service_dispo = Dispo.query.filter(and_(Dispo.service_id == service_id , Dispo.available == True)).all()
-    all_days_dispo= list(map(lambda x: x.serialize(), service_dispo))
-    return jsonify(all_days_dispo)
+#     #buscamos la disponibilidad del producto con id = product_id y available true
+#     product_dispo = Dispo.query.filter(and_(Dispo.service_id == service_id , Dispo.available == True)).all()
+#     all_days_dispo= list(map(lambda x: x.serialize(), product_dispo))
+#     return jsonify(all_days_dispo)
+#     # buscamos la disponibilidad del servicio con id = service_id y available true
+#     service_dispo = Dispo.query.filter(and_(Dispo.service_id == service_id , Dispo.available == True)).all()
+#     all_days_dispo= list(map(lambda x: x.serialize(), service_dispo))
+#     return jsonify(all_days_dispo)
 
 
 # CREATE NEW BOOKING
 @api.route('/book/<int:user_id>', methods=['POST'])
 @jwt_required()
 def create_booking(user_id):
-    # change is_available to False in Dispo
+    '''
+    Create booking after payment
+    '''
+    # Primero buscamos cliente
+    customer = User.query.get(user_id)
+    # Check if customer exists
+    if customer is None:
+        return jsonify({"message": "Usuario o contraseña incorrectos."}), 401
     
-    # dispo = Dispo.query.get(dispo_id)
-    # dispo.available = False
-    # db.session.commit()
+    customer_email = customer.email
 
     request_body = request.json
 
+    # Transforma request_body["date"] en el tipo <datetime.date> y request_body["time"] en <datetime.time>
+    bookDate = datetime.strptime(request_body["date"], "%d/%m/%Y")
+    bookTime = time.fromisoformat(request_body["time"])
+
     # Create a new booking
-    new_booking = Book(user_id = user_id , date = request_body["date"] , time = request_body["time"], service = request_body["service"])
+    new_booking = Book(user_id = user_id , date = bookDate , time = bookTime, service_id = request_body["service_id"])
     db.session.add(new_booking)
     db.session.commit()
 
+    service = Service.query.get(request_body["service_id"])
 
-    #buscamos el email del cliente
-    customer = User.query.get(user_id)
-    customer_email = customer.email
     # AHORA ENVIAMOS EL EMAIL DE CONFIRMACIÓN DE RESERVA
-    msg = Message("Confirmación de reserva",sender="spa@jmanvel.com",
-                recipients=[customer_email])
+    msg = Message("Confirmación de reserva",sender="spa@jmanvel.com", recipients=[customer_email])
     msg.body = "testing body"
-    msg.html = "<html lang='es'><head><meta charset='UTF-8'><meta http-equiv='X-UA-Compatible' content='IE=edge'><meta name='viewport' content='width=device-width, initial-scale=1.0'></head><body><h1>Confirmación de Reserva</h1><div><p>Estimado cliente:</p><p>Le confirmamos su reserva de nuestro servicio de " + str(dispo.service) + " para el día " + str(dispo.date.strftime("%-d/%-m/%Y"),) + " a las " + str(dispo.time.strftime("%-H:%M")) + "  </p><p>Muchas gracias por confiar en nosotros.</p></div></body></html>"
+    msg.html = "<html lang='es'><head><meta charset='UTF-8'><meta http-equiv='X-UA-Compatible' content='IE=edge'><meta name='viewport' content='width=device-width, initial-scale=1.0'></head><body><h1>Confirmación de Reserva</h1><div><p>Estimado cliente:</p><p>Le confirmamos su reserva de nuestro servicio de " + str(service.serialize()["name"]) + " para el día " + str(request_body["date"]) + " a las " + str(request_body["time"]) + "  </p><p>Muchas gracias por confiar en nosotros.</p></div></body></html>"
     mail.send(msg)
 
     return jsonify({"message": "Su reserva ha sido Confirmada."}), 200
    
-# CREATE NEW BOOKING
-# @api.route('/book/<int:dispo_id>/<int:user_id>', methods=['POST'])
-# @jwt_required()
-# def create_booking(dispo_id, user_id):
-#     # change is_available to False in Dispo
-    
-#     # dispo = Dispo.query.get(dispo_id)
-#     # dispo.available = False
-#     # db.session.commit()
-
-
-#     # Create a new booking
-#     new_booking = Book(user_id = user_id , date = dispo.date , time = dispo.time, service = dispo.service)
-#     db.session.add(new_booking)
-#     db.session.commit()
-
-
-#     #buscamos el email del cliente
-#     customer = User.query.get(user_id)
-#     customer_email = customer.email
-#     # AHORA ENVIAMOS EL EMAIL DE CONFIRMACIÓN DE RESERVA
-#     msg = Message("Confirmación de reserva",sender="spa@jmanvel.com",
-#                 recipients=[customer_email])
-#     msg.body = "testing body"
-#     msg.html = "<html lang='es'><head><meta charset='UTF-8'><meta http-equiv='X-UA-Compatible' content='IE=edge'><meta name='viewport' content='width=device-width, initial-scale=1.0'></head><body><h1>Confirmación de Reserva</h1><div><p>Estimado cliente:</p><p>Le confirmamos su reserva de nuestro servicio de " + str(dispo.service) + " para el día " + str(dispo.date.strftime("%-d/%-m/%Y"),) + " a las " + str(dispo.time.strftime("%-H:%M")) + "  </p><p>Muchas gracias por confiar en nosotros.</p></div></body></html>"
-#     mail.send(msg)
-
-#     return jsonify({"message": "Su reserva ha sido Confirmada"}), 200
-
 # GET BUSINESS INFO
 @api.route('/business', methods=['GET'])
 def get_business_info():
@@ -578,6 +558,10 @@ def get_dispo_hours(service_id):
         # Intenta obtener el horario y la duración
         schedule = Business.query.all()[0].serialize()["schedule"].split(',')
         duration = service.duration
+
+        # Duración por defecto de 60mins (1h)
+        if duration == 0:
+            duration = 60
 
         return jsonify(getDispo(schedule, duration)), 200
 

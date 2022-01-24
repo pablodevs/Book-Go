@@ -19,7 +19,8 @@ export const AddService2 = () => {
 				store.business.schedule !== "00:00,00:00" &&
 				store.business.schedule.split(",")[0] !== store.business.schedule.split(",")[1] &&
 				store.business.weekdays[0] !== "" &&
-				data.sku
+				data.sku &&
+				store.serviceInProgress.duration !== 0
 			)
 				setSchedule(true);
 		},
@@ -81,7 +82,7 @@ export const AddService2 = () => {
 								data-tooltip={
 									schedule
 										? "Permite que se pueda reservar este servicio"
-										: "Primero define un horario y un sku"
+										: "Primero define un horario, un sku y una duración"
 								}>
 								<input
 									className="form-check-input"
