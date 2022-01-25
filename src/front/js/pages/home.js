@@ -1,8 +1,9 @@
 import React, { useEffect, useContext } from "react";
 import { ServiceCard } from "../component/home_components/service_card";
-import { Panel } from "../component/home_components/panel";
 import { ScrollTop } from "../component/scrollTopButton";
+import { Link } from "react-router-dom";
 import { Context } from "../store/appContext";
+import home_img from "../../img/zen.jpg";
 import "../../styles/pages/home.scss";
 
 export const Home = () => {
@@ -16,25 +17,15 @@ export const Home = () => {
 
 	return (
 		<div className="container-fluid view">
-			<div className="row">
-				<div className="mx-auto col-md-12 col-xl-5">
-					<Panel />
-				</div>
-				<div className="mx-auto col-md-12 col-xl-5">
-					<h1 className="text-center pt-5">Health inside!</h1>
-					<p className="p-4 fs-5">
-						Nuestro enfoque es traer conciencia al cuerpo, la mente y el espíritu al abrir el camino hacia
-						la curación y el descanso. Nos esforzamos por llevar a los clientes por un camino de bienestar y
-						paz para facilitar mejor su capacidad de curación innata. Creemos que cada persona es única y
-						tiene un don único y estamos comprometidos a facilitar su viaje de curación. Brindamos sesiones
-						personalizadas que lo guían hacia la plenitud. También ofrecemos una variedad de servicios que
-						incluyen masajes, sanación energética y servicios de spa.
-					</p>
-					<p className="p-4 fs-5">
-						Te invitamos a descubrir tu verdadero yo y a conectarte con tu sabiduría interior y tu fuerza
-						interior.
-					</p>
-				</div>
+			<div className="container home-background">
+				<img src={home_img} />
+				<Link
+					type="button"
+					className="btn btn-home mt-auto full-width"
+					to="#"
+					onClick={() => actions.setPopup("booking", "¿Qué estás buscando?")}>
+					¡Reserva aquí!
+				</Link>
 			</div>
 			<div className="container-fluid my-5 mx-auto" id="services">
 				{store.services.length > 0 ? (
