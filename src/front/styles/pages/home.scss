@@ -1,42 +1,80 @@
-.home-background{
-    position: relative;
-    width: 100%;
-    height: auto;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
+@import "../colors";
+@import "../fonts";
+@import "../index";
 
+@import url('https://fonts.googleapis.com/css2?family=Satisfy&display=swap');
+
+.home {
     transform: translateY(-70px);
+}
+
+div.home-background {
+    justify-content: flex-start;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 75px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
     min-height: 75vh;
     background-image: url(./../../img/home-background.jpg);
-    background-position: center;
+    background-position-y: bottom;
+    background-position-x: right;
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: cover;
 }
-  
-.container .btn-home {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    -ms-transform: translate(-50%, -50%);
-    background-color:#2f3535;
-    color: white;
-    font-size: 16px;
-    padding: 12px 24px;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
+
+button.btn-home {
+    font-family: 'Poppins', sans-serif;
+    letter-spacing: 0.15rem;
+    font-size: 2rem;
+    margin: 0;
+    margin-left: 25vw;
+    @media screen and (max-width: 767.9px) {
+        margin-inline: auto;
+        background-color: white;
+        border-color: white;
+    }
+    color: #009783;
+    border: 3px solid #009783;
+    background-color: rgba(255, 255, 255, 0.774);
+    box-shadow: rgba(0, 0, 0, 0.183) 0px 15px 20px, rgba(0, 0, 0, 0.10) 0px 11px 8px;
+    
+    &:hover {
+        color: white;
+        border: 3px solid #009783;
+        background-color: #009783;
+        box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px 5px, rgba(0, 0, 0, 0.22) 0px 15px 12px 5px;
+    }
 }
 
-.container .btn-home:hover {
-background-color: grey;
-}
-@media(max-width: 768px) {
-    .full-width {
-        width: 50%;  
+.home-subtitle-wrapper {
+    padding-inline: 2rem;
+    margin-bottom: 8vh;
+    padding-top: 13vh;
+    gap: 2.5rem;
+    & > .home-subtitle {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        gap: 1.7rem;
+        font-family: 'Satisfy', cursive;
+        font-size: clamp(2rem, 3vw, 2.3rem);
     }
+    @media screen and (max-width: 1038px) {
+        flex-direction: column;
+        gap: 2rem;
+    }
+}
+.text-divider {
+    flex-wrap: nowrap;
+    width: 22vw;
+    min-width: 150px;
+    filter: brightness(1.1)
+}
+.emphasis {
+    // margin-left: 1.5rem;
+    letter-spacing: .3rem;
+    color: #009783;
+    text-shadow: -10px -10px 0px #77cbc06e,
+                 10px 10px 0px #f8d0307a,
 }
 
 .service-card.card-background::after {

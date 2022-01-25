@@ -2,6 +2,7 @@ import React, { useEffect, useContext } from "react";
 import { ServiceCard } from "../component/home_components/service_card";
 import { ScrollTop } from "../component/scrollTopButton";
 import { Context } from "../store/appContext";
+import text_divider from "../../img/text-divider.png";
 import "../../styles/pages/home.scss";
 
 export const Home = () => {
@@ -14,15 +15,22 @@ export const Home = () => {
 	}, []);
 
 	return (
-		<div className="container-fluid">
-			<div className="home-background">
+		<div className="container-fluid home">
+			<div className="home-background center">
 				<button
-					className="btn btn-home mt-auto full-width"
+					className="btn-cool btn-home"
 					onClick={() => actions.setPopup("booking", "¿Qué estás buscando?")}>
 					¡Reserva aquí!
 				</button>
 			</div>
-			<div className="container-fluid my-5 mx-auto px-3" id="services">
+			<div className="center home-subtitle-wrapper" id="services">
+				<img src={text_divider} className="text-divider" />
+				<h1 className="home-subtitle">
+					Descubre nuestros <span className="emphasis">SERVICIOS</span>
+				</h1>
+				<img src={text_divider} className="text-divider" />
+			</div>
+			<div className="container-fluid mb-5 mx-auto px-3 pb-5">
 				{store.services.length > 0 ? (
 					<div className="row gap-5 justify-content-center">
 						{store.services.map((item, index) => {

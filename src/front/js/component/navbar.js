@@ -4,8 +4,9 @@ import { Link, NavLink } from "react-router-dom";
 import "../../styles/components/navbar.scss";
 
 export const Navbar = () => {
-	let [navMenu, setNavMenu] = useState(false);
 	const { store, actions } = useContext(Context);
+	let [navMenu, setNavMenu] = useState(false);
+	const [servicesNavlink, setServicesNavlink] = useState(true);
 
 	useEffect(
 		() => {
@@ -17,6 +18,15 @@ export const Navbar = () => {
 			}
 		},
 		[navMenu, store.popup]
+	);
+
+	const url = window.location.pathname.split("/").pop();
+	useEffect(
+		() => {
+			if (window.location.pathname !== "/") setServicesNavlink(false);
+			else setServicesNavlink(true);
+		},
+		[url]
 	);
 
 	return (
@@ -91,9 +101,11 @@ export const Navbar = () => {
 						}}>
 						Reservar
 					</NavLink>
-					<a className="_navbar-link" href="#services" onClick={() => setNavMenu(false)}>
-						Servicios
-					</a>
+					{servicesNavlink ? (
+						<a className="_navbar-link" href="#services" onClick={() => setNavMenu(false)}>
+							Servicios
+						</a>
+					) : null}
 					{/* <NavLink className="_navbar-link" to="#" onClick={() => setNavMenu(false)}>
 						Contacto
 					</NavLink> */}
