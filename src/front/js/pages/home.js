@@ -36,8 +36,7 @@ export const Home = () => {
 					</p>
 				</div>
 			</div>
-
-			<div className="container-fluid my-5 mx-auto">
+			<div className="container-fluid my-5 mx-auto" id="services">
 				{store.services.length > 0 ? (
 					<div className="row gap-5 justify-content-center">
 						{store.services.map((item, index) => {

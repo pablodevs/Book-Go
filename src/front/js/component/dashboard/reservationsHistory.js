@@ -54,6 +54,8 @@ export const ReservationsHistory = () => {
 				let nextBookingsList = [];
 				let prevBookingsList = [];
 
+				console.log(bookings);
+
 				let bookingsList = bookings.sort((a, b) => {
 					const formatInput = input => {
 						let dateString = `${input.date.split("/")[2]}/${input.date.split("/")[1]}/${
@@ -65,10 +67,18 @@ export const ReservationsHistory = () => {
 					let dateA = formatInput(a);
 					let dateB = formatInput(b);
 
-					if (dateA > dateB) return 1;
-					else if (dateA < dateB) return -1;
-					return 0;
+					if (a.status === "Confirmed" && b.status === "Confirmed") return dateA - dateB;
+					if (a.status !== "Confirmed" && b.status === "Confirmed") return 1;
+					if (a.status === "Confirmed" && b.status !== "Confirmed") return -1;
+
+					// if (dateA > dateB)
+					// 	if (b.status === "Confirmed") return 1;
+					// 	else return -1;
+					// else if (dateA < dateB) return -1;
+					// return 0;
 				});
+
+				console.log(bookingsList);
 
 				bookingsList.map((book, idx) => {
 					let service = store.services.find(service => service.id === book.service_id);

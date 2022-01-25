@@ -23,7 +23,14 @@ export const Navbar = () => {
 		<header>
 			<nav className="_navbar">
 				<span className="_navbar-logo-wrapper text-start">
-					<NavLink className="_navbar-logo _navbar-link" to="/" onClick={() => setNavMenu(false)}>
+					<NavLink
+						className="_navbar-logo _navbar-link"
+						to="/"
+						onClick={() => {
+							document.body.scrollTop = 0;
+							document.documentElement.scrollTop = 0;
+							setNavMenu(false);
+						}}>
 						Inicio
 					</NavLink>
 				</span>
@@ -84,10 +91,10 @@ export const Navbar = () => {
 						}}>
 						Reservar
 					</NavLink>
-					{/* <NavLink className="_navbar-link" to="#" onClick={() => setNavMenu(false)}>
+					<a className="_navbar-link" href="#services" onClick={() => setNavMenu(false)}>
 						Servicios
-					</NavLink>
-					<NavLink className="_navbar-link" to="#" onClick={() => setNavMenu(false)}>
+					</a>
+					{/* <NavLink className="_navbar-link" to="#" onClick={() => setNavMenu(false)}>
 						Contacto
 					</NavLink> */}
 				</ul>
