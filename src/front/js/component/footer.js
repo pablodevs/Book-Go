@@ -7,7 +7,7 @@ export const Footer = () => (
 			<div className="row">
 				{/* Contact Data */}
 				<div className="col">
-					<h5>Contact Us</h5>
+					<h5>Contacto: </h5>
 					<ul className="nav flex-column">
 						<li className="nav-item mb-2">Cast: (+34) 123 456 789</li>
 						<li className="nav-item mb-2">Email: email@email.com</li>
@@ -16,7 +16,7 @@ export const Footer = () => (
 				</div>
 				{/* Social Media buttons */}
 				<div className="col">
-					<h5>Follow Us</h5>
+					<h5>Siguenos: </h5>
 					<ul className="nav justify-content-center p-3">
 						<li className="nav-item mb-2">
 							<a
@@ -52,14 +52,9 @@ export const Footer = () => (
 						<h5>Subscribe to our newsletter</h5>
 						<div>Monthly digest of whats new and exciting from us.</div>
 						<div className="row gap-2">
-							<input
-								id="newsletter1"
-								type="text"
-								className="col-md-12 col-sm-12"
-								placeholder="Email address"
-							/>
+							<input id="newsletter1" type="text" className="col-md-12 col-sm-12" placeholder="Email " />
 							<button className="btn btn-primary col-md-5 col-sm-12" type="button">
-								Subscribe
+								Subcríbete
 							</button>
 						</div>
 					</form>

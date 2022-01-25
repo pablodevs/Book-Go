@@ -1,0 +1,36 @@
+@import "../colors"; // paleta de colores
+@import "../fonts"; // paleta de fuentes
+@import url('https://fonts.googleapis.com/css2?family=Satisfy&display=swap');
+
+#info {
+    background-image: url(./../../img/zen.jpg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    -webkit-box-shadow: 9px 20px 5px 2px rgba(0,0,0,0.31);
+-moz-box-shadow: 9px 20px 5px 2px rgba(0,0,0,0.31);
+box-shadow: 9px 20px 5px 2px rgba(0,0,0,0.31);
+    padding-top: 220px;
+    
+   
+}
+
+button {
+    display: flex;
+    align-items: center;
+    box-shadow: inset 0 0 0 2px $--color-pink-dark;
+    color: $--color-pink-dark;
+    padding-inline: 1rem;
+    &:hover {
+        color: white;
+        background-color: $--color-pink-dark;
+}}
+
+.head_title{
+    font-family: 'Satisfy', cursive;
+}
+
+.card , .box{
+    border-radius: 20%;
+}
