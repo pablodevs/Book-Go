@@ -188,7 +188,7 @@ export const Calendar = () => {
 						style={{ left: `${mouseEffect.X}px`, top: `${mouseEffect.Y}px` }}
 					/>
 				</div>
-				<div className="hours-avaliable">{hours}</div>
+				{hours.length !== 0 ? <div className="hours-avaliable">{hours}</div> : null}
 			</div>
 		</div>
 	);
