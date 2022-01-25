@@ -11,32 +11,28 @@ export const Info = () => {
 		if (service.id === parseInt(params.id)) {
 			return (
 				<div id="info" key={idx}>
-					<div className="container-sm border border-rounded m-5 mr-0 bg-light w-25 box">
-						<div className="card m-3 p-3 border-white">
-							<h1 className="display-4 head_title">{service.name}</h1>
-							<p className="lead">{service.description}</p>
+					<div className="info-box center mt-auto">
+						<div className="card info-card">
+							<h1 className="display-4 head_title mb-3">{service.name}</h1>
+							<p className="lead of-y">{service.description}</p>
 							<hr className="my-4" />
 							<div className="row">
 								<div className="col">
 									<h4>Precio: </h4>
 									<h5>{service.price} €/hora</h5>
 								</div>
-								<div className="col text-end">
-									<button className="btn  shadow  m-2">
-										<Link to="/" className=" m-2">
-											Volver
-										</Link>
-									</button>
-									<span
-										className="btn shadow text-white bg-success btn-lg p-2"
-										href="#"
-										role="button"
+								<div className="col-auto text-end">
+									<button
+										className="btn-cool btn-pink"
 										onClick={() => {
 											actions.updateBooking("service", service);
 											actions.setPopup("calendar", "Selecciona el día", service.name);
 										}}>
 										Reservar
-									</span>
+									</button>
+									<Link to="/" className="btn-skip btn-skip-info">
+										<span>Volver</span>
+									</Link>
 								</div>
 							</div>
 						</div>

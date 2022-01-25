@@ -8,29 +8,84 @@
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: cover;
-    -webkit-box-shadow: 9px 20px 5px 2px rgba(0,0,0,0.31);
--moz-box-shadow: 9px 20px 5px 2px rgba(0,0,0,0.31);
-box-shadow: 9px 20px 5px 2px rgba(0,0,0,0.31);
-    padding-top: 220px;
-    
-   
+    padding-block: 3rem;
+    min-height: 75vh;
 }
 
-button {
-    display: flex;
-    align-items: center;
-    box-shadow: inset 0 0 0 2px $--color-pink-dark;
-    color: $--color-pink-dark;
-    padding-inline: 1rem;
+// button {
+//     display: flex;
+//     align-items: center;
+//     box-shadow: inset 0 0 0 2px $--color-pink-dark;
+//     color: $--color-pink-dark;
+//     padding-inline: 1rem;
+//     &:hover {
+//         color: white;
+//         background-color: $--color-pink-dark;
+// }}
+
+p.of-y {
+    max-height: 250px;
+    position: relative;
+    padding-right: 0.4em;
+    &::-webkit-scrollbar-track { margin-block: 0 }
+    &::-webkit-scrollbar-thumb {
+        background-color: $--scrollbar-color;
+        border-radius: 100vw;
+    }
+    @supports (scrollbar-color: red blue) {
+        & {
+            scrollbar-color: $--scrollbar-color transparent;
+            scrollbar-width: thin
+        }
+    }
     &:hover {
-        color: white;
-        background-color: $--color-pink-dark;
-}}
+        &::-webkit-scrollbar-thumb {
+            background-color: rgba(177, 177, 177, 0.671);
+            border-radius: 100vw;
+        }
+        @supports (scrollbar-color: red blue) {
+            & {
+                scrollbar-color: rgba(177, 177, 177, 0.671) transparent;
+                scrollbar-width: thin
+            }
+        }
+    }
+    &::after {
+        content: '';
+        position: absolute;
+    }
+}
 
 .head_title{
     font-family: 'Satisfy', cursive;
 }
 
-.card , .box{
-    border-radius: 20%;
+.info-card {
+    background-color: transparent;
+    border-color: transparent;
+}
+
+.info-box{
+    width: calc(min(80vw, 400px));
+    border-radius: 70px;
+    padding: 2rem;
+    background-color: white;
+    margin-inline: 10vw;
+    box-shadow: rgba(0, 0, 0, 0.56) 0px 22px 70px 4px;
+}
+
+div > a.btn-skip-info {
+    gap: 0;
+    margin-inline: auto;
+    justify-content: center;
+}
+
+button.btn-pink {
+    color: #dc76fa;
+    box-shadow: inset 0 0 0 2px #dc76fa;
+    &:hover {
+        background-color: #f9baff;
+        color: white
+    }
+    margin-bottom: 0.5rem;
 }

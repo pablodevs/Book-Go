@@ -472,7 +472,7 @@ $--br-client-tab-x2: 10px;
     direction: rtl;
     & li { direction: ltr; }
 }
-.clients-list ul, textarea {
+.clients-list ul, textarea, .of-y {
     overflow-y: auto;
     &::-webkit-scrollbar { width: 0.4em }
     &::-webkit-scrollbar-thumb {
