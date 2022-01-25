@@ -70,11 +70,12 @@ $--padding-top: 2rem;
     border-radius: 50%;
     object-fit: cover;
     object-position: top;
+    box-shadow: 0 4px 10px 0 rgba(0,0,0,0.14);
 }
 // Default avatar
 .avatar {
     background-color: rgba(0, 0, 0, 0.3);
-    border-radius: 9999px;
+    border-radius: 100%;
     padding: 6px;
     display: flex;
 }

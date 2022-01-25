@@ -37,6 +37,25 @@ a._navbar-link {
     padding: 0.2rem 0;
 }
 
+._navbar-profile-wrapper {
+    display: flex;
+    align-items: center;
+    margin-right: 1rem;
+    gap: 0.4rem;
+    & > div {
+        color: $--color-blue-light;
+        font-weight: normal;
+        font-size: 0.9rem;
+        & > i {
+            font-size: 0.7rem;
+            margin-left: 0.2rem;
+        }
+    }
+    &:hover img {
+        box-shadow: 0 0 0 2px $--color-blue-light; 
+    }
+}
+
 .avatar-miniature {
     height: 35px;
     width: 35px;
@@ -46,7 +65,7 @@ a._navbar-link {
     border-radius: 50%;
     object-fit: cover;
     object-position: top;
-    margin-right: 1rem
+    transition: all 0.3s ease-out;
 }
 
 $--login-link-border: 2px;
