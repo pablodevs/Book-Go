@@ -63,6 +63,15 @@ def resetTimeFormat(hours, minutes):
 
     return f"{outputList[0]}:{outputList[1]}"
 
+def resetStringHour(stringHour):
+    '''
+    Function to convert string hours ("10:00") in minutes integer
+        example input: 
+            - hours (integer): 10:30
+        output (integer, in minutes) >>> 630
+    '''
+    return int(stringHour.split(':')[0]) * 60 + int(stringHour.split(':')[1])
+
 def getDispo(schedule, duration, service_id, date):
     '''
         Example input:
@@ -72,8 +81,8 @@ def getDispo(schedule, duration, service_id, date):
         output (array of strings) >>> ['10:00', '10:45', '11:30', '12:15', '13:00', '13:45', '14:30', '15:15', '16:00', '16:45', '17:30', '18:15', '19:00']
     '''
 
-    timeFrom = int(schedule[0].split(':')[0]) * 60 + int(schedule[0].split(':')[1])
-    timeTo = int(schedule[1].split(':')[0]) * 60 + int(schedule[1].split(':')[1])
+    timeFrom = resetStringHour(schedule[0])
+    timeTo = resetStringHour(schedule[1])
     timeInterval = (timeTo - timeFrom)
 
     # Formatea el style de la fecha
@@ -88,15 +97,15 @@ def getDispo(schedule, duration, service_id, date):
         if datetime.strptime(book["date"], "%d/%m/%Y").strftime("%d/%m/%Y") == date and book["status"] == "Confirmed":
             hoursNotDispo.append(book["time"])
     
-    # Modifica el timeFrom si se trata de Hoy
-    if (date == today.strftime("%d/%m/%Y")):
-        timeFrom = int(today.strftime("%H")) * 60 + int(today.strftime("%M"))
-
     output = []
 
     for i in range(timeFrom, timeTo, duration):
         if (i + duration < timeTo):
             resetedHour = resetTimeFormat(math.floor(i / 60), i % 60)
+
+            if today.strftime("%d/%m/%Y") == date and resetStringHour(resetedHour) < resetStringHour(today.strftime("%H:%M")):
+                continue
+
             if resetedHour not in hoursNotDispo:
                 output.append(resetedHour)
 
