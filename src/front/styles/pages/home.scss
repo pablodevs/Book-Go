@@ -1,3 +1,35 @@
+.home-background{
+    position: relative;
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+  
+.container .btn-home {
+position: absolute;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+-ms-transform: translate(-50%, -50%);
+background-color:#2f3535;
+color: white;
+font-size: 16px;
+padding: 12px 24px;
+border: none;
+cursor: pointer;
+border-radius: 5px;
+}
+
+.container .btn-home:hover {
+background-color: grey;
+}
+@media(max-width: 768px) {
+    .full-width {
+        width: 50%;  
+    }
+}
 
 .service-card.card-background::after {
     content: '';
