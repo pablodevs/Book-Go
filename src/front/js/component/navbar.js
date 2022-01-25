@@ -23,8 +23,11 @@ export const Navbar = () => {
 	const url = window.location.pathname.split("/").pop();
 	useEffect(
 		() => {
-			if (window.location.pathname !== "/") setServicesNavlink(false);
-			else setServicesNavlink(true);
+			console.log(window.location.pathname);
+			if (window.location.pathname !== "/") {
+				console.log("YES");
+				setServicesNavlink(false);
+			} else setServicesNavlink(true);
 		},
 		[url]
 	);
@@ -40,6 +43,7 @@ export const Navbar = () => {
 							document.body.scrollTop = 0;
 							document.documentElement.scrollTop = 0;
 							setNavMenu(false);
+							setServicesNavlink(true);
 						}}>
 						Inicio
 					</NavLink>

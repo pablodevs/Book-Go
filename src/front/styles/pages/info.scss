@@ -8,8 +8,12 @@
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: cover;
-    padding-block: 3rem;
+    padding-bottom: 3rem;
     min-height: 75vh;
+
+    transform: translateY(-70px);
+    padding-top: calc(3rem + 70px);
+    margin-bottom: -70px
 }
 
 // button {

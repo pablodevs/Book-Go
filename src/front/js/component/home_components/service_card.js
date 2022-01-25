@@ -19,8 +19,9 @@ export const ServiceCard = props => {
 			<div className="card-body d-flex flex-column text-light" style={{ zIndex: "1", height: "175px" }}>
 				<span className="card-title">{props.service.name}</span>
 				<small className="card-text">{props.service.description}</small>
-				<Link type="button" to={"/info/" + props.service.id} className="btn btn-info mt-auto">
+				<Link type="button" to={"/info/" + props.service.id} className="btn-skip btn-card-info">
 					Más Info
+					<i className="fas fa-arrow-right" />
 				</Link>
 			</div>
 		</div>

@@ -7,6 +7,11 @@ export const Info = () => {
 	const { actions, store } = useContext(Context);
 	const params = useParams();
 
+	useEffect(() => {
+		document.body.scrollTop = 0;
+		document.documentElement.scrollTop = 0;
+	}, []);
+
 	return store.services.map((service, idx) => {
 		if (service.id === parseInt(params.id)) {
 			return (
