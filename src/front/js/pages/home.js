@@ -16,18 +16,15 @@ export const Home = () => {
 	}, []);
 
 	return (
-		<div className="container-fluid view">
-			<div className="container home-background">
-				<img src={home_img} />
-				<Link
-					type="button"
+		<div className="container-fluid">
+			<div className="home-background">
+				<button
 					className="btn btn-home mt-auto full-width"
-					to="#"
 					onClick={() => actions.setPopup("booking", "¿Qué estás buscando?")}>
 					¡Reserva aquí!
-				</Link>
+				</button>
 			</div>
-			<div className="container-fluid my-5 mx-auto" id="services">
+			<div className="container-fluid my-5 mx-auto px-3" id="services">
 				{store.services.length > 0 ? (
 					<div className="row gap-5 justify-content-center">
 						{store.services.map((item, index) => {
