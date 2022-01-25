@@ -23,9 +23,9 @@ div.home-background {
 button.btn-home {
     font-family: 'Poppins', sans-serif;
     letter-spacing: 0.15rem;
-    font-size: 2rem;
+    font-size: clamp(1.5rem, 6vw, 2rem);
     margin: 0;
-    margin-left: 25vw;
+    margin-left: 18vw;
     @media screen and (max-width: 767.9px) {
         margin-inline: auto;
         background-color: white;
@@ -65,24 +65,25 @@ button.btn-home {
 }
 .text-divider {
     flex-wrap: nowrap;
-    width: 22vw;
-    min-width: 150px;
+    width: clamp(150px, 17vw, 220px);
     filter: brightness(1.1)
 }
 .emphasis {
     // margin-left: 1.5rem;
     letter-spacing: .3rem;
     color: #009783;
-    text-shadow: -10px -10px 0px #77cbc06e,
-                 10px 10px 0px #f8d0307a,
+    text-shadow: -10px -10px 0px #79e0d348,
+                 10px 10px 0px #f8d03050,
 }
 
 .service-card.card-background::after {
     content: '';
     position: absolute;
-    background-image: linear-gradient(0deg, #000000bd, #00000057, #0000001f 54%, transparent 100%);
+    bottom: 0;
+    background-image: linear-gradient(0deg, #000000a2, transparent 100%);
     width: 100%;
-    height: 100%;
+    height: 20%;
+    transition:  0.4s ease-out;
 }
 
 .service-card .card-body {
@@ -129,7 +130,7 @@ button.btn-home {
     margin-bottom: 0.3rem;
 }
 
-.service-card:hover .card-body {
+.service-card:hover .card-body, .service-card-wrapper:focus-visible .service-card .card-body{
     bottom: 0;
     & .card-title::after {
         transform: scaleX(100%);
@@ -137,4 +138,33 @@ button.btn-home {
         -moz-transform: scaleX(100%);
         -webkit-transform: scaleX(100%);
     }
+}
+
+.service-card:hover.card-background::after {
+    height: 100%;
+    background-image: linear-gradient(0deg, #000000bd, #00000057, #0000001f 54%, transparent 100%);
+}
+.service-card-wrapper:focus-visible {
+    outline: none;
+    & .service-card.card-background::after{
+        height: 100%;
+        background-image: linear-gradient(0deg, #000000bd, #00000057, #0000001f 54%, transparent 100%);
+    }
+}
+
+a.btn-skip.btn-card-info {
+    width: fit-content;
+    color: $--color-blue-regular;
+    transition: all 0.2s ease-out;
+    & > i {
+        color: $--color-blue-regular;
+    }
+    &:hover {
+        color: $--color-blue-light;
+        & > i {
+            color: $--color-blue-light;
+            margin-left: 0.3rem
+        }
+    }
+    &:focus-visible { outline: none }
 }

@@ -60,7 +60,11 @@
 .popup-return { display: flex }
 .popup-close { display: flex; margin-left: auto }
 
-.popup-bg-show { visibility: visible; opacity: 1; transition: all 0.2s ease-out }
+.popup-bg-show {
+    visibility: visible;
+    opacity: 1;
+    transition: all 0.2s ease-out;
+}
 .popup-show {
     transform: translate(-50%, -50%);
     opacity: 1;
@@ -131,7 +135,10 @@ img.popup-service-img {
         opacity: 1;
         transition: all 0.3s ease-out;
     }
-    .popup-show { transform: translateY(0) }
+    .popup-show {
+        transform: translateY(0);
+        padding-bottom: 4rem;
+    }
     .popup-body {
         padding: 0 1rem 1rem 1rem;
         overflow-y: auto;

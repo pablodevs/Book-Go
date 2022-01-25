@@ -1,4 +1,5 @@
 import React, { useEffect, useContext } from "react";
+import { Link } from "react-router-dom";
 import { ServiceCard } from "../component/home_components/service_card";
 import { ScrollTop } from "../component/scrollTopButton";
 import { Context } from "../store/appContext";
@@ -36,9 +37,9 @@ export const Home = () => {
 						{store.services.map((item, index) => {
 							if (item.is_active)
 								return (
-									<div className="col-auto" key={index}>
+									<Link to={"/info/" + item.id} className="col-auto service-card-wrapper" key={index}>
 										<ServiceCard service={item} />
-									</div>
+									</Link>
 								);
 						})}
 					</div>
