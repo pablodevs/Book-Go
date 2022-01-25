@@ -1,9 +1,7 @@
 import React, { useEffect, useContext } from "react";
 import { ServiceCard } from "../component/home_components/service_card";
 import { ScrollTop } from "../component/scrollTopButton";
-import { Link } from "react-router-dom";
 import { Context } from "../store/appContext";
-import home_img from "../../img/zen.jpg";
 import "../../styles/pages/home.scss";
 
 export const Home = () => {
