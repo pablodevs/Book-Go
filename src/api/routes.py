@@ -10,8 +10,8 @@ import os
 from datetime import datetime, time, timedelta
 from sqlalchemy import and_
 
-from flask_mail import Mail, Message
 
+from flask_mail import Mail, Message
 import math
 
 #para la autenticación y generar el token
