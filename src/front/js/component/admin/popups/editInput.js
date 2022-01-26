@@ -1,15 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
-import PropTypes from "prop-types";
 import { Context } from "../../../store/appContext";
 
-export const EditInput = props => {
+export const EditInput = () => {
 	const { actions, store } = useContext(Context);
-	const [data, setData] = useState({ id: null, name: "" });
-
-	useEffect(() => {
-		let prod_id = store.services.find(element => element.name === props.input).id;
-		setData({ id: prod_id, name: props.input });
-	}, []);
+	const [data, setData] = useState({ id: store.popupObj.id, name: store.popupObj.service });
 
 	const handleSubmit = event => {
 		event.preventDefault();
@@ -49,8 +43,4 @@ export const EditInput = props => {
 			</form>
 		</div>
 	);
-};
-
-EditInput.propTypes = {
-	input: PropTypes.string
 };

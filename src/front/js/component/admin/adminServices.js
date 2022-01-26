@@ -234,7 +234,7 @@ export const AdminServices = () => {
 										// On click: abrir un cuadro de dialogo pequeño para cambiar el nombre del servicio
 										onClick={() => {
 											return data.id
-												? actions.setPopup("edit-service-name", `Editar ${data.service}`)
+												? actions.setPopup("edit-service-name", `Editar ${data.service}`, data)
 												: "";
 										}}>
 										<i className="fas fa-pen" />

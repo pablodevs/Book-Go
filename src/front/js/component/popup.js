@@ -85,7 +85,7 @@ export const Popup = () => {
 				) : store.popup === "guest" ? (
 					<Guest />
 				) : store.popup === "edit-service-name" ? (
-					<EditInput input={store.popupTitle.split(" ")[store.popupTitle.split(" ").length - 1]} />
+					<EditInput />
 				) : store.popup === "edit-img" ? (
 					<EditImg />
 				) : store.popup === "add-img" ? (

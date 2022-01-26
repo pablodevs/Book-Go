@@ -4,6 +4,7 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Satisfy&display=swap');
 
+
 .home {
     transform: translateY(-70px);
 }
@@ -18,14 +19,44 @@ div.home-background {
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: cover;
+    @media screen and (max-width: 767.9px) {
+        box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 75px -20px, rgba(0, 0, 0, 0.3) 0px 20px 40px -20px;
+    }
+}
+
+.calltoaction {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+    width: 100%;
+    & .calltoaction-title {
+        & > div {
+            position: relative;
+            width: 100%;
+            padding: 1rem;
+            background-color: rgba(255, 255, 255, 0.623);
+        }
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-size: clamp(1.4rem, 3vw, 2.3rem);
+        line-height: 1.5;
+        font-weight: bold;
+        color: #017767;
+        text-align: center;
+    }
+}
+.calltoaction-question {
+    font-size: clamp(2rem, 4vw, 2.7rem);
 }
 
 button.btn-home {
     font-family: 'Poppins', sans-serif;
     letter-spacing: 0.15rem;
-    font-size: clamp(1.5rem, 6vw, 2rem);
-    margin: 0;
-    margin-left: 18vw;
+    font-size: clamp(1.3rem, 2.8vw, 1.8rem);
+    margin: 1rem 0 0 0;
     @media screen and (max-width: 767.9px) {
         margin-inline: auto;
         background-color: white;
@@ -78,9 +109,13 @@ button.btn-home {
 
 .service-card {
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease-out;
     & > img { transition: all 0.3s ease-out }
-    &:hover > img {
-        transform: scale(1.1);
+    &:hover {
+        box-shadow: 10px 10px 3rem 0 rgba(143, 143, 143, 0.644);
+        & > img {
+            transform: scale(1.1);
+        }
     }
 }
 

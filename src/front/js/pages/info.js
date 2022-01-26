@@ -31,7 +31,7 @@ export const Info = () => {
 										className="btn-cool btn-pink"
 										onClick={() => {
 											actions.updateBooking("service", service);
-											actions.setPopup("calendar", "Selecciona el día", service.name);
+											actions.setPopup("calendar", `${service.name}: ¿Cuándo?`, service.name);
 										}}>
 										Reservar
 									</button>

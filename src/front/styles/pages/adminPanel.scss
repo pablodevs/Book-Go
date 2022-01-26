@@ -614,9 +614,13 @@ $--pills-spacing: 0.4rem;
 }
 
 .bookingLi {
+    display: flex;
+    text-align: center;
+    & > * { flex: auto }
     width: 100%;
     padding: 0.4rem;
     border-bottom: 1px dashed red;
+    & > li { margin-block: auto }
 }
 
 /*===== Negocio y Horario =====*/

@@ -10,6 +10,9 @@ header {
     z-index: 1000;
     top: 0;
     box-shadow: rgba(0, 0, 0, 0.21) 0px 10px 34px, rgba(0, 0, 0, 0.16) 0px 12px 19px;
+    @media screen and (max-width: 767.9px) {
+        box-shadow: rgba(0, 0, 0, 0.137) 0px 5px 20px, rgba(0, 0, 0, 0.11) 0px 7px 13px;
+    }
 }
 
 ._navbar {

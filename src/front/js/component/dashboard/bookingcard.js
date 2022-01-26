@@ -49,7 +49,7 @@ export const BookingCard = props => {
 					{props.status === "Confirmed" ? (
 						<button
 							className="btn-skip"
-							onClick={e => {
+							onClick={() => {
 								const deleteFunct = () => actions.cancelBooking(props.bookID);
 								actions.setPopup(
 									"confirm",

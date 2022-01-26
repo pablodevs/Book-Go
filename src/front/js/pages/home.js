@@ -18,11 +18,22 @@ export const Home = () => {
 	return (
 		<div className="container-fluid home">
 			<div className="home-background center">
-				<button
-					className="btn-cool btn-home"
-					onClick={() => actions.setPopup("booking", "¿Qué estás buscando?")}>
-					¡Reserva aquí!
-				</button>
+				<div className="calltoaction">
+					<h1 className="calltoaction-title">
+						<div>
+							<span className="calltoaction-messsage">
+								Descubre y reserva en el mejor balneario y spa.
+							</span>
+							<br />
+							<span className="calltoaction-question">¿A qué esperas?</span>
+						</div>
+						<button
+							className="btn-cool btn-home"
+							onClick={() => actions.setPopup("booking", "¿Qué estás buscando?")}>
+							¡Reserva aquí!
+						</button>
+					</h1>
+				</div>
 			</div>
 			<div className="center home-subtitle-wrapper" id="services">
 				<img src={text_divider} className="text-divider" />
