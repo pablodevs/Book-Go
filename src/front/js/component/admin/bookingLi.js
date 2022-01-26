@@ -28,8 +28,6 @@ export const BookingLi = props => {
 		return `${time} — ${resetTimeFormat(endTimeHours, endTimeMins)}`;
 	};
 
-	// useEffect(() => {}, []);
-
 	return (
 		<ul className="bookingLi">
 			<li
@@ -76,7 +74,8 @@ export const BookingLi = props => {
 							className="bookingLi-btn-cancel center"
 							data-tooltip="Cancelar cita"
 							onClick={() => {
-								const deleteFunct = () => actions.editBooking(props.bookID, { status: "Canceled" });
+								const deleteFunct = () =>
+									actions.editBooking(props.bookID, { status: "Canceled" }, props.client.id);
 								actions.setPopup(
 									"confirm",
 									"Cancelar cita",
@@ -98,7 +97,8 @@ export const BookingLi = props => {
 							className="bookingLi-btn-confirm center"
 							data-tooltip="Confirmar cita"
 							onClick={() => {
-								const confirmFunct = () => actions.editBooking(props.bookID, { status: "Confirmed" });
+								const confirmFunct = () =>
+									actions.editBooking(props.bookID, { status: "Confirmed" }, props.client.id);
 								actions.setPopup(
 									"confirm",
 									"Confirmar cita",
@@ -128,6 +128,7 @@ export const BookingLi = props => {
 BookingLi.propTypes = {
 	date: PropTypes.object,
 	service: PropTypes.object,
+	client: PropTypes.object,
 	status: PropTypes.string,
 	bookID: PropTypes.number
 };

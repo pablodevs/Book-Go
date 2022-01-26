@@ -822,7 +822,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			// Desde el dashboard puedes cancelar una cita
-			editBooking: async (id, changes) => {
+			editBooking: async (id, changes, client_id) => {
 				const actions = getActions();
 				const store = getStore();
 				try {
@@ -844,12 +844,33 @@ const getState = ({ getStore, getActions, setStore }) => {
 						});
 						throw Error(response);
 					} else {
+						actions.getClientBookings(client_id);
 						actions.closePopup();
 						return resp;
 					}
 				} catch (err) {
 					return err.json();
 				}
+			},
+
+			// Obtener todas las citas de un usuario
+			getClientBookings: client_id => {
+				const actions = getActions();
+				const store = getStore();
+				fetch(`${process.env.BACKEND_URL}/user/${client_id}/bookings`, {
+					headers: {
+						Authorization: "Bearer " + store.token
+					}
+				})
+					.then(response => {
+						if (!response.ok) throw Error(response);
+						return response.json();
+					})
+					.then(resp => {
+						setStore({ clientBookings: resp });
+						return resp;
+					})
+					.catch(err => console.error(err.message));
 			}
 		}
 	};

@@ -478,7 +478,7 @@ $--br-client-tab-x2: 10px;
     direction: rtl;
     & li { direction: ltr; }
 }
-.clients-list ul, textarea, .of-y {
+.clients-list ul, textarea, .of-y, .client-bookings {
     overflow-y: auto;
     &::-webkit-scrollbar { width: 0.4em }
     &::-webkit-scrollbar-thumb {
@@ -516,6 +516,7 @@ $--br-client-tab-x2: 10px;
     flex: 1;
     padding: 1rem 1rem 1rem 2rem;
     max-width: 800px;
+    height: 93vh;
 }
 .client-details-info {
     display: flex;
@@ -558,11 +559,19 @@ $--br-client-tab-x2: 10px;
 $--pills-spacing: 0.4rem;
 
 .client-bookings-wrapper {
+    overflow: hidden;
     width: 100%;
-    height: 100%;
+    flex: 1;
     display: flex;
     flex-direction: column;
     gap: 1rem
+}
+.client-bookings-newbook-btn {
+    color: $--color-grey-dark;
+    &:hover {
+        color: $--color-grey-dark;
+        border-color: $--color-grey-regular;
+    }
 }
 .pills-wrapper {
     font-family: 'Poppins', sans-serif;
@@ -610,13 +619,38 @@ $--pills-spacing: 0.4rem;
 }
 
 .client-bookings {
-    height: 100%;
-    width: 100%;
-    padding: 0.5rem 0.5rem 0 0.5rem;
+    flex: 1;
+    // width: 100%;
+    margin-right: 0.5rem;
+    padding: 0.5rem 0.8rem 0 0.5rem;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 0.4rem;
+    overflow-y: auto;
+    &::-webkit-scrollbar-track { margin-block: 0 }
+    &::-webkit-scrollbar-thumb {
+        background-color: $--scrollbar-color;
+        border-radius: 100vw;
+    }
+    @supports (scrollbar-color: red blue) {
+        & {
+            scrollbar-color: $--scrollbar-color transparent;
+            scrollbar-width: thin
+        }
+    }
+    &:hover {
+        &::-webkit-scrollbar-thumb {
+            background-color: rgba(177, 177, 177, 0.671);
+            border-radius: 100vw;
+        }
+        @supports (scrollbar-color: red blue) {
+            & {
+                scrollbar-color: rgba(177, 177, 177, 0.671) transparent;
+                scrollbar-width: thin
+            }
+        }
+    }
 }
 
 .bookingLi {

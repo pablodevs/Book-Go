@@ -30,26 +30,21 @@ export const ClientsList = () => {
 
 	useEffect(
 		() => {
+			actions.getClients();
 			if (client.id) {
 				setActivePill(0);
 				// Obtenemos todas las reservas
-				fetch(`${process.env.BACKEND_URL}/user/${client.id}/bookings`, {
-					headers: {
-						Authorization: "Bearer " + store.token
-					}
-				})
-					.then(response => {
-						if (!response.ok) throw Error(response);
-						return response.json();
-					})
-					.then(resp => {
-						setBookings(resp);
-					})
-					.catch(err => console.error(err.message));
+				actions.getClientBookings(client.id);
 			} else actions.setActiveClientTab(null);
-			actions.getClients();
 		},
 		[client]
+	);
+
+	useEffect(
+		() => {
+			if (store.clientBookings && store.clientBookings.length !== 0) setBookings(store.clientBookings);
+		},
+		[store.clientBookings]
 	);
 
 	useEffect(
@@ -92,11 +87,25 @@ export const ClientsList = () => {
 					// Compruebo si es una fecha posterior o la reserva es del pasado
 					if (date.getTime() > new Date().getTime())
 						nextBookingsList.push(
-							<BookingLi key={idx} bookID={book.id} date={date} service={service} status={book.status} />
+							<BookingLi
+								key={idx}
+								bookID={book.id}
+								date={date}
+								service={service}
+								status={book.status}
+								client={client}
+							/>
 						);
 					else
 						prevBookingsList.push(
-							<BookingLi key={idx} bookID={book.id} date={date} service={service} status={book.status} />
+							<BookingLi
+								key={idx}
+								bookID={book.id}
+								date={date}
+								service={service}
+								status={book.status}
+								client={client}
+							/>
 						);
 				});
 				setContent(null);
@@ -200,33 +209,20 @@ export const ClientsList = () => {
 										type="button"
 										className="edit-img dashboard-edit-img"
 										data-tooltip-left="Cambiar imagen de perfil"
-										onClick={() => undefined}>
+										onClick={() =>
+											actions.setPopup("edit-img", "Cambiar foto", {
+												...client,
+												preset: "client_images"
+											})
+										}>
 										<i className="fas fa-camera" />
 									</button>
 								</div>
 								<button
 									type="button"
-									className="icon-btn danger"
+									className="icon-btn client-bookings-newbook-btn"
 									data-tooltip-bot="Nueva cita"
-									onClick={() => {
-										return;
-										// if (!data.id) return;
-										// const deleteFunct = () => actions.removeService(data.id);
-										// actions.setPopup(
-										// 	"confirm",
-										// 	`Eliminar ${data.service}`,
-										// 	{
-										// 		button: "Eliminar",
-										// 		toast: {
-										// 			success: "Eliminado",
-										// 			loading: "Eliminando..."
-										// 		},
-										// 		message:
-										// 			"Esta acción no podrá deshacerse y se eliminarán las reservas actuales del servicio."
-										// 	},
-										// 	deleteFunct
-										// );
-									}}>
+									onClick={() => undefined}>
 									<i className="far fa-calendar-alt" />
 								</button>
 							</div>
