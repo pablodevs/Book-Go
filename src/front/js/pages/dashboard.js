@@ -72,6 +72,7 @@ export const Dashboard = () => {
 							<button
 								type="button"
 								className="edit-img dashboard-edit-img"
+								data-tooltip-bot="Cambiar imagen de perfil"
 								onClick={() =>
 									actions.setPopup("edit-img", "Cambiar foto", {
 										...store.user,

@@ -93,7 +93,11 @@ export const ClientsList = () => {
 										</svg>
 									</div>
 								)}
-								<button type="button" className="edit-img dashboard-edit-img" onClick={() => undefined}>
+								<button
+									type="button"
+									className="edit-img dashboard-edit-img"
+									data-tooltip-left="Cambiar imagen de perfil"
+									onClick={() => undefined}>
 									<i className="fas fa-camera" />
 								</button>
 							</div>
