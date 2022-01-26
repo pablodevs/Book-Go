@@ -616,11 +616,19 @@ $--pills-spacing: 0.4rem;
 .bookingLi {
     display: flex;
     text-align: center;
-    & > * { flex: auto }
+    & > * { flex: 1 }
+    border-bottom: 1px solid $--color-grey-dashboard-light;
     width: 100%;
     padding: 0.4rem;
-    border-bottom: 1px dashed red;
     & > li { margin-block: auto }
+}
+.bookingLi-cancel {
+    flex: none;
+    width: 60px;
+}
+.bookingLi-price {
+    font-size: 1.3rem;
+    font-family: 'Poppins', sans-serif;
 }
 
 /*===== Negocio y Horario =====*/

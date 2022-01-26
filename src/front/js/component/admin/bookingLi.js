@@ -28,7 +28,7 @@ export const BookingLi = props => {
 
 	return (
 		<ul className="bookingLi">
-			<li>
+			<li className="fw-bold">
 				{props.date.toLocaleDateString(undefined, {
 					year: "numeric",
 					month: "2-digit",
@@ -48,10 +48,18 @@ export const BookingLi = props => {
 			<li>
 				Estado
 				<br />
-				{props.status}
+				{props.status === "Confirmed" ? (
+					<span className="bookingcard-confirmed">
+						Confirmada <i className="far fa-check-circle" />
+					</span>
+				) : (
+					<span className="bookingcard-canceled">
+						Cancelada <i className="fas fa-ban" />
+					</span>
+				)}
 			</li>
-			<li>{props.service.price} €</li>
-			<li>
+			<li className="fw-bold bookingLi-price">{props.service.price} €</li>
+			<li className="bookingLi-cancel">
 				{props.status === "Confirmed" ? (
 					<button
 						className="logout btn-cool"
@@ -74,6 +82,26 @@ export const BookingLi = props => {
 						<i className="fas fa-trash-alt m-0" />
 					</button>
 				) : (
+					// <button
+					// 	className="btn-cool btn-confirm"
+					// 	onClick={() => {
+					// 		const deleteFunct = () => actions.cancelBooking(props.bookID);
+					// 		actions.setPopup(
+					// 			"confirm",
+					// 			"Cancelar cita",
+					// 			{
+					// 				button: "Cancelar",
+					// 				toast: {
+					// 					success: "Cita cancelada",
+					// 					loading: "Cancelando..."
+					// 				},
+					// 				message: "Esta acción no podrá deshacerse."
+					// 			},
+					// 			deleteFunct
+					// 		);
+					// 	}}>
+					// 	<i className="fas fa-trash-alt m-0" />
+					// </button>
 					""
 				)}
 			</li>

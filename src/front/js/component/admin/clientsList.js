@@ -42,7 +42,8 @@ export const ClientsList = () => {
 
 	useEffect(
 		() => {
-			if (client.id)
+			if (client.id) {
+				setActivePill(0);
 				// Obtenemos todas las reservas
 				fetch(`${process.env.BACKEND_URL}/user/${client.id}/bookings`, {
 					headers: {
@@ -57,8 +58,9 @@ export const ClientsList = () => {
 						setBookings(resp);
 					})
 					.catch(err => console.error(err.message));
+			}
 		},
-		[client]
+		[client, store.popup]
 	);
 
 	useEffect(
@@ -213,16 +215,12 @@ export const ClientsList = () => {
 										style={activePill ? { transform: "translateX(100%)" } : {}}
 									/>
 									<button
-										onClick={() => {
-											setActivePill(0);
-										}}
+										onClick={() => setActivePill(0)}
 										className={"pills" + (activePill ? "" : " active")}>
 										Próximas reservas <span>({nextBookings.length})</span>
 									</button>
 									<button
-										onClick={() => {
-											setActivePill(1);
-										}}
+										onClick={() => setActivePill(1)}
 										className={"pills" + (activePill ? " active" : "")}>
 										Reservas pasadas <span>({prevBookings.length})</span>
 									</button>
