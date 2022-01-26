@@ -187,7 +187,7 @@ export const AccountSettings = () => {
 			<button
 				className="delete-account"
 				onClick={() => {
-					const deleteFunct = () => actions.deleteUser();
+					const deleteFunct = () => actions.deleteUser(data.id);
 					actions.setPopup(
 						"confirm",
 						"Eliminar cuenta",

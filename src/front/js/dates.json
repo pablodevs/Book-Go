@@ -13,5 +13,19 @@
         "noviembre",
         "diciembre"
     ],
-    "day_text": ["D", "L", "M", "X", "J", "V", "S"]
+    "day_text": ["D", "L", "M", "X", "J", "V", "S"],
+    "pretty_month": [
+        "Ene.",
+        "Feb.",
+        "Mar.",
+        "Abr.",
+        "May.",
+        "Jun.",
+        "Jul.",
+        "Ago.",
+        "Sep.",
+        "Oct.",
+        "Nov.",
+        "Dic."
+    ]
 }

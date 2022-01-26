@@ -322,6 +322,7 @@ input.search-input[type="search"]::-webkit-search-results-decoration {
 [data-tooltip], [data-tooltip-bot], [data-tooltip-left] {
     position: relative;
     cursor: default;
+    z-index: 1;
 }
 
 [data-tooltip]::after, [data-tooltip-bot]::after, [data-tooltip-left]::after {

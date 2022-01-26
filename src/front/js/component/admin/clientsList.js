@@ -25,20 +25,8 @@ export const ClientsList = () => {
 	};
 
 	const getClientInfo = newClient => {
-		setClient({
-			id: newClient.id,
-			name: newClient.name,
-			lastname: newClient.lastname,
-			email: newClient.email,
-			phone: newClient.phone,
-			profile_image_url: newClient.profile_image_url
-		});
+		setClient(newClient);
 	};
-
-	useEffect(() => {
-		actions.getClients();
-		actions.setActiveClientTab(null);
-	}, []);
 
 	useEffect(
 		() => {
@@ -58,9 +46,10 @@ export const ClientsList = () => {
 						setBookings(resp);
 					})
 					.catch(err => console.error(err.message));
-			}
+			} else actions.setActiveClientTab(null);
+			actions.getClients();
 		},
-		[client, store.popup]
+		[client]
 	);
 
 	useEffect(
@@ -125,7 +114,7 @@ export const ClientsList = () => {
 				clientsList = store.clients.filter(
 					client =>
 						(client.name + " " + client.lastname).toLowerCase().includes(srchInput.toLowerCase()) ||
-						client.id === srchInput
+						client.id == srchInput
 				);
 				clientsList = clientsList.map((client, idx) => (
 					<ClientTab client={client} key={idx + 1} sendClientInfo={getClientInfo} />
@@ -166,29 +155,79 @@ export const ClientsList = () => {
 					</div>
 					<ul>{list}</ul>
 				</aside>
-				{Object.keys(client).length ? (
+				{Object.keys(client).length && store.clients.map(element => element.id).includes(client.id) ? (
 					<div className="client-details">
 						<div className="client-details-info">
-							<div className="dashboard-img-wrapper">
-								{client.profile_image_url ? (
-									<img className="dashboard-img" src={client.profile_image_url} />
-								) : (
-									<div className="avatar dashboard-avatar">
-										<svg viewBox="0 0 24 24" className="avatar__img">
-											<path
-												d="M12,3.5c2.347,0,4.25,1.903,4.25,4.25S14.347,12,12,12s-4.25-1.903-4.25-4.25S9.653,3.5,12,3.5z
-                                M5,20.5
-                                c0-3.866,3.134-7,7-7s7,3.134,7,7H5z"
-											/>
-										</svg>
-									</div>
-								)}
+							<div className="client-details-header">
 								<button
 									type="button"
-									className="edit-img dashboard-edit-img"
-									data-tooltip-left="Cambiar imagen de perfil"
-									onClick={() => undefined}>
-									<i className="fas fa-camera" />
+									className="icon-btn danger"
+									data-tooltip-bot="eliminar usuario"
+									onClick={() => {
+										const deleteFunct = () => actions.deleteUser(client.id);
+										actions.setPopup(
+											"confirm",
+											`Eliminar ${client.name}`,
+											{
+												button: "Eliminar",
+												toast: {
+													success: "Eliminado",
+													loading: "Eliminando..."
+												},
+												message:
+													"Esta acción no podrá deshacerse y se eliminarán las reservas asociadas al usuario."
+											},
+											deleteFunct
+										);
+									}}>
+									<i className="fas fa-trash-alt" />
+								</button>
+								<div className="dashboard-img-wrapper">
+									{client.profile_image_url ? (
+										<img className="dashboard-img" src={client.profile_image_url} />
+									) : (
+										<div className="avatar dashboard-avatar">
+											<svg viewBox="0 0 24 24" className="avatar__img">
+												<path
+													d="M12,3.5c2.347,0,4.25,1.903,4.25,4.25S14.347,12,12,12s-4.25-1.903-4.25-4.25S9.653,3.5,12,3.5z
+                                M5,20.5
+                                c0-3.866,3.134-7,7-7s7,3.134,7,7H5z"
+												/>
+											</svg>
+										</div>
+									)}
+									<button
+										type="button"
+										className="edit-img dashboard-edit-img"
+										data-tooltip-left="Cambiar imagen de perfil"
+										onClick={() => undefined}>
+										<i className="fas fa-camera" />
+									</button>
+								</div>
+								<button
+									type="button"
+									className="icon-btn danger"
+									data-tooltip-bot="Nueva cita"
+									onClick={() => {
+										return;
+										// if (!data.id) return;
+										// const deleteFunct = () => actions.removeService(data.id);
+										// actions.setPopup(
+										// 	"confirm",
+										// 	`Eliminar ${data.service}`,
+										// 	{
+										// 		button: "Eliminar",
+										// 		toast: {
+										// 			success: "Eliminado",
+										// 			loading: "Eliminando..."
+										// 		},
+										// 		message:
+										// 			"Esta acción no podrá deshacerse y se eliminarán las reservas actuales del servicio."
+										// 	},
+										// 	deleteFunct
+										// );
+									}}>
+									<i className="far fa-calendar-alt" />
 								</button>
 							</div>
 							<div className="client-details-name">

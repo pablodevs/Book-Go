@@ -54,7 +54,7 @@ a._navbar-link {
             margin-left: 0.2rem;
         }
     }
-    &:hover img {
+    &:hover ._navbar-profile-img, &:hover .avatar-miniature {
         box-shadow: 0 0 0 2px $--color-blue-light; 
     }
 }
@@ -64,11 +64,13 @@ a._navbar-link {
     width: 35px;
 }
 
+._navbar-profile-wrapper ._navbar-profile-img, ._navbar-profile-wrapper .avatar-miniature {
+    transition: all 0.3s ease-out;
+}
 ._navbar-profile-img {
     border-radius: 50%;
     object-fit: cover;
     object-position: top;
-    transition: all 0.3s ease-out;
 }
 
 $--login-link-border: 2px;

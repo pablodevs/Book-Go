@@ -10,17 +10,21 @@ export const ConfirmPopup = () => {
 				{store.popupObj.message}
 			</p>
 			<button
-				className="btn-cool danger"
+				className={"btn-cool" + (store.popupObj.style === "success" ? " btn-confirm" : " danger")}
 				onClick={() => {
 					actions.setToast(
 						"promise",
 						{ loading: store.popupObj.toast.loading, success: store.popupObj.toast.success },
 						store.popupFunct(),
-						"toast-danger"
+						`toast-${store.popupObj.style || "danger"}`
 					);
 				}}>
 				{store.popupObj.button}
-				<i className="fas fa-trash-alt" />
+				{store.popupObj.style === "success" ? (
+					<i className="fas fa-check" />
+				) : (
+					<i className="fas fa-trash-alt" />
+				)}
 			</button>
 		</div>
 	);

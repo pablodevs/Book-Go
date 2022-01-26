@@ -328,7 +328,7 @@ def create_new_user():
 
 # GET, MODIFY OR DELETE A USER
 # Protect a route with jwt_required, which will kick out requests without a valid JWT present.
-@api.route('/user', methods=['PUT', 'GET', 'DELETE'])
+@api.route('/user', methods=['PUT', 'GET'])
 @jwt_required() # Cuando se recive una peticion, se valida que exista ese token y que sea valido
 def handle_single_user():
     """
@@ -396,27 +396,46 @@ def handle_single_user():
     elif request.method == 'GET':
         return jsonify(user.serialize()), 200
     
-    # DELETE a user
-    elif request.method == 'DELETE':
-        if user.serialize()["public_id"]:
-            # Delete current image in cloudinary
-            cloudinaryResponse = cloudinary.uploader.destroy(user.serialize()["public_id"])
-            if cloudinaryResponse["result"] != "ok":
-                raise APIException('La imagen no existe o el public id es erróneo.', status_code=404)
-
-        deleted_id = user.serialize()["id"]
-        deleted_email = user.serialize()["email"]
-
-        # Delete all bookings of user
-        all_bookings = Book.query.filter_by(user_id = current_user_id).all()
-        for book in all_bookings:
-            db.session.delete(book)
-
-        db.session.delete(user)
-        db.session.commit()
-        return jsonify({"message": f"The user with id {deleted_id} and email {deleted_email} has been deleted."}), 200
-
     return jsonify({"message": "Invalid Method."}), 404
+
+# DELETE A USER BY ID
+@api.route('/user/<int:user_id>', methods=['PUT', 'GET', 'DELETE'])
+@jwt_required() # Cuando se recive una peticion, se valida que exista ese token y que sea valido
+def delete_user(user_id):
+    """
+    Delete a user
+    """
+
+    current_user_id = get_jwt_identity() # obtiene el id del usuario asociado al token (id == sub en jwt decode)
+    user = User.query.get(current_user_id)
+
+    # Data validation
+    if user is None:
+        raise APIException('User not found in data base.', status_code=404)
+    
+    # Admin or user with user_id Validation
+    if not user.serialize()["is_admin"] and user.serialize()["id"] != user_id:
+        raise APIException("You don't have permission.", status_code=404)
+
+    user_to_delete = User.query.get(user_id)
+
+    if user_to_delete.serialize()["public_id"]:
+        # Delete current image in cloudinary
+        cloudinaryResponse = cloudinary.uploader.destroy(user_to_delete.serialize()["public_id"])
+        if cloudinaryResponse["result"] != "ok":
+            raise APIException('La imagen no existe o el public id es erróneo.', status_code=404)
+
+    deleted_id = user_to_delete.serialize()["id"]
+    deleted_email = user_to_delete.serialize()["email"]
+
+    # Delete all bookings of user_to_delete
+    all_bookings = Book.query.filter_by(user_id = user_id).all()
+    for book in all_bookings:
+        db.session.delete(book)
+
+    db.session.delete(user_to_delete)
+    db.session.commit()
+    return jsonify({"message": f"The user with id {deleted_id} and email {deleted_email} has been deleted."}), 200
 
 # GET ALL USERS
 @api.route('/users', methods=['GET'])
@@ -508,25 +527,25 @@ def get_bookings(user_id):
 
     return jsonify(all_bookings), 200
 
-# Cancel (DELETE) a booking
+# Edit (DELETE) a booking
 @api.route('/book/<int:book_id>', methods=['PUT'])
 @jwt_required()
-def cancel_booking(book_id):
+def edit_booking(book_id):
     """
-    Cancel a booking
+    Edit a booking
     """
-    book_to_cancel = Book.query.get(book_id)
+    book_to_edit = Book.query.get(book_id)
 
-    if book_to_cancel is None:
+    if book_to_edit is None:
         raise APIException('La cita que estás buscando no existe', status_code=404)
 
     # Admin or user validation
     current_user_id = get_jwt_identity() # obtiene el id del usuario asociado al token (id == sub en jwt decode)
     user = User.query.get(current_user_id)
-    if not user.serialize()["is_admin"] and book_to_cancel.serialize()["user_id"] != current_user_id:
+    if not user.serialize()["is_admin"] and book_to_edit.serialize()["user_id"] != current_user_id:
         raise APIException('No tienes permisos suficientes.', status_code=401)
 
-    book_to_cancel.status = "Canceled"
+    book_to_edit.status = request.json["status"]
     db.session.commit()
     return jsonify({"message": "Cita cancelada"}), 200
 

@@ -50,7 +50,7 @@ export const BookingCard = props => {
 						<button
 							className="btn-skip"
 							onClick={() => {
-								const deleteFunct = () => actions.cancelBooking(props.bookID);
+								const deleteFunct = () => actions.editBooking(props.bookID, { status: "Canceled" });
 								actions.setPopup(
 									"confirm",
 									"Cancelar cita",

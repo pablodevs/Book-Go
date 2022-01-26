@@ -1,11 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Context } from "../../store/appContext";
 import PropTypes from "prop-types";
+import { Context } from "../../store/appContext";
+import dates from "../../dates.json";
 
 export const BookingLi = props => {
 	const { actions, store } = useContext(Context);
 
-	const pretyTime = (time, duration) => {
+	const prettyDate = date => [dates.pretty_month[date.getMonth()], date.getDate()];
+	const prettyTime = (time, duration) => {
 		const resetTimeFormat = (hours, minutes) => {
 			hours = hours.toString();
 			minutes = minutes.toString();
@@ -26,16 +28,18 @@ export const BookingLi = props => {
 		return `${time} — ${resetTimeFormat(endTimeHours, endTimeMins)}`;
 	};
 
+	// useEffect(() => {}, []);
+
 	return (
 		<ul className="bookingLi">
-			<li className="fw-bold">
-				{props.date.toLocaleDateString(undefined, {
-					year: "numeric",
-					month: "2-digit",
-					day: "2-digit"
-				})}
+			<li
+				className="bookingLi-date"
+				data-status={props.date.getTime() < new Date().getTime() ? "Disabled" : props.status}>
+				{prettyDate(props.date)[0]}
 				<br />
-				{pretyTime(
+				<span className="bookingLi-day">{prettyDate(props.date)[1]}</span>
+				<br />
+				{prettyTime(
 					props.date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
 					props.service.duration
 				)}
@@ -45,66 +49,78 @@ export const BookingLi = props => {
 				<br />
 				<span className="fw-bold">{props.service.name}</span>
 			</li>
-			<li>
-				Estado
-				<br />
-				{props.status === "Confirmed" ? (
+			{props.date.getTime() < new Date().getTime() ? (
+				""
+			) : props.status === "Confirmed" ? (
+				<li>
+					Estado
+					<br />
 					<span className="bookingcard-confirmed">
 						Confirmada <i className="far fa-check-circle" />
 					</span>
-				) : (
-					<span className="bookingcard-canceled">
+				</li>
+			) : (
+				<li>
+					Estado
+					<br />
+					<span className="bookingLi-canceled">
 						Cancelada <i className="fas fa-ban" />
 					</span>
-				)}
-			</li>
+				</li>
+			)}
 			<li className="fw-bold bookingLi-price">{props.service.price} €</li>
-			<li className="bookingLi-cancel">
-				{props.status === "Confirmed" ? (
-					<button
-						className="logout btn-cool"
-						onClick={() => {
-							const deleteFunct = () => actions.cancelBooking(props.bookID);
-							actions.setPopup(
-								"confirm",
-								"Cancelar cita",
-								{
-									button: "Cancelar",
-									toast: {
-										success: "Cita cancelada",
-										loading: "Cancelando..."
+			{props.date.getTime() > new Date().getTime() ? (
+				<li className="bookingLi-cancel">
+					{props.status === "Confirmed" ? (
+						<button
+							className="bookingLi-btn-cancel center"
+							data-tooltip="Cancelar cita"
+							onClick={() => {
+								const deleteFunct = () => actions.editBooking(props.bookID, { status: "Canceled" });
+								actions.setPopup(
+									"confirm",
+									"Cancelar cita",
+									{
+										button: "Cancelar",
+										toast: {
+											success: "Cita cancelada",
+											loading: "Cancelando..."
+										},
+										message: "Pulsa para cancelar la cita"
 									},
-									message: "Esta acción no podrá deshacerse."
-								},
-								deleteFunct
-							);
-						}}>
-						<i className="fas fa-trash-alt m-0" />
-					</button>
-				) : (
-					// <button
-					// 	className="btn-cool btn-confirm"
-					// 	onClick={() => {
-					// 		const deleteFunct = () => actions.cancelBooking(props.bookID);
-					// 		actions.setPopup(
-					// 			"confirm",
-					// 			"Cancelar cita",
-					// 			{
-					// 				button: "Cancelar",
-					// 				toast: {
-					// 					success: "Cita cancelada",
-					// 					loading: "Cancelando..."
-					// 				},
-					// 				message: "Esta acción no podrá deshacerse."
-					// 			},
-					// 			deleteFunct
-					// 		);
-					// 	}}>
-					// 	<i className="fas fa-trash-alt m-0" />
-					// </button>
-					""
-				)}
-			</li>
+									deleteFunct
+								);
+							}}>
+							<i className="fas fa-trash-alt m-0" />
+						</button>
+					) : (
+						<button
+							className="bookingLi-btn-confirm center"
+							data-tooltip="Confirmar cita"
+							onClick={() => {
+								const confirmFunct = () => actions.editBooking(props.bookID, { status: "Confirmed" });
+								actions.setPopup(
+									"confirm",
+									"Confirmar cita",
+									{
+										button: "Confirmar",
+										toast: {
+											success: "Cita confirmada",
+											loading: "Procesando..."
+										},
+										message: "Pulsa para confirmar la cita",
+										style: "success"
+									},
+									confirmFunct
+								);
+							}}>
+							<i className="fas fa-check" />
+						</button>
+					)}
+				</li>
+			) : (
+				""
+			)}
 		</ul>
 	);
 };

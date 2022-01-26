@@ -116,7 +116,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			// Cambia los popups
-			setPopup: async (type, title, obj = {}, funct = null) => {
+			setPopup: (type, title, obj = {}, funct = null) => {
 				// Para abrir el popup del login, register, reservas...
 				let store = getStore();
 				setStore({
@@ -511,11 +511,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			// Delete current USER
-			deleteUser: async () => {
+			deleteUser: async id => {
 				const actions = getActions();
 				const store = getStore();
 				try {
-					const response = await fetch(process.env.BACKEND_URL + "/user", {
+					const response = await fetch(process.env.BACKEND_URL + `/user/${id}`, {
 						method: "DELETE",
 						headers: {
 							Authorization: "Bearer " + store.token
@@ -531,7 +531,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 						});
 						throw Error(response);
 					}
-					actions.logout();
+					if (store.user && !store.user.is_admin) actions.logout();
+					else actions.getClients();
 					actions.closePopup();
 					return resp;
 				} catch (err) {
@@ -821,13 +822,15 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
 			// Desde el dashboard puedes cancelar una cita
-			cancelBooking: async id => {
+			editBooking: async (id, changes) => {
 				const actions = getActions();
 				const store = getStore();
 				try {
 					const response = await fetch(process.env.BACKEND_URL + `/book/${id}`, {
 						method: "PUT",
+						body: JSON.stringify(changes),
 						headers: {
+							"Content-Type": "application/json",
 							Authorization: "Bearer " + store.token
 						}
 					});
