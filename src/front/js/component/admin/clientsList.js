@@ -2,12 +2,23 @@ import React, { useContext, useEffect, useState } from "react";
 import { Context } from "../../store/appContext";
 import { ClientTab } from "./clientTab";
 import { PretyPhone } from "../../pages/dashboard.js";
+import { BookingLi } from "./bookingLi";
+import booking_img from "../../../img/dashboard/calendario.png";
 
 export const ClientsList = () => {
 	const { actions, store } = useContext(Context);
 	const [list, setList] = useState([]);
 	const [srchInput, setSrchInput] = useState("");
 	const [client, setClient] = useState({});
+	const [content, setContent] = useState(
+		<div className="spinner-border text-info mx-auto mt-5" role="status">
+			<span className="visually-hidden">Loading...</span>
+		</div>
+	);
+	const [activePill, setActivePill] = useState(0);
+	const [bookings, setBookings] = useState(null);
+	const [nextBookings, setNextBookings] = useState([]);
+	const [prevBookings, setPrevBookings] = useState([]);
 
 	const handleSearchOnChange = e => {
 		setSrchInput(e.target.value);
@@ -15,6 +26,7 @@ export const ClientsList = () => {
 
 	const getClientInfo = newClient => {
 		setClient({
+			id: newClient.id,
 			name: newClient.name,
 			lastname: newClient.lastname,
 			email: newClient.email,
@@ -27,6 +39,82 @@ export const ClientsList = () => {
 		actions.getClients();
 		actions.setActiveClientTab(null);
 	}, []);
+
+	useEffect(
+		() => {
+			if (client.id)
+				// Obtenemos todas las reservas
+				fetch(`${process.env.BACKEND_URL}/user/${client.id}/bookings`, {
+					headers: {
+						Authorization: "Bearer " + store.token
+					}
+				})
+					.then(response => {
+						if (!response.ok) throw Error(response);
+						return response.json();
+					})
+					.then(resp => {
+						setBookings(resp);
+					})
+					.catch(err => console.error(err.message));
+		},
+		[client]
+	);
+
+	useEffect(
+		() => {
+			if (bookings && bookings.length === 0)
+				setContent(
+					<div className="center dashboard-welcome">
+						<span style={{ fontWeight: "normal" }}>No hay reservas de momento</span>
+						<img src={booking_img} width="100" height="100" style={{ filter: "opacity(40%)" }} />
+					</div>
+				);
+			else if (client.id && bookings && bookings.length !== 0) {
+				let nextBookingsList = [];
+				let prevBookingsList = [];
+
+				let bookingsList = bookings.sort((a, b) => {
+					const formatInput = input => {
+						let dateString = `${input.date.split("/")[2]}/${input.date.split("/")[1]}/${
+							input.date.split("/")[0]
+						} ${input.time}`;
+						return new Date(dateString).getTime();
+					};
+
+					let dateA = formatInput(a);
+					let dateB = formatInput(b);
+
+					if (a.status === "Confirmed" && b.status === "Confirmed") return dateA - dateB;
+					else if (a.status !== "Confirmed" && b.status === "Confirmed") return 1;
+					else if (a.status === "Confirmed" && b.status !== "Confirmed") return -1;
+				});
+
+				bookingsList.map((book, idx) => {
+					let service = store.services.find(service => service.id === book.service_id);
+					// Cambiamos de día/mes/año a año/mes/día para que lo coja new Date()
+					let dateString = `${book.date.split("/")[2]}/${book.date.split("/")[1]}/${
+						book.date.split("/")[0]
+					} ${book.time}`;
+					let date = new Date(dateString);
+
+					// Compruebo si es una fecha posterior o la reserva es del pasado
+					if (date.getTime() > new Date().getTime())
+						nextBookingsList.push(
+							<BookingLi key={idx} bookID={book.id} date={date} service={service} status={book.status} />
+						);
+					else
+						prevBookingsList.push(
+							<BookingLi key={idx} bookID={book.id} date={date} service={service} status={book.status} />
+						);
+				});
+				setContent(null);
+				setNextBookings(nextBookingsList);
+				setPrevBookings(prevBookingsList);
+			}
+		},
+		[bookings]
+	);
 
 	useEffect(
 		() => {
@@ -115,11 +203,33 @@ export const ClientsList = () => {
 								</div>
 							</div>
 						</div>
-						<div className="center">
-							Aquí irá la información del número de: reservas realizadas, inasistencias, cancelaciones,
-							ingresos que ha generado (ingresos totales). Alomejor un textarea con observaciones.
-							<br />Y por último faltarían los botones de modificar usuario y realizar una nueva cita
-						</div>
+						{content ? (
+							content
+						) : (
+							<div className="client-bookings-wrapper">
+								<div className="pills-wrapper">
+									<div
+										className="pills-pseudoelement"
+										style={activePill ? { transform: "translateX(100%)" } : {}}
+									/>
+									<button
+										onClick={() => {
+											setActivePill(0);
+										}}
+										className={"pills" + (activePill ? "" : " active")}>
+										Próximas reservas <span>({nextBookings.length})</span>
+									</button>
+									<button
+										onClick={() => {
+											setActivePill(1);
+										}}
+										className={"pills" + (activePill ? " active" : "")}>
+										Reservas pasadas <span>({prevBookings.length})</span>
+									</button>
+								</div>
+								<div className="client-bookings">{activePill ? prevBookings : nextBookings}</div>
+							</div>
+						)}
 					</div>
 				) : (
 					""

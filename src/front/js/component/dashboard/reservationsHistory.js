@@ -24,7 +24,7 @@ export const ReservationsHistory = () => {
 		() => {
 			if (!store.popup)
 				// Obtenemos todas las reservas
-				fetch(`${process.env.BACKEND_URL}/user/bookings`, {
+				fetch(`${process.env.BACKEND_URL}/user/${store.user.id}/bookings`, {
 					headers: {
 						Authorization: "Bearer " + localStorage.getItem("token")
 					}

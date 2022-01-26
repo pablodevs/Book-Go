@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 export const ServiceCard = props => {
 	return (
 		<div
-			className="service-card card shadow rounded-3 card-background"
+			className="service-card card card-background"
 			style={{ border: "none", width: "15rem", height: "380px", overflow: "hidden" }}>
 			<img
 				src={

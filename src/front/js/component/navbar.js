@@ -23,11 +23,8 @@ export const Navbar = () => {
 	const url = window.location.pathname.split("/").pop();
 	useEffect(
 		() => {
-			console.log(window.location.pathname);
-			if (window.location.pathname !== "/") {
-				console.log("YES");
-				setServicesNavlink(false);
-			} else setServicesNavlink(true);
+			if (window.location.pathname !== "/") setServicesNavlink(false);
+			else setServicesNavlink(true);
 		},
 		[url]
 	);

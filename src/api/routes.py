@@ -454,27 +454,6 @@ def generate_token():
     return jsonify({"message": "Acceso correcto.", "status": "success", "token": access_token, "id": user.id, "profile_image_url" : user.profile_image_url, "name": user.name, "lastname": user.lastname, "email": user.email, "phone": str(user.phone), "is_admin": user.is_admin })
 
 
-
-
-# # GET AVAILABILITY OF A SERVICE
-# @api.route('/dispo/<service_name>', methods=['GET'])
-# def get_service_dispo(service_name):
-
-#     # buscamos el servicio en la tabla de servicios
-#     service_query = Service.query.filter_by(name = service_name).all()
-#     service= list(map(lambda x: x.serialize(), service_query))
-#     service_id = service[0]['id']
-
-#     #buscamos la disponibilidad del producto con id = product_id y available true
-#     product_dispo = Dispo.query.filter(and_(Dispo.service_id == service_id , Dispo.available == True)).all()
-#     all_days_dispo= list(map(lambda x: x.serialize(), product_dispo))
-#     return jsonify(all_days_dispo)
-#     # buscamos la disponibilidad del servicio con id = service_id y available true
-#     service_dispo = Dispo.query.filter(and_(Dispo.service_id == service_id , Dispo.available == True)).all()
-#     all_days_dispo= list(map(lambda x: x.serialize(), service_dispo))
-#     return jsonify(all_days_dispo)
-
-
 # CREATE NEW BOOKING
 @api.route('/book/<int:user_id>', methods=['POST'])
 @jwt_required()
@@ -512,19 +491,19 @@ def create_booking(user_id):
     return jsonify({"message": "Su reserva ha sido Confirmada."}), 200
 
 # GET BOOKINGS OF USER
-@api.route('/user/bookings', methods=['GET'])
+@api.route('/user/<int:user_id>/bookings', methods=['GET'])
 @jwt_required()
-def get_bookings():
+def get_bookings(user_id):
     """
     Create booking after payment
     """
     current_user_id = get_jwt_identity() # obtiene el id del usuario asociado al token (id == sub en jwt decode)
     user = User.query.get(current_user_id)
     # Admin validation
-    # if user.serialize()["is_admin"] == False:
-    #     raise APIException('Error de identificación.', status_code=401)
+    if not user.serialize()["is_admin"] and user_id != user.id:
+        raise APIException('Error de identificación.', status_code=401)
 
-    all_bookings = Book.query.filter_by(user_id = current_user_id).all()
+    all_bookings = Book.query.filter_by(user_id = user_id).all()
     all_bookings = [book.serialize() for book in all_bookings]
 
     return jsonify(all_bookings), 200

@@ -46,13 +46,13 @@ export const AdminPanel = () => {
 				if (params.content === "welcome") showWelcome();
 				else if (params.content === "bookings") setContent(<Reservations />);
 				else if (params.content === "clients") setContent(<ClientsList />);
-				else if (params.content === "statistics")
-					setContent(
-						// Aquí iría un <Componente/> con el contenido que queramos mostrar en cada caso
-						<div className="dashboard-content-wrapper">
-							<h1 className="dashboard-content-title">Estadísticas</h1>
-						</div>
-					);
+				// else if (params.content === "statistics")
+				// 	setContent(
+				// 		// Aquí iría un <Componente/> con el contenido que queramos mostrar en cada caso
+				// 		<div className="dashboard-content-wrapper">
+				// 			<h1 className="dashboard-content-title">Estadísticas</h1>
+				// 		</div>
+				// 	);
 				else if (params.content === "services") setContent(<AdminServices />);
 				else if (params.content === "business") setContent(<BusinessSettings />);
 				else if (params.content === "profile") setContent(<AccountSettings />);
@@ -111,7 +111,7 @@ export const AdminPanel = () => {
 											<span>Clientes</span>
 										</button>
 									</li>
-									<li>
+									{/* <li>
 										<button
 											className={"admin-tab" + (activeTab === "statistics" ? " tab-active" : "")}
 											onClick={() => {
@@ -122,7 +122,7 @@ export const AdminPanel = () => {
 											<i className="far fa-chart-bar" />
 											<span>Estadísticas</span>
 										</button>
-									</li>
+									</li> */}
 									<li>
 										<button
 											className={"admin-tab" + (activeTab === "services" ? " tab-active" : "")}
