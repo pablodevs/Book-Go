@@ -30,19 +30,21 @@ export const ClientsList = () => {
 
 	useEffect(
 		() => {
-			actions.getClients();
 			if (client.id) {
 				setActivePill(0);
 				// Obtenemos todas las reservas
 				actions.getClientBookings(client.id);
-			} else actions.setActiveClientTab(null);
+			} else {
+				actions.getClients();
+				actions.setActiveClientTab(null);
+			}
 		},
 		[client]
 	);
 
 	useEffect(
 		() => {
-			if (store.clientBookings && store.clientBookings.length !== 0) setBookings(store.clientBookings);
+			if (store.clientBookings) setBookings(store.clientBookings);
 		},
 		[store.clientBookings]
 	);

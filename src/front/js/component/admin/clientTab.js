@@ -4,7 +4,6 @@ import PropTypes from "prop-types";
 
 export const ClientTab = props => {
 	const { actions, store } = useContext(Context);
-	const [focus, setFocus] = useState(false);
 
 	return (
 		<li className="li-client">

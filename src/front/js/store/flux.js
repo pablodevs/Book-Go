@@ -855,7 +855,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			// Obtener todas las citas de un usuario
 			getClientBookings: client_id => {
-				const actions = getActions();
 				const store = getStore();
 				fetch(`${process.env.BACKEND_URL}/user/${client_id}/bookings`, {
 					headers: {
