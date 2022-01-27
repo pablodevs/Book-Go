@@ -38,7 +38,8 @@ export const Home = () => {
 			<div className="center home-subtitle-wrapper" id="services">
 				<img src={text_divider} className="text-divider" />
 				<h1 className="home-subtitle">
-					Descubre nuestros <span className="emphasis">SERVICIOS</span>
+					Descubre nuestros
+					<span className="emphasis">&nbsp;Servicios</span>
 				</h1>
 				<img src={text_divider} className="text-divider" />
 			</div>
