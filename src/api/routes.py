@@ -347,6 +347,10 @@ def handle_single_user():
         # Query body
         request_body = request.form
 
+        # Admin validation
+        if "user_id" in request_body and user.serialize()["is_admin"] == True:
+            user = User.query.get(request_body.get("user_id", None))
+
         # Check body's info
         if "name" in request_body:
             if len(request_body.get("name", None)) > 120:
@@ -399,7 +403,7 @@ def handle_single_user():
     return jsonify({"message": "Invalid Method."}), 404
 
 # DELETE A USER BY ID
-@api.route('/user/<int:user_id>', methods=['PUT', 'GET', 'DELETE'])
+@api.route('/user/<int:user_id>', methods=['DELETE'])
 @jwt_required() # Cuando se recive una peticion, se valida que exista ese token y que sea valido
 def delete_user(user_id):
     """

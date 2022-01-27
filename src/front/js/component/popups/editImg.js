@@ -8,7 +8,8 @@ export const EditImg = () => {
 	return (
 		<div className="popup-body">
 			<span className={store.cloudinaryInfo.image_url ? "text-confirm" : ""}>
-				{(store.popupObj.service_img_url || store.popupObj.img_url) && !store.cloudinaryInfo.image_url
+				{(store.popupObj.service_img_url || store.popupObj.img_url || store.popupObj.profile_image_url) &&
+				!store.cloudinaryInfo.image_url
 					? "Pulsa en la imagen para modificarla."
 					: store.cloudinaryInfo.image_url
 						? "Imagen subida corréctamente"
@@ -23,10 +24,16 @@ export const EditImg = () => {
 						// On click: abrir un cuadro de dialogo pequeño para cambiar el nombre del servicio
 						onClick={() => actions.setWidget(true)}>
 						<i className="fas fa-camera" />
-						{store.popupObj.service_img_url || store.popupObj.img_url ? (
+						{store.popupObj.service_img_url ||
+						store.popupObj.img_url ||
+						store.popupObj.profile_image_url ? (
 							<img
 								className="popup-service-img"
-								src={store.popupObj.service_img_url || store.popupObj.img_url}
+								src={
+									store.popupObj.service_img_url ||
+									store.popupObj.img_url ||
+									store.popupObj.profile_image_url
+								}
 							/>
 						) : (
 							""
@@ -40,10 +47,16 @@ export const EditImg = () => {
 								<span className="visually-hidden">Loading...</span>
 							</div>
 						</div>
-						{store.popupObj.service_img_url || store.popupObj.img_url ? (
+						{store.popupObj.service_img_url ||
+						store.popupObj.img_url ||
+						store.popupObj.profile_image_url ? (
 							<img
 								className="popup-service-img"
-								src={store.popupObj.service_img_url || store.popupObj.img_url}
+								src={
+									store.popupObj.service_img_url ||
+									store.popupObj.img_url ||
+									store.popupObj.profile_image_url
+								}
 							/>
 						) : (
 							""
@@ -57,7 +70,10 @@ export const EditImg = () => {
 				}
 			/>
 			<div className="d-flex flex-row w-100">
-				{store.popupObj.service_img_url || store.popupObj.img_url || store.cloudinaryInfo.image_url ? (
+				{store.popupObj.service_img_url ||
+				store.popupObj.img_url ||
+				store.popupObj.profile_image_url ||
+				store.cloudinaryInfo.image_url ? (
 					<button
 						className={"mx-auto" + (store.cloudinaryInfo.image_url ? " btn-skip" : " btn-cool danger")}
 						onClick={() => {
@@ -100,7 +116,12 @@ export const EditImg = () => {
 					onClick={() => {
 						if (!store.cloudinaryInfo.image_url) actions.closePopup();
 						else {
-							const method = store.popupObj.service_img_url || store.popupObj.img_url ? "modify" : "add";
+							const method =
+								store.popupObj.service_img_url ||
+								store.popupObj.img_url ||
+								store.popupObj.profile_image_url
+									? "modify"
+									: "add";
 
 							let toastFunction = null;
 							if (store.popupObj.preset === "services_images")
@@ -115,6 +136,7 @@ export const EditImg = () => {
 								body.append("profile_image_url", store.cloudinaryInfo.image_url);
 								body.append("public_id", store.cloudinaryInfo.public_id);
 								body.append("method", method);
+								body.append("user_id", store.popupObj.id);
 								toastFunction = actions.updateUser(body);
 							}
 

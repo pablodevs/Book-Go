@@ -492,17 +492,19 @@ const getState = ({ getStore, getActions, setStore }) => {
 						});
 						throw Error(response);
 					}
-					setStore({
-						user: {
-							...store.user,
-							name: resp.name,
-							lastname: resp.lastname,
-							phone: resp.phone,
-							email: resp.email,
-							img_url: resp.profile_image_url,
-							public_id: resp.public_id
-						}
-					});
+					if (!store.user.is_admin)
+						setStore({
+							user: {
+								...store.user,
+								name: resp.name,
+								lastname: resp.lastname,
+								phone: resp.phone,
+								email: resp.email,
+								img_url: resp.profile_image_url,
+								public_id: resp.public_id
+							}
+						});
+					else actions.getClients();
 					if (store.popup) actions.closePopup();
 					return resp;
 				} catch (err) {

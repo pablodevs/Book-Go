@@ -142,6 +142,16 @@ export const ClientsList = () => {
 		[store.clients, srchInput]
 	);
 
+	useEffect(
+		() => {
+			if (store.clients.length !== 0 && client.id) {
+				let updatedClient = store.clients.find(element => element.id === client.id);
+				setClient(updatedClient);
+			}
+		},
+		[store.clients]
+	);
+
 	return store.clients ? (
 		<div className="dashboard-content-wrapper">
 			<div className="clients-wrapper">
