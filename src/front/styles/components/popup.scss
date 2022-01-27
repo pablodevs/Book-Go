@@ -107,7 +107,8 @@ button.popup-edit-img, div.popup-edit-img {
     }
     &:hover {
         background: none;
-        border-radius: 20px;
+        border-radius: 25px;
+        & > img { transform: scale(1.1) }
         & > i, & > .spinner-border-wrapper { box-shadow: 0 4px 10px 3px rgba(0,0,0,0.4) }
     }
 }
@@ -120,6 +121,7 @@ img.popup-service-img {
     width: 100%;
     object-fit: cover;
     position: absolute;
+    transition: all 0.2s ease-out;
 }
 
 @media screen and (max-width: 767.9px) {
