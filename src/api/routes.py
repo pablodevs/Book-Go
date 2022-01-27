@@ -531,6 +531,28 @@ def get_bookings(user_id):
 
     return jsonify(all_bookings), 200
 
+# GET ALL BOOKINGS
+@api.route('/users/bookings', methods=['GET'])
+@jwt_required()
+def get_all_bookings():
+    """
+    Get all clients bookings
+    """
+    current_user_id = get_jwt_identity() # obtiene el id del usuario asociado al token (id == sub en jwt decode)
+    user = User.query.get(current_user_id)
+    # Admin validation
+    if not user.serialize()["is_admin"]:
+        raise APIException("You don't have permission.", status_code=401)
+
+    all_bookings = Book.query.all()
+    all_bookings = [book.serialize() for book in all_bookings]
+    output = []
+    for book in all_bookings:
+        client = User.query.get(book['user_id']).serialize()
+        output.append({**book, "client": client})
+
+    return jsonify(output), 200
+
 # Edit (DELETE) a booking
 @api.route('/book/<int:book_id>', methods=['PUT'])
 @jwt_required()

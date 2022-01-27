@@ -66,6 +66,15 @@ export const BookingLi = props => {
 					</span>
 				</li>
 			)}
+			{props.extended ? (
+				<li>
+					<span className="bookingLi-name" data-user-id={props.client.id}>{`${props.client.name} ${
+						props.client.lastname
+					}`}</span>
+					<br />
+					{props.client.email}
+				</li>
+			) : null}
 			<li className="fw-bold bookingLi-price">{props.service.price} €</li>
 			{props.date.getTime() > new Date().getTime() ? (
 				<li className="bookingLi-cancel">
@@ -130,5 +139,6 @@ BookingLi.propTypes = {
 	service: PropTypes.object,
 	client: PropTypes.object,
 	status: PropTypes.string,
-	bookID: PropTypes.number
+	bookID: PropTypes.number,
+	extended: PropTypes.bool
 };

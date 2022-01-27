@@ -96,6 +96,7 @@ export const ClientsList = () => {
 								service={service}
 								status={book.status}
 								client={client}
+								extended={false}
 							/>
 						);
 					else
@@ -107,6 +108,7 @@ export const ClientsList = () => {
 								service={service}
 								status={book.status}
 								client={client}
+								extended={false}
 							/>
 						);
 				});

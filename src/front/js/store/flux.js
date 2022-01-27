@@ -872,6 +872,25 @@ const getState = ({ getStore, getActions, setStore }) => {
 						return resp;
 					})
 					.catch(err => console.error(err.message));
+			},
+
+			// Obtener todas las citas
+			getAllBookings: () => {
+				const store = getStore();
+				fetch(`${process.env.BACKEND_URL}/users/bookings`, {
+					headers: {
+						Authorization: "Bearer " + store.token
+					}
+				})
+					.then(response => {
+						if (!response.ok) throw Error(response);
+						return response.json();
+					})
+					.then(resp => {
+						setStore({ allClientBookings: resp });
+						return resp;
+					})
+					.catch(err => console.error(err.message));
 			}
 		}
 	};
