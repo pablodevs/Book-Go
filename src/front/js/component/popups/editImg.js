@@ -88,8 +88,12 @@ export const EditImg = () => {
 									});
 								else if (store.popupObj.preset === "client_images") {
 									let body = new FormData();
-									body.append("profile_image_url", store.popupObj.img_url);
+									body.append(
+										"profile_image_url",
+										store.popupObj.img_url || store.popupObj.profile_image_url
+									);
 									body.append("public_id", store.popupObj.public_id);
+									body.append("user_id", store.popupObj.id);
 									body.append("method", "delete");
 									toastFunction = actions.updateUser(body);
 								}
