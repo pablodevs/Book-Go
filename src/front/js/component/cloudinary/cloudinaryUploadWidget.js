@@ -53,7 +53,7 @@ export const CloudinaryUploadWidget = props => {
 						},
 						queue: {
 							title: "Cola de carga",
-							title_uploading_with_counter: "Subiendo {{num}} Imágenes",
+							title_uploading_with_counter: "Espere un momento mientras subimos la imagen",
 							abort_all: "Cancelar",
 							retry_failed: "Intentar de nuevo",
 							done: "Hecho",
@@ -81,7 +81,7 @@ export const CloudinaryUploadWidget = props => {
 						menuIcons: "#555a5f",
 						link: "#44A8B7",
 						action: "#4B6D9D",
-						inProgress: "#D9FBFF",
+						inProgress: "#4b6d9d",
 						complete: "#15D715",
 						error: "#D07A79",
 						textDark: "#242727",

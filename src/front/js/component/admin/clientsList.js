@@ -146,7 +146,8 @@ export const ClientsList = () => {
 		() => {
 			if (store.clients.length !== 0 && client.id) {
 				let updatedClient = store.clients.find(element => element.id === client.id);
-				setClient(updatedClient);
+				if (updatedClient) setClient(updatedClient);
+				else setClient({});
 			}
 		},
 		[store.clients]

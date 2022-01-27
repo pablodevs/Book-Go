@@ -535,7 +535,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 					}
 					if (store.user && !store.user.is_admin) actions.logout();
 					else actions.getClients();
-					actions.closePopup();
+					if (store.popup) actions.closePopup();
 					return resp;
 				} catch (err) {
 					return err.json();
