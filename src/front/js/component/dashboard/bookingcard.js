@@ -73,7 +73,14 @@ export const BookingCard = props => {
 				</div>
 			</div>
 			<div className="bookingcard-img-wrapper">
-				<img src={props.service.service_img_url} className="bookingcard-img" alt="imagen del servicio" />
+				<img
+					src={
+						props.service.service_img_url ||
+						"https://res.cloudinary.com/peibol888/image/upload/v1642880624/default_stc4oy.png"
+					}
+					className="bookingcard-img"
+					alt="imagen del servicio"
+				/>
 			</div>
 		</div>
 	);
