@@ -20,7 +20,7 @@ export const BookingLi = props => {
 			return `${outputList[0]}:${outputList[1]}`;
 		};
 
-		let timeInMins = parseInt(time.split(":")[0]) * 60;
+		let timeInMins = parseInt(time.split(":")[0]) * 60 + parseInt(time.split(":")[1]);
 		let endTime = timeInMins + duration;
 		let endTimeHours = parseInt(endTime / 60);
 		let endTimeMins = endTime % 60;
@@ -81,7 +81,7 @@ export const BookingLi = props => {
 					{props.status === "Confirmed" ? (
 						<button
 							className="bookingLi-btn-cancel center"
-							data-tooltip="Cancelar cita"
+							data-tooltip-bot="Cancelar cita"
 							onClick={() => {
 								const deleteFunct = () =>
 									actions.editBooking(props.bookID, { status: "Canceled" }, props.client.id);
@@ -104,7 +104,7 @@ export const BookingLi = props => {
 					) : (
 						<button
 							className="bookingLi-btn-confirm center"
-							data-tooltip="Confirmar cita"
+							data-tooltip-bot="Confirmar cita"
 							onClick={() => {
 								const confirmFunct = () =>
 									actions.editBooking(props.bookID, { status: "Confirmed" }, props.client.id);

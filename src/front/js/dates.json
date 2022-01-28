@@ -14,6 +14,7 @@
         "diciembre"
     ],
     "day_text": ["D", "L", "M", "X", "J", "V", "S"],
+    "pretty_weekday": ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
     "pretty_month": [
         "Ene.",
         "Feb.",

@@ -16,7 +16,6 @@ export const Reservations = () => {
 	const [prevBookings, setPrevBookings] = useState([]);
 
 	useEffect(() => {
-		// actions.getAllBookings({ date: new Date() });
 		actions.getAllBookings();
 	}, []);
 

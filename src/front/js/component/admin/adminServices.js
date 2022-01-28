@@ -395,7 +395,7 @@ export const AdminServices = () => {
 										type="text"
 										name="sku"
 										maxLength="150"
-										value={data.sku}
+										value={data.sku ? data.sku : ""}
 										autoComplete="off"
 										onChange={handleInputChange}
 									/>

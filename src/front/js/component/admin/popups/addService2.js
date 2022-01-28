@@ -110,7 +110,13 @@ export const AddService2 = () => {
 					<button
 						type="button"
 						className="btn-skip"
-						onClick={() => actions.setPopup("add-img", "Añadir una foto al servicio")}>
+						onClick={e => {
+							setData({
+								sku: "",
+								is_active: false
+							});
+							handleSubmit(e);
+						}}>
 						Omitir
 						<i className="fas fa-arrow-right" />
 					</button>
