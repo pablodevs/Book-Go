@@ -49,9 +49,9 @@ export const Booking_resume = () => {
 	};
 
 	return (
-		<div className="popup-body booking-resume-body" style={{ gap: "0" }}>
+		<div className="popup-body" style={{ gap: "0" }}>
 			<div className="booking-resume">
-				<div className="booking-body">
+				<div className="booking-resume-body">
 					<h2 className="booking-resume-subtitle">CUANDO</h2>
 					<div className="booking-resume-row">
 						{getPrettyDate()}
@@ -65,7 +65,7 @@ export const Booking_resume = () => {
 						</div>
 					</div>
 				</div>
-				<div className="d-flex flex-row justify-content-around w-100 mt-auto">
+				<div className="d-flex flex-row justify-content-between justify-content-md-around w-100 mt-auto">
 					<button onClick={() => actions.goToPrevPopup()} type="button" className="btn-skip">
 						Volver
 					</button>
