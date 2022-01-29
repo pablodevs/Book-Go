@@ -161,7 +161,6 @@ export const ClientsList = () => {
 				<aside className="clients-list">
 					<h1 className="dashboard-content-title clients-list-title">Clientes</h1>
 					<div className="search-client search-wrapper">
-						<i className="fas fa-search" />
 						<input
 							type="search"
 							className="search-input search-client-input"
@@ -169,6 +168,7 @@ export const ClientsList = () => {
 							onChange={handleSearchOnChange}
 							value={srchInput}
 						/>
+						<i className="fas fa-search" />
 						{srchInput !== "" ? (
 							<button type="button" className="search-clear" onClick={() => setSrchInput("")}>
 								<i className="fas fa-times" />

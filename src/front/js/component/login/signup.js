@@ -44,17 +44,16 @@ export const Signup = () => {
 		<div className="container-fluid popup-container">
 			<div className="row popup-row">
 				<form onSubmit={handleSubmit}>
-					<div className="col mx-4 mb-4" style={{ display: "grid", gap: "1rem" }}>
-						<div>
-							<label htmlFor="name">Nombre</label>
+					<div className="col mx-4 mb-4" style={{ display: "grid", gap: "0.4rem" }}>
+						<div className="input-wrapper">
 							<input autoFocus required onChange={handleInputChange} type="text" id="name" name="name" />
+							<label htmlFor="name">Nombre</label>
 						</div>
-						<div>
-							<label htmlFor="lastname">Apellidos</label>
+						<div className="input-wrapper">
 							<input required onChange={handleInputChange} type="text" id="lastname" name="lastname" />
+							<label htmlFor="lastname">Apellidos</label>
 						</div>
-						<div>
-							<label htmlFor="phone">Teléfono</label>
+						<div className="input-wrapper">
 							<input
 								required
 								onChange={handleInputChange}
@@ -64,9 +63,9 @@ export const Signup = () => {
 								minLength="9"
 								maxLength="9"
 							/>
+							<label htmlFor="phone">Teléfono</label>
 						</div>
-						<div>
-							<label htmlFor="email">E-mail</label>
+						<div className="input-wrapper">
 							<input
 								required
 								onChange={handleInputChange}
@@ -75,9 +74,9 @@ export const Signup = () => {
 								name="email"
 								placeholder="name@example.com"
 							/>
+							<label htmlFor="email">E-mail</label>
 						</div>
-						<div>
-							<label htmlFor="password">Contraseña</label>
+						<div className="input-wrapper">
 							<input
 								required
 								onChange={handleInputChange}
@@ -85,22 +84,27 @@ export const Signup = () => {
 								id="password"
 								name="password"
 							/>
+							<label htmlFor="password">Contraseña</label>
 						</div>
 						<span className="text-center">También puedes añadir una foto de perfil</span>
 						<CloudinaryUploadWidget
 							preset="client_images"
 							defaultComp={<WidgetButton title="Subir imagen" funct={() => actions.setWidget(true)} />}
 							loadingComp={
-								<div className="input-button">
-									<div className="spinner-border spinner-border-sm" role="status">
-										<span className="visually-hidden">Loading...</span>
+								<div className="input-wrapper">
+									<div className="input-button">
+										<div className="spinner-border spinner-border-sm" role="status">
+											<span className="visually-hidden">Loading...</span>
+										</div>
 									</div>
 								</div>
 							}
 							successComp={
-								<div className="input-button">
-									<i className="fas fa-camera" />
-									<i className="far fa-check-circle" style={{ color: "rgb(21, 215, 21)" }} />
+								<div className="input-wrapper">
+									<div className="input-button">
+										<i className="fas fa-camera" />
+										<i className="far fa-check-circle" style={{ color: "rgb(21, 215, 21)" }} />
+									</div>
 								</div>
 							}
 						/>

@@ -24,10 +24,10 @@
 }
 
 .admin-aside {
+    z-index: 1000;
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 1;
     height: 100vh;
     background-color: $--color-grey-dark;
     box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
@@ -228,33 +228,33 @@ button.inactive {
 }
 
 .price-input {
-    position: relative;
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    width: fit-content;
-    & input {
-        padding-left: 1.5rem;
-        text-align: center;
+    & > input {
+        padding-left: 45%;
     }
-    & span {
+    & > span {
         position: absolute;
+        top: 50%;
         left: 0;
-        height: 64%;
-        width: 1.5rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        transform: translateY(-50%);
+        height: 40%;
+        width: 2.8rem;
+        padding-left: 0.3rem;
         font-weight: bold;
         border-right: 1px solid lightgrey;
+    }
+    & > input:focus-visible ~ span {
+        border-right: 1px solid #00b1cc;
     }
 }
 
 div.socialMedia-input {
     flex-direction: row;
     align-items: center;
-    gap: 0.5rem;
-    & > .dashboard-input { flex: 1 }
+    padding-left: 2.25rem;
+    & > span {
+        position: absolute;
+        left: 0.5rem;
+    }
 }
 
 div.admin-form-group {
@@ -387,6 +387,7 @@ div.disponibility-title.admin-form-group {
     width: 270px;
 }
 .search-client {
+    & > input { background-color: white }
     margin: 2rem 0 1rem 0;
     margin-inline: auto;
 }
@@ -668,7 +669,7 @@ $--pills-spacing: 0.4rem;
     display: flex;
     text-align: center;
     gap: 0.4rem;
-    & > * { flex: 1 }
+    & > * { width: 100% }
     border-bottom: 1px solid $--color-grey-dashboard-light;
     width: 100%;
     padding: 0.8rem 0.4rem;
@@ -681,6 +682,7 @@ $--pills-spacing: 0.4rem;
 .bookingLi-price {
     font-size: 1.3rem;
     font-family: 'Poppins', sans-serif;
+    max-width: 80px;
 }
 
 .bookingLi-canceled {
@@ -704,6 +706,9 @@ $--pills-spacing: 0.4rem;
 .bookingLi-date {
     font-size: 0.9rem;
     position: relative;
+    width: fit-content;
+    padding-inline: 2rem;
+    flex: none;
     &::after {
         content: '';
         position: absolute;

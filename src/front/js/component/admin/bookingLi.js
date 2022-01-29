@@ -68,9 +68,9 @@ export const BookingLi = props => {
 			)}
 			{props.extended ? (
 				<li>
-					<span className="bookingLi-name" data-user-id={props.client.id}>{`${props.client.name} ${
-						props.client.lastname
-					}`}</span>
+					<span className="bookingLi-name" data-user-id={props.client.id}>{`${
+						props.client.name
+					} ${props.client.lastname.charAt(0).toUpperCase()}.`}</span>
 					<br />
 					{props.client.email}
 				</li>

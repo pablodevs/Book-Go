@@ -53,126 +53,115 @@ export const AccountSettings = () => {
 	return (
 		<div className="dashboard-content-wrapper">
 			<h1 className="dashboard-content-title">Cuenta y Configuración</h1>
-			<form onSubmit={submitForm} className="dashboard-form">
+			<form onSubmit={submitForm} className="dashboard-form dashboard-form-less-gap">
 				<h2 className="dashboard-content-subtitle">Detalles de la cuenta</h2>
-				<div>
+				<div className="input-wrapper">
+					<input
+						onChange={e => {
+							handleInputChange(e);
+						}}
+						type="text"
+						id="update-name"
+						name="name"
+						value={data.name || ""}
+						placeholder="Nombre"
+					/>
 					<label className="dashboard-label" htmlFor="update-name">
 						Nombre
 					</label>
-					<div className="dashboard-input">
-						<input
-							onChange={e => {
-								handleInputChange(e);
-							}}
-							type="text"
-							id="update-name"
-							name="name"
-							value={data.name || ""}
-							placeholder="Nombre"
-						/>
-						<button
-							type="button"
-							className="clear-input"
-							onClick={() => {
-								setData({
-									...data,
-									name: ""
-								});
-							}}>
-							<i className="fas fa-times" />
-						</button>
-					</div>
+					<button
+						type="button"
+						className="clear-input"
+						onClick={() => {
+							setData({
+								...data,
+								name: ""
+							});
+						}}>
+						<i className="fas fa-times" />
+					</button>
 				</div>
-				<div>
+				<div className="input-wrapper">
+					<input
+						onChange={e => {
+							handleInputChange(e);
+						}}
+						type="text"
+						id="update-lastname"
+						name="lastname"
+						value={data.lastname || ""}
+						placeholder="Apellidos"
+					/>
 					<label className="dashboard-label" htmlFor="update-lastname">
 						Apellido
 					</label>
-					<div className="dashboard-input">
-						<input
-							onChange={e => {
-								handleInputChange(e);
-							}}
-							type="text"
-							id="update-lastname"
-							name="lastname"
-							value={data.lastname || ""}
-							placeholder="Apellidos"
-						/>
-						<button
-							type="button"
-							className="clear-input"
-							onClick={() =>
-								setData({
-									...data,
-									lastname: ""
-								})
-							}>
-							<i className="fas fa-times" />
-						</button>
-					</div>
+					<button
+						type="button"
+						className="clear-input"
+						onClick={() =>
+							setData({
+								...data,
+								lastname: ""
+							})
+						}>
+						<i className="fas fa-times" />
+					</button>
 				</div>
-				<div>
+				<div className="input-wrapper">
+					<input
+						onChange={e => {
+							handleInputChange(e);
+						}}
+						type="mail"
+						id="update-email"
+						name="email"
+						value={data.email || ""}
+						placeholder="Email"
+					/>
 					<label className="dashboard-label" htmlFor="update-email">
 						Email
 					</label>
-					<div className="dashboard-input">
-						<input
-							onChange={e => {
-								handleInputChange(e);
-							}}
-							type="mail"
-							id="update-email"
-							name="email"
-							value={data.email || ""}
-							placeholder="Email"
-						/>
-						<button
-							type="button"
-							className="clear-input"
-							onClick={() =>
-								setData({
-									...data,
-									email: ""
-								})
-							}>
-							<i className="fas fa-times" />
-						</button>
-					</div>
+					<button
+						type="button"
+						className="clear-input"
+						onClick={() =>
+							setData({
+								...data,
+								email: ""
+							})
+						}>
+						<i className="fas fa-times" />
+					</button>
 				</div>
-				<div>
+				<div className="input-wrapper">
+					<input
+						onChange={handleInputChange}
+						type="tel"
+						id="update-phone"
+						name="phone"
+						value={data.phone || ""}
+						minLength="9"
+						maxLength="9"
+						placeholder="Número de teléfono"
+					/>
 					<label className="dashboard-label" htmlFor="update-phone">
 						Número de teléfono
 					</label>
-					<div className="dashboard-input">
-						<input
-							onChange={handleInputChange}
-							type="tel"
-							id="update-phone"
-							name="phone"
-							value={data.phone || ""}
-							minLength="9"
-							maxLength="9"
-							placeholder="Número de teléfono"
-						/>
-						<button
-							type="button"
-							className="clear-input"
-							onClick={() =>
-								setData({
-									...data,
-									phone: ""
-								})
-							}>
-							<i className="fas fa-times" />
-						</button>
-					</div>
+					<button
+						type="button"
+						className="clear-input"
+						onClick={() =>
+							setData({
+								...data,
+								phone: ""
+							})
+						}>
+						<i className="fas fa-times" />
+					</button>
 				</div>
 				<div>
 					<span className="admin-form-subgroup-title">¿Has olvidado la contraseña?</span>
-					<div>
-						<label htmlFor="update-password" className="dashboard-label">
-							Contraseña
-						</label>
+					<div className="input-wrapper">
 						<button type="button" id="update-password" className="input-button">
 							Cambiar contraseña
 						</button>

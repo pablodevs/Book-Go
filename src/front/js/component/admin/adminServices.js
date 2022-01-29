@@ -99,7 +99,13 @@ export const AdminServices = () => {
 				data.duration !== 0
 			)
 				setSchedule(true);
-			else setSchedule(false);
+			else {
+				setData({
+					...data,
+					is_active: false
+				});
+				setSchedule(false);
+			}
 		},
 		[data.sku, store.business, data]
 	);
@@ -206,40 +212,38 @@ export const AdminServices = () => {
 							<Link to="/admin/business">aquí</Link> para gestionar las horas disponibles.
 						</small>
 						<div className="admin-form-group">
-							<div className="admin-form-subgroup">
-								<label className="dashboard-label" htmlFor="service">
-									Servicio
-								</label>
-								<div className="dashboard-input service-input">
-									<div className="select-wrapper">
-										<select
-											onChange={handleInputChange}
-											id="service"
-											name="service"
-											value={data.service}>
-											<option value="DEFAULT" disabled hidden>
-												Elige un servicio...
+							<div className="admin-form-subgroup service-input">
+								<div className="input-wrapper select-wrapper">
+									<select
+										onChange={handleInputChange}
+										id="service"
+										name="service"
+										value={data.service}>
+										<option value="DEFAULT" disabled hidden>
+											Elige un servicio...
+										</option>
+										{serviceList.map((service, idx) => (
+											<option key={idx} value={service}>
+												{service}
 											</option>
-											{serviceList.map((service, idx) => (
-												<option key={idx} value={service}>
-													{service}
-												</option>
-											))}
-										</select>
-									</div>
-									<button
-										type="button"
-										className={"icon-btn" + (data.id ? "" : " inactive")}
-										data-tooltip="cambiar nombre"
-										// On click: abrir un cuadro de dialogo pequeño para cambiar el nombre del servicio
-										onClick={() => {
-											return data.id
-												? actions.setPopup("edit-service-name", `Editar ${data.service}`, data)
-												: "";
-										}}>
-										<i className="fas fa-pen" />
-									</button>
+										))}
+									</select>
+									<label className="dashboard-label" htmlFor="service">
+										Servicio
+									</label>
 								</div>
+								<button
+									type="button"
+									className={"icon-btn" + (data.id ? "" : " inactive")}
+									data-tooltip="cambiar nombre"
+									// On click: abrir un cuadro de dialogo pequeño para cambiar el nombre del servicio
+									onClick={() => {
+										return data.id
+											? actions.setPopup("edit-service-name", `Editar ${data.service}`, data)
+											: "";
+									}}>
+									<i className="fas fa-pen" />
+								</button>
 							</div>
 						</div>
 						<div className="admin-form-group">
@@ -254,10 +258,7 @@ export const AdminServices = () => {
 								<div className="admin-form-subgroup duration-subgroup collapse-content">
 									<div className="dflex-row">
 										<div>
-											<label className="dashboard-label" htmlFor="price">
-												Precio
-											</label>
-											<div className="price-input">
+											<div className="input-wrapper price-input">
 												<input
 													type="number"
 													id="price"
@@ -266,14 +267,14 @@ export const AdminServices = () => {
 													onChange={handleInputChange}
 													value={data.price}
 												/>
-												<span>€</span>
+												<span className="center">€</span>
+												<label className="dashboard-label" htmlFor="price">
+													Precio
+												</label>
 											</div>
 										</div>
 										<div>
-											<label htmlFor="hours" className="dashboard-label">
-												Hora(s)
-											</label>
-											<div className="select-wrapper">
+											<div className="input-wrapper select-wrapper">
 												<select
 													onChange={e => setHours(parseInt(e.target.value))}
 													id="hours"
@@ -284,11 +285,11 @@ export const AdminServices = () => {
 														</option>
 													))}
 												</select>
+												<label htmlFor="hours" className="dashboard-label">
+													Hora(s)
+												</label>
 											</div>
-											<label htmlFor="minutes" className="dashboard-label">
-												Minutos
-											</label>
-											<div className="select-wrapper">
+											<div className="input-wrapper select-wrapper">
 												<select
 													onChange={e => setMinutes(parseInt(e.target.value))}
 													id="minutes"
@@ -299,6 +300,9 @@ export const AdminServices = () => {
 														</option>
 													))}
 												</select>
+												<label htmlFor="minutes" className="dashboard-label">
+													Minutos
+												</label>
 											</div>
 										</div>
 									</div>
@@ -315,11 +319,7 @@ export const AdminServices = () => {
 									Descripción e imagen del servicio
 								</h3>
 								<div className="collapse-content">
-									<div className="admin-form-subgroup">
-										<label htmlFor="description" className="dashboard-label">
-											Descripción
-											<span>{data.description.length}</span>
-										</label>
+									<div className="admin-form-subgroup input-wrapper">
 										<textarea
 											id="description"
 											name="description"
@@ -328,6 +328,9 @@ export const AdminServices = () => {
 											value={data.description}
 											onChange={handleInputChange}
 										/>
+										<label htmlFor="description" className="dashboard-label">
+											Descripción
+										</label>
 									</div>
 									<div className="admin-form-subgroup img-subgroup">
 										<div className="admin-service-img-wrapper">
@@ -386,10 +389,7 @@ export const AdminServices = () => {
 						</span>
 						<div className="admin-form-group">
 							<div className="admin-form-subgroup">
-								<label className="dashboard-label" htmlFor="sku">
-									Sku (código de artículo)
-								</label>
-								<div className="dashboard-input">
+								<div className="input-wrapper">
 									<input
 										id="sku"
 										type="text"
@@ -399,6 +399,9 @@ export const AdminServices = () => {
 										autoComplete="off"
 										onChange={handleInputChange}
 									/>
+									<label className="dashboard-label" htmlFor="sku">
+										Sku (código de artículo)
+									</label>
 									<button
 										type="button"
 										className="clear-input"

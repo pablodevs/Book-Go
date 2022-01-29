@@ -194,6 +194,11 @@ button.dashboard-edit-img {
 }
 .dashboard-form { gap: 1.5rem }
 
+.dashboard-form-less-gap {
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
+
 @media screen and (max-width: 767.9px) {
     .dashboard-wrapper {
         grid-template-columns: 100%;
@@ -233,14 +238,13 @@ button.dashboard-edit-img {
 .dashboard-input { position: relative }
 button.clear-input, .edit-input {
     position: absolute;
-    display: flex;
-    align-items: center;
-    height: 100%;
+    top: 50%;
     right: 1rem;
+    transform: translateY(-50%);
     color: $--color-grey-light
 }
 .dashboard-form input:focus-visible ~ button.clear-input {
-    color: $--color-blue-dark
+    color: #00b1cc
 }
 
 .delete-account {

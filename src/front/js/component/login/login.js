@@ -31,8 +31,7 @@ export const Login = () => {
 			<div className="row popup-row">
 				<form onSubmit={handleSubmit}>
 					<div className="col mx-4 mb-4" style={{ display: "grid", gap: "1rem" }}>
-						<div>
-							<label htmlFor="loginemail">E-mail</label>
+						<div className="input-wrapper">
 							<input
 								autoFocus
 								required
@@ -44,9 +43,9 @@ export const Login = () => {
 								name="email"
 								placeholder="name@example.com"
 							/>
+							<label htmlFor="loginemail">E-mail</label>
 						</div>
-						<div>
-							<label htmlFor="loginpassword">Contraseña</label>
+						<div className="input-wrapper">
 							<input
 								required
 								onChange={e => {
@@ -56,6 +55,7 @@ export const Login = () => {
 								id="loginpassword"
 								name="password"
 							/>
+							<label htmlFor="loginpassword">Contraseña</label>
 						</div>
 						<button className="btn-cool" type="submit">
 							Acceder

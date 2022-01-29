@@ -144,26 +144,30 @@ export const BusinessSettings = () => {
 						</div>
 						<div className="admin-form-group">
 							<div className="admin-form-subgroup">
-								<label className="dashboard-label" htmlFor="time-from">
-									Desde
-								</label>
-								<input
-									type="time"
-									id="time-from"
-									value={timeFrom}
-									onChange={e => setTimeFrom(e.target.value)}
-								/>
+								<div className="input-wrapper">
+									<input
+										type="time"
+										id="time-from"
+										value={timeFrom}
+										onChange={e => setTimeFrom(e.target.value)}
+									/>
+									<label className="dashboard-label" htmlFor="time-from">
+										Desde
+									</label>
+								</div>
 							</div>
 							<div className="admin-form-subgroup">
-								<label className="dashboard-label" htmlFor="time-to">
-									Hasta
-								</label>
-								<input
-									type="time"
-									id="time-to"
-									value={timeTo}
-									onChange={e => setTimeTo(e.target.value)}
-								/>
+								<div className="input-wrapper">
+									<input
+										type="time"
+										id="time-to"
+										value={timeTo}
+										onChange={e => setTimeTo(e.target.value)}
+									/>
+									<label className="dashboard-label" htmlFor="time-to">
+										Hasta
+									</label>
+								</div>
 							</div>
 						</div>
 						<div>
@@ -174,141 +178,131 @@ export const BusinessSettings = () => {
 					</form>
 				</section>
 				<section className="admin-second-section">
-					<form onSubmit={handleSubmitSecondForm} className="dashboard-form">
+					<form onSubmit={handleSubmitSecondForm} className="dashboard-form dashboard-form-less-gap">
 						<h2 className="dashboard-content-subtitle">Detalles del negocio</h2>
 						<small>
 							Cambia la información del negocio aquí. Esta información afectará al pié de la página.
 						</small>
-						<div>
+						<div className="input-wrapper">
+							<input
+								onChange={handleInputChange}
+								type="text"
+								id="address"
+								name="address"
+								value={secondData.address}
+								placeholder="C/..."
+							/>
 							<label className="dashboard-label" htmlFor="address">
 								Dirección
 							</label>
-							<div className="dashboard-input">
-								<input
-									onChange={handleInputChange}
-									type="text"
-									id="address"
-									name="address"
-									value={secondData.address}
-									placeholder="C/..."
-								/>
-								<button
-									type="button"
-									className="clear-input"
-									onClick={() => {
-										setSecondData({
-											...secondData,
-											address: ""
-										});
-									}}>
-									<i className="fas fa-times" />
-								</button>
-							</div>
+							<button
+								type="button"
+								className="clear-input"
+								onClick={() => {
+									setSecondData({
+										...secondData,
+										address: ""
+									});
+								}}>
+								<i className="fas fa-times" />
+							</button>
 						</div>
-						<div>
+						<div className="input-wrapper">
+							<input
+								onChange={handleInputChange}
+								type="tel"
+								id="businessPhone"
+								name="phone"
+								value={secondData.phone}
+								placeholder="teléfono de contacto..."
+							/>
 							<label className="dashboard-label" htmlFor="businessPhone">
 								Teléfono del establecimiento
 							</label>
-							<div className="dashboard-input">
-								<input
-									onChange={handleInputChange}
-									type="tel"
-									id="businessPhone"
-									name="phone"
-									value={secondData.phone}
-									placeholder="teléfono de contacto..."
-								/>
-								<button
-									type="button"
-									className="clear-input"
-									onClick={() => {
-										setSecondData({
-											...secondData,
-											phone: ""
-										});
-									}}>
-									<i className="fas fa-times" />
-								</button>
-							</div>
+							<button
+								type="button"
+								className="clear-input"
+								onClick={() => {
+									setSecondData({
+										...secondData,
+										phone: ""
+									});
+								}}>
+								<i className="fas fa-times" />
+							</button>
 						</div>
 						<h3 className="dashboard-content-h3">Redes sociales</h3>
-						<div className="socialMedia-input">
-							<label className="dashboard-label" htmlFor="facebook">
+						<div className="input-wrapper socialMedia-input">
+							<input
+								onChange={handleInputChange}
+								type="text"
+								id="facebook"
+								name="fb_url"
+								value={secondData.fb_url}
+								placeholder="https://facebook.com/"
+							/>
+							<span>
 								<i className="fab fa-facebook-square" />
-							</label>
-							<div className="dashboard-input">
-								<input
-									onChange={handleInputChange}
-									type="text"
-									id="facebook"
-									name="fb_url"
-									value={secondData.fb_url}
-									placeholder="https://facebook.com/"
-								/>
-								<button
-									type="button"
-									className="clear-input"
-									onClick={() => {
-										setSecondData({
-											...secondData,
-											fb_url: ""
-										});
-									}}>
-									<i className="fas fa-times" />
-								</button>
-							</div>
+							</span>
+							<button
+								type="button"
+								className="clear-input"
+								onClick={() => {
+									setSecondData({
+										...secondData,
+										fb_url: ""
+									});
+								}}>
+								<i className="fas fa-times" />
+							</button>
 						</div>
-						<div className="socialMedia-input">
-							<label className="dashboard-label" htmlFor="instagram">
+						<div className="input-wrapper socialMedia-input">
+							<input
+								onChange={handleInputChange}
+								type="text"
+								id="instagram"
+								name="ig_url"
+								value={secondData.ig_url}
+								placeholder="https://instagram.com/"
+							/>
+							<span>
 								<i className="fab fa-instagram" />
-							</label>
-							<div className="dashboard-input">
-								<input
-									onChange={handleInputChange}
-									type="text"
-									id="instagram"
-									name="ig_url"
-									value={secondData.ig_url}
-									placeholder="https://instagram.com/"
-								/>
-								<button
-									type="button"
-									className="clear-input"
-									onClick={() =>
-										setSecondData({
-											...secondData,
-											ig_url: ""
-										})
-									}>
-									<i className="fas fa-times" />
-								</button>
-							</div>
+							</span>
+							<button
+								type="button"
+								className="clear-input"
+								onClick={() =>
+									setSecondData({
+										...secondData,
+										ig_url: ""
+									})
+								}>
+								<i className="fas fa-times" />
+							</button>
 						</div>
-						<div className="socialMedia-input">
-							<label className="dashboard-label" htmlFor="twitter">
+						<div className="input-wrapper socialMedia-input">
+							<input
+								onChange={handleInputChange}
+								type="mail"
+								id="twitter"
+								name="twitter_url"
+								value={secondData.twitter_url}
+								placeholder="https://twitter.com/"
+							/>
+							<span>
 								<i className="fab fa-twitter" />
-							</label>
-							<div className="dashboard-input">
-								<input
-									onChange={handleInputChange}
-									type="mail"
-									id="twitter"
-									name="twitter_url"
-									value={secondData.twitter_url}
-									placeholder="https://twitter.com/"
-								/>
-								<button
-									type="button"
-									className="clear-input"
-									onClick={() =>
-										setSecondData({
-											...secondData,
-											twitter_url: ""
-										})
-									}>
-									<i className="fas fa-times" />
-								</button>
-							</div>
+							</span>
+							<button
+								type="button"
+								className="clear-input"
+								onClick={() =>
+									setSecondData({
+										...secondData,
+										twitter_url: ""
+									})
+								}>
+								<i className="fas fa-times" />
+							</button>
 						</div>
 						<div>
 							<button type="submit" className="btn-cool">

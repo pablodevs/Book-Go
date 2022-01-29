@@ -44,10 +44,7 @@ export const AddService2 = () => {
 				</p>
 				<div className="admin-form-group">
 					<div className="admin-form-subgroup">
-						<label className="dashboard-label" htmlFor="new-sku">
-							Sku (código de artículo)
-						</label>
-						<div className="dashboard-input">
+						<div className="input-wrapper">
 							<input
 								id="new-sku"
 								type="text"
@@ -58,6 +55,9 @@ export const AddService2 = () => {
 								autoComplete="off"
 								onChange={handleInputChange}
 							/>
+							<label className="dashboard-label" htmlFor="new-sku">
+								Sku (código de artículo)
+							</label>
 							<button
 								type="button"
 								className="clear-input"

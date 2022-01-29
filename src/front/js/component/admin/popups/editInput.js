@@ -24,11 +24,7 @@ export const EditInput = () => {
 	return (
 		<div className="popup-body">
 			<form className="dashboard-form" onSubmit={handleSubmit}>
-				<div className="admin-form-subgroup">
-					<label className="dashboard-label" htmlFor="popup-service-edit">
-						Nuevo nombre:
-						<span>{data.name.length}</span>
-					</label>
+				<div className="admin-form-subgroup input-wrapper">
 					<input
 						id="popup-service-edit"
 						type="text"
@@ -36,6 +32,9 @@ export const EditInput = () => {
 						value={data.name}
 						onChange={e => setData({ ...data, name: e.target.value })}
 					/>
+					<label className="dashboard-label" htmlFor="popup-service-edit">
+						Nuevo nombre:
+					</label>
 				</div>
 				<button type="submit" className="btn-cool btn-confirm">
 					Confirmar cambios

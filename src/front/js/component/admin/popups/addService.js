@@ -57,11 +57,7 @@ export const AddService = () => {
 				</p>
 				<div className="admin-form-group">
 					<div className="admin-form-subgroup">
-						<label className="dashboard-label" htmlFor="new-service">
-							Nombre:
-							<span>{data.name.length}</span>
-						</label>
-						<div className="dashboard-input">
+						<div className="input-wrapper">
 							<input
 								id="new-service"
 								type="text"
@@ -73,6 +69,9 @@ export const AddService = () => {
 								autoFocus
 								required
 							/>
+							<label className="dashboard-label" htmlFor="new-service">
+								Nombre:
+							</label>
 							<button
 								type="button"
 								className="clear-input"
@@ -94,10 +93,7 @@ export const AddService = () => {
 					<div className="admin-form-subgroup duration-subgroup">
 						<div className="dflex-row">
 							<div>
-								<label className="dashboard-label" htmlFor="new-price">
-									Precio
-								</label>
-								<div className="price-input">
+								<div className="input-wrapper price-input">
 									<input
 										type="number"
 										id="new-price"
@@ -107,14 +103,14 @@ export const AddService = () => {
 										value={data.price}
 										required
 									/>
-									<span>€</span>
+									<span className="center">€</span>
+									<label className="dashboard-label" htmlFor="new-price">
+										Precio
+									</label>
 								</div>
 							</div>
 							<div>
-								<label htmlFor="new-hours" className="dashboard-label">
-									Hora(s)
-								</label>
-								<div className="select-wrapper">
+								<div className="select-wrapper input-wrapper">
 									<select
 										onChange={e => setHours(parseInt(e.target.value))}
 										id="new-hours"
@@ -125,11 +121,11 @@ export const AddService = () => {
 											</option>
 										))}
 									</select>
+									<label htmlFor="new-hours" className="dashboard-label">
+										Hora(s)
+									</label>
 								</div>
-								<label htmlFor="new-minutes" className="dashboard-label">
-									Minutos
-								</label>
-								<div className="select-wrapper">
+								<div className="select-wrapper input-wrapper">
 									<select
 										onChange={e => setMinutes(parseInt(e.target.value))}
 										id="new-minutes"
@@ -140,6 +136,9 @@ export const AddService = () => {
 											</option>
 										))}
 									</select>
+									<label htmlFor="new-minutes" className="dashboard-label">
+										Minutos
+									</label>
 								</div>
 							</div>
 						</div>
@@ -149,11 +148,7 @@ export const AddService = () => {
 					Por último agrega una descripción <strong>descripción</strong>
 				</p>
 				<div className="admin-form-group">
-					<div className="admin-form-subgroup">
-						<label htmlFor="new-description" className="dashboard-label">
-							Descripción
-							<span>{data.description.length}</span>
-						</label>
+					<div className="admin-form-subgroup input-wrapper">
 						<textarea
 							id="new-description"
 							name="description"
@@ -162,6 +157,9 @@ export const AddService = () => {
 							onChange={handleInputChange}
 							required
 						/>
+						<label htmlFor="new-description" className="dashboard-label">
+							Descripción
+						</label>
 					</div>
 				</div>
 				<div>
