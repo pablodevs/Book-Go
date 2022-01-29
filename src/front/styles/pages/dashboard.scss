@@ -241,7 +241,8 @@ button.clear-input, .edit-input {
     top: 50%;
     right: 1rem;
     transform: translateY(-50%);
-    color: $--color-grey-light
+    color: $--color-grey-light;
+    transition: all 0.2s ease-out;
 }
 .dashboard-form input:focus-visible ~ button.clear-input {
     color: #00b1cc
