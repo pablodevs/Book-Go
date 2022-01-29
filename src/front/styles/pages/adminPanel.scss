@@ -232,6 +232,7 @@ button.inactive {
         padding-left: 45%;
     }
     & > span {
+        transition: all 0.2s ease-out;
         position: absolute;
         top: 50%;
         left: 0;
@@ -243,7 +244,7 @@ button.inactive {
         border-right: 1px solid lightgrey;
     }
     & > input:focus-visible ~ span {
-        border-right: 1px solid #00b1cc;
+        border-color: #00b1cc;
     }
 }
 
