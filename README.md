@@ -4,9 +4,9 @@
 ### *Link to the page:* [click here](https://bookngo.herokuapp.com/)
 -> Admin account to explore the back office:
 
-  email: admin@admin.es
+  **email**: admin@admin.es
 
-  pass: admin
+  **pass**: admin
 
 ## Authors
 
