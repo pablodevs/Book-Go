@@ -1,6 +1,10 @@
 # Final Project Chavi, Clara y Pablo
 
 4Geeks Academy Full-Stack Developer program final project.
+### *Link to the page:* [click here](https://bookngo.herokuapp.com/)
+-> Admin account to explore the back office:
+  email: admin@admin.es
+  pass: admin
 
 ## Authors
 
