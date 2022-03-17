@@ -2,7 +2,7 @@
 
 4Geeks Academy Full-Stack Developer program final project.
 ### *Link to the page:* [click here](https://bookngo.herokuapp.com/)
--> Admin account to explore the back office:
+-> Administrator account to explore the administration panel:
 
   *email*: admin@admin.es
 
