@@ -5,6 +5,7 @@
 -> Admin account to explore the back office:
 
   email: admin@admin.es
+
   pass: admin
 
 ## Authors
